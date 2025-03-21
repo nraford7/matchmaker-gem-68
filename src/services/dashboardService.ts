@@ -1,6 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { NetworkSharedDeal } from "@/types";
 
 // Interface for dashboard metrics
 interface DashboardMetrics {
@@ -8,20 +9,6 @@ interface DashboardMetrics {
   opportunitiesViewed: number;
   matchQualityPercentage: number;
   activeDealsCount: number;
-}
-
-// Type for network shared deal
-interface NetworkSharedDeal {
-  id: string;
-  opportunityId: string;
-  opportunityName: string;
-  sector: string;
-  stage: string;
-  fundingAmount: number;
-  sharedBy: string;
-  avatar: string | null;
-  comment: string | null;
-  sharedAt: string;
 }
 
 // Fetch dashboard metrics for the current user
@@ -36,9 +23,8 @@ export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
     }
 
     // First check if the user has metrics already
-    // Use type assertion to bypass TypeScript type checking
     const { data, error } = await supabase
-      .from('dashboard_metrics' as any)
+      .from('dashboard_metrics')
       .select("*")
       .eq("user_id", userId)
       .single();
@@ -66,9 +52,8 @@ export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
         active_deals_count: activeDealsCount || 0
       };
 
-      // Use type assertion to bypass TypeScript type checking
       const { data: newData, error: insertError } = await supabase
-        .from('dashboard_metrics' as any)
+        .from('dashboard_metrics')
         .insert(defaultMetrics)
         .select()
         .single();
@@ -123,9 +108,8 @@ export const updateDashboardMetrics = async (metrics: Partial<DashboardMetrics>)
     // Add updated_at timestamp
     updateData.updated_at = new Date().toISOString();
 
-    // Use type assertion to bypass TypeScript type checking
     const { error } = await supabase
-      .from('dashboard_metrics' as any)
+      .from('dashboard_metrics')
       .update(updateData)
       .eq("user_id", userId);
 
@@ -150,9 +134,8 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
       throw new Error("User not authenticated");
     }
 
-    // Use type assertion to bypass TypeScript type checking
     const { data, error } = await supabase
-      .from('network_shared_deals' as any)
+      .from('network_shared_deals')
       .select(`
         id,
         comment,

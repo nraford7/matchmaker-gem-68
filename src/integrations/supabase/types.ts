@@ -47,6 +47,39 @@ export type Database = {
           },
         ]
       }
+      dashboard_metrics: {
+        Row: {
+          active_deals_count: number
+          created_at: string
+          id: string
+          match_quality_percentage: number
+          new_matches: number
+          opportunities_viewed: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active_deals_count?: number
+          created_at?: string
+          id?: string
+          match_quality_percentage?: number
+          new_matches?: number
+          opportunities_viewed?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active_deals_count?: number
+          created_at?: string
+          id?: string
+          match_quality_percentage?: number
+          new_matches?: number
+          opportunities_viewed?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       investor_connections: {
         Row: {
           created_at: string
@@ -118,6 +151,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      network_shared_deals: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          opportunity_id: string
+          shared_by_user_id: string
+          shared_with_user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          opportunity_id: string
+          shared_by_user_id: string
+          shared_with_user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          opportunity_id?: string
+          shared_by_user_id?: string
+          shared_with_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "network_shared_deals_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       opportunities: {
         Row: {
