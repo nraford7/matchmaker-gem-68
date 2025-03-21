@@ -11,7 +11,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { UploadCloud, BriefcaseIcon, InfoIcon, MapPinIcon, DollarSign } from "lucide-react";
+import { 
+  UploadCloud, 
+  BriefcaseIcon, 
+  InfoIcon, 
+  MapPinIcon, 
+  DollarSign,
+  UsersIcon,
+  UserIcon,
+  UserPlusIcon, 
+  Building2Icon,
+  X
+} from "lucide-react";
+
+const personSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }),
+  role: z.string().min(1, { message: "Role is required" }),
+  organization: z.string().optional(),
+});
 
 const opportunitySchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -20,14 +37,18 @@ const opportunitySchema = z.object({
   stage: z.string().min(1, { message: "Please select a stage" }),
   fundingAmount: z.coerce.number().min(1, { message: "Funding amount is required" }),
   location: z.string().min(1, { message: "Location is required" }),
+  people: z.array(personSchema).optional(),
 });
 
+type Person = z.infer<typeof personSchema>;
 type OpportunityFormValues = z.infer<typeof opportunitySchema>;
 
 const UploadOpportunity = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [people, setPeople] = useState<Person[]>([]);
+  const [newPerson, setNewPerson] = useState<Person>({ name: "", role: "", organization: "" });
 
   const form = useForm<OpportunityFormValues>({
     resolver: zodResolver(opportunitySchema),
@@ -38,11 +59,15 @@ const UploadOpportunity = () => {
       stage: "",
       fundingAmount: 0,
       location: "",
+      people: [],
     },
   });
 
   const onSubmit = async (data: OpportunityFormValues) => {
     setIsSubmitting(true);
+    
+    // Add people to the form data
+    data.people = people;
     
     try {
       // In a real app, you would upload the data to your backend here
@@ -73,6 +98,29 @@ const UploadOpportunity = () => {
     if (files && files.length > 0) {
       setSelectedFile(files[0]);
     }
+  };
+
+  const handleAddPerson = () => {
+    if (newPerson.name.trim() === "" || newPerson.role.trim() === "") {
+      toast.error("Name and role are required for team members");
+      return;
+    }
+    
+    setPeople([...people, { ...newPerson }]);
+    setNewPerson({ name: "", role: "", organization: "" });
+  };
+
+  const handleRemovePerson = (index: number) => {
+    const updatedPeople = [...people];
+    updatedPeople.splice(index, 1);
+    setPeople(updatedPeople);
+  };
+
+  const handlePersonChange = (field: keyof Person, value: string) => {
+    setNewPerson({
+      ...newPerson,
+      [field]: value,
+    });
   };
 
   return (
@@ -228,6 +276,86 @@ const UploadOpportunity = () => {
                       </FormItem>
                     )}
                   />
+                </div>
+
+                {/* People Involved Section */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <UsersIcon className="h-5 w-5 text-primary" />
+                    <h3 className="text-lg font-medium">People Involved</h3>
+                  </div>
+                  
+                  {/* List of added people */}
+                  {people.length > 0 && (
+                    <div className="space-y-2">
+                      {people.map((person, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-md">
+                          <div className="flex items-center gap-3">
+                            <UserIcon className="h-5 w-5 text-muted-foreground" />
+                            <div>
+                              <p className="font-medium">{person.name}</p>
+                              <p className="text-sm text-muted-foreground">{person.role}</p>
+                              {person.organization && (
+                                <p className="text-xs text-muted-foreground">
+                                  <Building2Icon className="inline h-3 w-3 mr-1" />
+                                  {person.organization}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => handleRemovePerson(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Form to add new person */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border border-dashed rounded-md">
+                    <div>
+                      <FormLabel htmlFor="personName">Name</FormLabel>
+                      <Input
+                        id="personName"
+                        placeholder="John Doe"
+                        value={newPerson.name}
+                        onChange={(e) => handlePersonChange('name', e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <FormLabel htmlFor="personRole">Role</FormLabel>
+                      <Input
+                        id="personRole"
+                        placeholder="CEO, Investor, Advisor"
+                        value={newPerson.role}
+                        onChange={(e) => handlePersonChange('role', e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <FormLabel htmlFor="personOrg">Organization (Optional)</FormLabel>
+                      <Input
+                        id="personOrg"
+                        placeholder="Company Name"
+                        value={newPerson.organization || ''}
+                        onChange={(e) => handlePersonChange('organization', e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddPerson}
+                    className="w-full"
+                  >
+                    <UserPlusIcon className="h-4 w-4 mr-2" />
+                    Add Person
+                  </Button>
                 </div>
 
                 <div className="space-y-2">
