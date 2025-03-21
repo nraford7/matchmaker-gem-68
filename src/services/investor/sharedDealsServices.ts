@@ -61,21 +61,23 @@ export const createSampleSharedDeals = async (): Promise<boolean> => {
     }
     
     // Fetch real investor profiles for more realistic data
-    const { data: investors, error: investorsError } = await supabase
+    const { data, error: investorsError } = await supabase
       .from("investor_profiles")
       .select("id, name")
       .order("name")
       .limit(3);
       
-    if (investorsError || !investors || investors.length === 0) {
+    // Use a let variable for investors so we can reassign it
+    let investors = data || [];
+    
+    if (investorsError || investors.length === 0) {
       console.error("Error fetching investors:", investorsError);
       // Fallback to default mock investors if no real ones are found
-      const mockInvestors = [
+      investors = [
         { id: userId, name: "Alex Thompson" },
         { id: userId, name: "Maya Singh" },
         { id: userId, name: "Jordan Chen" }
       ];
-      investors = mockInvestors;
     }
     
     const comments = [
