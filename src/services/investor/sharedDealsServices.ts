@@ -128,6 +128,7 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
 
     console.log("Raw network shared deals data:", sharedDealsData);
 
+    // If no deals are found, automatically create sample deals
     if (!sharedDealsData || sharedDealsData.length === 0) {
       console.log("No network shared deals found, creating sample deals");
       await createSampleSharedDeals();
