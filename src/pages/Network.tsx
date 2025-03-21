@@ -1,13 +1,9 @@
 
 import { useState, useEffect } from "react";
-import { Users, Loader2 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  NetworkCard, 
-  SuggestedConnections, 
-  NetworkSearchBar, 
-  EmptyState,
-  NetworkHighlights
+  NetworkHeader,
+  NetworkHighlights,
+  NetworkContent
 } from "@/components/network";
 import { NetworkInvestor } from "@/types";
 import { 
@@ -118,92 +114,21 @@ const Network = () => {
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2 mb-4">
-          <Users className="h-6 w-6 text-primary" />
-          Network
-        </h1>
-        <p className="text-muted-foreground mb-6">
-          Connect with other investors and discover opportunities
-        </p>
-        
-        {/* Network Highlights moved to the top */}
+        <NetworkHeader />
         <NetworkHighlights />
       </div>
       
-      <div className="flex flex-col lg:flex-row gap-8 mt-8">
-        <div className="lg:w-2/3">
-          {isLoading ? (
-            <div className="flex justify-center items-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          ) : (
-            <Tabs defaultValue="following" onValueChange={handleTabChange}>
-              <div className="flex justify-between items-center mb-4">
-                <TabsList>
-                  <TabsTrigger value="following">Following</TabsTrigger>
-                  <TabsTrigger value="discover">Discover</TabsTrigger>
-                </TabsList>
-                
-                <NetworkSearchBar 
-                  searchQuery={searchQuery}
-                  onSearchChange={setSearchQuery}
-                />
-              </div>
-              
-              <TabsContent value="following" className="mt-0">
-                {filteredInvestors.length === 0 && (
-                  <EmptyState 
-                    type={searchQuery ? "search" : "following"}
-                    searchQuery={searchQuery}
-                    onClearSearch={() => setSearchQuery("")}
-                    onDiscoverInvestors={() => handleTabChange("discover")}
-                  />
-                )}
-                
-                <div className="grid gap-4">
-                  {filteredInvestors.map(investor => (
-                    <NetworkCard 
-                      key={investor.id} 
-                      investor={investor} 
-                      isFollowing={followedInvestors.some(inv => inv.id === investor.id)}
-                      onToggleFollow={toggleFollow}
-                    />
-                  ))}
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="discover" className="mt-0">
-                {filteredInvestors.length === 0 && (
-                  <EmptyState 
-                    type="search"
-                    searchQuery={searchQuery}
-                    onClearSearch={() => setSearchQuery("")}
-                  />
-                )}
-                
-                <div className="grid gap-4">
-                  {filteredInvestors.map(investor => (
-                    <NetworkCard 
-                      key={investor.id} 
-                      investor={investor} 
-                      isFollowing={followedInvestors.some(inv => inv.id === investor.id)}
-                      onToggleFollow={toggleFollow}
-                    />
-                  ))}
-                </div>
-              </TabsContent>
-            </Tabs>
-          )}
-        </div>
-        
-        <div className="lg:w-1/3">
-          <SuggestedConnections 
-            suggestedConnections={suggestedConnections}
-            isLoading={isLoading}
-            onToggleFollow={toggleFollow}
-          />
-        </div>
-      </div>
+      <NetworkContent 
+        isLoading={isLoading}
+        selectedTab={selectedTab}
+        searchQuery={searchQuery}
+        filteredInvestors={filteredInvestors}
+        followedInvestors={followedInvestors}
+        suggestedConnections={suggestedConnections}
+        onTabChange={handleTabChange}
+        onSearchChange={setSearchQuery}
+        onToggleFollow={toggleFollow}
+      />
     </div>
   );
 };
