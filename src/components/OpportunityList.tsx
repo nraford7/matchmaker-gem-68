@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Opportunity } from "@/types";
 import { Badge } from "@/components/ui/badge";

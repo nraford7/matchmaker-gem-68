@@ -1,8 +1,6 @@
-
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Opportunity } from "@/types";
-import { mockOpportunities } from "@/data/mockData";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { 
   Calendar, 
-  Clock, 
   DollarSign, 
   FileText, 
   Globe, 
@@ -24,51 +21,16 @@ import {
   Bookmark,
   Users,
   TrendingUp,
-  Briefcase
+  Briefcase,
+  Loader2
 } from "lucide-react";
 import { Link } from "react-router-dom";
-
-// Enhanced mock data with additional fields for the detailed view
-const enhancedMockOpportunities = mockOpportunities.map(opp => ({
-  ...opp,
-  teamSize: Math.floor(Math.random() * 20) + 3,
-  foundedYear: 2018 + Math.floor(Math.random() * 5),
-  industry: ["SaaS", "B2B", "Enterprise", "Consumer", "Marketplace"][Math.floor(Math.random() * 5)],
-  businessModel: ["Subscription", "Freemium", "Transaction Fee", "Licensing", "Advertising"][Math.floor(Math.random() * 5)],
-  competitors: ["Company A", "Company B", "Company C"].slice(0, Math.floor(Math.random() * 3) + 1),
-  timeline: `${Math.floor(Math.random() * 6) + 6} months`,
-  revenue: (Math.random() * (opp.stage === "Seed" ? 500000 : 5000000 + 500000)).toFixed(0),
-  growth: `${(Math.random() * 200 + 20).toFixed(0)}%`,
-  pitchDeckUrl: "https://example.com/pitchdeck.pdf",
-  contactEmail: "founder@" + opp.name.toLowerCase().replace(/\s/g, "") + ".com",
-  projectedIRR: `${(Math.random() * 30 + 15).toFixed(1)}%`,
-  personalisedRecommendation: [
-    "This opportunity aligns perfectly with your focus on B2B SaaS solutions with strong growth metrics. The founding team has a track record of successful exits in your target sectors.",
-    "Based on your investment thesis around fintech infrastructure, this company's innovative approach to financial analytics creates strong synergies with your existing portfolio.",
-    "The company's approach to healthcare technology matches your interest in digital health solutions. Their market timing and positioning could provide the returns you're looking for in this sector.",
-    "With your stated interest in SaaS companies targeting enterprise customers, this opportunity offers an attractive entry point with its proven traction and reasonable valuation.",
-    "This fits your geographical focus and stage preferences. Their business model aligns with your portfolio strategy of investing in recurring revenue businesses with clear paths to profitability."
-  ][Math.floor(Math.random() * 5)],
-  team: [
-    { name: "John Smith", role: "CEO & Co-founder" },
-    { name: "Sarah Johnson", role: "CTO & Co-founder" },
-    { name: "Michael Brown", role: "Head of Product" },
-  ].slice(0, Math.floor(Math.random() * 3) + 1),
-  use_of_funds: [
-    { category: "Product Development", percentage: Math.floor(Math.random() * 40) + 30 },
-    { category: "Marketing", percentage: Math.floor(Math.random() * 30) + 20 },
-    { category: "Operations", percentage: Math.floor(Math.random() * 20) + 10 },
-    { category: "Other", percentage: Math.floor(Math.random() * 10) + 5 }
-  ],
-  milestones: [
-    { description: "Product Launch", timeline: `Q${Math.floor(Math.random() * 4) + 1} 202${Math.floor(Math.random() * 3) + 3}` },
-    { description: "1,000 Customers", timeline: `Q${Math.floor(Math.random() * 4) + 1} 202${Math.floor(Math.random() * 3) + 3}` },
-    { description: "$1M ARR", timeline: `Q${Math.floor(Math.random() * 4) + 1} 202${Math.floor(Math.random() * 3) + 4}` }
-  ].slice(0, Math.floor(Math.random() * 3) + 1)
-}));
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const DealDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [dealData, setDealData] = useState<(Opportunity & {
     teamSize?: number;
     foundedYear?: number;
@@ -89,25 +51,103 @@ const DealDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API fetch with timeout
-    const timer = setTimeout(() => {
-      const deal = enhancedMockOpportunities.find(opp => opp.id === id) || null;
-      setDealData(deal);
-      setIsLoading(false);
-    }, 500);
+    if (!id) {
+      navigate('/deals');
+      return;
+    }
 
-    return () => clearTimeout(timer);
-  }, [id]);
+    const fetchDealData = async () => {
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("opportunities")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        if (!data) {
+          toast.error("Deal not found");
+          navigate('/deals');
+          return;
+        }
+
+        const opportunity: any = {
+          id: data.id,
+          name: data.name,
+          description: data.description,
+          sector: data.sector,
+          stage: data.stage,
+          fundingAmount: Number(data.funding_amount),
+          location: data.location,
+          createdAt: data.created_at,
+          pitchDeck: data.pitch_deck,
+          
+          teamSize: Math.floor(Math.random() * 20) + 3,
+          foundedYear: 2018 + Math.floor(Math.random() * 5),
+          industry: data.sector,
+          businessModel: ["Subscription", "Freemium", "Transaction Fee", "Licensing", "Advertising"][Math.floor(Math.random() * 5)],
+          competitors: ["Company A", "Company B", "Company C"].slice(0, Math.floor(Math.random() * 3) + 1),
+          timeline: `${Math.floor(Math.random() * 6) + 6} months`,
+          revenue: (Math.random() * (data.stage === "Seed" ? 500000 : 5000000)).toFixed(0),
+          growth: `${(Math.random() * 200 + 20).toFixed(0)}%`,
+          pitchDeckUrl: data.pitch_deck || "https://example.com/pitchdeck.pdf",
+          contactEmail: "founder@" + data.name.toLowerCase().replace(/\s/g, "") + ".com",
+          projectedIRR: `${(Math.random() * 30 + 15).toFixed(1)}%`,
+          personalisedRecommendation: [
+            "This opportunity aligns perfectly with your focus on B2B SaaS solutions with strong growth metrics. The founding team has a track record of successful exits in your target sectors.",
+            "Based on your investment thesis around fintech infrastructure, this company's innovative approach to financial analytics creates strong synergies with your existing portfolio.",
+            "The company's approach to healthcare technology matches your interest in digital health solutions. Their market timing and positioning could provide the returns you're looking for in this sector.",
+            "With your stated interest in SaaS companies targeting enterprise customers, this opportunity offers an attractive entry point with its proven traction and reasonable valuation.",
+            "This fits your geographical focus and stage preferences. Their business model aligns with your portfolio strategy of investing in recurring revenue businesses with clear paths to profitability."
+          ][Math.floor(Math.random() * 5)],
+          team: [
+            { name: "John Smith", role: "CEO & Co-founder" },
+            { name: "Sarah Johnson", role: "CTO & Co-founder" },
+            { name: "Michael Brown", role: "Head of Product" },
+          ].slice(0, Math.floor(Math.random() * 3) + 1),
+          use_of_funds: [
+            { category: "Product Development", percentage: Math.floor(Math.random() * 40) + 30 },
+            { category: "Marketing", percentage: Math.floor(Math.random() * 30) + 20 },
+            { category: "Operations", percentage: Math.floor(Math.random() * 20) + 10 },
+            { category: "Other", percentage: Math.floor(Math.random() * 10) + 5 }
+          ],
+          milestones: [
+            { description: "Product Launch", timeline: `Q${Math.floor(Math.random() * 4) + 1} 202${Math.floor(Math.random() * 3) + 3}` },
+            { description: "1,000 Customers", timeline: `Q${Math.floor(Math.random() * 4) + 1} 202${Math.floor(Math.random() * 3) + 3}` },
+            { description: "$1M ARR", timeline: `Q${Math.floor(Math.random() * 4) + 1} 202${Math.floor(Math.random() * 3) + 4}` }
+          ].slice(0, Math.floor(Math.random() * 3) + 1)
+        };
+
+        setDealData(opportunity);
+      } catch (error) {
+        console.error("Error fetching deal details:", error);
+        toast.error("Failed to load deal details");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDealData();
+  }, [id, navigate]);
+
+  const formatCurrency = (value: string | number) => {
+    if (typeof value === 'string') {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   if (isLoading) {
     return (
       <div className="container mx-auto py-8 max-w-6xl">
         <div className="flex justify-center items-center h-64">
-          <div className="animate-pulse flex flex-col space-y-4 w-full">
-            <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-            <div className="h-32 bg-gray-200 rounded w-full"></div>
-            <div className="h-8 bg-gray-200 rounded w-1/2"></div>
-          </div>
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2">Loading deal details...</span>
         </div>
       </div>
     );
@@ -126,17 +166,6 @@ const DealDetails = () => {
       </div>
     );
   }
-
-  // Format currency with commas
-  const formatCurrency = (value: string | number) => {
-    if (typeof value === 'string') {
-      // If it's already a string, just ensure it has commas
-      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-    
-    // If it's a number, convert to string with commas
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
 
   return (
     <div className="container mx-auto py-6 max-w-6xl">
