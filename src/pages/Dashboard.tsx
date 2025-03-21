@@ -39,17 +39,18 @@ const Dashboard = () => {
         <NetworkSharedDeals />
       </div>
       
+      <div className="mb-4">
+        <h2 className="text-2xl font-bold tracking-tight">Your Saved Deals</h2>
+        <p className="text-muted-foreground">
+          Opportunities you've saved for later
+        </p>
+      </div>
+      
       <Tabs defaultValue="saved" className="w-full mb-6">
         {/* Removed the TabsList with the button */}
         
         <TabsContent value="saved" className="space-y-4">
           <Card>
-            <CardHeader>
-              <h2 className="text-2xl font-bold tracking-tight">Your Saved Deals</h2>
-              <CardDescription>
-                Opportunities you've saved for later
-              </CardDescription>
-            </CardHeader>
             <CardContent>
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <p className="text-lg text-muted-foreground mb-4">
