@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, Sparkles, Zap, ArrowUpRight } from "lucide-react";
+import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, Sparkles, Zap, ArrowUpRight, Shield, Key, Handshake, UserRound } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -91,23 +91,75 @@ const Index = () => {
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/90 to-primary flex items-center justify-center text-primary-foreground">
                     <BarChart4 className="h-6 w-6" />
                   </div>
-                  <h3 className="text-2xl font-semibold">Visualize Your Preferences</h3>
+                  <h3 className="text-2xl font-semibold">Deep Understanding of Your Needs</h3>
                 </div>
                 <p className="text-muted-foreground mb-4">
-                  See a visual representation of your investment criteria and how opportunities align with your strategy.
+                  Our platform builds a comprehensive model of your investment strategy and preferences to find exactly what you're looking for.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <ChevronRight className="h-4 w-4 text-primary" />
-                    <span>Interactive radar charts of preferences</span>
+                    <span>Intuitive preference profile building</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <ChevronRight className="h-4 w-4 text-primary" />
-                    <span>Portfolio distribution analytics</span>
+                    <span>Contextual understanding of investment goals</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <ChevronRight className="h-4 w-4 text-primary" />
-                    <span>Opportunity fit visualization</span>
+                    <span>Continuous learning from your feedback</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="rounded-xl border bg-card p-8 shadow-sm transition-all duration-300 hover:shadow-md">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/90 to-primary flex items-center justify-center text-primary-foreground">
+                    <Shield className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-2xl font-semibold">Confidential, Invite-Only</h3>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Our exclusive platform ensures that sensitive investment opportunities remain private and are only shared with qualified investors.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <ChevronRight className="h-4 w-4 text-primary" />
+                    <span>Invitation-only access to top-tier deals</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <ChevronRight className="h-4 w-4 text-primary" />
+                    <span>End-to-end encryption for sensitive materials</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <ChevronRight className="h-4 w-4 text-primary" />
+                    <span>Verified investor network with NDA protection</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="rounded-xl border bg-card p-8 shadow-sm transition-all duration-300 hover:shadow-md">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/90 to-primary flex items-center justify-center text-primary-foreground">
+                    <UserRound className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-2xl font-semibold">Bespoke Service, AI Empowered</h3>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Combining personal service with cutting-edge AI technology to deliver a custom investment experience tailored to your exact needs.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <ChevronRight className="h-4 w-4 text-primary" />
+                    <span>Personal investment concierge backed by AI</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <ChevronRight className="h-4 w-4 text-primary" />
+                    <span>Custom deal flow curated to your requirements</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <ChevronRight className="h-4 w-4 text-primary" />
+                    <span>Proactive opportunity identification</span>
                   </li>
                 </ul>
               </div>
