@@ -1,0 +1,108 @@
+
+import { useState, useEffect } from "react";
+import { 
+  ResponsiveContainer, 
+  RadarChart, 
+  PolarGrid, 
+  PolarAngleAxis, 
+  Radar,
+  Tooltip,
+  Legend
+} from "recharts";
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { Card, CardContent } from "@/components/ui/card";
+import { Investor } from "@/types";
+
+interface PreferenceVisualizerProps {
+  investor: Investor;
+}
+
+interface RadarData {
+  subject: string;
+  value: number;
+  fullMark: number;
+}
+
+export const PreferenceVisualizer = ({ investor }: PreferenceVisualizerProps) => {
+  const [data, setData] = useState<RadarData[]>([]);
+
+  useEffect(() => {
+    // Generate data for radar chart based on investor preferences
+    const radarData: RadarData[] = [
+      {
+        subject: "Fintech",
+        value: investor.preferredSectors.includes("Fintech") ? 80 : 20,
+        fullMark: 100,
+      },
+      {
+        subject: "Health Tech",
+        value: investor.preferredSectors.includes("Health Tech") ? 90 : 10,
+        fullMark: 100,
+      },
+      {
+        subject: "SaaS",
+        value: investor.preferredSectors.includes("SaaS") ? 85 : 15,
+        fullMark: 100,
+      },
+      {
+        subject: "Early Stage",
+        value: investor.preferredStages.includes("Seed") || investor.preferredStages.includes("Pre-seed") ? 90 : 30,
+        fullMark: 100,
+      },
+      {
+        subject: "Growth Stage",
+        value: investor.preferredStages.includes("Series B") || investor.preferredStages.includes("Series C") ? 70 : 20,
+        fullMark: 100,
+      },
+      {
+        subject: "US Market",
+        value: investor.preferredGeographies.includes("US") ? 85 : 20,
+        fullMark: 100,
+      },
+      {
+        subject: "Europe",
+        value: investor.preferredGeographies.includes("Europe") ? 75 : 30,
+        fullMark: 100,
+      },
+    ];
+    
+    setData(radarData);
+  }, [investor]);
+
+  const chartConfig = {
+    investor: { color: "#0ea5e9" },
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="h-64">
+        <ChartContainer config={chartConfig}>
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="subject" />
+              <Radar
+                name="Investor"
+                dataKey="value"
+                stroke={chartConfig.investor.color}
+                fill={chartConfig.investor.color}
+                fillOpacity={0.6}
+              />
+              <Tooltip content={<ChartTooltipContent />} />
+              <Legend />
+            </RadarChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </div>
+
+      <Card>
+        <CardContent className="p-4">
+          <div className="text-sm font-medium">Investment Thesis</div>
+          <p className="text-sm text-muted-foreground mt-2">
+            {investor.investmentThesis}
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
