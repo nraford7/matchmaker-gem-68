@@ -47,11 +47,6 @@ const Index = () => {
           
           {/* Features Section */}
           <div className="container mx-auto py-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">Discover Your Perfect Investment Match</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-center mb-12">
-              Our platform combines AI with expert insights to help you find opportunities that align with your investment thesis.
-            </p>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
               <div className="rounded-xl border bg-card p-8 shadow-sm transition-all duration-300 hover:shadow-md">
                 <div className="flex items-center gap-4 mb-4">
