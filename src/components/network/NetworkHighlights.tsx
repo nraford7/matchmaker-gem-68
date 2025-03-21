@@ -44,7 +44,7 @@ export const NetworkHighlights = () => {
     return <NetworkHighlightsEmpty />;
   }
   
-  // Display shared deals in a two-column grid
+  // Display shared deals in a card grid similar to opportunity lists
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -59,7 +59,7 @@ export const NetworkHighlights = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {sharedDeals.map((deal) => (
             <SharedDealItem key={deal.id} deal={deal} />
           ))}
