@@ -34,7 +34,7 @@ export const enhanceRecommendation = async (
       sector: opportunityData.sector,
       stage: opportunityData.stage,
       fundingAmount: Number(opportunityData.funding_amount),
-      location: opportunityData.location || "Unknown", // Use location from opportunity data if available, otherwise default to "Unknown"
+      location: typeof opportunityData.location === 'string' ? opportunityData.location : "Unknown", // Handle location property properly
       sharedBy: investorData.name,
       avatar: investorData.avatar_url,
       comment: recommendation[commentField],

@@ -7,7 +7,7 @@ import { enhanceRecommendation } from "./utils/enhancementUtils";
 export const fetchNetworkSharedDeals = async (userId: string): Promise<NetworkSharedDeal[]> => {
   try {
     // Fetch shared deals made to the current user
-    const { data: sharedDealsData, error: sharedDealsError } = await supabase
+    let { data: sharedDealsData, error: sharedDealsError } = await supabase
       .from("network_shared_deals")
       .select(`
         id,
