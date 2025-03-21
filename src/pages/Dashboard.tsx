@@ -18,22 +18,20 @@ const Dashboard = () => {
     <div className="container mx-auto py-6">
       <DashboardHeader />
       
-      <Card className="mb-6">
-        <CardContent className="pt-6">
-          {topMatches.length > 0 ? (
-            <OpportunityList 
-              opportunities={topMatches}
-              showMatchScore
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center py-6 text-center">
-              <p className="text-lg text-muted-foreground">
-                No new matches found based on your criteria
-              </p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <div className="mb-6">
+        {topMatches.length > 0 ? (
+          <OpportunityList 
+            opportunities={topMatches}
+            showMatchScore
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center py-6 text-center">
+            <p className="text-lg text-muted-foreground">
+              No new matches found based on your criteria
+            </p>
+          </div>
+        )}
+      </div>
       
       <div className="mb-6">
         <NetworkSharedDeals />
