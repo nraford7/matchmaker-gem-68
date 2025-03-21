@@ -3,10 +3,8 @@ import { Link } from "react-router-dom";
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, Sparkles, Zap, ArrowUpRight, Shield, Key, Handshake, UserRound } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-
 const Index = () => {
-  return (
-    <div className="relative overflow-x-hidden">
+  return <div className="relative overflow-x-hidden">
       {/* Hero Section with Background Gradient */}
       <div className="relative bg-gradient-to-br from-indigo-50 via-white to-blue-50">
         <div className="absolute inset-0 bg-grid-black/[0.02] -z-10" />
@@ -79,7 +77,7 @@ const Index = () => {
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/90 to-primary flex items-center justify-center text-primary-foreground">
                     <BarChart4 className="h-6 w-6" />
                   </div>
-                  <h3 className="text-2xl font-semibold">Deep Understanding of Your Needs</h3>
+                  <h3 className="text-2xl font-semibold">Deep Understanding</h3>
                 </div>
                 <p className="text-muted-foreground mb-4">
                   Our platform builds a comprehensive model of your investment strategy and preferences to find exactly what you're looking for.
@@ -155,17 +153,22 @@ const Index = () => {
 
             {/* Stats Section */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 p-8 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl">
-              {[
-                { value: "500+", label: "Active Deals" },
-                { value: "98%", label: "Match Accuracy" },
-                { value: "$2.4B", label: "Total Invested" },
-                { value: "3,200+", label: "Investors" }
-              ].map((stat, index) => (
-                <div key={index} className="text-center">
+              {[{
+              value: "500+",
+              label: "Active Deals"
+            }, {
+              value: "98%",
+              label: "Match Accuracy"
+            }, {
+              value: "$2.4B",
+              label: "Total Invested"
+            }, {
+              value: "3,200+",
+              label: "Investors"
+            }].map((stat, index) => <div key={index} className="text-center">
                   <div className="text-3xl md:text-4xl font-bold text-primary mb-2">{stat.value}</div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
-                </div>
-              ))}
+                </div>)}
             </div>
 
             <div className="flex justify-center">
@@ -178,8 +181,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
