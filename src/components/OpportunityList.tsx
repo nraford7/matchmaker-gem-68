@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ThumbsUp, ThumbsDown, MapPin, DollarSign } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface OpportunityListProps {
   opportunities: Opportunity[];
@@ -26,7 +27,9 @@ export const OpportunityList = ({ opportunities, showMatchScore = false }: Oppor
         <Card key={opportunity.id} className="overflow-hidden">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
-              <CardTitle className="text-lg">{opportunity.name}</CardTitle>
+              <Link to={`/deals/${opportunity.id}`} className="hover:underline">
+                <CardTitle className="text-lg">{opportunity.name}</CardTitle>
+              </Link>
               <Badge variant="outline">{opportunity.stage}</Badge>
             </div>
             <div className="flex items-center text-sm text-muted-foreground gap-1">
@@ -35,7 +38,9 @@ export const OpportunityList = ({ opportunities, showMatchScore = false }: Oppor
             </div>
           </CardHeader>
           <CardContent className="pb-2">
-            <p className="text-sm line-clamp-3 mb-3">{opportunity.description}</p>
+            <Link to={`/deals/${opportunity.id}`} className="block hover:text-primary transition-colors">
+              <p className="text-sm line-clamp-3 mb-3">{opportunity.description}</p>
+            </Link>
             
             <div className="flex flex-wrap gap-1 mb-3">
               <Badge variant="secondary">{opportunity.sector}</Badge>
@@ -59,7 +64,9 @@ export const OpportunityList = ({ opportunities, showMatchScore = false }: Oppor
             )}
           </CardContent>
           <CardFooter className="flex justify-between pt-2">
-            <Button variant="ghost" size="sm">View Details</Button>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to={`/deals/${opportunity.id}`}>View Details</Link>
+            </Button>
             
             {showMatchScore && (
               <div className="flex gap-1">
