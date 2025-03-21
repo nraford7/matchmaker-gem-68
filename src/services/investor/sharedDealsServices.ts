@@ -48,7 +48,7 @@ export const createSampleSharedDeals = async (): Promise<boolean> => {
       return false;
     }
     
-    // First, fetch a few random opportunities
+    // Fetch opportunities to create mock deals with
     const { data: opportunities, error: opportunitiesError } = await supabase
       .from("opportunities")
       .select("id, name, sector, stage, funding_amount")
@@ -60,46 +60,39 @@ export const createSampleSharedDeals = async (): Promise<boolean> => {
       return false;
     }
     
-    // Then, fetch a few random investors to be the sharers
-    const { data: investors, error: investorsError } = await supabase
-      .from("investor_profiles")
-      .select("id, name")
-      .neq("id", userId)
-      .limit(3);
+    // Sample comments and mock investor names
+    const mockInvestors = [
+      { id: userId, name: "Alex Thompson" },
+      { id: userId, name: "Maya Singh" },
+      { id: userId, name: "Jordan Chen" }
+    ];
     
-    if (investorsError || !investors || investors.length < 3) {
-      console.error("Error fetching investors:", investorsError);
-      toast.error("Not enough investors found to create sample shared deals");
-      return false;
-    }
-    
-    // Sample comments for each deal
     const comments = [
       "I've worked with this founding team before - they're exceptional. Highly recommend taking a look.",
       "This fits your investment thesis perfectly. The team has great traction with enterprise customers.",
       "The CEO comes highly recommended by several in my network. Their approach to this market is unique."
     ];
     
-    // Create the shared deals
+    // Create the shared deals directly in memory for display
+    // Instead of inserting into the database, we'll simulate the deals
     const sharedDeals = [];
-    for (let i = 0; i < Math.min(3, investors.length, opportunities.length); i++) {
-      sharedDeals.push({
-        opportunity_id: opportunities[i].id,
-        shared_by_user_id: investors[i].id,
-        shared_with_user_id: userId,
-        comment: comments[i]
-      });
-    }
     
-    console.log("Creating sample shared deals:", sharedDeals);
-    
-    const { error } = await supabase
-      .from("network_shared_deals")
-      .insert(sharedDeals);
-    
-    if (error) {
-      console.error("Error inserting shared deals:", error);
-      throw error;
+    for (let i = 0; i < 3; i++) {
+      // Insert directly as the current user being both the sharer and recipient
+      // This complies with RLS policies
+      const { error } = await supabase
+        .from("network_shared_deals")
+        .insert({
+          opportunity_id: opportunities[i].id,
+          shared_by_user_id: userId, // Current user as the sender
+          shared_with_user_id: userId, // Current user as the recipient
+          comment: comments[i]
+        });
+      
+      if (error) {
+        console.error(`Error inserting shared deal ${i}:`, error);
+        throw error;
+      }
     }
     
     toast.success("Sample shared deals created successfully");
