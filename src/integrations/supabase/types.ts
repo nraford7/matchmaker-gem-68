@@ -260,7 +260,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      match_score: {
+        Args: {
+          investor_id: string
+          opportunity_id: string
+        }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
