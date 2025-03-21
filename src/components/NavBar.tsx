@@ -18,10 +18,10 @@ export const NavBar = () => {
   const currentPath = location.pathname;
   
   return (
-    <div className="border-b">
+    <div className="border-b border-gray-800 bg-gray-900">
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link to="/" className="font-bold text-xl">
+          <Link to="/" className="font-bold text-xl text-white">
             OpportunityMatcher
           </Link>
           
@@ -30,8 +30,8 @@ export const NavBar = () => {
               to="/dashboard" 
               className={`flex items-center gap-1 text-sm ${
                 currentPath === "/dashboard" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
+                  ? "font-bold text-white" 
+                  : "font-medium text-gray-400 hover:text-white"
               }`}
             >
               <LayoutDashboard className="h-4 w-4" />
@@ -41,8 +41,8 @@ export const NavBar = () => {
               to="/deals" 
               className={`flex items-center gap-1 text-sm ${
                 currentPath === "/deals" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
+                  ? "font-bold text-white" 
+                  : "font-medium text-gray-400 hover:text-white"
               }`}
             >
               <Briefcase className="h-4 w-4" />
@@ -52,8 +52,8 @@ export const NavBar = () => {
               to="/insights" 
               className={`flex items-center gap-1 text-sm ${
                 currentPath === "/insights" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
+                  ? "font-bold text-white" 
+                  : "font-medium text-gray-400 hover:text-white"
               }`}
             >
               <ChartPie className="h-4 w-4" />
@@ -63,8 +63,8 @@ export const NavBar = () => {
               to="/upload" 
               className={`flex items-center gap-1 text-sm ${
                 currentPath === "/upload" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
+                  ? "font-bold text-white" 
+                  : "font-medium text-gray-400 hover:text-white"
               }`}
             >
               <FilePlus className="h-4 w-4" />
