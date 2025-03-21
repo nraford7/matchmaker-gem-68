@@ -3,28 +3,49 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Handshake, MessageSquare, Users, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { fetchNetworkSharedDeals } from "@/services/dashboardService";
+import { fetchNetworkSharedDeals, createSampleSharedDeals } from "@/services/investor";
 import { NetworkSharedDeal } from "@/types";
+import { toast } from "sonner";
 import { SampleDealsButton } from "@/components/network";
 
 export const NetworkHighlights = () => {
   const [sharedDeals, setSharedDeals] = useState<NetworkSharedDeal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
+  
+  const loadSharedDeals = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchNetworkSharedDeals();
+      console.log("Shared deals loaded:", data);
+      setSharedDeals(data);
+    } catch (error) {
+      console.error("Error loading shared deals:", error);
+      toast.error("Failed to load shared deals");
+    } finally {
+      setLoading(false);
+    }
+  };
   
   useEffect(() => {
-    const loadSharedDeals = async () => {
-      try {
-        const data = await fetchNetworkSharedDeals();
-        setSharedDeals(data);
-      } catch (error) {
-        console.error("Error loading shared deals:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
     loadSharedDeals();
   }, []);
+  
+  const handleCreateSample = async () => {
+    setIsCreating(true);
+    try {
+      const success = await createSampleSharedDeals();
+      if (success) {
+        toast.success("Sample deals created successfully");
+        // Reload shared deals after creating samples
+        await loadSharedDeals();
+      }
+    } catch (error) {
+      console.error("Error creating sample deals:", error);
+    } finally {
+      setIsCreating(false);
+    }
+  };
   
   if (loading) {
     return (
@@ -69,7 +90,21 @@ export const NetworkHighlights = () => {
             </p>
             <div className="space-y-2">
               <Button variant="outline" className="w-full">Find Investors to Follow</Button>
-              <SampleDealsButton />
+              <Button 
+                variant="default" 
+                className="w-full"
+                onClick={handleCreateSample}
+                disabled={isCreating}
+              >
+                {isCreating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Sample Shared Deals"
+                )}
+              </Button>
             </div>
           </div>
         </CardContent>
