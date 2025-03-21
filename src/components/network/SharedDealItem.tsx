@@ -3,6 +3,7 @@ import { NetworkSharedDeal } from "@/types";
 import { Handshake, MessageSquare } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface SharedDealItemProps {
   deal: NetworkSharedDeal;
@@ -13,6 +14,16 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   
   const handleViewDetails = () => {
     navigate(`/deals/${deal.opportunityId}`);
+  };
+  
+  // Get the initials for avatar fallback
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
   };
   
   return (
@@ -29,8 +40,11 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         </span>
       </div>
       
-      <div className="flex items-center text-sm mb-2 gap-1">
-        <Handshake className="h-3 w-3 text-primary" />
+      <div className="flex items-center text-sm mb-2 gap-2">
+        <Avatar className="h-6 w-6">
+          {deal.avatar && <AvatarImage src={deal.avatar} alt={deal.sharedBy} />}
+          <AvatarFallback className="text-xs">{getInitials(deal.sharedBy)}</AvatarFallback>
+        </Avatar>
         <span>Shared by <span className="font-medium">{deal.sharedBy}</span></span>
       </div>
       
@@ -43,7 +57,7 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
       </div>
       
       {deal.comment && (
-        <div className="bg-muted p-2 rounded-md mb-2 flex gap-2">
+        <div className="bg-muted p-2 rounded-md mb-2 flex gap-2 mt-auto">
           <MessageSquare className="h-4 w-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
           <p className="text-xs italic">{deal.comment}</p>
         </div>
