@@ -1,16 +1,60 @@
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { EnhancedOpportunity } from "@/pages/DealDetails";
 import { FileText, ThumbsDown, ThumbsUp } from "lucide-react";
+import { submitPositiveFeedback, submitNegativeFeedback, getFeedbackStatus } from "@/services/opportunity/matchFeedbackService";
 
 interface DealSidebarProps {
   deal: EnhancedOpportunity;
 }
 
 const DealSidebar = ({ deal }: DealSidebarProps) => {
+  const [feedback, setFeedback] = useState<'positive' | 'negative' | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  useEffect(() => {
+    const loadFeedback = async () => {
+      if (deal.matchScore !== undefined) {
+        const status = await getFeedbackStatus(deal.id);
+        setFeedback(status);
+      }
+    };
+    
+    loadFeedback();
+  }, [deal.id, deal.matchScore]);
+  
+  const handlePositiveFeedback = async () => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      const success = await submitPositiveFeedback(deal.id);
+      if (success) {
+        setFeedback('positive');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleNegativeFeedback = async () => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      const success = await submitNegativeFeedback(deal.id);
+      if (success) {
+        setFeedback('negative');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       {deal.matchScore !== undefined && (
@@ -30,11 +74,21 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
               )}
               
               <div className="flex gap-2 mt-4">
-                <Button className="flex-1 gap-1">
+                <Button 
+                  className="flex-1 gap-1"
+                  variant={feedback === 'positive' ? "default" : "outline"}
+                  onClick={handlePositiveFeedback}
+                  disabled={isSubmitting}
+                >
                   <ThumbsUp className="h-4 w-4" />
                   Interested
                 </Button>
-                <Button variant="outline" className="flex-1 gap-1">
+                <Button 
+                  variant={feedback === 'negative' ? "default" : "outline"} 
+                  className="flex-1 gap-1"
+                  onClick={handleNegativeFeedback}
+                  disabled={isSubmitting}
+                >
                   <ThumbsDown className="h-4 w-4" />
                   Pass
                 </Button>

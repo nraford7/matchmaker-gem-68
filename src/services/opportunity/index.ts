@@ -5,3 +5,4 @@ export * from "./fetchServices";
 export * from "./activeDealsServices";
 export * from "./savedDealsServices";
 export * from "./createServices";
+export * from "./matchFeedbackService";

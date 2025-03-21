@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Opportunity } from "@/types";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { MapPin, MoreHorizontal, Save, Briefcase, Archive, ThumbsUp, ThumbsDown } from "lucide-react";
 import { saveDeal } from "@/services/opportunity/savedDealsServices";
+import { submitPositiveFeedback, submitNegativeFeedback, getFeedbackStatus } from "@/services/opportunity/matchFeedbackService";
 import { ActivateDealDialog } from "./ActivateDealDialog";
 import { CompleteDealDialog } from "./CompleteDealDialog";
 
@@ -20,9 +21,50 @@ interface OpportunityCardProps {
 export const OpportunityCard = ({ opportunity, showMatchScore = false }: OpportunityCardProps) => {
   const [activatingId, setActivatingId] = useState<string | null>(null);
   const [completingId, setCompletingId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<'positive' | 'negative' | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  useEffect(() => {
+    const loadFeedback = async () => {
+      if (showMatchScore) {
+        const status = await getFeedbackStatus(opportunity.id);
+        setFeedback(status);
+      }
+    };
+    
+    loadFeedback();
+  }, [opportunity.id, showMatchScore]);
   
   const handleSave = async (id: string) => {
     await saveDeal(id);
+  };
+
+  const handlePositiveFeedback = async () => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      const success = await submitPositiveFeedback(opportunity.id);
+      if (success) {
+        setFeedback('positive');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleNegativeFeedback = async () => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      const success = await submitNegativeFeedback(opportunity.id);
+      if (success) {
+        setFeedback('negative');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -129,10 +171,22 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
         
         {showMatchScore && (
           <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button 
+              variant={feedback === 'positive' ? "default" : "ghost"} 
+              size="icon" 
+              className="h-8 w-8"
+              onClick={handlePositiveFeedback}
+              disabled={isSubmitting}
+            >
               <ThumbsUp className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button 
+              variant={feedback === 'negative' ? "default" : "ghost"} 
+              size="icon" 
+              className="h-8 w-8"
+              onClick={handleNegativeFeedback}
+              disabled={isSubmitting}
+            >
               <ThumbsDown className="h-4 w-4" />
             </Button>
           </div>
