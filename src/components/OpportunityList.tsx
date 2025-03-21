@@ -1,10 +1,9 @@
-
 import { Opportunity } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ThumbsUp, ThumbsDown, MapPin, DollarSign } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface OpportunityListProps {
@@ -44,8 +43,7 @@ export const OpportunityList = ({ opportunities, showMatchScore = false }: Oppor
             
             <div className="flex flex-wrap gap-1 mb-3">
               <Badge variant="secondary">{opportunity.sector}</Badge>
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <DollarSign className="h-3 w-3" />
+              <Badge variant="secondary">
                 ${(opportunity.fundingAmount / 1000000).toFixed(1)}M
               </Badge>
             </div>
