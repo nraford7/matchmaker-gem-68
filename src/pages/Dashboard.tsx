@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -7,20 +7,53 @@ import { Opportunity } from "@/types";
 import { OpportunityList } from "@/components/OpportunityList";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { DashboardMetrics } from "@/components/DashboardMetrics";
-import { mockOpportunities } from "@/data/mockData";
 import { NetworkSharedDeals } from "@/components/NetworkSharedDeals";
+import { fetchSavedDeals } from "@/services/opportunity";
 
 const Dashboard = () => {
-  const [opportunities] = useState<Opportunity[]>(mockOpportunities);
-  const topMatches = opportunities.filter(o => (o.matchScore || 0) > 0.7);
+  const [topMatches, setTopMatches] = useState<Opportunity[]>([]);
+  const [savedDeals, setSavedDeals] = useState<Opportunity[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const loadDeals = async () => {
+      try {
+        // Fetch saved deals which include match scores
+        const deals = await fetchSavedDeals();
+        setSavedDeals(deals);
+        
+        // Filter for top matches
+        const matches = deals.filter(o => (o.matchScore || 0) > 0.7);
+        setTopMatches(matches);
+      } catch (error) {
+        console.error("Error loading deals:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadDeals();
+  }, []);
   
   return (
     <div className="container mx-auto py-6">
       <DashboardHeader />
       
       <Card className="mb-6">
-        <CardContent className="pt-6">
-          {topMatches.length > 0 ? (
+        <CardHeader>
+          <h2 className="text-xl font-bold">Top Matches</h2>
+          <CardDescription>
+            Opportunities that closely match your investment criteria
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-6 text-center">
+              <p className="text-lg text-muted-foreground">
+                Loading top matches...
+              </p>
+            </div>
+          ) : topMatches.length > 0 ? (
             <OpportunityList 
               opportunities={topMatches}
               showMatchScore
@@ -47,17 +80,25 @@ const Dashboard = () => {
       </div>
       
       <Tabs defaultValue="saved" className="w-full mb-6">
-        {/* Removed the TabsList with the button */}
-        
         <TabsContent value="saved" className="space-y-4">
           <Card>
             <CardContent>
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-lg text-muted-foreground mb-4">
-                  You haven't saved any opportunities yet
-                </p>
-                <Button variant="outline">Browse Opportunities</Button>
-              </div>
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-6 text-center">
+                  <p className="text-lg text-muted-foreground">
+                    Loading saved deals...
+                  </p>
+                </div>
+              ) : savedDeals.length > 0 ? (
+                <OpportunityList opportunities={savedDeals} />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <p className="text-lg text-muted-foreground mb-4">
+                    You haven't saved any opportunities yet
+                  </p>
+                  <Button variant="outline">Browse Opportunities</Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

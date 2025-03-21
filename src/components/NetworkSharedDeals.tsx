@@ -1,33 +1,52 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { OpportunityList } from "@/components/OpportunityList";
-import { Opportunity } from "@/types";
 import { Handshake, MessageSquare, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockOpportunities } from "@/data/mockData";
-
-// Mock data for network shared deals
-const mockNetworkDeals: (Opportunity & { 
-  sharedBy: string;
-  sharedDate: string;
-  comment?: string;
-})[] = [
-  {
-    ...mockOpportunities[2],
-    sharedBy: "Michael Chen",
-    sharedDate: new Date(2023, 7, 18).toISOString(),
-    comment: "Strong founding team with previous exits. Worth looking into."
-  },
-  {
-    ...mockOpportunities[4],
-    sharedBy: "Sarah Johnson",
-    sharedDate: new Date(2023, 7, 15).toISOString()
-  }
-];
+import { fetchNetworkSharedDeals } from "@/services/dashboardService";
+import { NetworkSharedDeal } from "@/types";
 
 export const NetworkSharedDeals = () => {
-  const [sharedDeals] = useState(mockNetworkDeals);
+  const [sharedDeals, setSharedDeals] = useState<NetworkSharedDeal[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const loadSharedDeals = async () => {
+      try {
+        const data = await fetchNetworkSharedDeals();
+        setSharedDeals(data);
+      } catch (error) {
+        console.error("Error loading shared deals:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadSharedDeals();
+  }, []);
+  
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Users className="h-5 w-5 text-muted-foreground" />
+            <CardTitle>Network Highlights</CardTitle>
+          </div>
+          <CardDescription>
+            Deals shared by investors in your network
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center justify-center py-6 text-center">
+            <p className="text-lg text-muted-foreground">
+              Loading shared deals...
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
   
   if (sharedDeals.length === 0) {
     return (
@@ -67,11 +86,11 @@ export const NetworkSharedDeals = () => {
       <CardContent>
         <div className="space-y-4">
           {sharedDeals.map((deal) => (
-            <div key={`${deal.id}-${deal.sharedBy}`} className="border rounded-md p-3">
+            <div key={deal.id} className="border rounded-md p-3">
               <div className="flex justify-between items-start mb-2">
-                <h4 className="font-medium">{deal.name}</h4>
+                <h4 className="font-medium">{deal.opportunityName}</h4>
                 <span className="text-xs text-muted-foreground">
-                  {new Date(deal.sharedDate).toLocaleDateString()}
+                  {new Date(deal.sharedAt).toLocaleDateString()}
                 </span>
               </div>
               
@@ -80,7 +99,13 @@ export const NetworkSharedDeals = () => {
                 <span>Shared by <span className="font-medium">{deal.sharedBy}</span></span>
               </div>
               
-              <p className="text-sm line-clamp-2 mb-2">{deal.description}</p>
+              <div className="flex gap-2 text-xs text-muted-foreground mb-2">
+                <span>{deal.sector}</span>
+                <span>•</span>
+                <span>{deal.stage}</span>
+                <span>•</span>
+                <span>${new Intl.NumberFormat().format(deal.fundingAmount)}</span>
+              </div>
               
               {deal.comment && (
                 <div className="bg-muted p-2 rounded-md mb-2 flex gap-2">

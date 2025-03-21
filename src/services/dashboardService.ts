@@ -36,8 +36,9 @@ export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
     }
 
     // First check if the user has metrics already
-    const { data, error } = await (supabase
-      .from('dashboard_metrics') as any)
+    // Use type assertion to bypass TypeScript type checking
+    const { data, error } = await supabase
+      .from('dashboard_metrics' as any)
       .select("*")
       .eq("user_id", userId)
       .single();
@@ -65,9 +66,9 @@ export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
         active_deals_count: activeDealsCount || 0
       };
 
-      // Use direct any type assertion
-      const { data: newData, error: insertError } = await (supabase
-        .from('dashboard_metrics') as any)
+      // Use type assertion to bypass TypeScript type checking
+      const { data: newData, error: insertError } = await supabase
+        .from('dashboard_metrics' as any)
         .insert(defaultMetrics)
         .select()
         .single();
@@ -122,9 +123,9 @@ export const updateDashboardMetrics = async (metrics: Partial<DashboardMetrics>)
     // Add updated_at timestamp
     updateData.updated_at = new Date().toISOString();
 
-    // Use direct any type assertion
-    const { error } = await (supabase
-      .from('dashboard_metrics') as any)
+    // Use type assertion to bypass TypeScript type checking
+    const { error } = await supabase
+      .from('dashboard_metrics' as any)
       .update(updateData)
       .eq("user_id", userId);
 
@@ -149,9 +150,9 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
       throw new Error("User not authenticated");
     }
 
-    // Use direct any type assertion
-    const { data, error } = await (supabase
-      .from('network_shared_deals') as any)
+    // Use type assertion to bypass TypeScript type checking
+    const { data, error } = await supabase
+      .from('network_shared_deals' as any)
       .select(`
         id,
         comment,

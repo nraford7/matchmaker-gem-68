@@ -23,9 +23,9 @@ export interface StageData {
 // Fetch market insights by sector
 export const fetchMarketInsightsBySector = async (): Promise<SectorData[]> => {
   try {
-    // Use direct any type assertion to bypass type checking
-    const { data, error } = await (supabase
-      .from('market_insights') as any)
+    // Use type assertion to bypass TypeScript type checking
+    const { data, error } = await supabase
+      .from('market_insights' as any)
       .select("*")
       .order("date", { ascending: true });
 
@@ -62,9 +62,9 @@ export const fetchMarketInsightsBySector = async (): Promise<SectorData[]> => {
 // Fetch market insights by stage
 export const fetchMarketInsightsByStage = async (): Promise<StageData[]> => {
   try {
-    // Use direct any type assertion
-    const { data, error } = await (supabase
-      .from('market_insights') as any)
+    // Use type assertion to bypass TypeScript type checking
+    const { data, error } = await supabase
+      .from('market_insights' as any)
       .select("*")
       .order("stage", { ascending: true });
 
@@ -104,9 +104,9 @@ export const fetchRecentTrends = async (): Promise<any[]> => {
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
     
-    // Use direct any type assertion
-    const { data, error } = await (supabase
-      .from('market_insights') as any)
+    // Use type assertion to bypass TypeScript type checking
+    const { data, error } = await supabase
+      .from('market_insights' as any)
       .select("*")
       .gte("date", threeMonthsAgo.toISOString().split('T')[0])
       .order("date", { ascending: true });

@@ -1,4 +1,3 @@
-
 export interface Investor {
   id: string;
   name: string;
@@ -49,4 +48,18 @@ export interface Match {
   createdAt: string;
   isRead: boolean;
   feedback?: 'positive' | 'negative' | null;
+}
+
+// NetworkSharedDeal type for shared opportunities
+export interface NetworkSharedDeal {
+  id: string;
+  opportunityId: string;
+  opportunityName: string;
+  sector: string;
+  stage: string;
+  fundingAmount: number;
+  sharedBy: string;
+  avatar: string | null;
+  comment: string | null;
+  sharedAt: string;
 }
