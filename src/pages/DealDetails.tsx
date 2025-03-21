@@ -49,6 +49,57 @@ const DealDetails = () => {
     const fetchDealData = async () => {
       setIsLoading(true);
       try {
+        // Check if the ID is a demo ID (starting with 'sample-')
+        if (id.startsWith('sample-')) {
+          console.log("Loading sample deal data for ID:", id);
+          // Create mock data for sample deals
+          const sampleDeal: EnhancedOpportunity = {
+            id: id,
+            name: `Sample Opportunity ${id.split('-')[1]}`,
+            description: "This is a sample opportunity description. It showcases what a real opportunity would look like in the system.",
+            sector: "SaaS",
+            stage: "Seed",
+            fundingAmount: 1500000,
+            location: "San Francisco, CA",
+            createdAt: new Date().toISOString(),
+            pitchDeck: "https://example.com/sample-pitch-deck.pdf",
+            
+            teamSize: Math.floor(Math.random() * 20) + 3,
+            foundedYear: 2018 + Math.floor(Math.random() * 5),
+            industry: "Software",
+            businessModel: ["Subscription", "Freemium", "Transaction Fee", "Licensing", "Advertising"][Math.floor(Math.random() * 5)],
+            competitors: ["Company A", "Company B", "Company C"].slice(0, Math.floor(Math.random() * 3) + 1),
+            timeline: `${Math.floor(Math.random() * 6) + 6} months`,
+            revenue: (Math.random() * 500000).toFixed(0),
+            growth: `${(Math.random() * 200 + 20).toFixed(0)}%`,
+            pitchDeckUrl: "https://example.com/pitchdeck.pdf",
+            contactEmail: `founder@sample${id.split('-')[1]}.com`,
+            projectedIRR: `${(Math.random() * 30 + 15).toFixed(1)}%`,
+            personalisedRecommendation: "This opportunity aligns with your focus on early-stage SaaS startups. The founding team has a strong technical background and the market size is significant.",
+            team: [
+              { name: "John Smith", role: "CEO & Co-founder" },
+              { name: "Sarah Johnson", role: "CTO & Co-founder" },
+              { name: "Michael Brown", role: "Head of Product" },
+            ],
+            use_of_funds: [
+              { category: "Product Development", percentage: 40 },
+              { category: "Marketing", percentage: 30 },
+              { category: "Operations", percentage: 20 },
+              { category: "Other", percentage: 10 }
+            ],
+            milestones: [
+              { description: "Product Launch", timeline: "Q2 2023" },
+              { description: "1,000 Customers", timeline: "Q4 2023" },
+              { description: "$1M ARR", timeline: "Q2 2024" }
+            ]
+          };
+          
+          setDealData(sampleDeal);
+          setIsLoading(false);
+          return;
+        }
+
+        // Regular UUID-based query for real deals
         const { data, error } = await supabase
           .from("opportunities")
           .select("*")
