@@ -87,12 +87,50 @@ export const NavBar = () => {
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="hidden md:block">
-            <div className="flex flex-col items-end justify-center">
-              <span className="text-sm font-medium">{currentUser.name}</span>
-              <span className="text-xs text-muted-foreground">{currentUser.company}</span>
-            </div>
-          </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className="hidden md:flex flex-col items-end justify-center cursor-pointer hover:opacity-80 transition-opacity">
+                <span className="text-sm font-medium">{currentUser.name}</span>
+                <span className="text-xs text-muted-foreground">{currentUser.company}</span>
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-56" align="end">
+              <div className="space-y-1">
+                <h4 className="font-medium leading-none mb-2">{currentUser.name}</h4>
+                <p className="text-xs text-muted-foreground">{currentUser.company}</p>
+              </div>
+              <div className="mt-4 space-y-2">
+                <Link 
+                  to="/preferences" 
+                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors"
+                >
+                  <Filter className="h-4 w-4" />
+                  Preferences
+                </Link>
+                <Link 
+                  to="/network" 
+                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors"
+                >
+                  <Users className="h-4 w-4" />
+                  Network
+                </Link>
+                <Link 
+                  to="/account" 
+                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors"
+                >
+                  <Settings className="h-4 w-4" />
+                  Account settings
+                </Link>
+                <div className="border-t my-2"></div>
+                <button 
+                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors text-red-500"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign out
+                </button>
+              </div>
+            </PopoverContent>
+          </Popover>
           
           <Popover>
             <PopoverTrigger asChild>
