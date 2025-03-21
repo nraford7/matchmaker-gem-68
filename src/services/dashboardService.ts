@@ -36,7 +36,6 @@ export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
     }
 
     // First check if the user has metrics already
-    // Use direct any type assertion to bypass type checking
     const { data, error } = await (supabase
       .from('dashboard_metrics') as any)
       .select("*")
