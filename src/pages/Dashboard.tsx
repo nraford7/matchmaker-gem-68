@@ -35,15 +35,26 @@ const Dashboard = () => {
         </CardContent>
       </Card>
       
-      <div className="mb-6">
-        <NetworkSharedDeals />
-      </div>
-      
-      <Tabs defaultValue="all" className="w-full mb-6">
+      <Tabs defaultValue="network" className="w-full mb-6">
         <TabsList className="mb-4">
+          <TabsTrigger value="network">Network Highlights</TabsTrigger>
           <TabsTrigger value="all">All Opportunities</TabsTrigger>
           <TabsTrigger value="saved">Saved</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="network" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Network Highlights</CardTitle>
+              <CardDescription>
+                Deals shared by investors in your network
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <NetworkSharedDeals />
+            </CardContent>
+          </Card>
+        </TabsContent>
         
         <TabsContent value="all" className="space-y-4">
           <Card>
