@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Opportunity } from "@/types";
-import { OpportunityList } from "@/components/OpportunityList";
+import { OpportunityList } from "@/components/opportunities";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { DashboardMetrics } from "@/components/DashboardMetrics";
 import { NetworkSharedDeals } from "@/components/NetworkSharedDeals";

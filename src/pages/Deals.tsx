@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { OpportunityList } from "@/components/OpportunityList";
+import { OpportunityList } from "@/components/opportunities";
 import { Opportunity } from "@/types";
 import { Briefcase, Save, Archive, PieChart, TrendingUp, Filter, Search, Globe, FilePlus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";

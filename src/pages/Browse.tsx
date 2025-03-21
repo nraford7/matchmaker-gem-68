@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { Opportunity } from "@/types";
-import { OpportunityList } from "@/components/OpportunityList";
+import { OpportunityList } from "@/components/opportunities";
 import { mockOpportunities } from "@/data/mockData";
 
 const Browse = () => {
