@@ -2,7 +2,7 @@
 import { NetworkSharedDeal, Opportunity } from "@/types";
 import { fetchAllInvestors } from "./investor";
 import { fetchSavedDeals } from "./opportunity";
-import { fetchRecommendationsForUser } from "./investor/recommendationsServices";
+import { fetchRecommendationsForUser } from "./investor/recommendations/fetchRecommendations";
 import { supabase } from "@/integrations/supabase/client";
 
 // Fetch top matches for the dashboard
