@@ -7,10 +7,17 @@ import {
   Search, 
   Filter, 
   Users, 
-  BarChart,
   User,
-  FilePlus
+  FilePlus,
+  LogOut,
+  Settings
 } from "lucide-react";
+import { 
+  Popover, 
+  PopoverContent, 
+  PopoverTrigger 
+} from "@/components/ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const NavBar = () => {
   const [currentUser] = useState({
@@ -63,39 +70,6 @@ export const NavBar = () => {
               <FilePlus className="h-4 w-4" />
               New
             </Link>
-            <Link 
-              to="/preferences" 
-              className={`flex items-center gap-1 text-sm ${
-                currentPath === "/preferences" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Filter className="h-4 w-4" />
-              Preferences
-            </Link>
-            <Link 
-              to="/network" 
-              className={`flex items-center gap-1 text-sm ${
-                currentPath === "/network" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Users className="h-4 w-4" />
-              Network
-            </Link>
-            <Link 
-              to="/analytics" 
-              className={`flex items-center gap-1 text-sm ${
-                currentPath === "/analytics" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <BarChart className="h-4 w-4" />
-              Analytics
-            </Link>
           </nav>
         </div>
         
@@ -107,9 +81,51 @@ export const NavBar = () => {
             </div>
           </div>
           
-          <Button variant="outline" size="icon" className="rounded-full">
-            <User className="h-5 w-5" />
-          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="icon" className="rounded-full">
+                <Avatar>
+                  <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56" align="end">
+              <div className="space-y-1">
+                <h4 className="font-medium leading-none mb-2">{currentUser.name}</h4>
+                <p className="text-xs text-muted-foreground">{currentUser.company}</p>
+              </div>
+              <div className="mt-4 space-y-2">
+                <Link 
+                  to="/preferences" 
+                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors"
+                >
+                  <Filter className="h-4 w-4" />
+                  Preferences
+                </Link>
+                <Link 
+                  to="/network" 
+                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors"
+                >
+                  <Users className="h-4 w-4" />
+                  Network
+                </Link>
+                <Link 
+                  to="/account" 
+                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors"
+                >
+                  <Settings className="h-4 w-4" />
+                  Account settings
+                </Link>
+                <div className="border-t my-2"></div>
+                <button 
+                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors text-red-500"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign out
+                </button>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
     </div>
