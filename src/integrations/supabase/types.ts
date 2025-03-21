@@ -328,6 +328,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      insert_fake_investor_profiles: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       match_score: {
         Args: {
           investor_id: string
