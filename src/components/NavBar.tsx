@@ -11,7 +11,8 @@ import {
   FilePlus,
   LogOut,
   Settings,
-  ChartPie
+  ChartPie,
+  Briefcase
 } from "lucide-react";
 import { 
   Popover, 
@@ -59,6 +60,17 @@ export const NavBar = () => {
             >
               <Search className="h-4 w-4" />
               Search
+            </Link>
+            <Link 
+              to="/deals" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/deals" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Briefcase className="h-4 w-4" />
+              Deals
             </Link>
             <Link 
               to="/upload" 
