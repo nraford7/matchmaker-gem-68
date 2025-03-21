@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { OpportunityList } from "@/components/OpportunityList";
 import { Opportunity } from "@/types";
-import { HandShake, MessageSquare, Users } from "lucide-react";
+import { Handshake, MessageSquare, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockOpportunities } from "@/data/mockData";
 
@@ -76,7 +76,7 @@ export const NetworkSharedDeals = () => {
                 </div>
               </div>
               <div className="flex items-center text-sm gap-1">
-                <HandShake className="h-3 w-3 text-primary" />
+                <Handshake className="h-3 w-3 text-primary" />
                 <span>Shared by <span className="font-medium">{deal.sharedBy}</span></span>
               </div>
             </CardHeader>
