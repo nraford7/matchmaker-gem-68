@@ -152,6 +152,41 @@ export type Database = {
         }
         Relationships: []
       }
+      investor_recommendations: {
+        Row: {
+          commentary: string | null
+          created_at: string
+          id: string
+          opportunity_id: string
+          recipient_id: string
+          recommender_id: string
+        }
+        Insert: {
+          commentary?: string | null
+          created_at?: string
+          id?: string
+          opportunity_id: string
+          recipient_id: string
+          recommender_id: string
+        }
+        Update: {
+          commentary?: string | null
+          created_at?: string
+          id?: string
+          opportunity_id?: string
+          recipient_id?: string
+          recommender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investor_recommendations_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       matches: {
         Row: {
           created_at: string

@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Loader2, MessageSquare } from "lucide-react";
-import { fetchNetworkSharedDeals } from "@/services/investor";
+import { Users, Loader2 } from "lucide-react";
+import { fetchRecommendationsForUser } from "@/services/investor";
 import { NetworkSharedDeal } from "@/types";
 import { toast } from "sonner";
 import { NetworkHighlightsLoading } from "./NetworkHighlightsLoading";
@@ -10,33 +10,33 @@ import { NetworkHighlightsEmpty } from "./NetworkHighlightsEmpty";
 import { SharedDealItem } from "./SharedDealItem";
 
 export const NetworkHighlights = () => {
-  const [sharedDeals, setSharedDeals] = useState<NetworkSharedDeal[]>([]);
+  const [recommendations, setRecommendations] = useState<NetworkSharedDeal[]>([]);
   const [loading, setLoading] = useState(true);
   
-  const loadSharedDeals = async () => {
+  const loadRecommendations = async () => {
     try {
       setLoading(true);
-      const data = await fetchNetworkSharedDeals();
-      console.log("Shared deals loaded:", data);
-      setSharedDeals(data);
+      const data = await fetchRecommendationsForUser();
+      console.log("Recommendations loaded:", data);
+      setRecommendations(data);
     } catch (error) {
-      console.error("Error loading shared deals:", error);
-      toast.error("Failed to load shared deals");
+      console.error("Error loading recommendations:", error);
+      toast.error("Failed to load recommendations");
     } finally {
       setLoading(false);
     }
   };
   
   useEffect(() => {
-    loadSharedDeals();
+    loadRecommendations();
   }, []);
   
   if (loading) {
     return <NetworkHighlightsLoading />;
   }
   
-  if (sharedDeals.length === 0) {
-    return <NetworkHighlightsEmpty onReloadDeals={loadSharedDeals} />;
+  if (recommendations.length === 0) {
+    return <NetworkHighlightsEmpty onReloadDeals={loadRecommendations} />;
   }
   
   return (
@@ -52,7 +52,7 @@ export const NetworkHighlights = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {sharedDeals.map((deal) => (
+          {recommendations.map((deal) => (
             <SharedDealItem key={deal.id} deal={deal} />
           ))}
         </div>

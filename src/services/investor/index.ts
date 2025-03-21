@@ -5,3 +5,4 @@ export * from "./fetchServices";
 export * from "./profileServices";
 export * from "./connectionServices";
 export * from "./sharedDealsServices";
+export * from "./recommendationsServices";

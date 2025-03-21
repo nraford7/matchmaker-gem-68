@@ -22,7 +22,7 @@ export const NetworkHighlightsEmpty = ({ onReloadDeals }: NetworkHighlightsEmpty
       <CardContent>
         <div className="flex flex-col items-center justify-center py-8 text-center">
           <Users className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium mb-2">No shared deals yet</h3>
+          <h3 className="text-lg font-medium mb-2">No recommendations yet</h3>
           <p className="text-muted-foreground text-sm mb-4 max-w-md">
             When investors in your network recommend deals to you, they'll appear here with their comments.
           </p>

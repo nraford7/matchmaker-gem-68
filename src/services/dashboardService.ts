@@ -2,7 +2,7 @@
 import { NetworkSharedDeal, Opportunity } from "@/types";
 import { fetchAllInvestors } from "./investor";
 import { fetchSavedDeals } from "./opportunity";
-import { fetchNetworkSharedDeals as fetchSharedDeals } from "./investor/sharedDealsServices";
+import { fetchRecommendationsForUser } from "./investor/recommendationsServices";
 import { supabase } from "@/integrations/supabase/client";
 
 // Fetch top matches for the dashboard
@@ -19,9 +19,9 @@ export const fetchTopMatches = async (limit = 3): Promise<Opportunity[]> => {
   return sortedDeals.slice(0, limit);
 };
 
-// Fetch network shared deals for the dashboard
-export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> => {
-  return fetchSharedDeals();
+// Fetch network recommendations for the dashboard
+export const fetchNetworkRecommendations = async (): Promise<NetworkSharedDeal[]> => {
+  return fetchRecommendationsForUser();
 };
 
 // Fetch network metrics for the dashboard
