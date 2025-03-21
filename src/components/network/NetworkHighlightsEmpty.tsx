@@ -1,16 +1,18 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { createSampleSharedDeals } from "@/services/investor";
 import { toast } from "sonner";
+
 interface NetworkHighlightsEmptyProps {
   onReloadDeals: () => Promise<void>;
 }
-export const NetworkHighlightsEmpty = ({
-  onReloadDeals
-}: NetworkHighlightsEmptyProps) => {
+
+export const NetworkHighlightsEmpty = ({ onReloadDeals }: NetworkHighlightsEmptyProps) => {
   const [isCreating, setIsCreating] = useState(false);
+  
   const handleCreateSample = async () => {
     setIsCreating(true);
     try {
@@ -26,11 +28,13 @@ export const NetworkHighlightsEmpty = ({
       setIsCreating(false);
     }
   };
-  return <Card>
+  
+  return (
+    <Card>
       <CardHeader>
         <div className="flex items-center gap-2">
           <Users className="h-5 w-5 text-muted-foreground" />
-          <CardTitle>Highlights</CardTitle>
+          <CardTitle>Network Highlights</CardTitle>
         </div>
         <CardDescription>
           Deals shared by investors in your network
@@ -43,14 +47,24 @@ export const NetworkHighlightsEmpty = ({
           </p>
           <div className="space-y-2">
             <Button variant="outline" className="w-full">Find Investors to Follow</Button>
-            <Button variant="default" className="w-full" onClick={handleCreateSample} disabled={isCreating}>
-              {isCreating ? <>
+            <Button 
+              variant="default" 
+              className="w-full"
+              onClick={handleCreateSample}
+              disabled={isCreating}
+            >
+              {isCreating ? (
+                <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Creating...
-                </> : "Create Sample Shared Deals"}
+                </>
+              ) : (
+                "Create Sample Shared Deals"
+              )}
             </Button>
           </div>
         </div>
       </CardContent>
-    </Card>;
+    </Card>
+  );
 };
