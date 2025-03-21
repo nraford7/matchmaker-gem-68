@@ -31,7 +31,7 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
       
       <div className="flex items-center text-sm mb-2 gap-1">
         <Handshake className="h-3 w-3 text-primary" />
-        <span>Shared by <span className="font-medium">{deal.sharedBy || "Alex Thompson"}</span></span>
+        <span>Shared by <span className="font-medium">{deal.sharedBy}</span></span>
       </div>
       
       <div className="flex gap-2 text-xs text-muted-foreground mb-2">

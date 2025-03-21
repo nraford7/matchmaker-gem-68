@@ -60,12 +60,23 @@ export const createSampleSharedDeals = async (): Promise<boolean> => {
       return false;
     }
     
-    // Sample comments and mock investor names
-    const mockInvestors = [
-      { id: userId, name: "Alex Thompson" },
-      { id: userId, name: "Maya Singh" },
-      { id: userId, name: "Jordan Chen" }
-    ];
+    // Fetch real investor profiles for more realistic data
+    const { data: investors, error: investorsError } = await supabase
+      .from("investor_profiles")
+      .select("id, name")
+      .order("name")
+      .limit(3);
+      
+    if (investorsError || !investors || investors.length === 0) {
+      console.error("Error fetching investors:", investorsError);
+      // Fallback to default mock investors if no real ones are found
+      const mockInvestors = [
+        { id: userId, name: "Alex Thompson" },
+        { id: userId, name: "Maya Singh" },
+        { id: userId, name: "Jordan Chen" }
+      ];
+      investors = mockInvestors;
+    }
     
     const comments = [
       "I've worked with this founding team before - they're exceptional. Highly recommend taking a look.",
