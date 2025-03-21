@@ -22,7 +22,7 @@ export const NavBar = () => {
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="font-bold text-xl">
-            EMIR Invest
+            OpportunityMatcher
           </Link>
           
           <nav className="hidden md:flex items-center gap-6">
