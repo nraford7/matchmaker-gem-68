@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import { Opportunity } from "@/types";
 import { DashboardHeader } from "@/components/DashboardHeader";
-import { NetworkSharedDeals } from "@/components/NetworkSharedDeals";
 import { fetchSavedDeals } from "@/services/opportunity";
 import { TopMatches, SavedDeals, PerformanceMetricsSection } from "@/components/dashboard";
+import { NetworkHighlights } from "@/components/network";
 
 const Dashboard = () => {
   const [topMatches, setTopMatches] = useState<Opportunity[]>([]);
@@ -38,7 +38,7 @@ const Dashboard = () => {
       <TopMatches topMatches={topMatches} loading={loading} />
       
       <div className="mb-6">
-        <NetworkSharedDeals />
+        <NetworkHighlights />
       </div>
       
       <SavedDeals savedDeals={savedDeals} loading={loading} />

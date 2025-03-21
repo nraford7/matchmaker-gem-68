@@ -1,12 +1,13 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Handshake, MessageSquare, Users } from "lucide-react";
+import { Handshake, MessageSquare, Users, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { fetchNetworkSharedDeals } from "@/services/dashboardService";
 import { NetworkSharedDeal } from "@/types";
 import { SampleDealsButton } from "@/components/network";
 
-export const NetworkSharedDeals = () => {
+export const NetworkHighlights = () => {
   const [sharedDeals, setSharedDeals] = useState<NetworkSharedDeal[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -39,6 +40,7 @@ export const NetworkSharedDeals = () => {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-6 text-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
             <p className="text-lg text-muted-foreground">
               Loading shared deals...
             </p>

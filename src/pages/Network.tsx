@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import { Users, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { NetworkSharedDeals } from "@/components/NetworkSharedDeals";
 import { 
   NetworkCard, 
   SuggestedConnections, 
   NetworkSearchBar, 
-  EmptyState 
+  EmptyState,
+  NetworkHighlights
 } from "@/components/network";
 import { NetworkInvestor } from "@/types";
 import { 
@@ -201,7 +201,7 @@ const Network = () => {
             onToggleFollow={toggleFollow}
           />
           
-          <NetworkSharedDeals />
+          <NetworkHighlights />
         </div>
       </div>
     </div>
