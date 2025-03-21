@@ -39,30 +39,15 @@ const Dashboard = () => {
         <NetworkSharedDeals />
       </div>
       
-      <Tabs defaultValue="all" className="w-full mb-6">
+      <Tabs defaultValue="saved" className="w-full mb-6">
         <TabsList className="mb-4">
-          <TabsTrigger value="all">All Opportunities</TabsTrigger>
-          <TabsTrigger value="saved">Saved</TabsTrigger>
+          <TabsTrigger value="saved">Your Saved Deals</TabsTrigger>
         </TabsList>
-        
-        <TabsContent value="all" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>All Opportunities</CardTitle>
-              <CardDescription>
-                Browse all available investment opportunities
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <OpportunityList opportunities={opportunities} />
-            </CardContent>
-          </Card>
-        </TabsContent>
         
         <TabsContent value="saved" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Saved Opportunities</CardTitle>
+              <CardTitle>Your Saved Deals</CardTitle>
               <CardDescription>
                 Opportunities you've saved for later
               </CardDescription>

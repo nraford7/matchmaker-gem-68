@@ -42,9 +42,9 @@ export const NavBar = () => {
               Dashboard
             </Link>
             <Link 
-              to="/opportunities" 
+              to="/browse" 
               className={`flex items-center gap-1 text-sm ${
-                currentPath === "/opportunities" 
+                currentPath === "/browse" 
                   ? "font-bold text-foreground" 
                   : "font-medium text-muted-foreground hover:text-foreground"
               }`}
