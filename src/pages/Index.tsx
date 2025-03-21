@@ -1,95 +1,126 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase } from "lucide-react";
 
-export default function Index() {
+const Index = () => {
   return (
-    <div className="flex flex-col min-h-[85vh]">
-      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
-            <div className="space-y-4">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                AI-Powered Investment Opportunity Matching
-              </h1>
-              <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                Find your next investment with our intelligent matching engine. We analyze your preferences and investment thesis to connect you with the most promising opportunities.
-              </p>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Link to="/dashboard">
-                  <Button className="w-full min-[400px]:w-auto">Go to Dashboard</Button>
-                </Link>
-                <Link to="/preferences">
-                  <Button variant="outline" className="w-full min-[400px]:w-auto">
-                    Set Preferences
-                  </Button>
-                </Link>
-              </div>
+    <div className="container mx-auto py-12">
+      <div className="flex flex-col items-center text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+          InvestorMatch
+        </h1>
+        <p className="text-xl text-muted-foreground max-w-2xl mb-8">
+          Find your next investment opportunity with AI-powered matching that understands your preferences
+        </p>
+        <Link to="/dashboard">
+          <Button size="lg" className="gap-2">
+            Go to Dashboard <ChevronRight className="h-4 w-4" />
+          </Button>
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="rounded-lg border bg-card p-8">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Trophy className="h-6 w-6 text-primary" />
             </div>
-            <div className="flex items-center justify-center">
-              <div className="relative w-full h-full min-h-[300px]">
-                <img
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                  alt="Investment Analysis"
-                  className="object-cover rounded-lg shadow-xl"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                  }}
-                />
-              </div>
-            </div>
+            <h3 className="text-2xl font-semibold">Smart Matching</h3>
           </div>
+          <p className="text-muted-foreground mb-4">
+            Our AI-powered algorithm analyzes your investment preferences and matches you with the most relevant opportunities.
+          </p>
+          <ul className="space-y-2">
+            <li className="flex items-center gap-2">
+              <ChevronRight className="h-4 w-4 text-primary" />
+              <span>Multi-factor analysis of investment criteria</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <ChevronRight className="h-4 w-4 text-primary" />
+              <span>Personalized match scores for each opportunity</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <ChevronRight className="h-4 w-4 text-primary" />
+              <span>Plain-language explanations for matches</span>
+            </li>
+          </ul>
         </div>
-      </section>
-      
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-        <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <div className="inline-block rounded-lg bg-muted-foreground/20 px-3 py-1 text-sm">
-                How It Works
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                Smart Matching Technology
-              </h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Our platform uses advanced AI to understand your investment preferences and match you with relevant opportunities.
-              </p>
+
+        <div className="rounded-lg border bg-card p-8">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <BarChart4 className="h-6 w-6 text-primary" />
             </div>
+            <h3 className="text-2xl font-semibold">Visualize Your Preferences</h3>
           </div>
-          <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
-            <div className="grid gap-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-white">
-                1
-              </div>
-              <h3 className="text-xl font-bold">Define Preferences</h3>
-              <p className="text-muted-foreground">
-                Set your investment criteria including sectors, stages, check sizes, and geographic preferences.
-              </p>
-            </div>
-            <div className="grid gap-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-white">
-                2
-              </div>
-              <h3 className="text-xl font-bold">AI Matching</h3>
-              <p className="text-muted-foreground">
-                Our algorithms analyze opportunities and rank them based on how well they match your criteria.
-              </p>
-            </div>
-            <div className="grid gap-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-white">
-                3
-              </div>
-              <h3 className="text-xl font-bold">Discover & Connect</h3>
-              <p className="text-muted-foreground">
-                Review personalized matches, understand why they're a good fit, and connect with promising startups.
-              </p>
-            </div>
-          </div>
+          <p className="text-muted-foreground mb-4">
+            See a visual representation of your investment criteria and how opportunities align with your strategy.
+          </p>
+          <ul className="space-y-2">
+            <li className="flex items-center gap-2">
+              <ChevronRight className="h-4 w-4 text-primary" />
+              <span>Interactive radar charts of preferences</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <ChevronRight className="h-4 w-4 text-primary" />
+              <span>Portfolio distribution analytics</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <ChevronRight className="h-4 w-4 text-primary" />
+              <span>Opportunity fit visualization</span>
+            </li>
+          </ul>
         </div>
-      </section>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="rounded-lg border bg-card p-6 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Trophy className="h-6 w-6 text-primary" />
+            </div>
+          </div>
+          <h3 className="text-xl font-medium mb-2">Tailored Matches</h3>
+          <p className="text-muted-foreground">
+            Get matched with opportunities that align with your investment thesis and criteria.
+          </p>
+        </div>
+
+        <div className="rounded-lg border bg-card p-6 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Rocket className="h-6 w-6 text-primary" />
+            </div>
+          </div>
+          <h3 className="text-xl font-medium mb-2">Opportunity Insights</h3>
+          <p className="text-muted-foreground">
+            Understand why each opportunity matches your criteria with detailed explanations.
+          </p>
+        </div>
+
+        <div className="rounded-lg border bg-card p-6 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Briefcase className="h-6 w-6 text-primary" />
+            </div>
+          </div>
+          <h3 className="text-xl font-medium mb-2">Efficient Deal Flow</h3>
+          <p className="text-muted-foreground">
+            Streamline your deal flow process and focus on the opportunities that matter most.
+          </p>
+        </div>
+      </div>
+
+      <div className="flex justify-center">
+        <Link to="/dashboard">
+          <Button size="lg" variant="outline" className="gap-2">
+            Explore Your Dashboard <ChevronRight className="h-4 w-4" />
+          </Button>
+        </Link>
+      </div>
     </div>
   );
-}
+};
+
+export default Index;
