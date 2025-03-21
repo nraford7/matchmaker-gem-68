@@ -4,5 +4,14 @@ export * from "./baseService";
 export * from "./fetchServices";
 export * from "./profileServices";
 export * from "./connectionServices";
+
+// Handle shared deals services
 export * from "./sharedDealsServices";
-export * from "./recommendationsServices";
+
+// Explicitly re-export from recommendationsServices to prevent naming conflicts
+// with sharedDealsServices
+export {
+  fetchRecommendationsForUser,
+  recommendDealToInvestor,
+  // Not re-exporting shareDealWithInvestor since it's already exported from sharedDealsServices
+} from "./recommendationsServices";
