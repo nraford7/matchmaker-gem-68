@@ -36,12 +36,20 @@ export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
     }
 
     // First check if the user has metrics already
-    // Use a type assertion to work around the TypeScript error
-    const { data, error } = await (supabase
-      .from('dashboard_metrics') as any)
+    // Use a more specific type assertion
+    const { data, error } = await supabase
+      .from('dashboard_metrics')
       .select("*")
       .eq("user_id", userId)
-      .single();
+      .single() as unknown as {
+        data: {
+          new_matches: number;
+          opportunities_viewed: number;
+          match_quality_percentage: number;
+          active_deals_count: number;
+        } | null;
+        error: any;
+      };
 
     if (error && error.code !== "PGRST116") { // PGRST116 means no rows returned
       throw error;
@@ -66,12 +74,20 @@ export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
         active_deals_count: activeDealsCount || 0
       };
 
-      // Use a type assertion to work around the TypeScript error
-      const { data: newData, error: insertError } = await (supabase
-        .from('dashboard_metrics') as any)
+      // Use a more specific type assertion
+      const { data: newData, error: insertError } = await supabase
+        .from('dashboard_metrics')
         .insert(defaultMetrics)
         .select()
-        .single();
+        .single() as unknown as {
+          data: {
+            new_matches: number;
+            opportunities_viewed: number;
+            match_quality_percentage: number;
+            active_deals_count: number;
+          };
+          error: any;
+        };
 
       if (insertError) throw insertError;
 
@@ -123,11 +139,11 @@ export const updateDashboardMetrics = async (metrics: Partial<DashboardMetrics>)
     // Add updated_at timestamp
     updateData.updated_at = new Date().toISOString();
 
-    // Use a type assertion to work around the TypeScript error
-    const { error } = await (supabase
-      .from('dashboard_metrics') as any)
+    // Use a more specific type assertion
+    const { error } = await supabase
+      .from('dashboard_metrics')
       .update(updateData)
-      .eq("user_id", userId);
+      .eq("user_id", userId) as unknown as { error: any };
 
     if (error) throw error;
 
@@ -150,9 +166,9 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
       throw new Error("User not authenticated");
     }
 
-    // Use a type assertion to work around the TypeScript error
-    const { data, error } = await (supabase
-      .from('network_shared_deals') as any)
+    // Use a more specific type assertion
+    const { data, error } = await supabase
+      .from('network_shared_deals')
       .select(`
         id,
         comment,
@@ -173,11 +189,29 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
       `)
       .eq("shared_with_user_id", userId)
       .order("created_at", { ascending: false })
-      .limit(5);
+      .limit(5) as unknown as {
+        data: Array<{
+          id: string;
+          comment: string | null;
+          created_at: string;
+          opportunities: {
+            id: string;
+            name: string;
+            sector: string;
+            stage: string;
+            funding_amount: number;
+          };
+          investor_profiles: {
+            name: string;
+            avatar_url: string | null;
+          };
+        }>;
+        error: any;
+      };
 
     if (error) throw error;
 
-    return data.map((item: any) => ({
+    return data.map((item) => ({
       id: item.id,
       opportunityId: item.opportunities.id,
       opportunityName: item.opportunities.name,

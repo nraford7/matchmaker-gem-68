@@ -23,18 +23,27 @@ export interface StageData {
 // Fetch market insights by sector
 export const fetchMarketInsightsBySector = async (): Promise<SectorData[]> => {
   try {
-    // Use a type assertion to work around the TypeScript error
-    const { data, error } = await (supabase
-      .from('market_insights') as any)
+    // Use a more specific type assertion
+    const { data, error } = await supabase
+      .from('market_insights')
       .select("*")
-      .order("date", { ascending: true });
+      .order("date", { ascending: true }) as unknown as {
+        data: Array<{
+          sector: string;
+          date: string;
+          deal_count: number;
+          funding_amount: number;
+          avg_deal_size: number;
+        }>;
+        error: any;
+      };
 
     if (error) throw error;
 
     // Group data by sector
     const sectorMap = new Map<string, any[]>();
     
-    data.forEach((item: any) => {
+    data.forEach((item) => {
       if (!sectorMap.has(item.sector)) {
         sectorMap.set(item.sector, []);
       }
@@ -62,18 +71,25 @@ export const fetchMarketInsightsBySector = async (): Promise<SectorData[]> => {
 // Fetch market insights by stage
 export const fetchMarketInsightsByStage = async (): Promise<StageData[]> => {
   try {
-    // Use a type assertion to work around the TypeScript error
-    const { data, error } = await (supabase
-      .from('market_insights') as any)
+    // Use a more specific type assertion
+    const { data, error } = await supabase
+      .from('market_insights')
       .select("*")
-      .order("stage", { ascending: true });
+      .order("stage", { ascending: true }) as unknown as {
+        data: Array<{
+          stage: string;
+          deal_count: number;
+          funding_amount: number;
+        }>;
+        error: any;
+      };
 
     if (error) throw error;
 
     // Group data by stage and aggregate
     const stageMap = new Map<string, { dealCount: number; fundingAmount: number }>();
     
-    data.forEach((item: any) => {
+    data.forEach((item) => {
       if (!item.stage) return;
       
       if (!stageMap.has(item.stage)) {
@@ -104,19 +120,26 @@ export const fetchRecentTrends = async (): Promise<any[]> => {
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
     
-    // Use a type assertion to work around the TypeScript error
-    const { data, error } = await (supabase
-      .from('market_insights') as any)
+    // Use a more specific type assertion
+    const { data, error } = await supabase
+      .from('market_insights')
       .select("*")
       .gte("date", threeMonthsAgo.toISOString().split('T')[0])
-      .order("date", { ascending: true });
+      .order("date", { ascending: true }) as unknown as {
+        data: Array<{
+          date: string;
+          sector: string;
+          deal_count: number;
+        }>;
+        error: any;
+      };
 
     if (error) throw error;
 
     // Group by month and sector
     const monthSectorMap = new Map<string, any>();
     
-    data.forEach((item: any) => {
+    data.forEach((item) => {
       const month = new Date(item.date).toLocaleString('default', { month: 'short' });
       
       if (!monthSectorMap.has(month)) {
