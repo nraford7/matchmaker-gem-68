@@ -114,35 +114,73 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
       return [];
     }
 
-    const { data, error } = await supabase
+    // First, get the shared deal records
+    const { data: sharedDealsData, error: sharedDealsError } = await supabase
       .from("network_shared_deals")
       .select(`
         id,
         comment,
         created_at,
-        opportunities!inner(id, name, sector, stage, funding_amount),
-        shared_by_user_id,
-        investor_profiles!inner(name, avatar_url)
+        opportunity_id,
+        shared_by_user_id
       `)
       .eq("shared_with_user_id", userId)
       .order("created_at", { ascending: false });
 
-    if (error) {
-      throw error;
+    if (sharedDealsError) {
+      throw sharedDealsError;
     }
 
-    return data.map(item => ({
-      id: item.id,
-      opportunityId: item.opportunities.id,
-      opportunityName: item.opportunities.name,
-      sector: item.opportunities.sector,
-      stage: item.opportunities.stage,
-      fundingAmount: Number(item.opportunities.funding_amount),
-      sharedBy: item.investor_profiles.name,
-      avatar: item.investor_profiles.avatar_url,
-      comment: item.comment,
-      sharedAt: item.created_at
+    if (!sharedDealsData || sharedDealsData.length === 0) {
+      return [];
+    }
+
+    // Create a mapped result with placeholders
+    const mappedDeals: NetworkSharedDeal[] = sharedDealsData.map(deal => ({
+      id: deal.id,
+      opportunityId: deal.opportunity_id,
+      opportunityName: "", // To be populated
+      sector: "", // To be populated
+      stage: "", // To be populated
+      fundingAmount: 0, // To be populated
+      sharedBy: "", // To be populated
+      avatar: null,
+      comment: deal.comment,
+      sharedAt: deal.created_at
     }));
+
+    // For each shared deal, fetch opportunity details
+    for (let i = 0; i < mappedDeals.length; i++) {
+      const deal = sharedDealsData[i];
+      
+      // Fetch opportunity details
+      const { data: opportunityData, error: opportunityError } = await supabase
+        .from("opportunities")
+        .select("name, sector, stage, funding_amount")
+        .eq("id", deal.opportunity_id)
+        .single();
+      
+      if (!opportunityError && opportunityData) {
+        mappedDeals[i].opportunityName = opportunityData.name;
+        mappedDeals[i].sector = opportunityData.sector;
+        mappedDeals[i].stage = opportunityData.stage;
+        mappedDeals[i].fundingAmount = Number(opportunityData.funding_amount);
+      }
+      
+      // Fetch sharer details
+      const { data: investorData, error: investorError } = await supabase
+        .from("investor_profiles")
+        .select("name, avatar_url")
+        .eq("id", deal.shared_by_user_id)
+        .single();
+      
+      if (!investorError && investorData) {
+        mappedDeals[i].sharedBy = investorData.name;
+        mappedDeals[i].avatar = investorData.avatar_url;
+      }
+    }
+
+    return mappedDeals;
   } catch (error) {
     console.error("Error fetching shared deals:", error);
     toast.error("Failed to load shared deals");
