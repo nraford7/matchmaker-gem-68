@@ -5,25 +5,26 @@ import { OpportunityCard } from "./OpportunityCard";
 interface OpportunityListProps {
   opportunities: Opportunity[];
   showMatchScore?: boolean;
+  animatingIds?: string[];
 }
 
-export const OpportunityList = ({ opportunities, showMatchScore = false }: OpportunityListProps) => {
-  if (opportunities.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-lg text-muted-foreground">No opportunities found</p>
-      </div>
-    );
-  }
-
+export const OpportunityList = ({ 
+  opportunities, 
+  showMatchScore = false,
+  animatingIds = []
+}: OpportunityListProps) => {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {opportunities.map((opportunity) => (
-        <OpportunityCard 
-          key={opportunity.id} 
-          opportunity={opportunity} 
-          showMatchScore={showMatchScore} 
-        />
+        <div
+          key={opportunity.id}
+          className={animatingIds.includes(opportunity.id) ? "animate-fade-out" : ""}
+        >
+          <OpportunityCard
+            opportunity={opportunity}
+            showMatchScore={showMatchScore}
+          />
+        </div>
       ))}
     </div>
   );

@@ -11,24 +11,37 @@ const Dashboard = () => {
   const [savedDeals, setSavedDeals] = useState<Opportunity[]>([]);
   const [loading, setLoading] = useState(true);
   
+  const loadDeals = async () => {
+    try {
+      // Fetch saved deals which include match scores
+      const deals = await fetchSavedDeals();
+      setSavedDeals(deals);
+      
+      // Filter for top matches
+      const matches = deals.filter(o => (o.matchScore || 0) > 0.7);
+      setTopMatches(matches);
+    } catch (error) {
+      console.error("Error loading deals:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   useEffect(() => {
-    const loadDeals = async () => {
-      try {
-        // Fetch saved deals which include match scores
-        const deals = await fetchSavedDeals();
-        setSavedDeals(deals);
-        
-        // Filter for top matches
-        const matches = deals.filter(o => (o.matchScore || 0) > 0.7);
-        setTopMatches(matches);
-      } catch (error) {
-        console.error("Error loading deals:", error);
-      } finally {
-        setLoading(false);
-      }
+    loadDeals();
+  }, []);
+  
+  // Listen for feedback changes to refresh the data
+  useEffect(() => {
+    const handleFeedbackChange = () => {
+      loadDeals();
     };
     
-    loadDeals();
+    window.addEventListener('matchFeedbackChanged', handleFeedbackChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('matchFeedbackChanged', handleFeedbackChange as EventListener);
+    };
   }, []);
   
   return (

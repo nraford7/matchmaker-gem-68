@@ -3,6 +3,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { getCurrentUserId, validateUserAuth } from "./baseService";
 
+// Custom event interface for TypeScript
+declare global {
+  interface WindowEventMap {
+    'matchFeedbackChanged': CustomEvent<{opportunityId: string, feedback: 'positive' | 'negative'}>;
+  }
+}
+
+// Helper function to dispatch feedback event
+const dispatchFeedbackEvent = (opportunityId: string, feedback: 'positive' | 'negative') => {
+  const event = new CustomEvent('matchFeedbackChanged', {
+    detail: { opportunityId, feedback }
+  });
+  window.dispatchEvent(event);
+};
+
 // Submit positive feedback for a match
 export const submitPositiveFeedback = async (opportunityId: string): Promise<boolean> => {
   try {
@@ -53,6 +68,9 @@ export const submitPositiveFeedback = async (opportunityId: string): Promise<boo
         user_id: userId
       }, { onConflict: 'opportunity_id,user_id' });
 
+    // Dispatch custom event for UI updates
+    dispatchFeedbackEvent(opportunityId, 'positive');
+    
     toast.success("Marked as interested");
     return true;
   } catch (error) {
@@ -125,6 +143,9 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
 
     if (pastDealError) throw pastDealError;
 
+    // Dispatch custom event for UI updates
+    dispatchFeedbackEvent(opportunityId, 'negative');
+    
     toast.success("Moved to past deals");
     return true;
   } catch (error) {
