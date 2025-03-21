@@ -10,6 +10,20 @@ interface DashboardMetrics {
   activeDealsCount: number;
 }
 
+// Type for network shared deal
+interface NetworkSharedDeal {
+  id: string;
+  opportunityId: string;
+  opportunityName: string;
+  sector: string;
+  stage: string;
+  fundingAmount: number;
+  sharedBy: string;
+  avatar: string | null;
+  comment: string | null;
+  sharedAt: string;
+}
+
 // Fetch dashboard metrics for the current user
 export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
   try {
@@ -22,8 +36,9 @@ export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
     }
 
     // First check if the user has metrics already
-    const { data, error } = await supabase
-      .from("dashboard_metrics")
+    // Use a type assertion to work around the TypeScript error
+    const { data, error } = await (supabase
+      .from('dashboard_metrics') as any)
       .select("*")
       .eq("user_id", userId)
       .single();
@@ -51,8 +66,9 @@ export const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
         active_deals_count: activeDealsCount || 0
       };
 
-      const { data: newData, error: insertError } = await supabase
-        .from("dashboard_metrics")
+      // Use a type assertion to work around the TypeScript error
+      const { data: newData, error: insertError } = await (supabase
+        .from('dashboard_metrics') as any)
         .insert(defaultMetrics)
         .select()
         .single();
@@ -107,8 +123,9 @@ export const updateDashboardMetrics = async (metrics: Partial<DashboardMetrics>)
     // Add updated_at timestamp
     updateData.updated_at = new Date().toISOString();
 
-    const { error } = await supabase
-      .from("dashboard_metrics")
+    // Use a type assertion to work around the TypeScript error
+    const { error } = await (supabase
+      .from('dashboard_metrics') as any)
       .update(updateData)
       .eq("user_id", userId);
 
@@ -123,7 +140,7 @@ export const updateDashboardMetrics = async (metrics: Partial<DashboardMetrics>)
 };
 
 // Fetch network shared deals for display on dashboard
-export const fetchNetworkSharedDeals = async () => {
+export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> => {
   try {
     const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
     if (sessionError) throw sessionError;
@@ -133,8 +150,9 @@ export const fetchNetworkSharedDeals = async () => {
       throw new Error("User not authenticated");
     }
 
-    const { data, error } = await supabase
-      .from("network_shared_deals")
+    // Use a type assertion to work around the TypeScript error
+    const { data, error } = await (supabase
+      .from('network_shared_deals') as any)
       .select(`
         id,
         comment,
@@ -159,7 +177,7 @@ export const fetchNetworkSharedDeals = async () => {
 
     if (error) throw error;
 
-    return data.map(item => ({
+    return data.map((item: any) => ({
       id: item.id,
       opportunityId: item.opportunities.id,
       opportunityName: item.opportunities.name,

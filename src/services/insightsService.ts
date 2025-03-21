@@ -23,8 +23,9 @@ export interface StageData {
 // Fetch market insights by sector
 export const fetchMarketInsightsBySector = async (): Promise<SectorData[]> => {
   try {
-    const { data, error } = await supabase
-      .from("market_insights")
+    // Use a type assertion to work around the TypeScript error
+    const { data, error } = await (supabase
+      .from('market_insights') as any)
       .select("*")
       .order("date", { ascending: true });
 
@@ -33,7 +34,7 @@ export const fetchMarketInsightsBySector = async (): Promise<SectorData[]> => {
     // Group data by sector
     const sectorMap = new Map<string, any[]>();
     
-    data.forEach(item => {
+    data.forEach((item: any) => {
       if (!sectorMap.has(item.sector)) {
         sectorMap.set(item.sector, []);
       }
@@ -61,8 +62,9 @@ export const fetchMarketInsightsBySector = async (): Promise<SectorData[]> => {
 // Fetch market insights by stage
 export const fetchMarketInsightsByStage = async (): Promise<StageData[]> => {
   try {
-    const { data, error } = await supabase
-      .from("market_insights")
+    // Use a type assertion to work around the TypeScript error
+    const { data, error } = await (supabase
+      .from('market_insights') as any)
       .select("*")
       .order("stage", { ascending: true });
 
@@ -71,7 +73,7 @@ export const fetchMarketInsightsByStage = async (): Promise<StageData[]> => {
     // Group data by stage and aggregate
     const stageMap = new Map<string, { dealCount: number; fundingAmount: number }>();
     
-    data.forEach(item => {
+    data.forEach((item: any) => {
       if (!item.stage) return;
       
       if (!stageMap.has(item.stage)) {
@@ -102,8 +104,9 @@ export const fetchRecentTrends = async (): Promise<any[]> => {
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
     
-    const { data, error } = await supabase
-      .from("market_insights")
+    // Use a type assertion to work around the TypeScript error
+    const { data, error } = await (supabase
+      .from('market_insights') as any)
       .select("*")
       .gte("date", threeMonthsAgo.toISOString().split('T')[0])
       .order("date", { ascending: true });
@@ -113,7 +116,7 @@ export const fetchRecentTrends = async (): Promise<any[]> => {
     // Group by month and sector
     const monthSectorMap = new Map<string, any>();
     
-    data.forEach(item => {
+    data.forEach((item: any) => {
       const month = new Date(item.date).toLocaleString('default', { month: 'short' });
       
       if (!monthSectorMap.has(month)) {
