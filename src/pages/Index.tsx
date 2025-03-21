@@ -13,7 +13,7 @@ const Index = () => {
       {/* Simple centered content */}
       <div className="container mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
         <div className="max-w-3xl text-center">
-          <h1 className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+          <h1 className="text-6xl font-bold mb-6 text-white">
             EMIR Invest
           </h1>
           
