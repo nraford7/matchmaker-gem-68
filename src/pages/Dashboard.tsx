@@ -11,6 +11,7 @@ import { mockOpportunities } from "@/data/mockData";
 
 const Dashboard = () => {
   const [opportunities] = useState<Opportunity[]>(mockOpportunities);
+  const topMatches = opportunities.filter(o => (o.matchScore || 0) > 0.7);
   
   return (
     <div className="container mx-auto py-6">
@@ -20,29 +21,35 @@ const Dashboard = () => {
         <DashboardMetrics />
       </div>
       
-      <Tabs defaultValue="matches" className="w-full">
+      {/* New Match Alerts section moved to the top */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>New Match Alerts</CardTitle>
+          <CardDescription>
+            Opportunities that best match your investment criteria
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {topMatches.length > 0 ? (
+            <OpportunityList 
+              opportunities={topMatches}
+              showMatchScore
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center py-6 text-center">
+              <p className="text-lg text-muted-foreground">
+                No new matches found based on your criteria
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      
+      <Tabs defaultValue="all" className="w-full">
         <TabsList className="mb-4">
-          <TabsTrigger value="matches">Top Matches</TabsTrigger>
           <TabsTrigger value="all">All Opportunities</TabsTrigger>
           <TabsTrigger value="saved">Saved</TabsTrigger>
         </TabsList>
-        
-        <TabsContent value="matches" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Your Top Matches</CardTitle>
-              <CardDescription>
-                Opportunities that best match your investment criteria
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <OpportunityList 
-                opportunities={opportunities.filter(o => (o.matchScore || 0) > 0.7)}
-                showMatchScore
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
         
         <TabsContent value="all" className="space-y-4">
           <Card>
