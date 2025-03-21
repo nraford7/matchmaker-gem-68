@@ -152,6 +152,44 @@ export type Database = {
         }
         Relationships: []
       }
+      matches: {
+        Row: {
+          created_at: string
+          feedback: string | null
+          id: string
+          opportunity_id: string
+          score: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feedback?: string | null
+          id?: string
+          opportunity_id: string
+          score?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feedback?: string | null
+          id?: string
+          opportunity_id?: string
+          score?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "matches_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       network_shared_deals: {
         Row: {
           comment: string | null
