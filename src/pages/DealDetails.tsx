@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Opportunity } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import DealHeader from "@/components/deals/DealHeader";
@@ -190,14 +189,17 @@ const DealDetails = () => {
     return <NotFoundState />;
   }
 
+  // Function to handle going back to the previous page
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="container mx-auto py-6 max-w-6xl">
       <div className="mb-6">
-        <Button variant="ghost" size="sm" asChild className="mb-2">
-          <Link to="/deals" className="flex items-center gap-1">
-            <ArrowLeft className="h-4 w-4" />
-            Back to Deals
-          </Link>
+        <Button variant="ghost" size="sm" onClick={handleGoBack} className="mb-2">
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          Back
         </Button>
         
         <DealHeader deal={dealData} />
