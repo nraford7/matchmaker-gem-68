@@ -50,7 +50,7 @@ export const NavBar = () => {
               }`}
             >
               <Search className="h-4 w-4" />
-              Browse
+              Search
             </Link>
             <Link 
               to="/upload" 
