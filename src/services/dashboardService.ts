@@ -134,41 +134,59 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
       throw new Error("User not authenticated");
     }
 
-    const { data, error } = await supabase
+    // Get network shared deals
+    const { data: sharedDeals, error: dealsError } = await supabase
       .from('network_shared_deals')
       .select(`
         id,
         comment,
         created_at,
         shared_by_user_id,
-        shared_with_user_id,
+        opportunity_id,
         opportunities (
           id,
           name,
           sector,
           stage,
           funding_amount
-        ),
-        investor_profiles!investor_profiles_shared_by_user_id_fkey (
-          name,
-          avatar_url
         )
       `)
       .eq("shared_with_user_id", userId)
       .order("created_at", { ascending: false })
       .limit(5);
 
-    if (error) throw error;
+    if (dealsError) throw dealsError;
 
-    return data.map((item: any) => ({
+    // Fetch user profiles for the shared_by_user_ids
+    const sharedByUserIds = sharedDeals.map(deal => deal.shared_by_user_id);
+    
+    const { data: userProfiles, error: profilesError } = await supabase
+      .from('profiles')
+      .select(`
+        id,
+        full_name,
+        avatar_url
+      `)
+      .in('id', sharedByUserIds);
+    
+    if (profilesError) throw profilesError;
+
+    // Create a lookup map for user profiles
+    const userProfileMap = userProfiles.reduce((acc, profile) => {
+      acc[profile.id] = profile;
+      return acc;
+    }, {});
+
+    // Map the data to the NetworkSharedDeal type
+    return sharedDeals.map((item: any) => ({
       id: item.id,
       opportunityId: item.opportunities.id,
       opportunityName: item.opportunities.name,
       sector: item.opportunities.sector,
       stage: item.opportunities.stage,
       fundingAmount: item.opportunities.funding_amount,
-      sharedBy: item.investor_profiles?.name || "Unknown Investor",
-      avatar: item.investor_profiles?.avatar_url,
+      sharedBy: userProfileMap[item.shared_by_user_id]?.full_name || "Unknown Investor",
+      avatar: userProfileMap[item.shared_by_user_id]?.avatar_url,
       comment: item.comment,
       sharedAt: item.created_at
     }));
