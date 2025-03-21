@@ -8,6 +8,7 @@ import { OpportunityList } from "@/components/OpportunityList";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { DashboardMetrics } from "@/components/DashboardMetrics";
 import { mockOpportunities } from "@/data/mockData";
+import { NetworkSharedDeals } from "@/components/NetworkSharedDeals";
 
 const Dashboard = () => {
   const [opportunities] = useState<Opportunity[]>(mockOpportunities);
@@ -43,6 +44,10 @@ const Dashboard = () => {
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-6">
         <DashboardMetrics />
+      </div>
+      
+      <div className="mb-6">
+        <NetworkSharedDeals />
       </div>
       
       <Tabs defaultValue="all" className="w-full">
