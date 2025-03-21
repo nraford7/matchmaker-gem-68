@@ -10,8 +10,20 @@ import {
   LogOut,
   Settings,
   ChartPie,
-  Briefcase
+  Briefcase,
+  ChevronDown
 } from "lucide-react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const NavBar = () => {
   const location = useLocation();
@@ -71,6 +83,41 @@ export const NavBar = () => {
               New
             </Link>
           </nav>
+        </div>
+        
+        {/* User Avatar with Dropdown */}
+        <div className="flex items-center gap-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
+              <div className="text-sm text-gray-700 font-medium hidden sm:block">
+                Alex Johnson
+              </div>
+              <Avatar className="h-8 w-8 border border-gray-200">
+                <AvatarImage src="" alt="User" />
+                <AvatarFallback className="bg-gray-100 text-gray-700">
+                  <User className="h-4 w-4" />
+                </AvatarFallback>
+              </Avatar>
+              <ChevronDown className="h-4 w-4 text-gray-500" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 bg-white">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer text-red-500">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>
