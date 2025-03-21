@@ -83,17 +83,6 @@ export const NavBar = () => {
               <ChartPie className="h-4 w-4" />
               Insights
             </Link>
-            <Link 
-              to="/upload" 
-              className={`flex items-center gap-1 text-sm ${
-                currentPath === "/upload" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <FilePlus className="h-4 w-4" />
-              New
-            </Link>
           </nav>
         </div>
         

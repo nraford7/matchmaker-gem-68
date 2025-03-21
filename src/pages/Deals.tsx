@@ -1,9 +1,11 @@
+
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { OpportunityList } from "@/components/OpportunityList";
 import { Opportunity } from "@/types";
-import { Briefcase, Save, Archive, PieChart, TrendingUp, Filter, Search, Globe } from "lucide-react";
+import { Briefcase, Save, Archive, PieChart, TrendingUp, Filter, Search, Globe, FilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -78,11 +80,20 @@ const Deals = () => {
   
   return (
     <div className="container mx-auto py-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Deals Dashboard</h1>
-        <p className="text-muted-foreground">
-          Manage your active, saved, and past investment opportunities
-        </p>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Deals Dashboard</h1>
+          <p className="text-muted-foreground">
+            Manage your active, saved, and past investment opportunities
+          </p>
+        </div>
+        
+        <Link to="/upload">
+          <Button className="gap-2">
+            <FilePlus className="h-4 w-4" />
+            Add a Deal
+          </Button>
+        </Link>
       </div>
 
       <Tabs defaultValue="active" className="w-full mb-12">
