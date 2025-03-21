@@ -9,6 +9,124 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      active_deals: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          opportunity_id: string
+          stage: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          opportunity_id: string
+          stage: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          opportunity_id?: string
+          stage?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "active_deals_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      opportunities: {
+        Row: {
+          created_at: string
+          description: string
+          funding_amount: number
+          id: string
+          location: string
+          name: string
+          pitch_deck: string | null
+          sector: string
+          stage: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          funding_amount: number
+          id?: string
+          location: string
+          name: string
+          pitch_deck?: string | null
+          sector: string
+          stage: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          funding_amount?: number
+          id?: string
+          location?: string
+          name?: string
+          pitch_deck?: string | null
+          sector?: string
+          stage?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      past_deals: {
+        Row: {
+          completion_date: string
+          created_at: string
+          final_amount: number
+          id: string
+          notes: string | null
+          opportunity_id: string
+          user_id: string
+        }
+        Insert: {
+          completion_date?: string
+          created_at?: string
+          final_amount: number
+          id?: string
+          notes?: string | null
+          opportunity_id: string
+          user_id: string
+        }
+        Update: {
+          completion_date?: string
+          created_at?: string
+          final_amount?: number
+          id?: string
+          notes?: string | null
+          opportunity_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "past_deals_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -35,6 +153,35 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      saved_opportunities: {
+        Row: {
+          created_at: string
+          id: string
+          opportunity_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          opportunity_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          opportunity_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_opportunities_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
