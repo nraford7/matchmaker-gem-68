@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Loader2 } from "lucide-react";
+import { Users, Loader2, MessageSquare } from "lucide-react";
 import { fetchNetworkSharedDeals } from "@/services/investor";
 import { NetworkSharedDeal } from "@/types";
 import { toast } from "sonner";
@@ -47,7 +47,7 @@ export const NetworkHighlights = () => {
           <CardTitle>Network Highlights</CardTitle>
         </div>
         <CardDescription>
-          Deals shared by investors in your network
+          Deals recommended by investors in your network
         </CardDescription>
       </CardHeader>
       <CardContent>

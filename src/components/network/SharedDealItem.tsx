@@ -3,14 +3,21 @@ import { NetworkSharedDeal } from "@/types";
 import { Handshake, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 interface SharedDealItemProps {
   deal: NetworkSharedDeal;
 }
 
 export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
+  const navigate = useNavigate();
+  
+  const handleViewDetails = () => {
+    navigate(`/deals/${deal.opportunityId}`);
+  };
+  
   return (
-    <div className="border rounded-md p-3">
+    <div className="border rounded-md p-3 hover:shadow-md transition-shadow">
       <div className="flex justify-between items-start mb-2">
         <h4 className="font-medium">{deal.opportunityName}</h4>
         <span className="text-xs text-muted-foreground">
@@ -39,8 +46,14 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
       )}
       
       <div className="flex gap-2 mt-2">
-        <Button variant="ghost" size="sm" className="h-7 text-xs">View Details</Button>
-        <Button variant="outline" size="sm" className="h-7 text-xs">Thank {deal.sharedBy.split(' ')[0]}</Button>
+        <Button 
+          variant="default" 
+          size="sm" 
+          className="h-7 text-xs w-full"
+          onClick={handleViewDetails}
+        >
+          View Deal Details
+        </Button>
       </div>
     </div>
   );
