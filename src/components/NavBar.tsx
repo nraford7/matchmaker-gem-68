@@ -51,17 +51,6 @@ export const NavBar = () => {
               Dashboard
             </Link>
             <Link 
-              to="/browse" 
-              className={`flex items-center gap-1 text-sm ${
-                currentPath === "/browse" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Search className="h-4 w-4" />
-              Search
-            </Link>
-            <Link 
               to="/deals" 
               className={`flex items-center gap-1 text-sm ${
                 currentPath === "/deals" 
@@ -73,15 +62,15 @@ export const NavBar = () => {
               Deals
             </Link>
             <Link 
-              to="/upload" 
+              to="/browse" 
               className={`flex items-center gap-1 text-sm ${
-                currentPath === "/upload" 
+                currentPath === "/browse" 
                   ? "font-bold text-foreground" 
                   : "font-medium text-muted-foreground hover:text-foreground"
               }`}
             >
-              <FilePlus className="h-4 w-4" />
-              New
+              <Search className="h-4 w-4" />
+              Search
             </Link>
             <Link 
               to="/insights" 
@@ -93,6 +82,17 @@ export const NavBar = () => {
             >
               <ChartPie className="h-4 w-4" />
               Insights
+            </Link>
+            <Link 
+              to="/upload" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/upload" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <FilePlus className="h-4 w-4" />
+              New
             </Link>
           </nav>
         </div>
