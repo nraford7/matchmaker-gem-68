@@ -19,8 +19,8 @@ import { mockOpportunities } from "@/data/mockData";
 const Browse = () => {
   const [opportunities] = useState<Opportunity[]>(mockOpportunities);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSector, setSelectedSector] = useState<string>("");
-  const [selectedStage, setSelectedStage] = useState<string>("");
+  const [selectedSector, setSelectedSector] = useState<string | null>(null);
+  const [selectedStage, setSelectedStage] = useState<string | null>(null);
   
   // Get unique sectors and stages for filters
   const sectors = [...new Set(opportunities.map(opp => opp.sector))];
@@ -32,8 +32,8 @@ const Browse = () => {
       opp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       opp.description.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const matchesSector = selectedSector === "" || opp.sector === selectedSector;
-    const matchesStage = selectedStage === "" || opp.stage === selectedStage;
+    const matchesSector = selectedSector === null || opp.sector === selectedSector;
+    const matchesStage = selectedStage === null || opp.stage === selectedStage;
     
     return matchesSearch && matchesSector && matchesStage;
   });
@@ -60,24 +60,24 @@ const Browse = () => {
         </div>
         
         <div className="flex gap-2">
-          <Select value={selectedSector} onValueChange={setSelectedSector}>
+          <Select value={selectedSector || undefined} onValueChange={setSelectedSector}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by sector" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Sectors</SelectItem>
+              <SelectItem value="all">All Sectors</SelectItem>
               {sectors.map(sector => (
                 <SelectItem key={sector} value={sector}>{sector}</SelectItem>
               ))}
             </SelectContent>
           </Select>
           
-          <Select value={selectedStage} onValueChange={setSelectedStage}>
+          <Select value={selectedStage || undefined} onValueChange={setSelectedStage}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by stage" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Stages</SelectItem>
+              <SelectItem value="all">All Stages</SelectItem>
               {stages.map(stage => (
                 <SelectItem key={stage} value={stage}>{stage}</SelectItem>
               ))}
@@ -89,8 +89,8 @@ const Browse = () => {
               variant="outline" 
               onClick={() => {
                 setSearchQuery("");
-                setSelectedSector("");
-                setSelectedStage("");
+                setSelectedSector(null);
+                setSelectedStage(null);
               }}
             >
               Clear
