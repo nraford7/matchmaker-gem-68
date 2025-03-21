@@ -130,7 +130,12 @@ export const getFeedbackStatus = async (opportunityId: string): Promise<'positiv
       throw error;
     }
 
-    return data?.feedback || null;
+    // Use type guard to ensure feedback is one of the valid values
+    if (data?.feedback === "positive" || data?.feedback === "negative") {
+      return data.feedback;
+    }
+    
+    return null;
   } catch (error) {
     console.error("Error getting feedback status:", error);
     return null;
