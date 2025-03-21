@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { NetworkInvestor } from "@/types";
+import { NetworkInvestor, Investor } from "@/types";
 import { toast } from "sonner";
 
 // Fetch all investors
@@ -166,6 +166,88 @@ export const checkFollowingStatus = async (investorId: string): Promise<boolean>
   } catch (error) {
     console.error("Error checking following status:", error);
     return false;
+  }
+};
+
+// Create or update investor profile
+export const updateInvestorProfile = async (investor: Omit<Investor, "id">): Promise<boolean> => {
+  try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      toast.error("Please login to update your profile");
+      return false;
+    }
+
+    const { error } = await supabase
+      .from("investor_profiles")
+      .upsert({
+        id: userId,
+        name: investor.name,
+        email: investor.email,
+        sectors: investor.preferredSectors,
+        preferred_stages: investor.preferredStages,
+        check_size_min: investor.checkSizeMin,
+        check_size_max: investor.checkSizeMax,
+        preferred_geographies: investor.preferredGeographies,
+        investment_thesis: investor.investmentThesis
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    toast.success("Profile updated successfully");
+    return true;
+  } catch (error) {
+    console.error("Error updating investor profile:", error);
+    toast.error("Failed to update profile");
+    return false;
+  }
+};
+
+// Get current user's investor profile
+export const fetchCurrentInvestorProfile = async (): Promise<Investor | null> => {
+  try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from("investor_profiles")
+      .select("*")
+      .eq("id", userId)
+      .single();
+
+    if (error) {
+      // If no profile found, return null instead of throwing
+      if (error.code === "PGRST116") {
+        return null;
+      }
+      throw error;
+    }
+
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email || "",
+      preferredSectors: data.sectors || [],
+      preferredStages: data.preferred_stages || [],
+      checkSizeMin: data.check_size_min || 0,
+      checkSizeMax: data.check_size_max || 0,
+      preferredGeographies: data.preferred_geographies || [],
+      investmentThesis: data.investment_thesis || ""
+    };
+  } catch (error) {
+    console.error("Error fetching current investor profile:", error);
+    toast.error("Failed to load your profile");
+    return null;
   }
 };
 
