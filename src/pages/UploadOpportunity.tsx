@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { 
   UploadCloud, 
   BriefcaseIcon, 
@@ -27,7 +28,7 @@ import {
   FileText
 } from "lucide-react";
 
-const personSchema = z.object({
+const stakeholderSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   role: z.string().min(1, { message: "Role is required" }),
   organization: z.string().optional(),
@@ -36,43 +37,56 @@ const personSchema = z.object({
 const opportunitySchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
   description: z.string().min(10, { message: "Description must be at least 10 characters" }),
-  sector: z.string().min(1, { message: "Please select a sector" }),
+  sectors: z.array(z.string()).min(1, { message: "Please select at least one sector" }),
   stage: z.string().min(1, { message: "Please select a stage" }),
   fundingAmount: z.coerce.number().min(1, { message: "Funding amount is required" }),
   location: z.string().min(1, { message: "Location is required" }),
-  people: z.array(personSchema).optional(),
+  stakeholders: z.array(stakeholderSchema).optional(),
 });
 
-type Person = z.infer<typeof personSchema>;
+type Stakeholder = z.infer<typeof stakeholderSchema>;
 type OpportunityFormValues = z.infer<typeof opportunitySchema>;
+
+const sectors = [
+  { id: "software", label: "Software" },
+  { id: "healthcare", label: "Healthcare" },
+  { id: "fintech", label: "Fintech" },
+  { id: "e-commerce", label: "E-commerce" },
+  { id: "cleantech", label: "Cleantech" },
+  { id: "ai", label: "Artificial Intelligence" },
+  { id: "manufacturing", label: "Manufacturing" },
+  { id: "education", label: "Education" },
+  { id: "other", label: "Other" },
+];
 
 const UploadOpportunity = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [people, setPeople] = useState<Person[]>([]);
-  const [newPerson, setNewPerson] = useState<Person>({ name: "", role: "", organization: "" });
+  const [stakeholders, setStakeholders] = useState<Stakeholder[]>([]);
+  const [newStakeholder, setNewStakeholder] = useState<Stakeholder>({ name: "", role: "", organization: "" });
   const [isProcessing, setIsProcessing] = useState(false);
   const [hasProcessed, setHasProcessed] = useState(false);
+  const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
 
   const form = useForm<OpportunityFormValues>({
     resolver: zodResolver(opportunitySchema),
     defaultValues: {
       name: "",
       description: "",
-      sector: "",
+      sectors: [],
       stage: "",
       fundingAmount: 0,
       location: "",
-      people: [],
+      stakeholders: [],
     },
   });
 
   const onSubmit = async (data: OpportunityFormValues) => {
     setIsSubmitting(true);
     
-    // Add people to the form data
-    data.people = people;
+    // Add stakeholders to the form data
+    data.stakeholders = stakeholders;
     
     try {
       // In a real app, you would upload the data to your backend here
@@ -119,14 +133,14 @@ const UploadOpportunity = () => {
       const extractedData = {
         name: "TechSolutions AI Platform",
         description: "An advanced AI platform that helps enterprises automate document processing and extract valuable insights. The solution leverages cutting-edge natural language processing and computer vision to transform unstructured data into actionable intelligence.",
-        sector: "AI",
+        sectors: ["ai", "software"],
         stage: "Series A",
         fundingAmount: 5000000,
         location: "San Francisco, CA",
-        people: [
+        stakeholders: [
           { name: "Jane Smith", role: "CEO", organization: "TechSolutions Inc." },
           { name: "John Davis", role: "CTO", organization: "TechSolutions Inc." },
-          { name: "Robert Johnson", role: "Lead Investor", organization: "Venture Capital Partners" }
+          { name: "Venture Capital Partners", role: "Lead Investor", organization: "" }
         ]
       };
       
@@ -134,14 +148,15 @@ const UploadOpportunity = () => {
       form.reset({
         name: extractedData.name,
         description: extractedData.description,
-        sector: extractedData.sector,
+        sectors: extractedData.sectors,
         stage: extractedData.stage,
         fundingAmount: extractedData.fundingAmount,
         location: extractedData.location,
       });
       
-      // Set people
-      setPeople(extractedData.people);
+      // Set stakeholders
+      setStakeholders(extractedData.stakeholders);
+      setSelectedSectors(extractedData.sectors);
       
       // Show success message
       toast.success("Document processed successfully", {
@@ -159,26 +174,39 @@ const UploadOpportunity = () => {
     }
   };
 
-  const handleAddPerson = () => {
-    if (newPerson.name.trim() === "" || newPerson.role.trim() === "") {
-      toast.error("Name and role are required for team members");
+  const handleAddStakeholder = () => {
+    if (newStakeholder.name.trim() === "" || newStakeholder.role.trim() === "") {
+      toast.error("Name and role are required for stakeholders");
       return;
     }
     
-    setPeople([...people, { ...newPerson }]);
-    setNewPerson({ name: "", role: "", organization: "" });
+    setStakeholders([...stakeholders, { ...newStakeholder }]);
+    setNewStakeholder({ name: "", role: "", organization: "" });
   };
 
-  const handleRemovePerson = (index: number) => {
-    const updatedPeople = [...people];
-    updatedPeople.splice(index, 1);
-    setPeople(updatedPeople);
+  const handleRemoveStakeholder = (index: number) => {
+    const updatedStakeholders = [...stakeholders];
+    updatedStakeholders.splice(index, 1);
+    setStakeholders(updatedStakeholders);
   };
 
-  const handlePersonChange = (field: keyof Person, value: string) => {
-    setNewPerson({
-      ...newPerson,
+  const handleStakeholderChange = (field: keyof Stakeholder, value: string) => {
+    setNewStakeholder({
+      ...newStakeholder,
       [field]: value,
+    });
+  };
+
+  const toggleSector = (sector: string) => {
+    setSelectedSectors(current => {
+      const updated = current.includes(sector) 
+        ? current.filter(s => s !== sector)
+        : [...current, sector];
+      
+      // Update the form value
+      form.setValue("sectors", updated, { shouldValidate: true });
+      
+      return updated;
     });
   };
 
@@ -282,137 +310,135 @@ const UploadOpportunity = () => {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                  <div className="grid grid-cols-1 gap-6 mt-4">
+                    {/* Multi-select sectors using checkboxes */}
                     <FormField
                       control={form.control}
-                      name="sector"
-                      render={({ field }) => (
+                      name="sectors"
+                      render={() => (
                         <FormItem>
-                          <FormLabel>Sector</FormLabel>
-                          <Select 
-                            onValueChange={field.onChange} 
-                            defaultValue={field.value}
-                            value={field.value}
-                          >
+                          <FormLabel>Sectors</FormLabel>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
+                            {sectors.map((sector) => (
+                              <div key={sector.id} className="flex items-center space-x-2">
+                                <Checkbox 
+                                  id={`sector-${sector.id}`} 
+                                  checked={selectedSectors.includes(sector.id)}
+                                  onCheckedChange={() => toggleSector(sector.id)}
+                                />
+                                <label
+                                  htmlFor={`sector-${sector.id}`}
+                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                  {sector.label}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="stage"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Funding Stage</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange} 
+                              defaultValue={field.value}
+                              value={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select stage" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="Pre-seed">Pre-seed</SelectItem>
+                                <SelectItem value="Seed">Seed</SelectItem>
+                                <SelectItem value="Series A">Series A</SelectItem>
+                                <SelectItem value="Series B">Series B</SelectItem>
+                                <SelectItem value="Series C">Series C</SelectItem>
+                                <SelectItem value="Series D+">Series D+</SelectItem>
+                                <SelectItem value="Growth">Growth</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="fundingAmount"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Funding Amount ($)</FormLabel>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select sector" />
-                              </SelectTrigger>
+                              <div className="relative">
+                                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input 
+                                  type="number" 
+                                  placeholder="1000000" 
+                                  className="pl-10" 
+                                  {...field}
+                                />
+                              </div>
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Software">Software</SelectItem>
-                              <SelectItem value="Healthcare">Healthcare</SelectItem>
-                              <SelectItem value="Fintech">Fintech</SelectItem>
-                              <SelectItem value="E-commerce">E-commerce</SelectItem>
-                              <SelectItem value="Cleantech">Cleantech</SelectItem>
-                              <SelectItem value="AI">Artificial Intelligence</SelectItem>
-                              <SelectItem value="Manufacturing">Manufacturing</SelectItem>
-                              <SelectItem value="Education">Education</SelectItem>
-                              <SelectItem value="Other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name="stage"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Funding Stage</FormLabel>
-                          <Select 
-                            onValueChange={field.onChange} 
-                            defaultValue={field.value}
-                            value={field.value}
-                          >
+                      <FormField
+                        control={form.control}
+                        name="location"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Location</FormLabel>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select stage" />
-                              </SelectTrigger>
+                              <div className="relative">
+                                <MapPinIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input 
+                                  placeholder="City, Country" 
+                                  className="pl-10" 
+                                  {...field} 
+                                />
+                              </div>
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Pre-seed">Pre-seed</SelectItem>
-                              <SelectItem value="Seed">Seed</SelectItem>
-                              <SelectItem value="Series A">Series A</SelectItem>
-                              <SelectItem value="Series B">Series B</SelectItem>
-                              <SelectItem value="Series C">Series C</SelectItem>
-                              <SelectItem value="Series D+">Series D+</SelectItem>
-                              <SelectItem value="Growth">Growth</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="fundingAmount"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Funding Amount ($)</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input 
-                                type="number" 
-                                placeholder="1000000" 
-                                className="pl-10" 
-                                {...field}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="location"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Location</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <MapPinIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input 
-                                placeholder="City, Country" 
-                                className="pl-10" 
-                                {...field} 
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {/* People Involved Section */}
+                {/* Stakeholders Section (renamed from People Involved) */}
                 <div className="border-t pt-6 space-y-4">
                   <div className="flex items-center gap-2">
                     <UsersIcon className="h-5 w-5 text-primary" />
-                    <h3 className="text-lg font-medium">People Involved</h3>
+                    <h3 className="text-lg font-medium">Stakeholders</h3>
                   </div>
                   
-                  {/* List of added people */}
-                  {people.length > 0 && (
+                  {/* List of added stakeholders */}
+                  {stakeholders.length > 0 && (
                     <div className="space-y-2">
-                      {people.map((person, index) => (
+                      {stakeholders.map((stakeholder, index) => (
                         <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-md">
                           <div className="flex items-center gap-3">
                             <UserIcon className="h-5 w-5 text-muted-foreground" />
                             <div>
-                              <p className="font-medium">{person.name}</p>
-                              <p className="text-sm text-muted-foreground">{person.role}</p>
-                              {person.organization && (
+                              <p className="font-medium">{stakeholder.name}</p>
+                              <p className="text-sm text-muted-foreground">{stakeholder.role}</p>
+                              {stakeholder.organization && (
                                 <p className="text-xs text-muted-foreground">
                                   <Building2Icon className="inline h-3 w-3 mr-1" />
-                                  {person.organization}
+                                  {stakeholder.organization}
                                 </p>
                               )}
                             </div>
@@ -421,7 +447,7 @@ const UploadOpportunity = () => {
                             type="button" 
                             variant="ghost" 
                             size="sm" 
-                            onClick={() => handleRemovePerson(index)}
+                            onClick={() => handleRemoveStakeholder(index)}
                           >
                             <X className="h-4 w-4" />
                           </Button>
@@ -430,33 +456,33 @@ const UploadOpportunity = () => {
                     </div>
                   )}
                   
-                  {/* Form to add new person */}
+                  {/* Form to add new stakeholder */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border border-dashed rounded-md">
                     <div>
-                      <FormLabel htmlFor="personName">Name</FormLabel>
+                      <FormLabel htmlFor="stakeholderName">Name</FormLabel>
                       <Input
-                        id="personName"
-                        placeholder="John Doe"
-                        value={newPerson.name}
-                        onChange={(e) => handlePersonChange('name', e.target.value)}
+                        id="stakeholderName"
+                        placeholder="Person or Company"
+                        value={newStakeholder.name}
+                        onChange={(e) => handleStakeholderChange('name', e.target.value)}
                       />
                     </div>
                     <div>
-                      <FormLabel htmlFor="personRole">Role</FormLabel>
+                      <FormLabel htmlFor="stakeholderRole">Role</FormLabel>
                       <Input
-                        id="personRole"
-                        placeholder="CEO, Investor, Advisor"
-                        value={newPerson.role}
-                        onChange={(e) => handlePersonChange('role', e.target.value)}
+                        id="stakeholderRole"
+                        placeholder="Founder, Co-investor, Board Member"
+                        value={newStakeholder.role}
+                        onChange={(e) => handleStakeholderChange('role', e.target.value)}
                       />
                     </div>
                     <div>
-                      <FormLabel htmlFor="personOrg">Organization (Optional)</FormLabel>
+                      <FormLabel htmlFor="stakeholderOrg">Organization (Optional)</FormLabel>
                       <Input
-                        id="personOrg"
+                        id="stakeholderOrg"
                         placeholder="Company Name"
-                        value={newPerson.organization || ''}
-                        onChange={(e) => handlePersonChange('organization', e.target.value)}
+                        value={newStakeholder.organization || ''}
+                        onChange={(e) => handleStakeholderChange('organization', e.target.value)}
                       />
                     </div>
                   </div>
@@ -464,11 +490,11 @@ const UploadOpportunity = () => {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={handleAddPerson}
+                    onClick={handleAddStakeholder}
                     className="w-full"
                   >
                     <UserPlusIcon className="h-4 w-4 mr-2" />
-                    Add Person
+                    Add Stakeholder
                   </Button>
                 </div>
 
