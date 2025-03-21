@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Opportunity } from "@/types";
@@ -36,12 +37,18 @@ const enhancedMockOpportunities = mockOpportunities.map(opp => ({
   businessModel: ["Subscription", "Freemium", "Transaction Fee", "Licensing", "Advertising"][Math.floor(Math.random() * 5)],
   competitors: ["Company A", "Company B", "Company C"].slice(0, Math.floor(Math.random() * 3) + 1),
   timeline: `${Math.floor(Math.random() * 6) + 6} months`,
-  revenue: opp.stage === "Seed" ? 
-    `$${(Math.random() * 500000).toFixed(0)}` : 
-    `$${(Math.random() * 5000000 + 500000).toFixed(0)}`,
+  revenue: (Math.random() * (opp.stage === "Seed" ? 500000 : 5000000 + 500000)).toFixed(0),
   growth: `${(Math.random() * 200 + 20).toFixed(0)}%`,
   pitchDeckUrl: "https://example.com/pitchdeck.pdf",
   contactEmail: "founder@" + opp.name.toLowerCase().replace(/\s/g, "") + ".com",
+  projectedIRR: `${(Math.random() * 30 + 15).toFixed(1)}%`,
+  personalisedRecommendation: [
+    "This opportunity aligns perfectly with your focus on B2B SaaS solutions with strong growth metrics. The founding team has a track record of successful exits in your target sectors.",
+    "Based on your investment thesis around fintech infrastructure, this company's innovative approach to financial analytics creates strong synergies with your existing portfolio.",
+    "The company's approach to healthcare technology matches your interest in digital health solutions. Their market timing and positioning could provide the returns you're looking for in this sector.",
+    "With your stated interest in SaaS companies targeting enterprise customers, this opportunity offers an attractive entry point with its proven traction and reasonable valuation.",
+    "This fits your geographical focus and stage preferences. Their business model aligns with your portfolio strategy of investing in recurring revenue businesses with clear paths to profitability."
+  ][Math.floor(Math.random() * 5)],
   team: [
     { name: "John Smith", role: "CEO & Co-founder" },
     { name: "Sarah Johnson", role: "CTO & Co-founder" },
@@ -73,6 +80,8 @@ const DealDetails = () => {
     growth?: string;
     pitchDeckUrl?: string;
     contactEmail?: string;
+    projectedIRR?: string;
+    personalisedRecommendation?: string;
     team?: { name: string; role: string }[];
     use_of_funds?: { category: string; percentage: number }[];
     milestones?: { description: string; timeline: string }[];
@@ -117,6 +126,17 @@ const DealDetails = () => {
       </div>
     );
   }
+
+  // Format currency with commas
+  const formatCurrency = (value: string | number) => {
+    if (typeof value === 'string') {
+      // If it's already a string, just ensure it has commas
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    
+    // If it's a number, convert to string with commas
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   return (
     <div className="container mx-auto py-6 max-w-6xl">
@@ -173,8 +193,7 @@ const DealDetails = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Funding Amount</p>
-                  <p className="text-lg font-medium flex items-center">
-                    <DollarSign className="h-4 w-4 mr-1" />
+                  <p className="text-lg font-medium">
                     ${(dealData.fundingAmount / 1000000).toFixed(1)}M
                   </p>
                 </div>
@@ -208,9 +227,8 @@ const DealDetails = () => {
                 {dealData.revenue && (
                   <div className="space-y-1">
                     <p className="text-sm text-muted-foreground">Annual Revenue</p>
-                    <p className="text-lg font-medium flex items-center">
-                      <DollarSign className="h-4 w-4 mr-1" />
-                      {dealData.revenue}
+                    <p className="text-lg font-medium">
+                      ${formatCurrency(dealData.revenue)}
                     </p>
                   </div>
                 )}
@@ -220,6 +238,14 @@ const DealDetails = () => {
                     <p className="text-lg font-medium flex items-center">
                       <TrendingUp className="h-4 w-4 mr-1" />
                       {dealData.growth}
+                    </p>
+                  </div>
+                )}
+                {dealData.projectedIRR && (
+                  <div className="space-y-1">
+                    <p className="text-sm text-muted-foreground">Projected IRR</p>
+                    <p className="text-lg font-medium">
+                      {dealData.projectedIRR}
                     </p>
                   </div>
                 )}
@@ -237,6 +263,17 @@ const DealDetails = () => {
               )}
             </CardContent>
           </Card>
+          
+          {dealData.personalisedRecommendation && (
+            <Card className="border-l-4 border-l-primary">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Why We Think You'll Like This</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>{dealData.personalisedRecommendation}</p>
+              </CardContent>
+            </Card>
+          )}
           
           {dealData.team && dealData.team.length > 0 && (
             <Card>
@@ -389,6 +426,15 @@ const DealDetails = () => {
                   <span className="text-sm font-medium">${(dealData.fundingAmount / 1000000).toFixed(1)}M</span>
                 </div>
                 <Separator />
+                {dealData.projectedIRR && (
+                  <>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Projected IRR</span>
+                      <span className="text-sm font-medium">{dealData.projectedIRR}</span>
+                    </div>
+                    <Separator />
+                  </>
+                )}
                 {dealData.timeline && (
                   <>
                     <div className="flex justify-between">
