@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, Sparkles, Zap, ArrowUpRight, Shield, Key, Handshake, UserRound } from "lucide-react";
@@ -49,10 +48,6 @@ const Index = () => {
           {/* Features Section */}
           <div className="container mx-auto py-16">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-50 text-blue-600 text-sm font-medium mb-4">
-                <Zap className="h-3.5 w-3.5" />
-                <span>Smart Investment Features</span>
-              </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Discover Your Perfect Investment Match</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Our platform combines AI with expert insights to help you find opportunities that align with your investment thesis.
