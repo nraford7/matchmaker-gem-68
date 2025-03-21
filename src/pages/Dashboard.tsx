@@ -40,9 +40,7 @@ const Dashboard = () => {
       </div>
       
       <Tabs defaultValue="saved" className="w-full mb-6">
-        <TabsList className="mb-4">
-          <TabsTrigger value="saved">Your Saved Deals</TabsTrigger>
-        </TabsList>
+        {/* Removed the TabsList with the button */}
         
         <TabsContent value="saved" className="space-y-4">
           <Card>
