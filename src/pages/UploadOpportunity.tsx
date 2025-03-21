@@ -21,7 +21,10 @@ import {
   UserIcon,
   UserPlusIcon, 
   Building2Icon,
-  X
+  X,
+  FileType,
+  Loader2,
+  FileText
 } from "lucide-react";
 
 const personSchema = z.object({
@@ -49,6 +52,8 @@ const UploadOpportunity = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [people, setPeople] = useState<Person[]>([]);
   const [newPerson, setNewPerson] = useState<Person>({ name: "", role: "", organization: "" });
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [hasProcessed, setHasProcessed] = useState(false);
 
   const form = useForm<OpportunityFormValues>({
     resolver: zodResolver(opportunitySchema),
@@ -93,10 +98,64 @@ const UploadOpportunity = () => {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       setSelectedFile(files[0]);
+      
+      // Start processing the document
+      await processDocument(files[0]);
+    }
+  };
+
+  const processDocument = async (file: File) => {
+    setIsProcessing(true);
+    
+    try {
+      // Simulate AI processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Mock AI-extracted data
+      const extractedData = {
+        name: "TechSolutions AI Platform",
+        description: "An advanced AI platform that helps enterprises automate document processing and extract valuable insights. The solution leverages cutting-edge natural language processing and computer vision to transform unstructured data into actionable intelligence.",
+        sector: "AI",
+        stage: "Series A",
+        fundingAmount: 5000000,
+        location: "San Francisco, CA",
+        people: [
+          { name: "Jane Smith", role: "CEO", organization: "TechSolutions Inc." },
+          { name: "John Davis", role: "CTO", organization: "TechSolutions Inc." },
+          { name: "Robert Johnson", role: "Lead Investor", organization: "Venture Capital Partners" }
+        ]
+      };
+      
+      // Fill the form with extracted data
+      form.reset({
+        name: extractedData.name,
+        description: extractedData.description,
+        sector: extractedData.sector,
+        stage: extractedData.stage,
+        fundingAmount: extractedData.fundingAmount,
+        location: extractedData.location,
+      });
+      
+      // Set people
+      setPeople(extractedData.people);
+      
+      // Show success message
+      toast.success("Document processed successfully", {
+        description: "We've analyzed your document and filled out the form. Please review and make any necessary corrections."
+      });
+      
+      setHasProcessed(true);
+    } catch (error) {
+      console.error("Error processing document:", error);
+      toast.error("Failed to process document", {
+        description: "Please fill out the form manually"
+      });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -133,153 +192,208 @@ const UploadOpportunity = () => {
               <CardTitle>Upload New Opportunity</CardTitle>
             </div>
             <CardDescription>
-              Share a new investment opportunity with potential investors
+              Upload your pitch document and let AI help you fill out the details
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Opportunity Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter opportunity name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {/* Document Upload Section - Now First */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-primary" />
+                    <FormLabel htmlFor="pitchDeck" className="text-lg font-medium">Upload Pitch Document</FormLabel>
+                  </div>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    <div className="flex flex-col items-center">
+                      <UploadCloud className="h-10 w-10 text-muted-foreground mb-2" />
+                      <p className="mb-2 text-sm text-muted-foreground">
+                        Drag and drop your pitch document (PDF, PPT, or Word), or
+                      </p>
+                      <Button type="button" variant="outline" onClick={() => document.getElementById("pitchDeck")?.click()}>
+                        Browse files
+                      </Button>
+                      <input
+                        id="pitchDeck"
+                        type="file"
+                        accept=".pdf,.ppt,.pptx,.doc,.docx"
+                        className="hidden"
+                        onChange={handleFileChange}
+                      />
+                      {selectedFile && (
+                        <div className="mt-4 text-sm flex items-center gap-2">
+                          <FileType className="h-4 w-4 text-primary" />
+                          <span>Selected file: {selectedFile.name}</span>
+                        </div>
+                      )}
+                      {isProcessing && (
+                        <div className="mt-4 flex items-center gap-2 text-primary">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span>Processing document...</span>
+                        </div>
+                      )}
+                      {hasProcessed && (
+                        <div className="mt-4 text-sm text-green-600">
+                          <span>✓ Document processed. Please review the information below.</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
 
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Describe the opportunity in detail" 
-                          className="min-h-32" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField
-                    control={form.control}
-                    name="sector"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Sector</FormLabel>
-                        <Select 
-                          onValueChange={field.onChange} 
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select sector" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Software">Software</SelectItem>
-                            <SelectItem value="Healthcare">Healthcare</SelectItem>
-                            <SelectItem value="Fintech">Fintech</SelectItem>
-                            <SelectItem value="E-commerce">E-commerce</SelectItem>
-                            <SelectItem value="Cleantech">Cleantech</SelectItem>
-                            <SelectItem value="AI">Artificial Intelligence</SelectItem>
-                            <SelectItem value="Manufacturing">Manufacturing</SelectItem>
-                            <SelectItem value="Education">Education</SelectItem>
-                            <SelectItem value="Other">Other</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                {/* Opportunity Details Section */}
+                <div className="border-t pt-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <InfoIcon className="h-5 w-5 text-primary" />
+                    <h3 className="text-lg font-medium">Opportunity Details</h3>
+                  </div>
 
                   <FormField
                     control={form.control}
-                    name="stage"
+                    name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Funding Stage</FormLabel>
-                        <Select 
-                          onValueChange={field.onChange} 
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select stage" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Pre-seed">Pre-seed</SelectItem>
-                            <SelectItem value="Seed">Seed</SelectItem>
-                            <SelectItem value="Series A">Series A</SelectItem>
-                            <SelectItem value="Series B">Series B</SelectItem>
-                            <SelectItem value="Series C">Series C</SelectItem>
-                            <SelectItem value="Series D+">Series D+</SelectItem>
-                            <SelectItem value="Growth">Growth</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="fundingAmount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Funding Amount ($)</FormLabel>
+                        <FormLabel>Opportunity Name</FormLabel>
                         <FormControl>
-                          <div className="relative">
-                            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input 
-                              type="number" 
-                              placeholder="1000000" 
-                              className="pl-10" 
-                              {...field}
-                            />
-                          </div>
+                          <Input placeholder="Enter opportunity name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="location"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Location</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <MapPinIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input 
-                              placeholder="City, Country" 
-                              className="pl-10" 
+                  <div className="mt-4">
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description</FormLabel>
+                          <FormControl>
+                            <Textarea 
+                              placeholder="Describe the opportunity in detail" 
+                              className="min-h-32" 
                               {...field} 
                             />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <FormField
+                      control={form.control}
+                      name="sector"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Sector</FormLabel>
+                          <Select 
+                            onValueChange={field.onChange} 
+                            defaultValue={field.value}
+                            value={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select sector" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Software">Software</SelectItem>
+                              <SelectItem value="Healthcare">Healthcare</SelectItem>
+                              <SelectItem value="Fintech">Fintech</SelectItem>
+                              <SelectItem value="E-commerce">E-commerce</SelectItem>
+                              <SelectItem value="Cleantech">Cleantech</SelectItem>
+                              <SelectItem value="AI">Artificial Intelligence</SelectItem>
+                              <SelectItem value="Manufacturing">Manufacturing</SelectItem>
+                              <SelectItem value="Education">Education</SelectItem>
+                              <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="stage"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Funding Stage</FormLabel>
+                          <Select 
+                            onValueChange={field.onChange} 
+                            defaultValue={field.value}
+                            value={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select stage" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Pre-seed">Pre-seed</SelectItem>
+                              <SelectItem value="Seed">Seed</SelectItem>
+                              <SelectItem value="Series A">Series A</SelectItem>
+                              <SelectItem value="Series B">Series B</SelectItem>
+                              <SelectItem value="Series C">Series C</SelectItem>
+                              <SelectItem value="Series D+">Series D+</SelectItem>
+                              <SelectItem value="Growth">Growth</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="fundingAmount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Funding Amount ($)</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                              <Input 
+                                type="number" 
+                                placeholder="1000000" 
+                                className="pl-10" 
+                                {...field}
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="location"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Location</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <MapPinIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                              <Input 
+                                placeholder="City, Country" 
+                                className="pl-10" 
+                                {...field} 
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
 
                 {/* People Involved Section */}
-                <div className="space-y-4">
+                <div className="border-t pt-6 space-y-4">
                   <div className="flex items-center gap-2">
                     <UsersIcon className="h-5 w-5 text-primary" />
                     <h3 className="text-lg font-medium">People Involved</h3>
@@ -358,35 +472,7 @@ const UploadOpportunity = () => {
                   </Button>
                 </div>
 
-                <div className="space-y-2">
-                  <FormLabel htmlFor="pitchDeck">Pitch Deck (PDF)</FormLabel>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <div className="flex flex-col items-center">
-                      <UploadCloud className="h-10 w-10 text-muted-foreground mb-2" />
-                      <p className="mb-2 text-sm text-muted-foreground">
-                        Drag and drop your pitch deck, or
-                      </p>
-                      <Button type="button" variant="outline" onClick={() => document.getElementById("pitchDeck")?.click()}>
-                        Browse files
-                      </Button>
-                      <input
-                        id="pitchDeck"
-                        type="file"
-                        accept=".pdf"
-                        className="hidden"
-                        onChange={handleFileChange}
-                      />
-                      {selectedFile && (
-                        <div className="mt-4 text-sm flex items-center gap-2">
-                          <InfoIcon className="h-4 w-4 text-primary" />
-                          <span>Selected file: {selectedFile.name}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-end gap-4">
+                <div className="flex justify-end gap-4 pt-4 border-t">
                   <Button 
                     type="button" 
                     variant="outline" 
