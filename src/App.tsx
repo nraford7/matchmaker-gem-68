@@ -11,6 +11,7 @@ import Preferences from "./pages/Preferences";
 import UploadOpportunity from "./pages/UploadOpportunity";
 import Insights from "./pages/Insights";
 import Deals from "./pages/Deals";
+import DealDetails from "./pages/DealDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/deals" element={<Deals />} />
+          <Route path="/deals/:id" element={<DealDetails />} />
           <Route path="/preferences" element={<Preferences />} />
           <Route path="/upload" element={<UploadOpportunity />} />
           <Route path="/insights" element={<Insights />} />
