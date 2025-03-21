@@ -62,5 +62,4 @@ export interface NetworkSharedDeal {
   avatar: string | null;
   comment: string | null;
   sharedAt: string;
-  location: string;
 }

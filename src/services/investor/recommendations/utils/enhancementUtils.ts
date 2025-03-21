@@ -1,53 +1,46 @@
-import { NetworkInvestor, NetworkSharedDeal, Opportunity } from "@/types";
 
-// Convert from database format to frontend format
-export const enhanceNetworkInvestor = (investor: any): NetworkInvestor => {
-  return {
-    id: investor.id,
-    name: investor.name || "Unknown Investor",
-    company: investor.company || "Independent",
-    sectors: investor.sectors || [],
-    dealCount: investor.deal_count || 0,
-    avatar: investor.avatar_url,
-    email: investor.email,
-    preferredStages: investor.preferred_stages,
-    checkSizeMin: investor.check_size_min,
-    checkSizeMax: investor.check_size_max,
-    preferredGeographies: investor.preferred_geographies,
-    investmentThesis: investor.investment_thesis
-  };
-};
+import { NetworkSharedDeal } from "@/types";
+import { fetchOpportunityDetails } from "./opportunityUtils";
+import { fetchInvestorProfile } from "./investorUtils";
 
-// Create a shared deal object with needed properties
-export const createSharedDeal = (deal: any): NetworkSharedDeal => {
-  return {
-    id: deal.id,
-    opportunityId: deal.opportunity_id,
-    opportunityName: deal.opportunity_name || "Unnamed Opportunity",
-    sector: deal.sector || "Technology",
-    stage: deal.stage || "Seed",
-    fundingAmount: deal.funding_amount || 1000000,
-    sharedBy: deal.shared_by || "Anonymous Investor",
-    avatar: deal.avatar_url || "",
-    comment: deal.comment,
-    sharedAt: deal.created_at,
-    location: deal.location || "Unknown" // Add location property
-  };
-};
-
-// Format opportunity data for the frontend
-export const enhanceOpportunity = (opportunity: any): Opportunity => {
-  return {
-    id: opportunity.id,
-    name: opportunity.name,
-    description: opportunity.description,
-    sector: opportunity.sector,
-    stage: opportunity.stage,
-    fundingAmount: opportunity.funding_amount,
-    location: opportunity.location,
-    pitchDeck: opportunity.pitch_deck,
-    createdAt: opportunity.created_at,
-    matchScore: opportunity.match_score,
-    matchExplanation: opportunity.match_explanation,
-  };
+// Enhance recommendation with opportunity and investor details
+export const enhanceRecommendation = async (
+  recommendation: any, 
+  opportunityIdField: string,
+  investorIdField: string,
+  commentField: string,
+  createdAtField: string
+): Promise<NetworkSharedDeal | null> => {
+  try {
+    // Fetch opportunity details
+    const opportunityData = await fetchOpportunityDetails(recommendation[opportunityIdField]);
+    if (!opportunityData) {
+      console.log(`No opportunity data found for ID: ${recommendation[opportunityIdField]}`);
+      return null;
+    }
+    
+    // Fetch investor profile
+    const investorData = await fetchInvestorProfile(recommendation[investorIdField]);
+    if (!investorData) {
+      console.log(`No investor data found for ID: ${recommendation[investorIdField]}`);
+      return null;
+    }
+    
+    // Create the enhanced recommendation object
+    return {
+      id: recommendation.id,
+      opportunityId: recommendation[opportunityIdField],
+      opportunityName: opportunityData.name,
+      sector: opportunityData.sector,
+      stage: opportunityData.stage,
+      fundingAmount: Number(opportunityData.funding_amount),
+      sharedBy: investorData.name,
+      avatar: investorData.avatar_url,
+      comment: recommendation[commentField],
+      sharedAt: recommendation[createdAtField]
+    };
+  } catch (error) {
+    console.error("Error enhancing recommendation:", error);
+    return null;
+  }
 };

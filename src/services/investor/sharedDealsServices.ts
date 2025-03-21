@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { NetworkSharedDeal } from "@/types";
 import { toast } from "sonner";
@@ -156,8 +157,7 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
       sharedBy: "", // To be populated
       avatar: null,
       comment: deal.comment,
-      sharedAt: deal.created_at,
-      location: ""
+      sharedAt: deal.created_at
     }));
 
     // For each shared deal, fetch opportunity details
@@ -167,7 +167,7 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
       // Fetch opportunity details
       const { data: opportunityData, error: opportunityError } = await supabase
         .from("opportunities")
-        .select("name, sector, stage, funding_amount, location")
+        .select("name, sector, stage, funding_amount")
         .eq("id", deal.opportunity_id)
         .single();
       
@@ -176,7 +176,6 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
         mappedDeals[i].sector = opportunityData.sector;
         mappedDeals[i].stage = opportunityData.stage;
         mappedDeals[i].fundingAmount = Number(opportunityData.funding_amount);
-        mappedDeals[i].location = opportunityData.location || "Unknown";
       }
       
       // Fetch sharer details
