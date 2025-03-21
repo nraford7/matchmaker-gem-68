@@ -9,114 +9,74 @@ import {
   MapPin,
   DollarSign,
   Tag,
-  Clock
+  Clock,
+  Loader2,
+  UserPlus,
+  Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NetworkInvestor } from "@/types";
 import { PreferenceVisualizer } from "@/components/PreferenceVisualizer";
-
-// Enhanced mock data for investors with complete profiles
-const mockInvestorProfiles: NetworkInvestor[] = [
-  { 
-    id: "1", 
-    name: "Sarah Johnson", 
-    company: "Sequoia Capital", 
-    sectors: ["SaaS", "Fintech", "Health Tech"],
-    dealCount: 23,
-    avatar: null,
-    email: "sarah@sequoiacap.com",
-    preferredStages: ["Seed", "Series A", "Series B"],
-    checkSizeMin: 750000,
-    checkSizeMax: 3000000,
-    preferredGeographies: ["US", "Canada", "Europe"],
-    investmentThesis: "Focused on backing exceptional founders building category-defining technology companies with strong network effects. Looking for innovative solutions in financial technology, enterprise SaaS, and digital health."
-  },
-  { 
-    id: "2", 
-    name: "Michael Chen", 
-    company: "Andreessen Horowitz", 
-    sectors: ["AI", "Enterprise", "Developer Tools"],
-    dealCount: 18,
-    avatar: null,
-    email: "michael@a16z.com",
-    preferredStages: ["Series A", "Series B"],
-    checkSizeMin: 1000000,
-    checkSizeMax: 5000000,
-    preferredGeographies: ["US", "Asia", "Europe"],
-    investmentThesis: "Investing in companies leveraging artificial intelligence to transform industries. Especially interested in developer tools, enterprise software, and AI infrastructure with clear paths to market leadership."
-  },
-  { 
-    id: "3", 
-    name: "Elena Rodriguez", 
-    company: "First Round Capital", 
-    sectors: ["Consumer", "Marketplace", "EdTech"],
-    dealCount: 15,
-    avatar: null,
-    email: "elena@firstround.com",
-    preferredStages: ["Pre-seed", "Seed"],
-    checkSizeMin: 250000,
-    checkSizeMax: 1000000,
-    preferredGeographies: ["US", "Latin America"],
-    investmentThesis: "Supporting founders at the earliest stages with a focus on consumer products, marketplace models, and education technology. Looking for passionate teams with unique insights into their target markets."
-  },
-  { 
-    id: "4", 
-    name: "David Kim", 
-    company: "Y Combinator", 
-    sectors: ["B2B SaaS", "AI", "Marketplaces"],
-    dealCount: 27,
-    avatar: null,
-    email: "david@ycombinator.com",
-    preferredStages: ["Pre-seed", "Seed"],
-    checkSizeMin: 150000,
-    checkSizeMax: 500000,
-    preferredGeographies: ["US", "Canada", "Europe", "Asia"],
-    investmentThesis: "Investing in early-stage startups with exceptional founding teams. Focus on rapid growth potential, clear value propositions, and scalable business models across various technology sectors."
-  },
-  { 
-    id: "5", 
-    name: "Alexandra Wright", 
-    company: "Benchmark", 
-    sectors: ["Consumer", "SaaS", "Fintech"],
-    dealCount: 19,
-    avatar: null,
-    email: "alexandra@benchmark.com",
-    preferredStages: ["Seed", "Series A"],
-    checkSizeMin: 500000,
-    checkSizeMax: 2500000,
-    preferredGeographies: ["US", "UK"],
-    investmentThesis: "Seeking category-defining consumer and enterprise companies led by visionary founders. Interested in novel approaches to established markets with strong defensibility and network effects."
-  },
-  { 
-    id: "6", 
-    name: "James Smith", 
-    company: "Accel", 
-    sectors: ["Enterprise SaaS", "Security", "DevOps"],
-    dealCount: 22,
-    avatar: null,
-    email: "james@accel.com",
-    preferredStages: ["Series A", "Series B", "Series C"],
-    checkSizeMin: 2000000,
-    checkSizeMax: 10000000,
-    preferredGeographies: ["US", "Europe", "Australia"],
-    investmentThesis: "Backing entrepreneurs building transformative enterprise software companies. Focus on security, infrastructure, and developer tools that address large, growing markets with differentiated technology."
-  }
-];
+import { fetchInvestorById, followInvestor, unfollowInvestor, checkFollowingStatus } from "@/services/investorService";
 
 const InvestorProfile = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [investor, setInvestor] = useState<NetworkInvestor | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followingLoading, setFollowingLoading] = useState(false);
   
   useEffect(() => {
-    // Find investor by ID
-    const foundInvestor = mockInvestorProfiles.find(i => i.id === id);
-    if (foundInvestor) {
-      setInvestor(foundInvestor);
-    }
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        if (id) {
+          const investorData = await fetchInvestorById(id);
+          setInvestor(investorData);
+          
+          // Check if user is following this investor
+          const following = await checkFollowingStatus(id);
+          setIsFollowing(following);
+        }
+      } catch (error) {
+        console.error("Error loading investor:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
   }, [id]);
+  
+  const handleToggleFollow = async () => {
+    if (!id || !investor) return;
+    
+    setFollowingLoading(true);
+    try {
+      if (isFollowing) {
+        const success = await unfollowInvestor(id);
+        if (success) setIsFollowing(false);
+      } else {
+        const success = await followInvestor(id);
+        if (success) setIsFollowing(true);
+      }
+    } catch (error) {
+      console.error("Error toggling follow status:", error);
+    } finally {
+      setFollowingLoading(false);
+    }
+  };
+  
+  if (isLoading) {
+    return (
+      <div className="container mx-auto py-6 flex justify-center items-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
   
   if (!investor) {
     return (
@@ -159,15 +119,37 @@ const InvestorProfile = () => {
           <Card>
             <CardHeader className="flex flex-row items-center gap-4">
               <Avatar className="h-16 w-16">
+                <AvatarImage src={investor.avatar || undefined} alt={investor.name} />
                 <AvatarFallback className="text-xl">{investor.name.charAt(0)}</AvatarFallback>
               </Avatar>
-              <div>
+              <div className="flex-1">
                 <CardTitle>{investor.name}</CardTitle>
                 <CardDescription className="flex items-center mt-1">
                   <Building className="h-3.5 w-3.5 mr-1" />
                   {investor.company}
                 </CardDescription>
               </div>
+              <Button 
+                variant={isFollowing ? "outline" : "default"}
+                size="sm"
+                onClick={handleToggleFollow}
+                disabled={followingLoading}
+                className="shrink-0"
+              >
+                {followingLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : isFollowing ? (
+                  <>
+                    <Check className="h-4 w-4 mr-1" />
+                    Following
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="h-4 w-4 mr-1" />
+                    Follow
+                  </>
+                )}
+              </Button>
             </CardHeader>
             <CardContent className="space-y-4">
               {investor.email && (

@@ -47,6 +47,78 @@ export type Database = {
           },
         ]
       }
+      investor_connections: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      investor_profiles: {
+        Row: {
+          avatar_url: string | null
+          check_size_max: number | null
+          check_size_min: number | null
+          company: string | null
+          created_at: string
+          deal_count: number
+          email: string | null
+          id: string
+          investment_thesis: string | null
+          name: string
+          preferred_geographies: string[] | null
+          preferred_stages: string[] | null
+          sectors: string[]
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          check_size_max?: number | null
+          check_size_min?: number | null
+          company?: string | null
+          created_at?: string
+          deal_count?: number
+          email?: string | null
+          id: string
+          investment_thesis?: string | null
+          name: string
+          preferred_geographies?: string[] | null
+          preferred_stages?: string[] | null
+          sectors?: string[]
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          check_size_max?: number | null
+          check_size_min?: number | null
+          company?: string | null
+          created_at?: string
+          deal_count?: number
+          email?: string | null
+          id?: string
+          investment_thesis?: string | null
+          name?: string
+          preferred_geographies?: string[] | null
+          preferred_stages?: string[] | null
+          sectors?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       opportunities: {
         Row: {
           created_at: string

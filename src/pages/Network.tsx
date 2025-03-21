@@ -1,15 +1,15 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   Users, 
   UserPlus, 
   Search, 
-  Filter, 
-  MessageSquare,
   Handshake,
+  MessageSquare,
   Share2,
-  ChevronDown
+  ChevronDown,
+  Loader2
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,91 +24,78 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { NetworkSharedDeals } from "@/components/NetworkSharedDeals";
 import { NetworkInvestor } from "@/types";
-
-// Mock data for investors
-const mockFollowedInvestors: NetworkInvestor[] = [
-  { 
-    id: "1", 
-    name: "Sarah Johnson", 
-    company: "Sequoia Capital", 
-    sectors: ["SaaS", "Fintech", "Health Tech"],
-    dealCount: 23,
-    avatar: null
-  },
-  { 
-    id: "2", 
-    name: "Michael Chen", 
-    company: "Andreessen Horowitz", 
-    sectors: ["AI", "Enterprise", "Developer Tools"],
-    dealCount: 18,
-    avatar: null
-  },
-  { 
-    id: "3", 
-    name: "Elena Rodriguez", 
-    company: "First Round Capital", 
-    sectors: ["Consumer", "Marketplace", "EdTech"],
-    dealCount: 15,
-    avatar: null
-  }
-];
-
-const mockAllInvestors: NetworkInvestor[] = [
-  ...mockFollowedInvestors,
-  { 
-    id: "4", 
-    name: "David Kim", 
-    company: "Y Combinator", 
-    sectors: ["B2B SaaS", "AI", "Marketplaces"],
-    dealCount: 27,
-    avatar: null
-  },
-  { 
-    id: "5", 
-    name: "Alexandra Wright", 
-    company: "Benchmark", 
-    sectors: ["Consumer", "SaaS", "Fintech"],
-    dealCount: 19,
-    avatar: null
-  },
-  { 
-    id: "6", 
-    name: "James Smith", 
-    company: "Accel", 
-    sectors: ["Enterprise SaaS", "Security", "DevOps"],
-    dealCount: 22,
-    avatar: null
-  }
-];
+import { fetchAllInvestors, fetchFollowedInvestors, followInvestor, unfollowInvestor } from "@/services/investorService";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const Network = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTab, setSelectedTab] = useState("following");
-  const [investors, setInvestors] = useState(mockFollowedInvestors);
+  const [investors, setInvestors] = useState<NetworkInvestor[]>([]);
+  const [followedInvestors, setFollowedInvestors] = useState<NetworkInvestor[]>([]);
+  const [allInvestors, setAllInvestors] = useState<NetworkInvestor[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
+  
+  // Load investors data
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const [followed, all] = await Promise.all([
+          fetchFollowedInvestors(),
+          fetchAllInvestors()
+        ]);
+        
+        setFollowedInvestors(followed);
+        setAllInvestors(all);
+        setInvestors(selectedTab === "following" ? followed : all);
+      } catch (error) {
+        console.error("Error loading investors:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    if (user) {
+      loadData();
+    } else {
+      setIsLoading(false);
+    }
+  }, [user]);
   
   // Toggle following status
-  const toggleFollow = (investorId: string) => {
-    if (selectedTab === "following") {
-      setInvestors(investors.filter(investor => investor.id !== investorId));
-    } else {
-      const alreadyFollowing = mockFollowedInvestors.some(inv => inv.id === investorId);
-      if (alreadyFollowing) {
-        // Unfollow
-        setInvestors(investors.map(investor => {
-          if (investor.id === investorId) {
-            return { ...investor, isFollowing: false };
-          }
-          return investor;
-        }));
-      } else {
-        // Follow
-        setInvestors(investors.map(investor => {
-          if (investor.id === investorId) {
-            return { ...investor, isFollowing: true };
-          }
-          return investor;
-        }));
+  const toggleFollow = async (investorId: string) => {
+    if (!user) {
+      toast.error("Please log in to follow investors");
+      return;
+    }
+    
+    const isFollowing = followedInvestors.some(inv => inv.id === investorId);
+    
+    let success;
+    if (isFollowing) {
+      // Unfollow
+      success = await unfollowInvestor(investorId);
+      if (success) {
+        setFollowedInvestors(prev => prev.filter(inv => inv.id !== investorId));
       }
+    } else {
+      // Follow
+      success = await followInvestor(investorId);
+      if (success) {
+        const investorToFollow = allInvestors.find(inv => inv.id === investorId);
+        if (investorToFollow) {
+          setFollowedInvestors(prev => [...prev, investorToFollow]);
+        }
+      }
+    }
+    
+    if (success && selectedTab === "following") {
+      // Refresh the list if we're on the following tab
+      const followed = await fetchFollowedInvestors();
+      setFollowedInvestors(followed);
+      setInvestors(followed);
     }
   };
   
@@ -116,9 +103,9 @@ const Network = () => {
   const handleTabChange = (value: string) => {
     setSelectedTab(value);
     if (value === "following") {
-      setInvestors(mockFollowedInvestors);
+      setInvestors(followedInvestors);
     } else {
-      setInvestors(mockAllInvestors);
+      setInvestors(allInvestors);
     }
   };
   
@@ -126,11 +113,16 @@ const Network = () => {
   const filteredInvestors = investors.filter(
     investor => 
       investor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      investor.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (investor.company && investor.company.toLowerCase().includes(searchQuery.toLowerCase())) ||
       investor.sectors.some(sector => 
         sector.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
+  
+  // Get suggested connections - investors user is not following yet
+  const suggestedConnections = allInvestors
+    .filter(investor => !followedInvestors.some(followed => followed.id === investor.id))
+    .slice(0, 3);
   
   return (
     <div className="container mx-auto py-6">
@@ -146,76 +138,82 @@ const Network = () => {
             </p>
           </div>
           
-          <Tabs defaultValue="following" onValueChange={handleTabChange}>
-            <div className="flex justify-between items-center mb-4">
-              <TabsList>
-                <TabsTrigger value="following">Following</TabsTrigger>
-                <TabsTrigger value="discover">Discover</TabsTrigger>
-              </TabsList>
-              
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input 
-                  placeholder="Search investors..." 
-                  className="pl-10 w-[250px]"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
+          {isLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
-            
-            <TabsContent value="following" className="mt-0">
-              {filteredInvestors.length === 0 && (
-                <Card>
-                  <CardContent className="py-10 flex flex-col items-center justify-center text-center">
-                    <Users className="h-10 w-10 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-medium mb-2">No investors found</h3>
-                    <p className="text-muted-foreground mb-4">
-                      {searchQuery ? "No results match your search criteria." : "You're not following any investors yet."}
-                    </p>
-                    <Button onClick={() => handleTabChange("discover")}>Discover Investors</Button>
-                  </CardContent>
-                </Card>
-              )}
-              
-              <div className="grid gap-4">
-                {filteredInvestors.map(investor => (
-                  <InvestorCard 
-                    key={investor.id} 
-                    investor={investor} 
-                    isFollowing={true}
-                    onToggleFollow={toggleFollow}
+          ) : (
+            <Tabs defaultValue="following" onValueChange={handleTabChange}>
+              <div className="flex justify-between items-center mb-4">
+                <TabsList>
+                  <TabsTrigger value="following">Following</TabsTrigger>
+                  <TabsTrigger value="discover">Discover</TabsTrigger>
+                </TabsList>
+                
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input 
+                    placeholder="Search investors..." 
+                    className="pl-10 w-[250px]"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                ))}
+                </div>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="discover" className="mt-0">
-              {filteredInvestors.length === 0 && (
-                <Card>
-                  <CardContent className="py-10 flex flex-col items-center justify-center text-center">
-                    <Search className="h-10 w-10 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-medium mb-2">No investors found</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Try adjusting your search to find investors
-                    </p>
-                    <Button onClick={() => setSearchQuery("")}>Clear Search</Button>
-                  </CardContent>
-                </Card>
-              )}
               
-              <div className="grid gap-4">
-                {filteredInvestors.map(investor => (
-                  <InvestorCard 
-                    key={investor.id} 
-                    investor={investor} 
-                    isFollowing={mockFollowedInvestors.some(inv => inv.id === investor.id)}
-                    onToggleFollow={toggleFollow}
-                  />
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="following" className="mt-0">
+                {filteredInvestors.length === 0 && (
+                  <Card>
+                    <CardContent className="py-10 flex flex-col items-center justify-center text-center">
+                      <Users className="h-10 w-10 text-muted-foreground mb-4" />
+                      <h3 className="text-lg font-medium mb-2">No investors found</h3>
+                      <p className="text-muted-foreground mb-4">
+                        {searchQuery ? "No results match your search criteria." : "You're not following any investors yet."}
+                      </p>
+                      <Button onClick={() => handleTabChange("discover")}>Discover Investors</Button>
+                    </CardContent>
+                  </Card>
+                )}
+                
+                <div className="grid gap-4">
+                  {filteredInvestors.map(investor => (
+                    <InvestorCard 
+                      key={investor.id} 
+                      investor={investor} 
+                      isFollowing={followedInvestors.some(inv => inv.id === investor.id)}
+                      onToggleFollow={toggleFollow}
+                    />
+                  ))}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="discover" className="mt-0">
+                {filteredInvestors.length === 0 && (
+                  <Card>
+                    <CardContent className="py-10 flex flex-col items-center justify-center text-center">
+                      <Search className="h-10 w-10 text-muted-foreground mb-4" />
+                      <h3 className="text-lg font-medium mb-2">No investors found</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Try adjusting your search to find investors
+                      </p>
+                      <Button onClick={() => setSearchQuery("")}>Clear Search</Button>
+                    </CardContent>
+                  </Card>
+                )}
+                
+                <div className="grid gap-4">
+                  {filteredInvestors.map(investor => (
+                    <InvestorCard 
+                      key={investor.id} 
+                      investor={investor} 
+                      isFollowing={followedInvestors.some(inv => inv.id === investor.id)}
+                      onToggleFollow={toggleFollow}
+                    />
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
+          )}
         </div>
         
         <div className="lg:w-1/3 space-y-6">
@@ -230,25 +228,39 @@ const Network = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {mockAllInvestors.slice(3, 6).map(investor => (
-                  <div key={investor.id} className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarFallback>{investor.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium text-sm">{investor.name}</p>
-                        <p className="text-xs text-muted-foreground">{investor.company}</p>
+              {isLoading ? (
+                <div className="flex justify-center py-4">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                </div>
+              ) : suggestedConnections.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-2">
+                  No more suggested connections available
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {suggestedConnections.map(investor => (
+                    <div key={investor.id} className="flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarFallback>{investor.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-sm">{investor.name}</p>
+                          <p className="text-xs text-muted-foreground">{investor.company}</p>
+                        </div>
                       </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => toggleFollow(investor.id)}
+                      >
+                        <UserPlus className="h-3 w-3 mr-1" />
+                        Follow
+                      </Button>
                     </div>
-                    <Button variant="outline" size="sm">
-                      <UserPlus className="h-3 w-3 mr-1" />
-                      Follow
-                    </Button>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
           
@@ -279,6 +291,7 @@ const InvestorCard = ({ investor, isFollowing, onToggleFollow }: InvestorCardPro
         <div className="flex justify-between">
           <div className="flex gap-4">
             <Avatar className="h-14 w-14 cursor-pointer" onClick={handleViewProfile}>
+              <AvatarImage src={investor.avatar || undefined} alt={investor.name} />
               <AvatarFallback className="text-lg">{investor.name.charAt(0)}</AvatarFallback>
             </Avatar>
             
