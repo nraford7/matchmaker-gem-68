@@ -1,17 +1,12 @@
-
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Opportunity } from "@/types";
 import { mockOpportunities } from "@/data/mockData";
-import { 
-  Badge, 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle,
-  Button,
-  Separator
-} from "@/components/ui";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
 import { 
   Calendar, 
   Clock, 
@@ -31,7 +26,6 @@ import {
   Briefcase
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Progress } from "@/components/ui/progress";
 
 // Enhanced mock data with additional fields for the detailed view
 const enhancedMockOpportunities = mockOpportunities.map(opp => ({
