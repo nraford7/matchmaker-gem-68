@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, ArrowUpRight, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
@@ -16,7 +15,7 @@ const Index = () => {
               <span>AI-Powered Investment Matching</span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+            <h1 className="text-5xl font-bold tracking-tight mb-2 bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 text-slate-950 md:text-6xl">
               OpportunityMatcher
             </h1>
             <h2 className="text-2xl font-medium text-muted-foreground mb-10">
