@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -10,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { mockOpportunities } from "@/data/mockData";
 
-// Create mock data by reusing and extending the mockOpportunities
 const activeDeals: Opportunity[] = [
   ...mockOpportunities.slice(0, 2).map(deal => ({
     ...deal,
@@ -70,7 +68,6 @@ const Deals = () => {
   const [allStats] = useState<StatsSummary>(calculateStats([...activeDeals, ...savedDeals, ...pastDeals, ...mockOpportunities]));
   const [searchQuery, setSearchQuery] = useState("");
   
-  // Filter opportunities based on search
   const filteredOpportunities = mockOpportunities.filter(opp => {
     return searchQuery === "" || 
       opp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -86,28 +83,6 @@ const Deals = () => {
         <p className="text-muted-foreground">
           Manage your active, saved, and past investment opportunities
         </p>
-      </div>
-
-      {/* Search section */}
-      <div className="mb-6 flex gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input 
-            placeholder="Describe the kind of opportunity you're looking for..." 
-            className="pl-9"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        
-        {searchQuery && (
-          <Button 
-            variant="outline" 
-            onClick={() => setSearchQuery("")}
-          >
-            Clear
-          </Button>
-        )}
       </div>
 
       <Tabs defaultValue="active" className="w-full mb-12">
@@ -166,7 +141,6 @@ const Deals = () => {
         </TabsContent>
       </Tabs>
 
-      {/* All Opportunities section (moved out of Tabs) */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -197,7 +171,27 @@ const Deals = () => {
               )}
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input 
+                placeholder="Describe the kind of opportunity you're looking for..." 
+                className="pl-9"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-8"
+                  onClick={() => setSearchQuery("")}
+                >
+                  Clear
+                </Button>
+              )}
+            </div>
+            
             <OpportunityList opportunities={filteredOpportunities} />
           </CardContent>
         </Card>
