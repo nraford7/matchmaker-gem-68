@@ -1,7 +1,6 @@
 
 import { NetworkSharedDeal } from "@/types";
 import { Handshake, MessageSquare } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +18,12 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   return (
     <div className="border rounded-md p-3 hover:shadow-md transition-shadow h-full flex flex-col">
       <div className="flex justify-between items-start mb-2">
-        <h4 className="font-medium line-clamp-1">{deal.opportunityName}</h4>
+        <h4 
+          className="font-medium line-clamp-1 cursor-pointer hover:text-primary hover:underline"
+          onClick={handleViewDetails}
+        >
+          {deal.opportunityName}
+        </h4>
         <span className="text-xs text-muted-foreground shrink-0 ml-2">
           {new Date(deal.sharedAt).toLocaleDateString()}
         </span>
@@ -27,7 +31,7 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
       
       <div className="flex items-center text-sm mb-2 gap-1">
         <Handshake className="h-3 w-3 text-primary" />
-        <span>Shared by <span className="font-medium">{deal.sharedBy}</span></span>
+        <span>Shared by <span className="font-medium">{deal.sharedBy || "Alex Thompson"}</span></span>
       </div>
       
       <div className="flex gap-2 text-xs text-muted-foreground mb-2">
@@ -35,7 +39,7 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         <span>•</span>
         <span>{deal.stage}</span>
         <span>•</span>
-        <span>${formatCurrency(deal.fundingAmount)}</span>
+        <span>${formatCurrency(Math.round(deal.fundingAmount))}</span>
       </div>
       
       {deal.comment && (
@@ -44,17 +48,6 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
           <p className="text-xs italic">{deal.comment}</p>
         </div>
       )}
-      
-      <div className="flex gap-2 mt-auto pt-2">
-        <Button 
-          variant="default" 
-          size="sm" 
-          className="h-7 text-xs w-full"
-          onClick={handleViewDetails}
-        >
-          View Deal Details
-        </Button>
-      </div>
     </div>
   );
 };
