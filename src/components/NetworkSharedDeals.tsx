@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Handshake, MessageSquare, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { fetchNetworkSharedDeals } from "@/services/dashboardService";
 import { NetworkSharedDeal } from "@/types";
+import { SampleDealsButton } from "@/components/network";
 
 export const NetworkSharedDeals = () => {
   const [sharedDeals, setSharedDeals] = useState<NetworkSharedDeal[]>([]);
@@ -65,7 +65,10 @@ export const NetworkSharedDeals = () => {
             <p className="text-lg text-muted-foreground mb-4">
               No shared deals from your network yet
             </p>
-            <Button variant="outline">Find Investors to Follow</Button>
+            <div className="space-y-2">
+              <Button variant="outline" className="w-full">Find Investors to Follow</Button>
+              <SampleDealsButton />
+            </div>
           </div>
         </CardContent>
       </Card>

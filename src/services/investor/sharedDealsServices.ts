@@ -1,0 +1,151 @@
+
+import { supabase } from "@/integrations/supabase/client";
+import { NetworkSharedDeal } from "@/types";
+import { toast } from "sonner";
+import { getCurrentUserId } from "./baseService";
+
+// Share a deal with another investor
+export const shareDealWithInvestor = async (
+  opportunityId: string, 
+  sharedWithUserId: string, 
+  comment: string | null = null
+): Promise<boolean> => {
+  try {
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      toast.error("You must be logged in to share deals");
+      return false;
+    }
+
+    const { error } = await supabase
+      .from("network_shared_deals")
+      .insert({
+        opportunity_id: opportunityId,
+        shared_by_user_id: userId,
+        shared_with_user_id: sharedWithUserId,
+        comment: comment
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    toast.success("Deal shared successfully");
+    return true;
+  } catch (error) {
+    console.error("Error sharing deal:", error);
+    toast.error("Failed to share deal");
+    return false;
+  }
+};
+
+// Create sample shared deals (for demo purposes)
+export const createSampleSharedDeals = async (): Promise<boolean> => {
+  try {
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      toast.error("You must be logged in to create sample shared deals");
+      return false;
+    }
+    
+    // First, fetch a few random investors to be the sharers
+    const { data: investors, error: investorsError } = await supabase
+      .from("investor_profiles")
+      .select("id, name")
+      .neq("id", userId)
+      .limit(3);
+    
+    if (investorsError || !investors || investors.length < 3) {
+      toast.error("Not enough investors found to create sample shared deals");
+      return false;
+    }
+    
+    // Then, fetch a few random opportunities
+    const { data: opportunities, error: opportunitiesError } = await supabase
+      .from("opportunities")
+      .select("id, name, sector, stage, funding_amount")
+      .limit(3);
+    
+    if (opportunitiesError || !opportunities || opportunities.length < 3) {
+      toast.error("Not enough opportunities found to create sample shared deals");
+      return false;
+    }
+    
+    // Sample comments
+    const comments = [
+      "I've worked with this founding team before - they're exceptional. Highly recommend taking a look.",
+      "This fits your investment thesis perfectly. The team has great traction with enterprise customers.",
+      null, // Some deals might not have comments
+    ];
+    
+    // Create the shared deals
+    const sharedDeals = [];
+    for (let i = 0; i < Math.min(3, investors.length, opportunities.length); i++) {
+      sharedDeals.push({
+        opportunity_id: opportunities[i].id,
+        shared_by_user_id: investors[i].id,
+        shared_with_user_id: userId,
+        comment: comments[i]
+      });
+    }
+    
+    const { error } = await supabase
+      .from("network_shared_deals")
+      .insert(sharedDeals);
+    
+    if (error) {
+      throw error;
+    }
+    
+    toast.success("Sample shared deals created successfully");
+    return true;
+  } catch (error) {
+    console.error("Error creating sample shared deals:", error);
+    toast.error("Failed to create sample shared deals");
+    return false;
+  }
+};
+
+// Fetch network shared deals for the current user
+export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> => {
+  try {
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      return [];
+    }
+
+    const { data, error } = await supabase
+      .from("network_shared_deals")
+      .select(`
+        id,
+        comment,
+        created_at,
+        opportunities!inner(id, name, sector, stage, funding_amount),
+        shared_by_user_id,
+        investor_profiles!inner(name, avatar_url)
+      `)
+      .eq("shared_with_user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw error;
+    }
+
+    return data.map(item => ({
+      id: item.id,
+      opportunityId: item.opportunities.id,
+      opportunityName: item.opportunities.name,
+      sector: item.opportunities.sector,
+      stage: item.opportunities.stage,
+      fundingAmount: Number(item.opportunities.funding_amount),
+      sharedBy: item.investor_profiles.name,
+      avatar: item.investor_profiles.avatar_url,
+      comment: item.comment,
+      sharedAt: item.created_at
+    }));
+  } catch (error) {
+    console.error("Error fetching shared deals:", error);
+    toast.error("Failed to load shared deals");
+    return [];
+  }
+};
