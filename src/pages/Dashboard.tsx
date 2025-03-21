@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Opportunity } from "@/types";
@@ -17,15 +16,8 @@ const Dashboard = () => {
     <div className="container mx-auto py-6">
       <DashboardHeader />
       
-      {/* New Match Alerts section moved to the very top, before metrics */}
       <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>New Match Alerts</CardTitle>
-          <CardDescription>
-            Opportunities that best match your investment criteria
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           {topMatches.length > 0 ? (
             <OpportunityList 
               opportunities={topMatches}

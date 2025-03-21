@@ -6,9 +6,9 @@ export const DashboardHeader = () => {
   return (
     <div className="flex items-center justify-between mb-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Investor Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">New Match Alerts</h1>
         <p className="text-muted-foreground">
-          Find your next investment opportunity with AI-powered matching
+          Opportunities that best match your investment criteria
         </p>
       </div>
       <div className="flex items-center gap-2">
