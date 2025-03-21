@@ -13,6 +13,7 @@ import Insights from "./pages/Insights";
 import Deals from "./pages/Deals";
 import DealDetails from "./pages/DealDetails";
 import Network from "./pages/Network";
+import InvestorProfile from "./pages/InvestorProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/upload" element={<UploadOpportunity />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="/network" element={<Network />} />
+          <Route path="/investor/:id" element={<InvestorProfile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

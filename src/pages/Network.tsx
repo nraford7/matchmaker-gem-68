@@ -1,4 +1,6 @@
+
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   Users, 
   UserPlus, 
@@ -21,9 +23,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { NetworkSharedDeals } from "@/components/NetworkSharedDeals";
+import { NetworkInvestor } from "@/types";
 
 // Mock data for investors
-const mockFollowedInvestors = [
+const mockFollowedInvestors: NetworkInvestor[] = [
   { 
     id: "1", 
     name: "Sarah Johnson", 
@@ -50,7 +53,7 @@ const mockFollowedInvestors = [
   }
 ];
 
-const mockAllInvestors = [
+const mockAllInvestors: NetworkInvestor[] = [
   ...mockFollowedInvestors,
   { 
     id: "4", 
@@ -258,30 +261,34 @@ const Network = () => {
 
 // Investor card component
 interface InvestorCardProps {
-  investor: {
-    id: string;
-    name: string;
-    company: string;
-    sectors: string[];
-    dealCount: number;
-    avatar: string | null;
-  };
+  investor: NetworkInvestor;
   isFollowing: boolean;
   onToggleFollow: (id: string) => void;
 }
 
 const InvestorCard = ({ investor, isFollowing, onToggleFollow }: InvestorCardProps) => {
+  const navigate = useNavigate();
+
+  const handleViewProfile = () => {
+    navigate(`/investor/${investor.id}`);
+  };
+  
   return (
     <Card>
       <CardContent className="p-6">
         <div className="flex justify-between">
           <div className="flex gap-4">
-            <Avatar className="h-14 w-14">
+            <Avatar className="h-14 w-14 cursor-pointer" onClick={handleViewProfile}>
               <AvatarFallback className="text-lg">{investor.name.charAt(0)}</AvatarFallback>
             </Avatar>
             
             <div>
-              <h3 className="font-medium text-lg">{investor.name}</h3>
+              <h3 
+                className="font-medium text-lg hover:text-primary cursor-pointer" 
+                onClick={handleViewProfile}
+              >
+                {investor.name}
+              </h3>
               <p className="text-muted-foreground">{investor.company}</p>
               
               <div className="flex flex-wrap gap-1 mt-2">
@@ -314,6 +321,10 @@ const InvestorCard = ({ investor, isFollowing, onToggleFollow }: InvestorCardPro
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuItem className="gap-2" onClick={handleViewProfile}>
+                  <Users className="h-4 w-4" />
+                  View Profile
+                </DropdownMenuItem>
                 <DropdownMenuItem className="gap-2">
                   <MessageSquare className="h-4 w-4" />
                   Message
@@ -331,7 +342,7 @@ const InvestorCard = ({ investor, isFollowing, onToggleFollow }: InvestorCardPro
           <div className="text-sm">
             <span className="font-medium">{investor.dealCount}</span> deals in portfolio
           </div>
-          <Button variant="link" size="sm" className="p-0 h-auto">
+          <Button variant="link" size="sm" className="p-0 h-auto" onClick={handleViewProfile}>
             View Portfolio
           </Button>
         </div>

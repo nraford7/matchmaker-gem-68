@@ -11,6 +11,21 @@ export interface Investor {
   investmentThesis: string;
 }
 
+export interface NetworkInvestor {
+  id: string;
+  name: string;
+  company: string;
+  sectors: string[];
+  dealCount: number;
+  avatar: string | null;
+  email?: string;
+  preferredStages?: string[];
+  checkSizeMin?: number;
+  checkSizeMax?: number;
+  preferredGeographies?: string[];
+  investmentThesis?: string;
+}
+
 export interface Opportunity {
   id: string;
   name: string;
