@@ -11,7 +11,7 @@ export const getFeedbackStatus = async (opportunityId: string): Promise<'positiv
 
   try {
     const { data, error } = await supabase
-      .from('opportunity_feedback')
+      .from('matches')
       .select('feedback')
       .eq('opportunity_id', opportunityId)
       .single();
@@ -21,7 +21,12 @@ export const getFeedbackStatus = async (opportunityId: string): Promise<'positiv
       return null;
     }
 
-    return data?.feedback || null;
+    // Check if data.feedback is 'positive' or 'negative'
+    if (data?.feedback === 'positive' || data?.feedback === 'negative') {
+      return data.feedback;
+    }
+    
+    return null;
   } catch (error) {
     console.error('Error in getFeedbackStatus:', error);
     return null;
@@ -39,15 +44,24 @@ export const submitPositiveFeedback = async (opportunityId: string): Promise<boo
   try {
     // First, check if feedback already exists
     const { data: existingFeedback } = await supabase
-      .from('opportunity_feedback')
+      .from('matches')
       .select('*')
       .eq('opportunity_id', opportunityId)
       .single();
 
+    // Get user ID
+    const { data: { user } } = await supabase.auth.getUser();
+    const userId = user?.id;
+
+    if (!userId) {
+      toast.error("You must be logged in to provide feedback");
+      return false;
+    }
+
     if (existingFeedback) {
       // Update existing feedback
       const { error } = await supabase
-        .from('opportunity_feedback')
+        .from('matches')
         .update({ feedback: 'positive' })
         .eq('opportunity_id', opportunityId);
 
@@ -57,8 +71,13 @@ export const submitPositiveFeedback = async (opportunityId: string): Promise<boo
     } else {
       // Insert new feedback
       const { error } = await supabase
-        .from('opportunity_feedback')
-        .insert([{ opportunity_id: opportunityId, feedback: 'positive' }]);
+        .from('matches')
+        .insert([{ 
+          opportunity_id: opportunityId, 
+          user_id: userId,
+          feedback: 'positive',
+          score: 0.8 // Default score
+        }]);
 
       if (error) {
         throw error;
@@ -85,15 +104,24 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
   try {
     // First, check if feedback already exists
     const { data: existingFeedback } = await supabase
-      .from('opportunity_feedback')
+      .from('matches')
       .select('*')
       .eq('opportunity_id', opportunityId)
       .single();
+      
+    // Get user ID
+    const { data: { user } } = await supabase.auth.getUser();
+    const userId = user?.id;
+
+    if (!userId) {
+      toast.error("You must be logged in to provide feedback");
+      return false;
+    }
 
     if (existingFeedback) {
       // Update existing feedback
       const { error } = await supabase
-        .from('opportunity_feedback')
+        .from('matches')
         .update({ feedback: 'negative' })
         .eq('opportunity_id', opportunityId);
 
@@ -103,8 +131,13 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
     } else {
       // Insert new feedback
       const { error } = await supabase
-        .from('opportunity_feedback')
-        .insert([{ opportunity_id: opportunityId, feedback: 'negative' }]);
+        .from('matches')
+        .insert([{ 
+          opportunity_id: opportunityId, 
+          user_id: userId,
+          feedback: 'negative',
+          score: 0.8 // Default score
+        }]);
 
       if (error) {
         throw error;

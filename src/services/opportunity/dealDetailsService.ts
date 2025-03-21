@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { EnhancedOpportunity } from "@/pages/DealDetails";
+import { EnhancedOpportunity } from "@/types/deal";
 import { toast } from "sonner";
 
 export const fetchDealData = async (id: string): Promise<EnhancedOpportunity | null> => {

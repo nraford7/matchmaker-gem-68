@@ -12,6 +12,12 @@ import { removeFeedback } from "./removeFeedback";
 
 // Submit negative feedback for a match
 export const submitNegativeFeedback = async (opportunityId: string): Promise<boolean> => {
+  // For sample data, just return success
+  if (opportunityId.startsWith('sample-')) {
+    toast.success("Feedback recorded");
+    return true;
+  }
+  
   try {
     const userId = await getValidatedUserId();
     if (!userId) {
@@ -25,7 +31,7 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
       .eq("id", opportunityId)
       .single();
 
-    if (opportunityError) throw opportunityError;
+    if (opportunityError && !opportunityId.startsWith('sample-')) throw opportunityError;
 
     // Check if there's an existing match record
     const existingMatch = await getExistingMatch(userId, opportunityId);
@@ -63,17 +69,19 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
     // Remove from active deals if present
     await removeFromActiveDeals(userId, opportunityId);
 
-    // Add to past deals with "Not Interested" note
-    const { error: pastDealError } = await supabase
-      .from("past_deals")
-      .insert({
-        opportunity_id: opportunityId,
-        user_id: userId,
-        final_amount: opportunity.funding_amount,
-        notes: "Not interested"
-      });
+    // Add to past deals with "Not Interested" note if we have opportunity details
+    if (opportunity) {
+      const { error: pastDealError } = await supabase
+        .from("past_deals")
+        .insert({
+          opportunity_id: opportunityId,
+          user_id: userId,
+          final_amount: opportunity.funding_amount,
+          notes: "Not interested"
+        });
 
-    if (pastDealError) throw pastDealError;
+      if (pastDealError) throw pastDealError;
+    }
 
     // Dispatch custom event for UI updates
     dispatchFeedbackEvent(opportunityId, 'negative');

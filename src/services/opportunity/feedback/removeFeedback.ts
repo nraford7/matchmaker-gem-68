@@ -1,9 +1,9 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { dispatchFeedbackEvent, getValidatedUserId, getExistingMatch, removeFromSavedDeals } from "./feedbackUtils";
+import { dispatchFeedbackEvent, getValidatedUserId } from "./feedbackUtils";
 
-// Remove feedback for a match
+// Remove feedback for an opportunity
 export const removeFeedback = async (opportunityId: string): Promise<boolean> => {
   try {
     const userId = await getValidatedUserId();
@@ -11,39 +11,17 @@ export const removeFeedback = async (opportunityId: string): Promise<boolean> =>
       return false;
     }
 
-    // Check if there's an existing match record
-    const existingMatch = await getExistingMatch(userId, opportunityId);
-
-    if (!existingMatch) {
-      return true; // Nothing to remove
-    }
-
-    // Update the match to remove feedback
-    const { error: updateError } = await supabase
+    // Delete the match record
+    const { error } = await supabase
       .from("matches")
-      .update({ feedback: null })
-      .eq("id", existingMatch.id);
+      .delete()
+      .eq("user_id", userId)
+      .eq("opportunity_id", opportunityId);
 
-    if (updateError) throw updateError;
-
-    // If it was a negative feedback, remove from past deals
-    if (existingMatch.feedback === "negative") {
-      const { error: deleteError } = await supabase
-        .from("past_deals")
-        .delete()
-        .eq("user_id", userId)
-        .eq("opportunity_id", opportunityId);
-
-      if (deleteError) throw deleteError;
-    }
-
-    // If it was a positive feedback, remove from saved opportunities
-    if (existingMatch.feedback === "positive") {
-      await removeFromSavedDeals(userId, opportunityId);
-    }
+    if (error) throw error;
 
     // Dispatch custom event for UI updates
-    dispatchFeedbackEvent(opportunityId, 'removed');
+    dispatchFeedbackEvent(opportunityId, null);
     
     toast.success("Feedback removed");
     return true;

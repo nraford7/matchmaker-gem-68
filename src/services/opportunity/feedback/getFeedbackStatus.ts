@@ -5,6 +5,11 @@ import { getCurrentUserId } from "../baseService";
 // Get feedback status for an opportunity
 export const getFeedbackStatus = async (opportunityId: string): Promise<'positive' | 'negative' | null> => {
   try {
+    // For sample data, just return null
+    if (opportunityId.startsWith('sample-')) {
+      return null;
+    }
+    
     const userId = await getCurrentUserId();
     if (!userId) return null;
 

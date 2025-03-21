@@ -6,6 +6,12 @@ import { removeFeedback } from "./removeFeedback";
 
 // Submit positive feedback for a match
 export const submitPositiveFeedback = async (opportunityId: string): Promise<boolean> => {
+  // For sample data, just return success
+  if (opportunityId.startsWith('sample-')) {
+    toast.success("Feedback recorded");
+    return true;
+  }
+  
   try {
     const userId = await getValidatedUserId();
     if (!userId) {
