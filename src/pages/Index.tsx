@@ -1,6 +1,7 @@
+
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, Sparkles, Zap, ArrowUpRight, Shield, Key, Handshake, UserRound } from "lucide-react";
+import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, ArrowUpRight, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 const Index = () => {
@@ -171,13 +172,7 @@ const Index = () => {
                 </div>)}
             </div>
 
-            <div className="flex justify-center">
-              <Link to="/dashboard">
-                <Button size="lg" className="gap-2">
-                  Explore Your Dashboard <ChevronRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
+            {/* Removed the "Explore Your Dashboard" button */}
           </div>
         </div>
       </div>
