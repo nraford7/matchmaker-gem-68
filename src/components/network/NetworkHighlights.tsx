@@ -10,27 +10,27 @@ import { useNavigate } from "react-router-dom";
 import { formatCurrency } from "@/lib/utils";
 
 export const NetworkHighlights = () => {
-  const [recommendations, setRecommendations] = useState<NetworkSharedDeal[]>([]);
+  const [sharedDeals, setSharedDeals] = useState<NetworkSharedDeal[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   
-  const loadRecommendations = async () => {
+  const loadSharedDeals = async () => {
     try {
       setLoading(true);
-      console.log("Loading network recommendations...");
+      console.log("Loading network shared deals...");
       const data = await fetchRecommendationsForUser();
-      setRecommendations(data);
-      console.log("Loaded recommendations:", data);
+      setSharedDeals(data);
+      console.log("Loaded shared deals:", data);
     } catch (error) {
-      console.error("Error loading recommendations:", error);
-      toast.error("Failed to load network recommendations");
+      console.error("Error loading shared deals:", error);
+      toast.error("Failed to load network shared deals");
     } finally {
       setLoading(false);
     }
   };
   
   useEffect(() => {
-    loadRecommendations();
+    loadSharedDeals();
   }, []);
   
   const handleViewDeal = (opportunityId: string) => {
@@ -44,16 +44,16 @@ export const NetworkHighlights = () => {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Network Highlights</CardTitle>
+            <CardTitle>Network Shared Deals</CardTitle>
           </div>
           <CardDescription>
-            Deals recommended by investors in your network
+            Deals shared by investors in your network
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-8">
             <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-            <p className="text-muted-foreground">Loading recommendations...</p>
+            <p className="text-muted-foreground">Loading shared deals...</p>
           </div>
         </CardContent>
       </Card>
@@ -61,29 +61,29 @@ export const NetworkHighlights = () => {
   }
   
   // Empty state
-  if (recommendations.length === 0) {
+  if (sharedDeals.length === 0) {
     return (
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Network Highlights</CardTitle>
+            <CardTitle>Network Shared Deals</CardTitle>
           </div>
           <CardDescription>
-            Deals recommended by investors in your network
+            Deals shared by investors in your network
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <Users className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-2">No recommendations yet</h3>
+            <h3 className="text-lg font-medium mb-2">No shared deals yet</h3>
             <p className="text-muted-foreground text-sm mb-4 max-w-md">
-              When investors in your network recommend deals to you, they'll appear here with their comments.
+              When investors in your network share deals with you, they'll appear here with their comments.
             </p>
             <Button 
               variant="outline" 
               size="sm"
-              onClick={loadRecommendations} 
+              onClick={loadSharedDeals} 
               className="gap-2"
             >
               <RefreshCw className="h-4 w-4" />
@@ -95,23 +95,23 @@ export const NetworkHighlights = () => {
     );
   }
   
-  // Display recommendations
+  // Display shared deals
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Network Highlights</CardTitle>
+            <CardTitle>Network Shared Deals</CardTitle>
           </div>
           <CardDescription>
-            Deals recommended by investors in your network
+            Deals shared by investors in your network
           </CardDescription>
         </div>
         <Button 
           variant="ghost" 
           size="sm" 
-          onClick={loadRecommendations}
+          onClick={loadSharedDeals}
           className="h-8 w-8 p-0"
         >
           <RefreshCw className="h-4 w-4" />
@@ -120,7 +120,7 @@ export const NetworkHighlights = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {recommendations.map((deal) => (
+          {sharedDeals.map((deal) => (
             <div key={deal.id} className="border rounded-md p-3 hover:shadow-md transition-shadow">
               <div className="flex justify-between items-start mb-2">
                 <h4 className="font-medium">{deal.opportunityName}</h4>

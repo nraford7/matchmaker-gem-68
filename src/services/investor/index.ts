@@ -8,9 +8,5 @@ export * from "./connectionServices";
 // Handle shared deals services
 export * from "./sharedDealsServices";
 
-// Explicitly re-export from recommendations to prevent naming conflicts
-// with sharedDealsServices
-export {
-  fetchRecommendationsForUser,
-  recommendDealToInvestor,
-} from "./recommendations";
+// Export recommendations function
+export { fetchRecommendationsForUser } from "./recommendations";

@@ -8,7 +8,7 @@ export const NetworkHighlightsLoading = () => {
       <CardHeader>
         <div className="flex items-center gap-2">
           <Users className="h-5 w-5 text-muted-foreground" />
-          <CardTitle>Network Highlights</CardTitle>
+          <CardTitle>Network Shared Deals</CardTitle>
         </div>
         <CardDescription>
           Deals shared by investors in your network
