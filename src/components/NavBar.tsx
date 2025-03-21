@@ -10,7 +10,8 @@ import {
   User,
   FilePlus,
   LogOut,
-  Settings
+  Settings,
+  ChartPie
 } from "lucide-react";
 import { 
   Popover, 
@@ -69,6 +70,17 @@ export const NavBar = () => {
             >
               <FilePlus className="h-4 w-4" />
               New
+            </Link>
+            <Link 
+              to="/insights" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/insights" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <ChartPie className="h-4 w-4" />
+              Insights
             </Link>
           </nav>
         </div>
