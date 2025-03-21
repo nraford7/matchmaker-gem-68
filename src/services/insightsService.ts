@@ -23,27 +23,18 @@ export interface StageData {
 // Fetch market insights by sector
 export const fetchMarketInsightsBySector = async (): Promise<SectorData[]> => {
   try {
-    // Use a more specific type assertion
-    const { data, error } = await supabase
-      .from('market_insights')
+    // Use direct any type assertion to bypass type checking
+    const { data, error } = await (supabase
+      .from('market_insights') as any)
       .select("*")
-      .order("date", { ascending: true }) as unknown as {
-        data: Array<{
-          sector: string;
-          date: string;
-          deal_count: number;
-          funding_amount: number;
-          avg_deal_size: number;
-        }>;
-        error: any;
-      };
+      .order("date", { ascending: true });
 
     if (error) throw error;
 
     // Group data by sector
     const sectorMap = new Map<string, any[]>();
     
-    data.forEach((item) => {
+    data.forEach((item: any) => {
       if (!sectorMap.has(item.sector)) {
         sectorMap.set(item.sector, []);
       }
@@ -71,25 +62,18 @@ export const fetchMarketInsightsBySector = async (): Promise<SectorData[]> => {
 // Fetch market insights by stage
 export const fetchMarketInsightsByStage = async (): Promise<StageData[]> => {
   try {
-    // Use a more specific type assertion
-    const { data, error } = await supabase
-      .from('market_insights')
+    // Use direct any type assertion
+    const { data, error } = await (supabase
+      .from('market_insights') as any)
       .select("*")
-      .order("stage", { ascending: true }) as unknown as {
-        data: Array<{
-          stage: string;
-          deal_count: number;
-          funding_amount: number;
-        }>;
-        error: any;
-      };
+      .order("stage", { ascending: true });
 
     if (error) throw error;
 
     // Group data by stage and aggregate
     const stageMap = new Map<string, { dealCount: number; fundingAmount: number }>();
     
-    data.forEach((item) => {
+    data.forEach((item: any) => {
       if (!item.stage) return;
       
       if (!stageMap.has(item.stage)) {
@@ -120,26 +104,19 @@ export const fetchRecentTrends = async (): Promise<any[]> => {
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
     
-    // Use a more specific type assertion
-    const { data, error } = await supabase
-      .from('market_insights')
+    // Use direct any type assertion
+    const { data, error } = await (supabase
+      .from('market_insights') as any)
       .select("*")
       .gte("date", threeMonthsAgo.toISOString().split('T')[0])
-      .order("date", { ascending: true }) as unknown as {
-        data: Array<{
-          date: string;
-          sector: string;
-          deal_count: number;
-        }>;
-        error: any;
-      };
+      .order("date", { ascending: true });
 
     if (error) throw error;
 
     // Group by month and sector
     const monthSectorMap = new Map<string, any>();
     
-    data.forEach((item) => {
+    data.forEach((item: any) => {
       const month = new Date(item.date).toLocaleString('default', { month: 'short' });
       
       if (!monthSectorMap.has(month)) {
