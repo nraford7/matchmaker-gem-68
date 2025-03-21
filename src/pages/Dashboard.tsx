@@ -17,11 +17,7 @@ const Dashboard = () => {
     <div className="container mx-auto py-6">
       <DashboardHeader />
       
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-6">
-        <DashboardMetrics />
-      </div>
-      
-      {/* New Match Alerts section moved to the top */}
+      {/* New Match Alerts section moved to the very top, before metrics */}
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>New Match Alerts</CardTitle>
@@ -44,6 +40,10 @@ const Dashboard = () => {
           )}
         </CardContent>
       </Card>
+      
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-6">
+        <DashboardMetrics />
+      </div>
       
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="mb-4">
