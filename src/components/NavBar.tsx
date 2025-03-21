@@ -8,7 +8,8 @@ import {
   Filter, 
   Users, 
   BarChart,
-  User
+  User,
+  FilePlus
 } from "lucide-react";
 
 export const NavBar = () => {
@@ -33,6 +34,10 @@ export const NavBar = () => {
             <Link to="/opportunities" className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
               <Search className="h-4 w-4" />
               Browse
+            </Link>
+            <Link to="/upload" className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
+              <FilePlus className="h-4 w-4" />
+              Upload
             </Link>
             <Link to="/preferences" className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
               <Filter className="h-4 w-4" />
