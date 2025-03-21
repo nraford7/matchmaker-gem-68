@@ -1,11 +1,12 @@
 
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { OpportunityList } from "@/components/OpportunityList";
 import { Opportunity } from "@/types";
-import { Briefcase, Save, Archive, PieChart, TrendingUp, Filter } from "lucide-react";
+import { Briefcase, Save, Archive, PieChart, TrendingUp, Filter, Search, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { mockOpportunities } from "@/data/mockData";
 
@@ -66,7 +67,17 @@ const Deals = () => {
   const [activeStats] = useState<StatsSummary>(calculateStats(activeDeals));
   const [savedStats] = useState<StatsSummary>(calculateStats(savedDeals));
   const [pastStats] = useState<StatsSummary>(calculateStats(pastDeals));
-  const [allStats] = useState<StatsSummary>(calculateStats([...activeDeals, ...savedDeals, ...pastDeals]));
+  const [allStats] = useState<StatsSummary>(calculateStats([...activeDeals, ...savedDeals, ...pastDeals, ...mockOpportunities]));
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  // Filter opportunities based on search
+  const filteredOpportunities = mockOpportunities.filter(opp => {
+    return searchQuery === "" || 
+      opp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.sector.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.stage.toLowerCase().includes(searchQuery.toLowerCase());
+  });
   
   return (
     <div className="container mx-auto py-6">
@@ -75,6 +86,28 @@ const Deals = () => {
         <p className="text-muted-foreground">
           Manage your active, saved, and past investment opportunities
         </p>
+      </div>
+
+      {/* Search section */}
+      <div className="mb-6 flex gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input 
+            placeholder="Describe the kind of opportunity you're looking for..." 
+            className="pl-9"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        
+        {searchQuery && (
+          <Button 
+            variant="outline" 
+            onClick={() => setSearchQuery("")}
+          >
+            Clear
+          </Button>
+        )}
       </div>
 
       <Tabs defaultValue="active" className="w-full">
@@ -91,6 +124,10 @@ const Deals = () => {
             <TabsTrigger value="past" className="flex items-center gap-1">
               <Archive className="h-4 w-4" />
               Past Deals
+            </TabsTrigger>
+            <TabsTrigger value="all" className="flex items-center gap-1">
+              <Globe className="h-4 w-4" />
+              All Opportunities
             </TabsTrigger>
           </TabsList>
           
@@ -130,6 +167,30 @@ const Deals = () => {
           ) : (
             <OpportunityList opportunities={pastDeals} />
           )}
+        </TabsContent>
+        
+        <TabsContent value="all" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {searchQuery ? "Search Results" : "All Opportunities"}
+              </CardTitle>
+              <CardDescription>
+                {searchQuery 
+                  ? `Found ${filteredOpportunities.length} result${filteredOpportunities.length !== 1 ? 's' : ''} for "${searchQuery}"`
+                  : "Browse all available investment opportunities"
+                }
+                {!searchQuery && filteredOpportunities.length < mockOpportunities.length && (
+                  <span className="ml-1">
+                    ({filteredOpportunities.length} of {mockOpportunities.length})
+                  </span>
+                )}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <OpportunityList opportunities={filteredOpportunities} />
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
       

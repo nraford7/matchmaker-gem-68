@@ -62,17 +62,6 @@ export const NavBar = () => {
               Deals
             </Link>
             <Link 
-              to="/browse" 
-              className={`flex items-center gap-1 text-sm ${
-                currentPath === "/browse" 
-                  ? "font-bold text-foreground" 
-                  : "font-medium text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Search className="h-4 w-4" />
-              Search
-            </Link>
-            <Link 
               to="/insights" 
               className={`flex items-center gap-1 text-sm ${
                 currentPath === "/insights" 

@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { NavBar } from "@/components/NavBar";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
-import Browse from "./pages/Browse";
 import Preferences from "./pages/Preferences";
 import UploadOpportunity from "./pages/UploadOpportunity";
 import Insights from "./pages/Insights";
@@ -26,11 +25,10 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/browse" element={<Browse />} />
+          <Route path="/deals" element={<Deals />} />
           <Route path="/preferences" element={<Preferences />} />
           <Route path="/upload" element={<UploadOpportunity />} />
           <Route path="/insights" element={<Insights />} />
-          <Route path="/deals" element={<Deals />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
