@@ -62,6 +62,17 @@ export const NavBar = () => {
               Deals
             </Link>
             <Link 
+              to="/network" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/network" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Users className="h-4 w-4" />
+              Network
+            </Link>
+            <Link 
               to="/insights" 
               className={`flex items-center gap-1 text-sm ${
                 currentPath === "/insights" 
@@ -108,13 +119,6 @@ export const NavBar = () => {
                   Preferences
                 </Link>
                 <Link 
-                  to="/network" 
-                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors"
-                >
-                  <Users className="h-4 w-4" />
-                  Network
-                </Link>
-                <Link 
                   to="/account" 
                   className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors"
                 >
@@ -152,13 +156,6 @@ export const NavBar = () => {
                 >
                   <Filter className="h-4 w-4" />
                   Preferences
-                </Link>
-                <Link 
-                  to="/network" 
-                  className="flex items-center gap-2 w-full rounded-md p-2 text-sm hover:bg-accent transition-colors"
-                >
-                  <Users className="h-4 w-4" />
-                  Network
                 </Link>
                 <Link 
                   to="/account" 
