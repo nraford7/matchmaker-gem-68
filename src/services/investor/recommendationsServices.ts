@@ -9,8 +9,11 @@ export const fetchRecommendationsForUser = async (): Promise<NetworkSharedDeal[]
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
+      console.log("No user ID found");
       return [];
     }
+
+    console.log("Fetching recommendations for user:", userId);
 
     // Fetch recommendations made to the current user
     const { data: recommendations, error: recommendationsError } = await supabase
@@ -26,10 +29,14 @@ export const fetchRecommendationsForUser = async (): Promise<NetworkSharedDeal[]
       .order("created_at", { ascending: false });
 
     if (recommendationsError) {
+      console.error("Error fetching recommendations:", recommendationsError);
       throw recommendationsError;
     }
 
+    console.log("Raw recommendations data:", recommendations);
+
     if (!recommendations || recommendations.length === 0) {
+      console.log("No recommendations found");
       return [];
     }
 
@@ -63,6 +70,8 @@ export const fetchRecommendationsForUser = async (): Promise<NetworkSharedDeal[]
         mappedDeals[i].sector = opportunityData.sector;
         mappedDeals[i].stage = opportunityData.stage;
         mappedDeals[i].fundingAmount = Number(opportunityData.funding_amount);
+      } else {
+        console.log("Error or no data for opportunity:", recommendation.opportunity_id, opportunityError);
       }
       
       // Fetch recommender details
@@ -75,9 +84,12 @@ export const fetchRecommendationsForUser = async (): Promise<NetworkSharedDeal[]
       if (!investorError && investorData) {
         mappedDeals[i].sharedBy = investorData.name;
         mappedDeals[i].avatar = investorData.avatar_url;
+      } else {
+        console.log("Error or no data for recommender:", recommendation.recommender_id, investorError);
       }
     }
 
+    console.log("Mapped deals:", mappedDeals);
     return mappedDeals;
   } catch (error) {
     console.error("Error fetching recommendations:", error);
