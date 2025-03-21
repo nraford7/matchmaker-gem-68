@@ -98,17 +98,33 @@ const Preferences = () => {
             Manage your investment criteria to improve match quality
           </p>
         </div>
+        
+        <Button 
+          type="submit"
+          form="preferences-form"
+          disabled={isSaving}
+          className="ml-auto"
+        >
+          {isSaving ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </>
+          ) : (
+            "Save Changes"
+          )}
+        </Button>
       </div>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSave)}>
+        <form id="preferences-form" onSubmit={form.handleSubmit(handleSave)}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <TabsContainer />
             </div>
             
             <div>
-              <PreferenceSidebar isSaving={isSaving} />
+              <PreferenceSidebar />
             </div>
           </div>
         </form>
