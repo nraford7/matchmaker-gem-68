@@ -34,7 +34,7 @@ export const enhanceRecommendation = async (
       sector: opportunityData.sector,
       stage: opportunityData.stage,
       fundingAmount: Number(opportunityData.funding_amount),
-      location: opportunityData.location || "Unknown", // Add location from opportunity data
+      location: opportunityData.location || "Unknown", // Use location from opportunity data if available, otherwise default to "Unknown"
       sharedBy: investorData.name,
       avatar: investorData.avatar_url,
       comment: recommendation[commentField],

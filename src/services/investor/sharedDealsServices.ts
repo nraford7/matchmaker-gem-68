@@ -110,7 +110,7 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
     console.log("Fetching network shared deals for user:", userId);
     
     // Fetch shared deals made to the current user
-    const { data: sharedDealsData, error: sharedDealsError } = await supabase
+    let { data: sharedDealsData, error: sharedDealsError } = await supabase
       .from("network_shared_deals")
       .select(`
         id,
@@ -151,6 +151,7 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
         return [];
       }
       
+      // Use the new data instead of reassigning
       sharedDealsData = newDealsData;
     }
 
