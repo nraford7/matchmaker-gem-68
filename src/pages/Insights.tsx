@@ -71,7 +71,10 @@ const Insights = () => {
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Platform Insights</h1>
+        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+          <ChartPie className="h-6 w-6 text-primary" />
+          Platform Insights
+        </h1>
         <p className="text-muted-foreground">
           Anonymized analytics showing deal flow trends and investment patterns
         </p>

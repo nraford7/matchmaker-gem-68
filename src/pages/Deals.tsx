@@ -82,7 +82,10 @@ const Deals = () => {
     <div className="container mx-auto py-6">
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Deals Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+            <Briefcase className="h-6 w-6 text-primary" />
+            Deals Dashboard
+          </h1>
           <p className="text-muted-foreground">
             Manage your active, saved, and past investment opportunities
           </p>
