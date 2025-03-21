@@ -15,7 +15,8 @@ export const fetchOpportunityDetails = async (opportunityId: string) => {
           name: `Sample Opportunity ${opportunityId.split('-')[1]}`,
           sector: "SaaS",
           stage: "Seed",
-          funding_amount: 1000000
+          funding_amount: 1000000,
+          location: "San Francisco, CA" // Add location property to sample data
         };
       }
       
@@ -24,7 +25,7 @@ export const fetchOpportunityDetails = async (opportunityId: string) => {
     
     const { data, error } = await supabase
       .from("opportunities")
-      .select("name, sector, stage, funding_amount")
+      .select("name, sector, stage, funding_amount, location") // Include location in the select
       .eq("id", opportunityId)
       .single();
     

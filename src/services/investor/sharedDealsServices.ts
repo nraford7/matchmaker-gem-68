@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { getCurrentUserId } from "./baseService";
 import { NetworkSharedDeal } from "@/types";
@@ -151,7 +150,6 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
         return [];
       }
       
-      // Use the new data instead of reassigning
       sharedDealsData = newDealsData;
     }
 
