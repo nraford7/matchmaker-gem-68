@@ -70,6 +70,15 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
       return false;
     }
 
+    // Get opportunity details for the past_deals entry
+    const { data: opportunity, error: opportunityError } = await supabase
+      .from("opportunities")
+      .select("funding_amount")
+      .eq("id", opportunityId)
+      .single();
+
+    if (opportunityError) throw opportunityError;
+
     // Check if there's an existing match record
     const { data: existingMatch, error: fetchError } = await supabase
       .from("matches")
@@ -104,7 +113,19 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
       if (insertError) throw insertError;
     }
 
-    toast.success("Marked as not interested");
+    // Add to past deals with "Not Interested" note
+    const { error: pastDealError } = await supabase
+      .from("past_deals")
+      .insert({
+        opportunity_id: opportunityId,
+        user_id: userId,
+        final_amount: opportunity.funding_amount,
+        notes: "Not interested"
+      });
+
+    if (pastDealError) throw pastDealError;
+
+    toast.success("Moved to past deals");
     return true;
   } catch (error) {
     console.error("Error submitting negative feedback:", error);
