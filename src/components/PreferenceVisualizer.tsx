@@ -74,7 +74,7 @@ export const PreferenceVisualizer = ({ investor }: PreferenceVisualizerProps) =>
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Investment Thesis Card - Moved above the chart */}
       <Card>
         <CardContent className="p-4">
@@ -85,8 +85,8 @@ export const PreferenceVisualizer = ({ investor }: PreferenceVisualizerProps) =>
         </CardContent>
       </Card>
 
-      {/* Radar Chart */}
-      <div className="h-64">
+      {/* Radar Chart with increased height and proper margin */}
+      <div className="h-80 mt-6 mb-4">
         <ChartContainer config={chartConfig}>
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
