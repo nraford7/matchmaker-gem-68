@@ -1,6 +1,7 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { NetworkSharedDeal } from "@/types";
-import { enhanceRecommendation } from "./utils";
+import { enhanceRecommendation } from "./utils/enhancementUtils";
 
 // Fetch network shared deals
 export const fetchNetworkSharedDeals = async (userId: string): Promise<NetworkSharedDeal[]> => {
@@ -32,15 +33,20 @@ export const fetchNetworkSharedDeals = async (userId: string): Promise<NetworkSh
 
     // Process each shared deal to get full details
     const enhancedDeals = await Promise.all(
-      sharedDealsData.map(deal => 
-        enhanceRecommendation(
-          deal,
-          "opportunity_id",
-          "shared_by_user_id",
-          "comment",
-          "created_at"
-        )
-      )
+      sharedDealsData.map(async deal => {
+        try {
+          return await enhanceRecommendation(
+            deal,
+            "opportunity_id",
+            "shared_by_user_id",
+            "comment",
+            "created_at"
+          );
+        } catch (error) {
+          console.error("Error enhancing deal:", error, deal);
+          return null;
+        }
+      })
     );
 
     // Filter out any null values from failed enhancements

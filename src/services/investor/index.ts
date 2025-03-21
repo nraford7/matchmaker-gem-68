@@ -13,5 +13,4 @@ export * from "./sharedDealsServices";
 export {
   fetchRecommendationsForUser,
   recommendDealToInvestor,
-  // Not re-exporting shareDealWithInvestor since it's already exported from sharedDealsServices
 } from "./recommendations";

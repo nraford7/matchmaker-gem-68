@@ -12,14 +12,21 @@ export const enhanceRecommendation = async (
   createdAtField: string
 ): Promise<NetworkSharedDeal | null> => {
   try {
+    // Fetch opportunity details
     const opportunityData = await fetchOpportunityDetails(recommendation[opportunityIdField]);
-    const investorData = await fetchInvestorProfile(recommendation[investorIdField]);
-    
-    if (!opportunityData || !investorData) {
-      console.log("Missing data for recommendation:", recommendation.id);
+    if (!opportunityData) {
+      console.log(`No opportunity data found for ID: ${recommendation[opportunityIdField]}`);
       return null;
     }
     
+    // Fetch investor profile
+    const investorData = await fetchInvestorProfile(recommendation[investorIdField]);
+    if (!investorData) {
+      console.log(`No investor data found for ID: ${recommendation[investorIdField]}`);
+      return null;
+    }
+    
+    // Create the enhanced recommendation object
     return {
       id: recommendation.id,
       opportunityId: recommendation[opportunityIdField],

@@ -15,15 +15,20 @@ export const fetchRecommendationsForUser = async (): Promise<NetworkSharedDeal[]
     }
 
     console.log("Fetching recommendations for user:", userId);
-    const recommendations = await Promise.all([
+    
+    // Fetch both types of recommendations in parallel
+    const [investorRecommendations, networkSharedDeals] = await Promise.all([
       fetchInvestorRecommendations(userId),
       fetchNetworkSharedDeals(userId)
     ]);
 
+    console.log("Investor recommendations:", investorRecommendations.length);
+    console.log("Network shared deals:", networkSharedDeals.length);
+
     // Combine both types of recommendations and sort by created_at
     const combinedRecommendations = [
-      ...recommendations[0],
-      ...recommendations[1]
+      ...investorRecommendations,
+      ...networkSharedDeals
     ].sort((a, b) => 
       new Date(b.sharedAt).getTime() - new Date(a.sharedAt).getTime()
     );

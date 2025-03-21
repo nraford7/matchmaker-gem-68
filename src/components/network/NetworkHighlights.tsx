@@ -1,32 +1,29 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Loader2, RefreshCw } from "lucide-react";
+import { Users, Loader2, RefreshCw, MessageSquare } from "lucide-react";
 import { fetchRecommendationsForUser } from "@/services/investor";
 import { NetworkSharedDeal } from "@/types";
 import { toast } from "sonner";
-import { NetworkHighlightsLoading } from "./NetworkHighlightsLoading";
-import { NetworkHighlightsEmpty } from "./NetworkHighlightsEmpty";
-import { SharedDealItem } from "./SharedDealItem";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { formatCurrency } from "@/lib/utils";
 
 export const NetworkHighlights = () => {
   const [recommendations, setRecommendations] = useState<NetworkSharedDeal[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
   
   const loadRecommendations = async () => {
     try {
       setLoading(true);
-      setError(null);
-      console.log("Loading recommendations...");
+      console.log("Loading network recommendations...");
       const data = await fetchRecommendationsForUser();
-      console.log("Recommendations loaded:", data);
       setRecommendations(data);
+      console.log("Loaded recommendations:", data);
     } catch (error) {
       console.error("Error loading recommendations:", error);
-      setError("Failed to load recommendations");
-      toast.error("Failed to load recommendations");
+      toast.error("Failed to load network recommendations");
     } finally {
       setLoading(false);
     }
@@ -36,11 +33,12 @@ export const NetworkHighlights = () => {
     loadRecommendations();
   }, []);
   
+  const handleViewDeal = (opportunityId: string) => {
+    navigate(`/deals/${opportunityId}`);
+  };
+  
+  // Loading state
   if (loading) {
-    return <NetworkHighlightsLoading />;
-  }
-
-  if (error) {
     return (
       <Card>
         <CardHeader>
@@ -53,8 +51,35 @@ export const NetworkHighlights = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col items-center justify-center py-6 text-center">
-            <p className="text-red-500 mb-4">{error}</p>
+          <div className="flex flex-col items-center justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
+            <p className="text-muted-foreground">Loading recommendations...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  
+  // Empty state
+  if (recommendations.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Users className="h-5 w-5 text-muted-foreground" />
+            <CardTitle>Network Highlights</CardTitle>
+          </div>
+          <CardDescription>
+            Deals recommended by investors in your network
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <Users className="h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-medium mb-2">No recommendations yet</h3>
+            <p className="text-muted-foreground text-sm mb-4 max-w-md">
+              When investors in your network recommend deals to you, they'll appear here with their comments.
+            </p>
             <Button 
               variant="outline" 
               size="sm"
@@ -62,7 +87,7 @@ export const NetworkHighlights = () => {
               className="gap-2"
             >
               <RefreshCw className="h-4 w-4" />
-              Try Again
+              Refresh
             </Button>
           </div>
         </CardContent>
@@ -70,10 +95,7 @@ export const NetworkHighlights = () => {
     );
   }
   
-  if (!recommendations || recommendations.length === 0) {
-    return <NetworkHighlightsEmpty onReloadDeals={loadRecommendations} />;
-  }
-  
+  // Display recommendations
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -99,7 +121,45 @@ export const NetworkHighlights = () => {
       <CardContent>
         <div className="space-y-4">
           {recommendations.map((deal) => (
-            <SharedDealItem key={deal.id} deal={deal} />
+            <div key={deal.id} className="border rounded-md p-3 hover:shadow-md transition-shadow">
+              <div className="flex justify-between items-start mb-2">
+                <h4 className="font-medium">{deal.opportunityName}</h4>
+                <span className="text-xs text-muted-foreground">
+                  {new Date(deal.sharedAt).toLocaleDateString()}
+                </span>
+              </div>
+              
+              <div className="flex items-center text-sm mb-2 gap-1">
+                <Users className="h-3 w-3 text-primary" />
+                <span>Shared by <span className="font-medium">{deal.sharedBy}</span></span>
+              </div>
+              
+              <div className="flex gap-2 text-xs text-muted-foreground mb-2">
+                <span>{deal.sector}</span>
+                <span>•</span>
+                <span>{deal.stage}</span>
+                <span>•</span>
+                <span>${formatCurrency(deal.fundingAmount)}</span>
+              </div>
+              
+              {deal.comment && (
+                <div className="bg-muted p-2 rounded-md mb-2 flex gap-2">
+                  <MessageSquare className="h-4 w-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
+                  <p className="text-xs italic">{deal.comment}</p>
+                </div>
+              )}
+              
+              <div className="flex gap-2 mt-2">
+                <Button 
+                  variant="default" 
+                  size="sm" 
+                  className="h-7 text-xs w-full"
+                  onClick={() => handleViewDeal(deal.opportunityId)}
+                >
+                  View Deal Details
+                </Button>
+              </div>
+            </div>
           ))}
         </div>
       </CardContent>

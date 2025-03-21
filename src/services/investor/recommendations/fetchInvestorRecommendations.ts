@@ -1,7 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { NetworkSharedDeal } from "@/types";
-import { enhanceRecommendation } from "./utils";
+import { enhanceRecommendation } from "./utils/enhancementUtils";
 
 // Fetch formal investor recommendations
 export const fetchInvestorRecommendations = async (userId: string): Promise<NetworkSharedDeal[]> => {
@@ -33,15 +33,20 @@ export const fetchInvestorRecommendations = async (userId: string): Promise<Netw
 
     // Process each recommendation to get full details
     const enhancedRecommendations = await Promise.all(
-      recommendations.map(recommendation => 
-        enhanceRecommendation(
-          recommendation,
-          "opportunity_id",
-          "recommender_id",
-          "commentary",
-          "created_at"
-        )
-      )
+      recommendations.map(async recommendation => {
+        try {
+          return await enhanceRecommendation(
+            recommendation,
+            "opportunity_id",
+            "recommender_id",
+            "commentary",
+            "created_at"
+          );
+        } catch (error) {
+          console.error("Error enhancing recommendation:", error, recommendation);
+          return null;
+        }
+      })
     );
 
     // Filter out any null values from failed enhancements
