@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Users, 
@@ -131,23 +130,17 @@ const Network = () => {
   );
   
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-6">
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="lg:w-2/3">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                <Users className="h-8 w-8" />
-                Network
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                Connect with other investors and discover opportunities
-              </p>
-            </div>
-            <Button>
-              <UserPlus className="mr-2 h-4 w-4" />
-              Invite Investors
-            </Button>
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+              <Users className="h-6 w-6 text-primary" />
+              Network
+            </h1>
+            <p className="text-muted-foreground">
+              Connect with other investors and discover opportunities
+            </p>
           </div>
           
           <Tabs defaultValue="following" onValueChange={handleTabChange}>
