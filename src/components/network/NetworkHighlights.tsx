@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
-import { fetchRecommendationsForUser } from "@/services/investor";
+import { fetchNetworkSharedDeals } from "@/services/investor/sharedDealsServices";
 import { NetworkSharedDeal } from "@/types";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,7 @@ export const NetworkHighlights = () => {
     try {
       setLoading(true);
       console.log("Loading network shared deals...");
-      const data = await fetchRecommendationsForUser();
+      const data = await fetchNetworkSharedDeals();
       setSharedDeals(data);
       console.log("Loaded shared deals:", data);
     } catch (error) {
