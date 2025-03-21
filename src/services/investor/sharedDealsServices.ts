@@ -48,7 +48,19 @@ export const createSampleSharedDeals = async (): Promise<boolean> => {
       return false;
     }
     
-    // First, fetch a few random investors to be the sharers
+    // First, fetch a few random opportunities
+    const { data: opportunities, error: opportunitiesError } = await supabase
+      .from("opportunities")
+      .select("id, name, sector, stage, funding_amount")
+      .limit(3);
+    
+    if (opportunitiesError || !opportunities || opportunities.length < 3) {
+      console.error("Error fetching opportunities:", opportunitiesError);
+      toast.error("Not enough opportunities found to create sample shared deals");
+      return false;
+    }
+    
+    // Then, fetch a few random investors to be the sharers
     const { data: investors, error: investorsError } = await supabase
       .from("investor_profiles")
       .select("id, name")
@@ -56,26 +68,16 @@ export const createSampleSharedDeals = async (): Promise<boolean> => {
       .limit(3);
     
     if (investorsError || !investors || investors.length < 3) {
+      console.error("Error fetching investors:", investorsError);
       toast.error("Not enough investors found to create sample shared deals");
       return false;
     }
     
-    // Then, fetch a few random opportunities
-    const { data: opportunities, error: opportunitiesError } = await supabase
-      .from("opportunities")
-      .select("id, name, sector, stage, funding_amount")
-      .limit(3);
-    
-    if (opportunitiesError || !opportunities || opportunities.length < 3) {
-      toast.error("Not enough opportunities found to create sample shared deals");
-      return false;
-    }
-    
-    // Sample comments
+    // Sample comments for each deal
     const comments = [
       "I've worked with this founding team before - they're exceptional. Highly recommend taking a look.",
       "This fits your investment thesis perfectly. The team has great traction with enterprise customers.",
-      null, // Some deals might not have comments
+      "The CEO comes highly recommended by several in my network. Their approach to this market is unique."
     ];
     
     // Create the shared deals
@@ -89,11 +91,14 @@ export const createSampleSharedDeals = async (): Promise<boolean> => {
       });
     }
     
+    console.log("Creating sample shared deals:", sharedDeals);
+    
     const { error } = await supabase
       .from("network_shared_deals")
       .insert(sharedDeals);
     
     if (error) {
+      console.error("Error inserting shared deals:", error);
       throw error;
     }
     
