@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Loader2, RefreshCw, MessageSquare } from "lucide-react";
+import { Users, MessageSquare } from "lucide-react";
 import { fetchRecommendationsForUser } from "@/services/investor";
 import { NetworkSharedDeal } from "@/types";
 import { toast } from "sonner";
@@ -46,7 +46,7 @@ export const NetworkHighlights = () => {
   
   // Empty state
   if (sharedDeals.length === 0) {
-    return <NetworkHighlightsEmpty onReloadDeals={loadSharedDeals} />;
+    return <NetworkHighlightsEmpty />;
   }
   
   // Display shared deals
@@ -62,15 +62,6 @@ export const NetworkHighlights = () => {
             Deals shared with you by investors in your network
           </CardDescription>
         </div>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={loadSharedDeals}
-          className="h-8 w-8 p-0"
-        >
-          <RefreshCw className="h-4 w-4" />
-          <span className="sr-only">Refresh</span>
-        </Button>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

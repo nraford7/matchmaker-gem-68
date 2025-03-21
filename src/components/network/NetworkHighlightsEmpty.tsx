@@ -1,13 +1,8 @@
 
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { RefreshCw, Users } from "lucide-react";
+import { Users } from "lucide-react";
 
-interface NetworkHighlightsEmptyProps {
-  onReloadDeals: () => void;
-}
-
-export const NetworkHighlightsEmpty = ({ onReloadDeals }: NetworkHighlightsEmptyProps) => {
+export const NetworkHighlightsEmpty = () => {
   return (
     <Card>
       <CardHeader>
@@ -26,15 +21,6 @@ export const NetworkHighlightsEmpty = ({ onReloadDeals }: NetworkHighlightsEmpty
           <p className="text-muted-foreground text-sm mb-4 max-w-md">
             When investors in your network share deals with you, they'll appear here with their comments.
           </p>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={onReloadDeals} 
-            className="gap-2"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Refresh
-          </Button>
         </div>
       </CardContent>
     </Card>
