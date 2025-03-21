@@ -36,6 +36,14 @@ export const fetchOpportunities = async (): Promise<Opportunity[]> => {
 // Fetch active deals for the current user
 export const fetchActiveDeals = async (): Promise<Opportunity[]> => {
   try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
     const { data, error } = await supabase
       .from("active_deals")
       .select(`
@@ -53,7 +61,8 @@ export const fetchActiveDeals = async (): Promise<Opportunity[]> => {
           pitch_deck,
           created_at
         )
-      `);
+      `)
+      .eq("user_id", userId);
 
     if (error) {
       throw error;
@@ -80,6 +89,14 @@ export const fetchActiveDeals = async (): Promise<Opportunity[]> => {
 // Fetch saved deals for the current user
 export const fetchSavedDeals = async (): Promise<Opportunity[]> => {
   try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
     const { data, error } = await supabase
       .from("saved_opportunities")
       .select(`
@@ -96,7 +113,8 @@ export const fetchSavedDeals = async (): Promise<Opportunity[]> => {
           pitch_deck,
           created_at
         )
-      `);
+      `)
+      .eq("user_id", userId);
 
     if (error) {
       throw error;
@@ -126,6 +144,14 @@ export const fetchSavedDeals = async (): Promise<Opportunity[]> => {
 // Fetch past deals for the current user
 export const fetchPastDeals = async (): Promise<Opportunity[]> => {
   try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
     const { data, error } = await supabase
       .from("past_deals")
       .select(`
@@ -142,7 +168,8 @@ export const fetchPastDeals = async (): Promise<Opportunity[]> => {
           pitch_deck,
           created_at
         )
-      `);
+      `)
+      .eq("user_id", userId);
 
     if (error) {
       throw error;
@@ -169,9 +196,21 @@ export const fetchPastDeals = async (): Promise<Opportunity[]> => {
 // Add a deal to saved deals
 export const saveDeal = async (opportunityId: string): Promise<boolean> => {
   try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      toast.error("Please login to save deals");
+      return false;
+    }
+
     const { error } = await supabase
       .from("saved_opportunities")
-      .insert({ opportunity_id: opportunityId });
+      .insert({ 
+        opportunity_id: opportunityId,
+        user_id: userId
+      });
 
     if (error) {
       if (error.code === "23505") { // Unique violation
@@ -193,11 +232,21 @@ export const saveDeal = async (opportunityId: string): Promise<boolean> => {
 // Add a deal to active deals
 export const activateDeal = async (opportunityId: string, stage: string): Promise<boolean> => {
   try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      toast.error("Please login to activate deals");
+      return false;
+    }
+
     const { error } = await supabase
       .from("active_deals")
       .insert({ 
         opportunity_id: opportunityId,
-        stage: stage
+        stage: stage,
+        user_id: userId
       });
 
     if (error) {
@@ -212,7 +261,8 @@ export const activateDeal = async (opportunityId: string, stage: string): Promis
     await supabase
       .from("saved_opportunities")
       .delete()
-      .eq("opportunity_id", opportunityId);
+      .eq("opportunity_id", opportunityId)
+      .eq("user_id", userId);
 
     toast.success("Deal activated successfully");
     return true;
@@ -226,11 +276,21 @@ export const activateDeal = async (opportunityId: string, stage: string): Promis
 // Move a deal to past deals
 export const completeDeal = async (opportunityId: string, finalAmount: number): Promise<boolean> => {
   try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      toast.error("Please login to complete deals");
+      return false;
+    }
+
     const { error } = await supabase
       .from("past_deals")
       .insert({ 
         opportunity_id: opportunityId,
-        final_amount: finalAmount
+        final_amount: finalAmount,
+        user_id: userId
       });
 
     if (error) {
@@ -245,7 +305,8 @@ export const completeDeal = async (opportunityId: string, finalAmount: number): 
     await supabase
       .from("active_deals")
       .delete()
-      .eq("opportunity_id", opportunityId);
+      .eq("opportunity_id", opportunityId)
+      .eq("user_id", userId);
 
     toast.success("Deal completed successfully");
     return true;
@@ -259,6 +320,15 @@ export const completeDeal = async (opportunityId: string, finalAmount: number): 
 // Create a new opportunity
 export const createOpportunity = async (opportunity: Omit<Opportunity, "id" | "createdAt">): Promise<string | null> => {
   try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw sessionError;
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      toast.error("Please login to create opportunities");
+      return null;
+    }
+
     const { data, error } = await supabase
       .from("opportunities")
       .insert({
@@ -268,7 +338,8 @@ export const createOpportunity = async (opportunity: Omit<Opportunity, "id" | "c
         stage: opportunity.stage,
         funding_amount: opportunity.fundingAmount,
         location: opportunity.location,
-        pitch_deck: opportunity.pitchDeck
+        pitch_deck: opportunity.pitchDeck,
+        user_id: userId
       })
       .select("id")
       .single();
