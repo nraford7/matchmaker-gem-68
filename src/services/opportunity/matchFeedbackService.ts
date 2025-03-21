@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { getCurrentUserId, validateUserAuth } from "./baseService";
@@ -138,6 +139,28 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
         });
 
       if (insertError) throw insertError;
+    }
+
+    // Remove from saved deals if present
+    const { error: savedDealDeleteError } = await supabase
+      .from("saved_opportunities")
+      .delete()
+      .eq("user_id", userId)
+      .eq("opportunity_id", opportunityId);
+
+    if (savedDealDeleteError) {
+      console.error("Error removing from saved deals:", savedDealDeleteError);
+    }
+
+    // Remove from active deals if present
+    const { error: activeDealDeleteError } = await supabase
+      .from("active_deals")
+      .delete()
+      .eq("user_id", userId)
+      .eq("opportunity_id", opportunityId);
+
+    if (activeDealDeleteError) {
+      console.error("Error removing from active deals:", activeDealDeleteError);
     }
 
     // Add to past deals with "Not Interested" note
