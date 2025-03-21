@@ -13,10 +13,10 @@ export const NetworkHighlightsEmpty = ({ onReloadDeals }: NetworkHighlightsEmpty
       <CardHeader>
         <div className="flex items-center gap-2">
           <Users className="h-5 w-5 text-muted-foreground" />
-          <CardTitle>Network Shared Deals</CardTitle>
+          <CardTitle>Network Highlights</CardTitle>
         </div>
         <CardDescription>
-          Deals shared by investors in your network
+          Deals shared with you by investors in your network
         </CardDescription>
       </CardHeader>
       <CardContent>

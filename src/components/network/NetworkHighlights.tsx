@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { formatCurrency } from "@/lib/utils";
+import { NetworkHighlightsEmpty } from "./NetworkHighlightsEmpty";
+import { NetworkHighlightsLoading } from "./NetworkHighlightsLoading";
 
 export const NetworkHighlights = () => {
   const [sharedDeals, setSharedDeals] = useState<NetworkSharedDeal[]>([]);
@@ -39,60 +41,12 @@ export const NetworkHighlights = () => {
   
   // Loading state
   if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Network Shared Deals</CardTitle>
-          </div>
-          <CardDescription>
-            Deals shared by investors in your network
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-            <p className="text-muted-foreground">Loading shared deals...</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <NetworkHighlightsLoading />;
   }
   
   // Empty state
   if (sharedDeals.length === 0) {
-    return (
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Network Shared Deals</CardTitle>
-          </div>
-          <CardDescription>
-            Deals shared by investors in your network
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center py-8 text-center">
-            <Users className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-2">No shared deals yet</h3>
-            <p className="text-muted-foreground text-sm mb-4 max-w-md">
-              When investors in your network share deals with you, they'll appear here with their comments.
-            </p>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={loadSharedDeals} 
-              className="gap-2"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Refresh
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <NetworkHighlightsEmpty onReloadDeals={loadSharedDeals} />;
   }
   
   // Display shared deals
@@ -102,10 +56,10 @@ export const NetworkHighlights = () => {
         <div>
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Network Shared Deals</CardTitle>
+            <CardTitle>Network Highlights</CardTitle>
           </div>
           <CardDescription>
-            Deals shared by investors in your network
+            Deals shared with you by investors in your network
           </CardDescription>
         </div>
         <Button 
