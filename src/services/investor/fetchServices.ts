@@ -53,19 +53,35 @@ export const fetchFollowedInvestors = async (): Promise<NetworkInvestor[]> => {
       throw new Error("User not authenticated");
     }
 
-    const { data, error } = await supabase
+    // First, get the list of investor IDs that the current user follows
+    const { data: connections, error: connectionsError } = await supabase
       .from("investor_connections")
-      .select(`
-        following_id,
-        investor_profiles!investor_profiles(*)
-      `)
+      .select("following_id")
       .eq("follower_id", userId);
 
-    if (error) {
-      throw error;
+    if (connectionsError) {
+      throw connectionsError;
     }
 
-    return data.map(item => formatInvestorProfile(item.investor_profiles));
+    // If no connections found, return empty array
+    if (!connections || connections.length === 0) {
+      return [];
+    }
+
+    // Extract the IDs of followed investors
+    const followingIds = connections.map(connection => connection.following_id);
+
+    // Then fetch the complete investor profiles for these IDs
+    const { data: profiles, error: profilesError } = await supabase
+      .from("investor_profiles")
+      .select("*")
+      .in("id", followingIds);
+
+    if (profilesError) {
+      throw profilesError;
+    }
+
+    return profiles.map(formatInvestorProfile);
   } catch (error) {
     console.error("Error fetching followed investors:", error);
     toast.error("Failed to load followed investors");

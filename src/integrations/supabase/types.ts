@@ -370,6 +370,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      insert_realistic_investors: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       match_score: {
         Args: {
           investor_id: string
