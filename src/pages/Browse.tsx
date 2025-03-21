@@ -3,15 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import { Opportunity } from "@/types";
 import { OpportunityList } from "@/components/OpportunityList";
 import { mockOpportunities } from "@/data/mockData";
@@ -19,23 +11,14 @@ import { mockOpportunities } from "@/data/mockData";
 const Browse = () => {
   const [opportunities] = useState<Opportunity[]>(mockOpportunities);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSector, setSelectedSector] = useState<string | null>(null);
-  const [selectedStage, setSelectedStage] = useState<string | null>(null);
   
-  // Get unique sectors and stages for filters
-  const sectors = [...new Set(opportunities.map(opp => opp.sector))];
-  const stages = [...new Set(opportunities.map(opp => opp.stage))];
-  
-  // Filter opportunities based on search and filters
+  // Filter opportunities based on search
   const filteredOpportunities = opportunities.filter(opp => {
-    const matchesSearch = searchQuery === "" || 
+    return searchQuery === "" || 
       opp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      opp.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesSector = selectedSector === null || opp.sector === selectedSector;
-    const matchesStage = selectedStage === null || opp.stage === selectedStage;
-    
-    return matchesSearch && matchesSector && matchesStage;
+      opp.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.sector.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.stage.toLowerCase().includes(searchQuery.toLowerCase());
   });
   
   return (
@@ -47,56 +30,26 @@ const Browse = () => {
         </p>
       </div>
       
-      {/* Search and filter section */}
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row">
+      {/* Search section */}
+      <div className="mb-6 flex gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input 
-            placeholder="Search opportunities..." 
+            placeholder="Describe the kind of opportunity you're looking for..." 
             className="pl-9"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         
-        <div className="flex gap-2">
-          <Select value={selectedSector || undefined} onValueChange={setSelectedSector}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by sector" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Sectors</SelectItem>
-              {sectors.map(sector => (
-                <SelectItem key={sector} value={sector}>{sector}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          
-          <Select value={selectedStage || undefined} onValueChange={setSelectedStage}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by stage" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Stages</SelectItem>
-              {stages.map(stage => (
-                <SelectItem key={stage} value={stage}>{stage}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          
-          {(selectedSector || selectedStage || searchQuery) && (
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedSector(null);
-                setSelectedStage(null);
-              }}
-            >
-              Clear
-            </Button>
-          )}
-        </div>
+        {searchQuery && (
+          <Button 
+            variant="outline" 
+            onClick={() => setSearchQuery("")}
+          >
+            Clear
+          </Button>
+        )}
       </div>
       
       <Card>
