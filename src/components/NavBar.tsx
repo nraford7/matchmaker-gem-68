@@ -61,7 +61,7 @@ export const NavBar = () => {
               }`}
             >
               <FilePlus className="h-4 w-4" />
-              Upload
+              New
             </Link>
             <Link 
               to="/preferences" 
