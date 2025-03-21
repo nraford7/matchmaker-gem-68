@@ -9,3 +9,6 @@ export * from "./NetworkTabs";
 export * from "./InvestorList";
 export * from "./NetworkHeader";
 export * from "./NetworkContent";
+export * from "./NetworkHighlightsLoading";
+export * from "./NetworkHighlightsEmpty";
+export * from "./SharedDealItem";

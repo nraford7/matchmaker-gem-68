@@ -1,17 +1,17 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Handshake, MessageSquare, Users, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { fetchNetworkSharedDeals, createSampleSharedDeals } from "@/services/investor";
+import { Users, Loader2 } from "lucide-react";
+import { fetchNetworkSharedDeals } from "@/services/investor";
 import { NetworkSharedDeal } from "@/types";
 import { toast } from "sonner";
-import { SampleDealsButton } from "@/components/network";
+import { NetworkHighlightsLoading } from "./NetworkHighlightsLoading";
+import { NetworkHighlightsEmpty } from "./NetworkHighlightsEmpty";
+import { SharedDealItem } from "./SharedDealItem";
 
 export const NetworkHighlights = () => {
   const [sharedDeals, setSharedDeals] = useState<NetworkSharedDeal[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isCreating, setIsCreating] = useState(false);
   
   const loadSharedDeals = async () => {
     try {
@@ -31,85 +31,12 @@ export const NetworkHighlights = () => {
     loadSharedDeals();
   }, []);
   
-  const handleCreateSample = async () => {
-    setIsCreating(true);
-    try {
-      const success = await createSampleSharedDeals();
-      if (success) {
-        toast.success("Sample deals created successfully");
-        // Reload shared deals after creating samples
-        await loadSharedDeals();
-      }
-    } catch (error) {
-      console.error("Error creating sample deals:", error);
-    } finally {
-      setIsCreating(false);
-    }
-  };
-  
   if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Network Highlights</CardTitle>
-          </div>
-          <CardDescription>
-            Deals shared by investors in your network
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center py-6 text-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-            <p className="text-lg text-muted-foreground">
-              Loading shared deals...
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <NetworkHighlightsLoading />;
   }
   
   if (sharedDeals.length === 0) {
-    return (
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Network Highlights</CardTitle>
-          </div>
-          <CardDescription>
-            Deals shared by investors in your network
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center py-6 text-center">
-            <p className="text-lg text-muted-foreground mb-4">
-              No shared deals from your network yet
-            </p>
-            <div className="space-y-2">
-              <Button variant="outline" className="w-full">Find Investors to Follow</Button>
-              <Button 
-                variant="default" 
-                className="w-full"
-                onClick={handleCreateSample}
-                disabled={isCreating}
-              >
-                {isCreating ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating...
-                  </>
-                ) : (
-                  "Create Sample Shared Deals"
-                )}
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <NetworkHighlightsEmpty onReloadDeals={loadSharedDeals} />;
   }
   
   return (
@@ -126,39 +53,7 @@ export const NetworkHighlights = () => {
       <CardContent>
         <div className="space-y-4">
           {sharedDeals.map((deal) => (
-            <div key={deal.id} className="border rounded-md p-3">
-              <div className="flex justify-between items-start mb-2">
-                <h4 className="font-medium">{deal.opportunityName}</h4>
-                <span className="text-xs text-muted-foreground">
-                  {new Date(deal.sharedAt).toLocaleDateString()}
-                </span>
-              </div>
-              
-              <div className="flex items-center text-sm mb-2 gap-1">
-                <Handshake className="h-3 w-3 text-primary" />
-                <span>Shared by <span className="font-medium">{deal.sharedBy}</span></span>
-              </div>
-              
-              <div className="flex gap-2 text-xs text-muted-foreground mb-2">
-                <span>{deal.sector}</span>
-                <span>•</span>
-                <span>{deal.stage}</span>
-                <span>•</span>
-                <span>${new Intl.NumberFormat().format(deal.fundingAmount)}</span>
-              </div>
-              
-              {deal.comment && (
-                <div className="bg-muted p-2 rounded-md mb-2 flex gap-2">
-                  <MessageSquare className="h-4 w-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
-                  <p className="text-xs italic">{deal.comment}</p>
-                </div>
-              )}
-              
-              <div className="flex gap-2 mt-2">
-                <Button variant="ghost" size="sm" className="h-7 text-xs">View Details</Button>
-                <Button variant="outline" size="sm" className="h-7 text-xs">Thank {deal.sharedBy.split(' ')[0]}</Button>
-              </div>
-            </div>
+            <SharedDealItem key={deal.id} deal={deal} />
           ))}
         </div>
       </CardContent>
