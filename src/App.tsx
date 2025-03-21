@@ -24,20 +24,23 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/deals" element={<Deals />} />
-          <Route path="/deals/:id" element={<DealDetails />} />
-          <Route path="/preferences" element={<Preferences />} />
-          <Route path="/upload" element={<UploadOpportunity />} />
-          <Route path="/insights" element={<Insights />} />
-          <Route path="/network" element={<Network />} />
-          <Route path="/investor/:id" element={<InvestorProfile />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="relative overflow-x-hidden min-h-screen bg-gradient-to-br from-indigo-50 via-white to-blue-50">
+          <div className="absolute inset-0 bg-grid-black/[0.02] -z-10" />
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/deals" element={<Deals />} />
+            <Route path="/deals/:id" element={<DealDetails />} />
+            <Route path="/preferences" element={<Preferences />} />
+            <Route path="/upload" element={<UploadOpportunity />} />
+            <Route path="/insights" element={<Insights />} />
+            <Route path="/network" element={<Network />} />
+            <Route path="/investor/:id" element={<InvestorProfile />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -1,13 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, ArrowUpRight, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+import { ChevronRight, Trophy, BarChart4, Shield, UserRound, Sparkles, ArrowRight, ArrowUpRight } from "lucide-react";
+
 const Index = () => {
-  return <div className="relative overflow-x-hidden">
-      {/* Hero Section with Background Gradient */}
-      <div className="relative bg-gradient-to-br from-indigo-50 via-white to-blue-50">
-        <div className="absolute inset-0 bg-grid-black/[0.02] -z-10" />
+  return <div className="relative">
+      {/* Hero Section - Background is now at App level */}
+      <div className="relative">
         <div className="container mx-auto py-16 md:py-24">
           <div className="flex flex-col items-center text-center mb-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-200 bg-purple-50 text-purple-600 text-sm font-medium mb-4">
@@ -40,8 +38,6 @@ const Index = () => {
               </Link>
             </div>
           </div>
-          
-          {/* Removed Carousel Section */}
           
           {/* Features Section */}
           <div className="container mx-auto py-16">
@@ -170,8 +166,6 @@ const Index = () => {
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
                 </div>)}
             </div>
-
-            {/* Removed the "Explore Your Dashboard" button */}
           </div>
         </div>
       </div>
