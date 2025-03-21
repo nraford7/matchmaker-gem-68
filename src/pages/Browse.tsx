@@ -54,10 +54,15 @@ const Browse = () => {
       
       <Card>
         <CardHeader>
-          <CardTitle>All Opportunities</CardTitle>
+          <CardTitle>
+            {searchQuery ? "Search Results" : "All Opportunities"}
+          </CardTitle>
           <CardDescription>
-            Browse all available investment opportunities
-            {filteredOpportunities.length < opportunities.length && (
+            {searchQuery 
+              ? `Found ${filteredOpportunities.length} result${filteredOpportunities.length !== 1 ? 's' : ''} for "${searchQuery}"`
+              : "Browse all available investment opportunities"
+            }
+            {!searchQuery && filteredOpportunities.length < opportunities.length && (
               <span className="ml-1">
                 ({filteredOpportunities.length} of {opportunities.length})
               </span>
