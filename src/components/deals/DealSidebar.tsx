@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,7 +33,7 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
     try {
       const success = await submitPositiveFeedback(deal.id);
       if (success) {
-        setFeedback('positive');
+        setFeedback(feedback === 'positive' ? null : 'positive');
       }
     } finally {
       setIsSubmitting(false);
@@ -48,7 +47,7 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
     try {
       const success = await submitNegativeFeedback(deal.id);
       if (success) {
-        setFeedback('negative');
+        setFeedback(feedback === 'negative' ? null : 'negative');
       }
     } finally {
       setIsSubmitting(false);

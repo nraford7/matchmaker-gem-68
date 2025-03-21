@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Opportunity } from "@/types";
@@ -46,7 +45,7 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
     try {
       const success = await submitPositiveFeedback(opportunity.id);
       if (success) {
-        setFeedback('positive');
+        setFeedback(feedback === 'positive' ? null : 'positive');
       }
     } finally {
       setIsSubmitting(false);
@@ -60,7 +59,7 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
     try {
       const success = await submitNegativeFeedback(opportunity.id);
       if (success) {
-        setFeedback('negative');
+        setFeedback(feedback === 'negative' ? null : 'negative');
       }
     } finally {
       setIsSubmitting(false);

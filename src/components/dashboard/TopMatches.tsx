@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Opportunity } from "@/types";
@@ -57,6 +56,13 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
             setFadingMatchId(null);
           }, 500); // Match the CSS transition duration
         }
+      } else if (feedback === 'removed') {
+        // If feedback was removed, we need to check if it was previously negative
+        // If so, we should add the match back to the list if it's in topMatches
+        const match = topMatches.find(match => match.id === opportunityId);
+        if (match && !visibleMatches.some(m => m.id === opportunityId)) {
+          setVisibleMatches(prev => [...prev, match]);
+        }
       }
     };
     
@@ -66,7 +72,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
     return () => {
       window.removeEventListener('matchFeedbackChanged', handleFeedbackChange as EventListener);
     };
-  }, [visibleMatches]);
+  }, [visibleMatches, topMatches]);
 
   return (
     <Card className="mb-6">
