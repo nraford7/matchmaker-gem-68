@@ -12,6 +12,7 @@ import UploadOpportunity from "./pages/UploadOpportunity";
 import Insights from "./pages/Insights";
 import Deals from "./pages/Deals";
 import DealDetails from "./pages/DealDetails";
+import Network from "./pages/Network";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/preferences" element={<Preferences />} />
           <Route path="/upload" element={<UploadOpportunity />} />
           <Route path="/insights" element={<Insights />} />
+          <Route path="/network" element={<Network />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
