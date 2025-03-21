@@ -1,3 +1,4 @@
+
 export interface Investor {
   id: string;
   name: string;
@@ -58,6 +59,7 @@ export interface NetworkSharedDeal {
   sector: string;
   stage: string;
   fundingAmount: number;
+  location: string; // Added location field
   sharedBy: string;
   avatar: string | null;
   comment: string | null;

@@ -9,6 +9,9 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { createRandomInvestorProfile } from "@/services/investor/randomProfileServices";
+import { createSampleSharedDeals } from "@/services/investor";
+import { toast } from "sonner";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -45,16 +48,30 @@ const Auth = () => {
     setIsLoading(true);
     setError(null);
 
-    const { error: signUpError } = await signUp(email, password, { 
-      full_name: fullName,
-      company 
-    });
-    
-    if (signUpError) {
-      setError(signUpError.message);
+    try {
+      const { error: signUpError } = await signUp(email, password, { 
+        full_name: fullName,
+        company 
+      });
+      
+      if (signUpError) {
+        setError(signUpError.message);
+        setIsLoading(false);
+        return;
+      }
+      
+      // When a user successfully signs up, create random profile and sample deals
+      // Note: The user ID will be available in the auth context after signup
+      toast.success("Account created! Setting up your investor profile...");
+      
+      // The createSampleSharedDeals will be called after profile creation
+      // in the AuthContext when we detect a new user
+      
+    } catch (error: any) {
+      console.error("Error during signup:", error);
+      setError(error.message || "An unexpected error occurred");
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   return (

@@ -3,6 +3,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
+import { createRandomInvestorProfile } from "@/services/investor/randomProfileServices";
+import { createSampleSharedDeals } from "@/services/investor";
+import { toast } from "sonner";
 
 type AuthContextType = {
   user: User | null;
@@ -26,14 +29,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isNewUser, setIsNewUser] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, currentSession) => {
+      async (event, currentSession) => {
+        console.log("Auth state changed:", event);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
+
+        // Handle new user sign up
+        if (event === 'SIGNED_IN' && isNewUser && currentSession?.user) {
+          try {
+            const { user } = currentSession;
+            const userData = user.user_metadata;
+            const fullName = userData?.full_name || user.email?.split('@')[0] || 'Investor';
+            
+            console.log("Creating random profile for new user:", user.id);
+            
+            // Create random investor profile
+            const profileSuccess = await createRandomInvestorProfile(
+              user.id, 
+              fullName, 
+              user.email || ''
+            );
+            
+            if (profileSuccess) {
+              toast.success("Random investor profile created!");
+              
+              // Create sample shared deals
+              console.log("Creating sample shared deals for new user");
+              await createSampleSharedDeals();
+              
+              toast.success("Your account is ready with sample data!");
+            }
+            
+            setIsNewUser(false);
+          } catch (error) {
+            console.error("Error setting up new user:", error);
+          }
+        }
+        
         setIsLoading(false);
       }
     );
@@ -46,7 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [isNewUser, navigate]);
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -70,6 +108,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     company?: string;
   }) => {
     try {
+      setIsNewUser(true); // Flag that this is a new user sign up
+      
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -84,6 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       return { error };
     } catch (error) {
+      setIsNewUser(false);
       return { error: error as Error };
     }
   };
