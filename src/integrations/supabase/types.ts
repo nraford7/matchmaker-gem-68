@@ -82,21 +82,18 @@ export type Database = {
       }
       investor_connections: {
         Row: {
-          comments: string | null
           created_at: string
           follower_id: string
           following_id: string
           id: string
         }
         Insert: {
-          comments?: string | null
           created_at?: string
           follower_id: string
           following_id: string
           id?: string
         }
         Update: {
-          comments?: string | null
           created_at?: string
           follower_id?: string
           following_id?: string

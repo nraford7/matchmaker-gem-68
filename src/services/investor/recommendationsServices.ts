@@ -1,10 +1,10 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { NetworkSharedDeal } from "@/types";
-import { getCurrentUserId } from "./baseService";
 import { toast } from "sonner";
+import { getCurrentUserId } from "./baseService";
 
-// Fetch recommendations for the current user
+// Fetch recommendations made to the current user
 export const fetchRecommendationsForUser = async (): Promise<NetworkSharedDeal[]> => {
   try {
     const userId = await getCurrentUserId();
@@ -12,119 +12,123 @@ export const fetchRecommendationsForUser = async (): Promise<NetworkSharedDeal[]
       console.log("No user ID found");
       return [];
     }
-    
+
     console.log("Fetching recommendations for user:", userId);
-    
-    // Query both the investor_recommendations and opportunities tables
-    const { data, error } = await supabase
+
+    // Fetch recommendations made to the current user
+    const { data: recommendations, error: recommendationsError } = await supabase
       .from("investor_recommendations")
       .select(`
         id,
         commentary,
-        opportunity_id,
-        recommender_id,
         created_at,
-        opportunities(name, sector, stage, funding_amount),
-        investor_profiles!recommender_id(name)
+        opportunity_id,
+        recommender_id
       `)
-      .eq("recipient_id", userId);
-    
-    if (error) {
-      console.error("Error fetching recommendations:", error);
-      return [];
+      .eq("recipient_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (recommendationsError) {
+      console.error("Error fetching recommendations:", recommendationsError);
+      throw recommendationsError;
     }
-    
-    console.log("Raw recommendations data:", data);
-    
-    if (!data || data.length === 0) {
+
+    console.log("Raw recommendations data:", recommendations);
+
+    if (!recommendations || recommendations.length === 0) {
       console.log("No recommendations found");
       return [];
     }
-    
-    // Transform the data into the required format
-    const recommendations: NetworkSharedDeal[] = data.map(rec => ({
-      id: rec.id,
-      opportunityId: rec.opportunity_id,
-      opportunityName: rec.opportunities.name,
-      sector: rec.opportunities.sector,
-      stage: rec.opportunities.stage,
-      fundingAmount: rec.opportunities.funding_amount,
-      sharedBy: rec.investor_profiles?.name || "Unknown Investor",
-      sharedAt: rec.created_at,
-      comment: rec.commentary || undefined
+
+    // Create a mapped result with placeholders
+    const mappedDeals: NetworkSharedDeal[] = recommendations.map(recommendation => ({
+      id: recommendation.id,
+      opportunityId: recommendation.opportunity_id,
+      opportunityName: "", // To be populated
+      sector: "", // To be populated
+      stage: "", // To be populated
+      fundingAmount: 0, // To be populated
+      sharedBy: "", // To be populated
+      avatar: null,
+      comment: recommendation.commentary,
+      sharedAt: recommendation.created_at
     }));
-    
-    return recommendations;
+
+    // For each recommendation, fetch opportunity details
+    for (let i = 0; i < mappedDeals.length; i++) {
+      const recommendation = recommendations[i];
+      
+      // Fetch opportunity details
+      const { data: opportunityData, error: opportunityError } = await supabase
+        .from("opportunities")
+        .select("name, sector, stage, funding_amount")
+        .eq("id", recommendation.opportunity_id)
+        .single();
+      
+      if (!opportunityError && opportunityData) {
+        mappedDeals[i].opportunityName = opportunityData.name;
+        mappedDeals[i].sector = opportunityData.sector;
+        mappedDeals[i].stage = opportunityData.stage;
+        mappedDeals[i].fundingAmount = Number(opportunityData.funding_amount);
+      } else {
+        console.log("Error or no data for opportunity:", recommendation.opportunity_id, opportunityError);
+      }
+      
+      // Fetch recommender details
+      const { data: investorData, error: investorError } = await supabase
+        .from("investor_profiles")
+        .select("name, avatar_url")
+        .eq("id", recommendation.recommender_id)
+        .single();
+      
+      if (!investorError && investorData) {
+        mappedDeals[i].sharedBy = investorData.name;
+        mappedDeals[i].avatar = investorData.avatar_url;
+      } else {
+        console.log("Error or no data for recommender:", recommendation.recommender_id, investorError);
+      }
+    }
+
+    console.log("Mapped deals:", mappedDeals);
+    return mappedDeals;
   } catch (error) {
-    console.error("Exception in fetchRecommendationsForUser:", error);
+    console.error("Error fetching recommendations:", error);
+    toast.error("Failed to load recommendations");
     return [];
   }
 };
 
-// Recommend a deal to another investor
-export const recommendDeal = async (
-  opportunityId: string,
-  recipientId: string,
-  comment?: string
+// Make recommendation to another investor
+export const recommendDealToInvestor = async (
+  opportunityId: string, 
+  recipientId: string, 
+  commentary: string | null = null
 ): Promise<boolean> => {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
-      toast.error("Please log in to recommend deals");
+      toast.error("You must be logged in to recommend deals");
       return false;
     }
-    
-    // Create a recommendation
+
     const { error } = await supabase
       .from("investor_recommendations")
       .insert({
         opportunity_id: opportunityId,
-        recipient_id: recipientId,
         recommender_id: userId,
-        commentary: comment || null
+        recipient_id: recipientId,
+        commentary: commentary
       });
-    
+
     if (error) {
-      console.error("Error recommending deal:", error);
-      toast.error("Failed to recommend deal");
-      return false;
+      throw error;
     }
-    
+
     toast.success("Deal recommended successfully");
     return true;
   } catch (error) {
-    console.error("Error in recommendDeal:", error);
+    console.error("Error recommending deal:", error);
     toast.error("Failed to recommend deal");
     return false;
-  }
-};
-
-// Get potential recipients (investors you follow)
-export const getPotentialRecipients = async () => {
-  try {
-    const userId = await getCurrentUserId();
-    if (!userId) return [];
-    
-    const { data, error } = await supabase
-      .from("investor_connections")
-      .select(`
-        following_id,
-        investor_profiles!following_id(id, name, company)
-      `)
-      .eq("follower_id", userId);
-    
-    if (error) {
-      console.error("Error fetching potential recipients:", error);
-      return [];
-    }
-    
-    return data.map(connection => ({
-      id: connection.investor_profiles.id,
-      name: connection.investor_profiles.name,
-      company: connection.investor_profiles.company || undefined
-    }));
-  } catch (error) {
-    console.error("Error in getPotentialRecipients:", error);
-    return [];
   }
 };
