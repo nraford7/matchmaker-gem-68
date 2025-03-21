@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Opportunity } from "@/types";
@@ -45,7 +45,7 @@ const Dashboard = () => {
         <TabsContent value="saved" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Your Saved Deals</CardTitle>
+              <h2 className="text-2xl font-bold tracking-tight">Your Saved Deals</h2>
               <CardDescription>
                 Opportunities you've saved for later
               </CardDescription>
