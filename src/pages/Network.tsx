@@ -24,7 +24,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { NetworkSharedDeals } from "@/components/NetworkSharedDeals";
 import { NetworkInvestor } from "@/types";
-import { fetchAllInvestors, fetchFollowedInvestors, followInvestor, unfollowInvestor } from "@/services/investorService";
+import { 
+  fetchAllInvestors, 
+  fetchFollowedInvestors, 
+  followInvestor, 
+  unfollowInvestor 
+} from "@/services/investor";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 

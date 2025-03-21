@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { 
@@ -19,7 +18,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NetworkInvestor } from "@/types";
 import { PreferenceVisualizer } from "@/components/PreferenceVisualizer";
-import { fetchInvestorById, followInvestor, unfollowInvestor, checkFollowingStatus } from "@/services/investorService";
+import { 
+  fetchInvestorById, 
+  followInvestor, 
+  unfollowInvestor, 
+  checkFollowingStatus 
+} from "@/services/investor";
 
 const InvestorProfile = () => {
   const { id } = useParams<{ id: string }>();

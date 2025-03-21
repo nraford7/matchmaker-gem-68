@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { Investor } from "@/types";
-import { fetchCurrentInvestorProfile, updateInvestorProfile } from "@/services/investorService";
+import { fetchCurrentInvestorProfile, updateInvestorProfile } from "@/services/investor";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2 } from "lucide-react";
