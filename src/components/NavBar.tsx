@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   LayoutDashboard, 
@@ -18,6 +18,9 @@ export const NavBar = () => {
     company: "Acme Capital"
   });
   
+  const location = useLocation();
+  const currentPath = location.pathname;
+  
   return (
     <div className="border-b">
       <div className="container mx-auto flex h-16 items-center justify-between">
@@ -27,27 +30,69 @@ export const NavBar = () => {
           </Link>
           
           <nav className="hidden md:flex items-center gap-6">
-            <Link to="/dashboard" className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link 
+              to="/dashboard" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/dashboard" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
               <LayoutDashboard className="h-4 w-4" />
               Dashboard
             </Link>
-            <Link to="/opportunities" className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link 
+              to="/opportunities" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/opportunities" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
               <Search className="h-4 w-4" />
               Browse
             </Link>
-            <Link to="/upload" className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link 
+              to="/upload" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/upload" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
               <FilePlus className="h-4 w-4" />
               Upload
             </Link>
-            <Link to="/preferences" className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link 
+              to="/preferences" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/preferences" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
               <Filter className="h-4 w-4" />
               Preferences
             </Link>
-            <Link to="/network" className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link 
+              to="/network" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/network" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
               <Users className="h-4 w-4" />
               Network
             </Link>
-            <Link to="/analytics" className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link 
+              to="/analytics" 
+              className={`flex items-center gap-1 text-sm ${
+                currentPath === "/analytics" 
+                  ? "font-bold text-foreground" 
+                  : "font-medium text-muted-foreground hover:text-foreground"
+              }`}
+            >
               <BarChart className="h-4 w-4" />
               Analytics
             </Link>
