@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Opportunity } from "@/types";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ThumbsUp, ThumbsDown, MapPin, MoreHorizontal, Save, Briefcase, Archive, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
-import { saveDeal, activateDeal, completeDeal } from "@/services/opportunityService";
+import { saveDeal } from "@/services/opportunity/savedDealsServices";
+import { activateDeal, completeDeal } from "@/services/opportunity/activeDealsServices";
 
 interface OpportunityListProps {
   opportunities: Opportunity[];
