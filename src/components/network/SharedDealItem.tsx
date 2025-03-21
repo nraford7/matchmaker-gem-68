@@ -17,10 +17,10 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   };
   
   return (
-    <div className="border rounded-md p-3 hover:shadow-md transition-shadow">
+    <div className="border rounded-md p-3 hover:shadow-md transition-shadow h-full flex flex-col">
       <div className="flex justify-between items-start mb-2">
-        <h4 className="font-medium">{deal.opportunityName}</h4>
-        <span className="text-xs text-muted-foreground">
+        <h4 className="font-medium line-clamp-1">{deal.opportunityName}</h4>
+        <span className="text-xs text-muted-foreground shrink-0 ml-2">
           {new Date(deal.sharedAt).toLocaleDateString()}
         </span>
       </div>
@@ -45,7 +45,7 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         </div>
       )}
       
-      <div className="flex gap-2 mt-2">
+      <div className="flex gap-2 mt-auto pt-2">
         <Button 
           variant="default" 
           size="sm" 
