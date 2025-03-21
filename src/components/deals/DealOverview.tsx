@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, Calendar, TrendingUp, Users } from "lucide-react";
-import { EnhancedOpportunity } from "@/pages/DealDetails";
+import { EnhancedOpportunity } from "@/types/deal";
 import { formatCurrency } from "@/lib/utils";
 
 interface DealOverviewProps {

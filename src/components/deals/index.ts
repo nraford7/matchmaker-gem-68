@@ -14,3 +14,4 @@ export * from "./DealRecommendation";
 export * from "./DealSidebar";
 export * from "./DealTeam";
 export * from "./NotFoundState";
+export * from "./DealLoading";

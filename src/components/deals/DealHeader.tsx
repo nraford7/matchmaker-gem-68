@@ -2,7 +2,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Bookmark, Download, MapPin, Share } from "lucide-react";
-import { EnhancedOpportunity } from "@/pages/DealDetails";
+import { EnhancedOpportunity } from "@/types/deal";
 
 interface DealHeaderProps {
   deal: EnhancedOpportunity;
