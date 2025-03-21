@@ -1,7 +1,6 @@
 
 import { NetworkSharedDeal } from "@/types";
-import { Handshake, MessageSquare, MapPin } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { MessageSquare, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -45,7 +44,7 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         </div>
         <div className="flex items-center text-sm text-muted-foreground gap-1">
           <MapPin className="h-3 w-3" />
-          <span>{deal.location || "Unknown"}</span>
+          <span>{deal.location}</span>
         </div>
       </CardHeader>
       
