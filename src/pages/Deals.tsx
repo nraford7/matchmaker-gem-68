@@ -110,7 +110,7 @@ const Deals = () => {
         )}
       </div>
 
-      <Tabs defaultValue="active" className="w-full">
+      <Tabs defaultValue="active" className="w-full mb-12">
         <div className="flex justify-between items-center mb-4">
           <TabsList>
             <TabsTrigger value="active" className="flex items-center gap-1">
@@ -124,10 +124,6 @@ const Deals = () => {
             <TabsTrigger value="past" className="flex items-center gap-1">
               <Archive className="h-4 w-4" />
               Past Deals
-            </TabsTrigger>
-            <TabsTrigger value="all" className="flex items-center gap-1">
-              <Globe className="h-4 w-4" />
-              All Opportunities
             </TabsTrigger>
           </TabsList>
           
@@ -168,31 +164,44 @@ const Deals = () => {
             <OpportunityList opportunities={pastDeals} />
           )}
         </TabsContent>
-        
-        <TabsContent value="all" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                {searchQuery ? "Search Results" : "All Opportunities"}
-              </CardTitle>
-              <CardDescription>
-                {searchQuery 
-                  ? `Found ${filteredOpportunities.length} result${filteredOpportunities.length !== 1 ? 's' : ''} for "${searchQuery}"`
-                  : "Browse all available investment opportunities"
-                }
-                {!searchQuery && filteredOpportunities.length < mockOpportunities.length && (
-                  <span className="ml-1">
-                    ({filteredOpportunities.length} of {mockOpportunities.length})
-                  </span>
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <OpportunityList opportunities={filteredOpportunities} />
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
+
+      {/* All Opportunities section (moved out of Tabs) */}
+      <div className="mb-12">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <Globe className="h-5 w-5" />
+            All Opportunities
+          </h2>
+          
+          <Button variant="outline" size="sm" className="gap-1">
+            <Filter className="h-4 w-4" />
+            Filter
+          </Button>
+        </div>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {searchQuery ? "Search Results" : "Available Opportunities"}
+            </CardTitle>
+            <CardDescription>
+              {searchQuery 
+                ? `Found ${filteredOpportunities.length} result${filteredOpportunities.length !== 1 ? 's' : ''} for "${searchQuery}"`
+                : "Browse all available investment opportunities"
+              }
+              {!searchQuery && filteredOpportunities.length < mockOpportunities.length && (
+                <span className="ml-1">
+                  ({filteredOpportunities.length} of {mockOpportunities.length})
+                </span>
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <OpportunityList opportunities={filteredOpportunities} />
+          </CardContent>
+        </Card>
+      </div>
       
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
