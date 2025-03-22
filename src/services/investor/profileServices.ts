@@ -22,7 +22,19 @@ export const fetchCurrentInvestorProfile = async (): Promise<Investor | null> =>
       return null;
     }
 
-    return data as Investor;
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email || "",
+      company: data.company || "",
+      biography: data.biography || "",
+      preferredSectors: data.sectors || [],
+      preferredStages: data.preferred_stages || [],
+      checkSizeMin: data.check_size_min || 0,
+      checkSizeMax: data.check_size_max || 0,
+      preferredGeographies: data.preferred_geographies || [],
+      investmentThesis: data.investment_thesis || ""
+    };
   } catch (error) {
     console.error("Error in fetchCurrentInvestorProfile:", error);
     return null;
@@ -45,12 +57,12 @@ export const updateInvestorProfile = async (profile: Omit<Investor, "id">): Prom
         email: profile.email,
         company: profile.company,
         biography: profile.biography,
-        preferredSectors: profile.preferredSectors,
-        preferredStages: profile.preferredStages,
-        checkSizeMin: profile.checkSizeMin,
-        checkSizeMax: profile.checkSizeMax,
-        preferredGeographies: profile.preferredGeographies,
-        investmentThesis: profile.investmentThesis
+        sectors: profile.preferredSectors,
+        preferred_stages: profile.preferredStages,
+        check_size_min: profile.checkSizeMin,
+        check_size_max: profile.checkSizeMax,
+        preferred_geographies: profile.preferredGeographies,
+        investment_thesis: profile.investmentThesis
       })
       .eq("id", session.session.user.id);
 
@@ -96,7 +108,19 @@ export const fetchInvestorProfileById = async (id: string): Promise<Investor | n
       return null;
     }
 
-    return data as Investor;
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email || "",
+      company: data.company || "",
+      biography: data.biography || "",
+      preferredSectors: data.sectors || [],
+      preferredStages: data.preferred_stages || [],
+      checkSizeMin: data.check_size_min || 0,
+      checkSizeMax: data.check_size_max || 0,
+      preferredGeographies: data.preferred_geographies || [],
+      investmentThesis: data.investment_thesis || ""
+    };
   } catch (error) {
     console.error("Error in fetchInvestorProfileById:", error);
     return null;
