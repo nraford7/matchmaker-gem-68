@@ -2,11 +2,10 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
-import { fetchNetworkSharedDeals, createSampleSharedDeals } from "@/services/investor/sharedDealsServices";
+import { fetchNetworkSharedDeals } from "@/services/investor/sharedDealsServices";
 import { NetworkSharedDeal } from "@/types";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { NetworkHighlightsEmpty } from "./NetworkHighlightsEmpty";
 import { NetworkHighlightsLoading } from "./NetworkHighlightsLoading";
 import { SharedDealItem } from "./SharedDealItem";
 
@@ -20,31 +19,11 @@ export const NetworkHighlights = () => {
       setLoading(true);
       console.log("Loading network shared deals...");
       const data = await fetchNetworkSharedDeals();
-      
-      // If no deals are found, automatically create sample deals
-      if (data.length === 0) {
-        console.log("No shared deals found, creating samples...");
-        await createSampleSharedDeals();
-        // Fetch again after creating sample deals
-        const newData = await fetchNetworkSharedDeals();
-        setSharedDeals(newData);
-      } else {
-        setSharedDeals(data);
-      }
-      
+      setSharedDeals(data);
       console.log("Loaded shared deals:", data);
     } catch (error) {
       console.error("Error loading shared deals:", error);
       toast.error("Failed to load network shared deals");
-      
-      // Even if there's an error, try to create sample deals
-      try {
-        await createSampleSharedDeals();
-        const newData = await fetchNetworkSharedDeals();
-        setSharedDeals(newData);
-      } catch (innerError) {
-        console.error("Error creating sample deals as fallback:", innerError);
-      }
     } finally {
       setLoading(false);
     }
@@ -59,12 +38,8 @@ export const NetworkHighlights = () => {
     return <NetworkHighlightsLoading />;
   }
   
-  // Empty state - should rarely happen now with our automatic sample creation
-  if (sharedDeals.length === 0) {
-    return <NetworkHighlightsEmpty />;
-  }
-  
   // Display shared deals in a two-column grid
+  // With our updated service, we should always have exactly 3 deals
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">

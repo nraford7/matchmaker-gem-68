@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { getCurrentUserId } from "./baseService";
 import { NetworkSharedDeal } from "@/types";
@@ -18,7 +19,7 @@ const sampleComments = [
   "Already has interest from several top investors."
 ];
 
-// Create sample shared deals for demo purposes
+// Create exactly 3 sample shared deals for demo purposes
 export const createSampleSharedDeals = async (): Promise<boolean> => {
   try {
     const userId = await getCurrentUserId();
@@ -56,8 +57,8 @@ export const createSampleSharedDeals = async (): Promise<boolean> => {
       .delete()
       .eq("shared_with_user_id", userId);
       
-    // Create 3-6 sample shared deals
-    const numberOfDeals = Math.floor(Math.random() * 4) + 3; // 3-6 deals
+    // Create exactly 3 sample shared deals
+    const numberOfDeals = 3;
     const sharedDeals = [];
     
     for (let i = 0; i < numberOfDeals; i++) {
@@ -97,7 +98,7 @@ export const createSampleSharedDeals = async (): Promise<boolean> => {
   }
 };
 
-// Fetch network shared deals for the current user
+// Fetch network shared deals for the current user, always ensuring there are 3 deals
 export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> => {
   try {
     const userId = await getCurrentUserId();
@@ -108,7 +109,16 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
 
     console.log("Fetching network shared deals for user:", userId);
     
-    // Fetch shared deals made to the current user
+    // Always delete existing shared deals first to ensure fresh samples each time
+    await supabase
+      .from("network_shared_deals")
+      .delete()
+      .eq("shared_with_user_id", userId);
+    
+    // Create fresh sample deals
+    await createSampleSharedDeals();
+    
+    // Fetch the newly created shared deals
     let { data: sharedDealsData, error: sharedDealsError } = await supabase
       .from("network_shared_deals")
       .select(`
@@ -121,38 +131,12 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
       .eq("shared_with_user_id", userId)
       .order("created_at", { ascending: false });
 
-    if (sharedDealsError) {
+    if (sharedDealsError || !sharedDealsData || sharedDealsData.length === 0) {
       console.error("Error fetching network shared deals:", sharedDealsError);
       return [];
     }
 
     console.log("Raw network shared deals data:", sharedDealsData);
-
-    // If no deals are found, automatically create sample deals
-    if (!sharedDealsData || sharedDealsData.length === 0) {
-      console.log("No network shared deals found, creating sample deals");
-      await createSampleSharedDeals();
-      
-      // Fetch again after creating sample deals
-      const { data: newDealsData, error: newDealsError } = await supabase
-        .from("network_shared_deals")
-        .select(`
-          id,
-          comment,
-          created_at,
-          opportunity_id,
-          shared_by_user_id
-        `)
-        .eq("shared_with_user_id", userId)
-        .order("created_at", { ascending: false });
-        
-      if (newDealsError || !newDealsData || newDealsData.length === 0) {
-        console.error("Still no deals after creating samples:", newDealsError);
-        return [];
-      }
-      
-      sharedDealsData = newDealsData;
-    }
 
     // Process each shared deal to get full details
     const enhancedDeals = await Promise.all(
