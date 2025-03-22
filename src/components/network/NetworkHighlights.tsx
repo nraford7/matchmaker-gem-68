@@ -1,45 +1,62 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
-import { fetchNetworkSharedDeals } from "@/services/investor/sharedDealsServices";
 import { NetworkSharedDeal } from "@/types";
-import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { NetworkHighlightsLoading } from "./NetworkHighlightsLoading";
 import { SharedDealItem } from "./SharedDealItem";
 
+// Mock data for network shared deals that will always be available
+const MOCK_SHARED_DEALS: NetworkSharedDeal[] = [
+  {
+    id: "mock-deal-1",
+    opportunityId: "sample-1",
+    opportunityName: "EcoTech Solutions",
+    sector: "CleanTech",
+    stage: "Series A",
+    fundingAmount: 3500000,
+    location: "San Francisco, CA",
+    sharedBy: "Michael Chen",
+    avatar: null,
+    comment: "This company's innovative approach to renewable energy storage could be transformative. Worth a look given your interest in cleantech.",
+    sharedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString() // 3 days ago
+  },
+  {
+    id: "mock-deal-2",
+    opportunityId: "sample-2",
+    opportunityName: "MedAI Diagnostics",
+    sector: "Health Tech",
+    stage: "Seed",
+    fundingAmount: 1200000,
+    location: "Boston, MA",
+    sharedBy: "Sarah Johnson",
+    avatar: null,
+    comment: "Their AI-powered diagnostic tool has shown impressive early results. The founding team has strong technical and medical backgrounds.",
+    sharedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days ago
+  },
+  {
+    id: "mock-deal-3",
+    opportunityId: "sample-3",
+    opportunityName: "Secure Payments",
+    sector: "FinTech",
+    stage: "Series B",
+    fundingAmount: 8000000,
+    location: "New York, NY",
+    sharedBy: "David Williams",
+    avatar: null,
+    comment: "This payment security platform is gaining significant traction with major financial institutions. Their revenue growth is impressive.",
+    sharedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString() // 14 days ago
+  }
+];
+
 export const NetworkHighlights = () => {
-  const [sharedDeals, setSharedDeals] = useState<NetworkSharedDeal[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   
-  const loadSharedDeals = async () => {
-    try {
-      setLoading(true);
-      console.log("Loading network shared deals...");
-      const data = await fetchNetworkSharedDeals();
-      setSharedDeals(data);
-      console.log("Loaded shared deals:", data);
-    } catch (error) {
-      console.error("Error loading shared deals:", error);
-      toast.error("Failed to load network shared deals");
-    } finally {
-      setLoading(false);
-    }
+  const handleViewDetails = (id: string) => {
+    navigate(`/deals/${id}`);
   };
   
-  useEffect(() => {
-    loadSharedDeals();
-  }, []);
-  
-  // Loading state
-  if (loading) {
-    return <NetworkHighlightsLoading />;
-  }
-  
-  // Display shared deals in a two-column grid
-  // With our updated service, we should always have exactly 3 deals
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -55,7 +72,7 @@ export const NetworkHighlights = () => {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {sharedDeals.map((deal) => (
+          {MOCK_SHARED_DEALS.map((deal) => (
             <SharedDealItem key={deal.id} deal={deal} />
           ))}
         </div>
