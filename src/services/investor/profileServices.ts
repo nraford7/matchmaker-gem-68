@@ -27,7 +27,7 @@ export const fetchCurrentInvestorProfile = async (): Promise<Investor | null> =>
       name: data.name,
       email: data.email || "",
       company: data.company || "",
-      biography: data.biography || "",
+      biography: data.biography || "", // This might be null in the database
       preferredSectors: data.sectors || [],
       preferredStages: data.preferred_stages || [],
       checkSizeMin: data.check_size_min || 0,
@@ -113,7 +113,7 @@ export const fetchInvestorProfileById = async (id: string): Promise<Investor | n
       name: data.name,
       email: data.email || "",
       company: data.company || "",
-      biography: data.biography || "",
+      biography: data.biography || "", // This might be null in the database
       preferredSectors: data.sectors || [],
       preferredStages: data.preferred_stages || [],
       checkSizeMin: data.check_size_min || 0,

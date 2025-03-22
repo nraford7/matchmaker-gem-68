@@ -14,6 +14,13 @@ export {
   fetchInvestorProfileById
 } from "./profileServices";
 
+// Export connection services
+export {
+  followInvestor,
+  unfollowInvestor,
+  checkFollowingStatus
+} from "./connectionServices";
+
 // Handle shared deals services
 export * from "./sharedDealsServices";
 
