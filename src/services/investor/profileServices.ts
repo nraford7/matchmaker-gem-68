@@ -19,6 +19,8 @@ export const updateInvestorProfile = async (investor: Omit<Investor, "id">): Pro
         id: userId,
         name: investor.name,
         email: investor.email,
+        company: investor.company,
+        biography: investor.biography,
         sectors: investor.preferredSectors,
         preferred_stages: investor.preferredStages,
         check_size_min: investor.checkSizeMin,

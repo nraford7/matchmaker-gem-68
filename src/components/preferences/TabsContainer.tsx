@@ -5,6 +5,7 @@ import { SectorsForm } from "./SectorsForm";
 import { StagesForm } from "./StagesForm";
 import { CheckSizeForm } from "./CheckSizeForm";
 import { GeographyForm } from "./GeographyForm";
+import { AccountSettingsForm } from "./AccountSettingsForm";
 
 export const TabsContainer = () => {
   return (
@@ -15,6 +16,7 @@ export const TabsContainer = () => {
         <TabsTrigger value="stages">Investment Stages</TabsTrigger>
         <TabsTrigger value="checks">Check Size</TabsTrigger>
         <TabsTrigger value="geo">Geography</TabsTrigger>
+        <TabsTrigger value="account">Account</TabsTrigger>
       </TabsList>
       
       <TabsContent value="profile" className="space-y-4">
@@ -35,6 +37,10 @@ export const TabsContainer = () => {
       
       <TabsContent value="geo" className="space-y-4">
         <GeographyForm />
+      </TabsContent>
+      
+      <TabsContent value="account" className="space-y-4">
+        <AccountSettingsForm />
       </TabsContent>
     </Tabs>
   );
