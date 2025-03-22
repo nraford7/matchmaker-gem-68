@@ -1,9 +1,8 @@
+
 export interface Investor {
   id: string;
   name: string;
   email: string;
-  company?: string;
-  biography?: string;
   preferredSectors: string[];
   preferredStages: string[];
   checkSizeMin: number;

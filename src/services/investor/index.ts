@@ -1,26 +1,9 @@
 
-// Re-export investor-related services
+// Re-export all investor-related services
 export * from "./baseService";
-
-// Export specific functions from fetchServices and profileServices to avoid conflicts
-export { 
-  fetchAllInvestors,
-  fetchInvestorById,
-  fetchFollowedInvestors
-} from "./fetchServices";
-
-export {
-  fetchCurrentInvestorProfile,
-  updateInvestorProfile,
-  fetchInvestorProfileById
-} from "./profileServices";
-
-// Export connection services
-export {
-  followInvestor,
-  unfollowInvestor,
-  checkFollowingStatus
-} from "./connectionServices";
+export * from "./fetchServices";
+export * from "./profileServices";
+export * from "./connectionServices";
 
 // Handle shared deals services
 export * from "./sharedDealsServices";
