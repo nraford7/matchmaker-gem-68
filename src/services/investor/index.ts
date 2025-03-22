@@ -1,6 +1,7 @@
 
 // Re-export investor-related services
 export * from "./baseService";
+
 // Export specific functions from fetchServices and profileServices to avoid conflicts
 export { 
   fetchAllInvestors,
