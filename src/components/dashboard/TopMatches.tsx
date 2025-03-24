@@ -19,7 +19,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
     return (
       <Card>
         <CardHeader className="bg-muted/50 pb-4">
-          <CardTitle className="flex items-center gap-2 text-xl">
+          <CardTitle className="text-xl font-semibold flex items-center gap-2">
             <TrendingUp className="w-5 h-5" />
             Top Matches
           </CardTitle>
@@ -37,7 +37,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   return (
     <Card className="overflow-hidden border-border">
       <CardHeader className="bg-muted/50 pb-4">
-        <CardTitle className="flex items-center gap-2 text-xl">
+        <CardTitle className="text-xl font-semibold flex items-center gap-2">
           <TrendingUp className="w-5 h-5" />
           Top Matches
         </CardTitle>
@@ -60,7 +60,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                 <Card className="hover:shadow-md transition-shadow hover:border-primary/20 h-full flex flex-col">
                   <CardContent className="p-4 flex flex-col h-full">
                     {/* Deal name */}
-                    <h3 className="font-semibold mb-2 line-clamp-1 hover:text-primary transition-colors text-base">
+                    <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base">
                       {deal.name}
                     </h3>
                     
@@ -83,11 +83,11 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                       {deal.description || "No description available"}
                     </p>
                     
-                    <div className="grid grid-cols-2 gap-1 text-sm mt-auto">
+                    <div className="grid grid-cols-2 gap-1 text-xs mt-auto">
                       {/* Location */}
                       {deal.location && (
                         <div className="flex items-center text-muted-foreground">
-                          <MapPin className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
+                          <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
                           <span className="truncate">{deal.location}</span>
                         </div>
                       )}
@@ -95,7 +95,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                       {/* Funding amount */}
                       {(deal.checkSizeRequired || deal.fundingAmount) && (
                         <div className="flex items-center text-muted-foreground">
-                          <DollarSign className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
+                          <DollarSign className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
                           <span>${formatCurrency(deal.checkSizeRequired || deal.fundingAmount || 0)}</span>
                         </div>
                       )}
@@ -103,7 +103,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                       {/* IRR if available */}
                       {deal.IRR !== undefined && (
                         <div className="flex items-center text-muted-foreground">
-                          <TrendingUp className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
+                          <TrendingUp className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
                           <span>{deal.IRR}% IRR</span>
                         </div>
                       )}
