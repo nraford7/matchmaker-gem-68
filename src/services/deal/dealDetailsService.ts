@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { EnhancedDeal } from "@/types/deal";
@@ -41,11 +42,11 @@ export const fetchDealData = async (dealId: string): Promise<EnhancedDeal | null
       investorSpeedRequired: data.investor_speed_required,
       // Type conversion for JSON fields
       strategyProfile: data.strategy_profile ? (typeof data.strategy_profile === 'string' 
-        ? JSON.parse(data.strategy_profile as string) 
-        : data.strategy_profile as Record<string, any>),
+        ? JSON.parse(data.strategy_profile) 
+        : data.strategy_profile as Record<string, any>) : {},
       psychologicalFit: data.psychological_fit ? (typeof data.psychological_fit === 'string'
-        ? JSON.parse(data.psychological_fit as string)
-        : data.psychological_fit as Record<string, any>),
+        ? JSON.parse(data.psychological_fit)
+        : data.psychological_fit as Record<string, any>) : {},
       createdAt: data.created_at,
       updatedAt: data.updated_at,
       
