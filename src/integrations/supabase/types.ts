@@ -98,6 +98,7 @@ export type Database = {
           location: string | null
           name: string
           psychological_fit: Json | null
+          recommendation: string | null
           sector_tags: string[] | null
           stage: string | null
           strategy_profile: Json | null
@@ -121,6 +122,7 @@ export type Database = {
           location?: string | null
           name: string
           psychological_fit?: Json | null
+          recommendation?: string | null
           sector_tags?: string[] | null
           stage?: string | null
           strategy_profile?: Json | null
@@ -144,6 +146,7 @@ export type Database = {
           location?: string | null
           name?: string
           psychological_fit?: Json | null
+          recommendation?: string | null
           sector_tags?: string[] | null
           stage?: string | null
           strategy_profile?: Json | null
