@@ -10,12 +10,22 @@ import { SharedDealItem } from "./SharedDealItem";
 const MOCK_SHARED_DEALS: NetworkSharedDeal[] = [
   {
     id: "mock-deal-1",
-    opportunityId: "sample-1",
-    opportunityName: "EcoTech Solutions",
+    deal_id: "sample-1",
+    deal: {
+      id: "sample-1",
+      name: "EcoTech Solutions",
+      sector_tags: ["CleanTech"],
+      stage: "Series A",
+      check_size_required: 3500000,
+    },
+    investor: {
+      id: "investor-1",
+      name: "Michael Chen",
+      deal_count: 5
+    },
     sector: "CleanTech",
     stage: "Series A",
     fundingAmount: 3500000,
-    location: "San Francisco, CA",
     sharedBy: "Michael Chen",
     avatar: null,
     comment: "This company's innovative approach to renewable energy storage could be transformative. Worth a look given your interest in cleantech.",
@@ -23,12 +33,22 @@ const MOCK_SHARED_DEALS: NetworkSharedDeal[] = [
   },
   {
     id: "mock-deal-2",
-    opportunityId: "sample-2",
-    opportunityName: "MedAI Diagnostics",
+    deal_id: "sample-2",
+    deal: {
+      id: "sample-2",
+      name: "MedAI Diagnostics",
+      sector_tags: ["Health Tech"],
+      stage: "Seed",
+      check_size_required: 1200000,
+    },
+    investor: {
+      id: "investor-2",
+      name: "Sarah Johnson",
+      deal_count: 8
+    },
     sector: "Health Tech",
     stage: "Seed",
     fundingAmount: 1200000,
-    location: "Boston, MA",
     sharedBy: "Sarah Johnson",
     avatar: null,
     comment: "Their AI-powered diagnostic tool has shown impressive early results. The founding team has strong technical and medical backgrounds.",
@@ -36,12 +56,22 @@ const MOCK_SHARED_DEALS: NetworkSharedDeal[] = [
   },
   {
     id: "mock-deal-3",
-    opportunityId: "sample-3",
-    opportunityName: "Secure Payments",
+    deal_id: "sample-3",
+    deal: {
+      id: "sample-3",
+      name: "Secure Payments",
+      sector_tags: ["FinTech"],
+      stage: "Series B",
+      check_size_required: 8000000,
+    },
+    investor: {
+      id: "investor-3",
+      name: "David Williams",
+      deal_count: 12
+    },
     sector: "FinTech",
     stage: "Series B",
     fundingAmount: 8000000,
-    location: "New York, NY",
     sharedBy: "David Williams",
     avatar: null,
     comment: "This payment security platform is gaining significant traction with major financial institutions. Their revenue growth is impressive.",
@@ -52,10 +82,6 @@ const MOCK_SHARED_DEALS: NetworkSharedDeal[] = [
 export const NetworkHighlights = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
-  const handleViewDetails = (id: string) => {
-    navigate(`/deals/${id}`);
-  };
   
   return (
     <Card>

@@ -24,13 +24,13 @@ export const StagesForm = () => {
             <div key={stage} className="flex items-center space-x-2">
               <Checkbox 
                 id={stage}
-                checked={form.watch("preferredStages").includes(stage)}
+                checked={(form.watch("preferred_stages") || []).includes(stage)}
                 onCheckedChange={(checked) => {
-                  const current = form.getValues("preferredStages");
+                  const current = form.getValues("preferred_stages") || [];
                   if (checked) {
-                    form.setValue("preferredStages", [...current, stage]);
+                    form.setValue("preferred_stages", [...current, stage]);
                   } else {
-                    form.setValue("preferredStages", current.filter(s => s !== stage));
+                    form.setValue("preferred_stages", current.filter(s => s !== stage));
                   }
                 }}
               />

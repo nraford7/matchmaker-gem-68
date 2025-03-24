@@ -32,8 +32,8 @@ export const fetchDeals = async (): Promise<Deal[]> => {
       dueDiligenceLevel: item.due_diligence_level,
       decisionConvictionRequired: item.decision_conviction_required,
       investorSpeedRequired: item.investor_speed_required,
-      strategyProfile: item.strategy_profile,
-      psychologicalFit: item.psychological_fit,
+      strategyProfile: typeof item.strategy_profile === 'object' ? item.strategy_profile : {},
+      psychologicalFit: typeof item.psychological_fit === 'object' ? item.psychological_fit : {},
       createdAt: item.created_at
     }));
   } catch (error) {
@@ -144,7 +144,7 @@ export const fetchSavedDeals = async (): Promise<Deal[]> => {
       createdAt: item.deals.created_at,
       // Simple match score simulation for now
       matchScore: Math.random() * 0.3 + 0.6,
-      matchExplanation: "Based on your sector and investment preferences"
+      matchExplanation: "Based on your sector and stage preferences"
     }));
   } catch (error) {
     console.error("Error fetching saved deals:", error);

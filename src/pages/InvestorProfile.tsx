@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Building } from "lucide-react";
@@ -92,25 +91,14 @@ const InvestorProfile = () => {
     id: investor.id,
     name: investor.name,
     email: investor.email || "",
-    contextSectors: investor.contextSectors,
-    preferredStages: investor.preferredStages || [],
-    checkSizeMin: investor.checkSizeMin || 0,
-    checkSizeMax: investor.checkSizeMax || 0,
-    preferredGeographies: investor.preferredGeographies || [],
-    investmentThesis: investor.investmentThesis || "",
-    role: investor.role,
-    sourceOfWealth: investor.sourceOfWealth,
-    preferredAssets: investor.preferredAssets,
-    valuesFilter: investor.valuesFilter,
-    timeHorizon: investor.timeHorizon,
-    structure: investor.structure,
-    aum: investor.aum,
-    geographicFocus: investor.geographicFocus,
-    stageFocus: investor.stageFocus,
-    psychologicalProfileRaw: investor.psychologicalProfileRaw,
-    psychologicalProfileWeighted: investor.psychologicalProfileWeighted,
-    strategyProfile: investor.strategyProfile,
-    weightingPreferences: investor.weightingPreferences
+    company: investor.company,
+    avatar_url: investor.avatar_url,
+    preferred_stages: investor.preferred_stages || [],
+    preferred_geographies: investor.preferred_geographies || [],
+    check_size_min: investor.check_size_min || 0,
+    check_size_max: investor.check_size_max || 0,
+    investment_thesis: investor.investment_thesis || "",
+    deal_count: investor.deal_count
   };
   
   return (

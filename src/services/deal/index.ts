@@ -1,7 +1,12 @@
 
-// Re-export all deal-related services
-export * from "./baseService";
-export * from "./fetchServices";
-export * from "./activeDealsServices";
-export * from "./savedDealsServices";
-export * from "./dealDetailsService";
+// Re-export services with proper naming
+export * from './fetchServices';
+export * from './dealDetailsService';
+
+// For backward compatibility
+export { 
+  fetchDeals as fetchOpportunities,
+  fetchActiveDeals as fetchActiveOpportunities,
+  fetchSavedDeals as fetchSavedOpportunities,
+  fetchPastDeals as fetchPastOpportunities
+} from './fetchServices';

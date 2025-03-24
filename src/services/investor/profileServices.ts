@@ -19,25 +19,17 @@ export const updateInvestorProfile = async (investor: Omit<Investor, "id">): Pro
         id: userId,
         name: investor.name,
         email: investor.email,
-        role: investor.role,
-        source_of_wealth: investor.sourceOfWealth,
-        context_sectors: investor.contextSectors,
-        preferred_stages: investor.preferredStages,
-        check_size_min: investor.checkSizeMin,
-        check_size_max: investor.checkSizeMax,
-        preferred_assets: investor.preferredAssets,
-        values_filter: investor.valuesFilter,
-        time_horizon: investor.timeHorizon,
-        structure: investor.structure,
-        aum: investor.aum,
-        geographic_focus: investor.geographicFocus,
-        stage_focus: investor.stageFocus,
-        preferred_geographies: investor.preferredGeographies,
-        investment_thesis: investor.investmentThesis,
-        psychological_profile_raw: investor.psychologicalProfileRaw,
-        psychological_profile_weighted: investor.psychologicalProfileWeighted,
-        strategy_profile: investor.strategyProfile,
-        weighting_preferences: investor.weightingPreferences
+        company: investor.company,
+        avatar_url: investor.avatar_url,
+        preferred_stages: investor.preferred_stages,
+        preferred_geographies: investor.preferred_geographies,
+        check_size_min: investor.check_size_min,
+        check_size_max: investor.check_size_max,
+        investment_thesis: investor.investment_thesis,
+        deal_count: investor.deal_count,
+        // Add additional fields from extended type if present
+        sector_tags: (investor as any).sector_tags,
+        updated_at: new Date().toISOString()
       });
 
     if (error) {

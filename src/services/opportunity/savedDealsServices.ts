@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { getCurrentUserId, validateUserAuth } from "./baseService";
 
 // Add a deal to saved deals
-export const saveDeal = async (opportunityId: string): Promise<boolean> => {
+export const saveDeal = async (dealId: string): Promise<boolean> => {
   try {
     const userId = await getCurrentUserId();
     if (!validateUserAuth(userId)) {
@@ -12,9 +12,9 @@ export const saveDeal = async (opportunityId: string): Promise<boolean> => {
     }
 
     const { error } = await supabase
-      .from("saved_opportunities")
+      .from("saved_deals")
       .insert({ 
-        opportunity_id: opportunityId,
+        deal_id: dealId,
         user_id: userId
       });
 

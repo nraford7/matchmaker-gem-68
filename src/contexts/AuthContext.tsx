@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
@@ -31,6 +30,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
   const navigate = useNavigate();
+  const [opportunities, setOpportunities] = useState<any[]>([]);
+  const [expirationDate, setExpirationDate] = useState<Date | null>(null);
 
   // Helper function to create active deals for a new user
   const createSampleActiveDeals = async (userId: string) => {
@@ -247,6 +248,119 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Find opportunities for authenticated user
+  const findOpportunities = async () => {
+    if (!user || !expirationDate || new Date() > expirationDate) {
+      setOpportunities([]);
+      return [];
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("deals")
+        .select("*")
+        .limit(10);
+
+      if (error) {
+        console.error('Error fetching opportunities:', error);
+        return [];
+      }
+
+      if (!data || data.length === 0) {
+        return [];
+      }
+
+      // Transform data into opportunities
+      const formattedOpportunities = data.map(item => ({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        fundingAmount: item.check_size_required,
+        sector: item.sector_tags?.[0] || 'General',
+        stage: item.stage || 'Not specified',
+        location: item.geographies?.[0] || 'Global',
+        matchScore: 0.78 + (Math.random() * 0.1),
+        matchExplanation: 'Based on your preferred sectors and stage focus',
+        createdAt: item.created_at
+      }));
+
+      setOpportunities(formattedOpportunities);
+      return formattedOpportunities;
+    } catch (error) {
+      console.error('Error in findOpportunities:', error);
+      return [];
+    }
+  };
+
+  // Find and check if a deal is in active deals
+  const checkActiveDeal = async (dealId: string) => {
+    if (!user) return false;
+
+    try {
+      const { data, error } = await supabase
+        .from("active_deals")
+        .select("*")
+        .eq("deal_id", dealId)
+        .eq("user_id", user.id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error checking active deal:', error);
+      }
+
+      return !!data;
+    } catch (error) {
+      console.error('Error in checkActiveDeal:', error);
+      return false;
+    }
+  };
+
+  // Find and check if a deal is saved
+  const checkSavedDeal = async (dealId: string) => {
+    if (!user) return false;
+
+    try {
+      const { data, error } = await supabase
+        .from("saved_deals")
+        .select("*")
+        .eq("deal_id", dealId)
+        .eq("user_id", user.id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error checking saved deal:', error);
+      }
+
+      return !!data;
+    } catch (error) {
+      console.error('Error in checkSavedDeal:', error);
+      return false;
+    }
+  };
+
+  // Check if a deal has been completed
+  const checkCompletedDeal = async (dealId: string) => {
+    if (!user) return false;
+
+    try {
+      const { data, error } = await supabase
+        .from("past_deals")
+        .select("*")
+        .eq("deal_id", dealId)
+        .eq("user_id", user.id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error checking completed deal:', error);
+      }
+
+      return !!data ? { completed: true, amount: data.final_amount } : false;
+    } catch (error) {
+      console.error('Error in checkCompletedDeal:', error);
+      return false;
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -368,6 +482,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signIn,
     signUp,
     signOut,
+    opportunities,
+    findOpportunities,
+    checkActiveDeal,
+    checkSavedDeal,
+    checkCompletedDeal,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

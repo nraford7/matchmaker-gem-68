@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { NetworkInvestor, Investor } from "@/types";
 import { toast } from "sonner";
@@ -115,48 +114,14 @@ export const fetchCurrentInvestorProfile = async (): Promise<Investor | null> =>
       id: data.id,
       name: data.name,
       email: data.email || "",
-      role: data.role,
-      sourceOfWealth: data.source_of_wealth || [],
-      contextSectors: data.context_sectors || [],
-      preferredStages: data.preferred_stages || [],
-      checkSizeMin: data.check_size_min || 0,
-      checkSizeMax: data.check_size_max || 0,
-      preferredAssets: data.preferred_assets || [],
-      valuesFilter: data.values_filter || [],
-      timeHorizon: data.time_horizon,
-      structure: data.structure,
-      aum: data.aum,
-      geographicFocus: data.geographic_focus,
-      stageFocus: data.stage_focus,
-      preferredGeographies: data.preferred_geographies || [],
-      investmentThesis: data.investment_thesis || "",
-      psychologicalProfileRaw: data.psychological_profile_raw ? data.psychological_profile_raw as {
-        Cautious?: number;
-        Methodical?: number;
-        Individualist?: number;
-        Spontaneous?: number;
-      } : {},
-      psychologicalProfileWeighted: data.psychological_profile_weighted ? data.psychological_profile_weighted as {
-        Cautious?: number;
-        Methodical?: number;
-        Individualist?: number;
-        Spontaneous?: number;
-      } : {},
-      strategyProfile: data.strategy_profile ? data.strategy_profile as {
-        checkSizeBehavior?: string;
-        dueDiligence?: string;
-        timeHorizon?: string;
-        exitStrategy?: string;
-        portfolioStyle?: string;
-        sectorPreferences?: string[];
-        esg?: string[];
-        involvementLevel?: string;
-        controlPreference?: string;
-      } : {},
-      weightingPreferences: data.weighting_preferences ? data.weighting_preferences as {
-        mostImportantFactors?: string[];
-        leastImportantFactors?: string[];
-      } : {}
+      company: data.company,
+      avatar_url: data.avatar_url,
+      preferred_stages: data.preferred_stages || [],
+      preferred_geographies: data.preferred_geographies || [],
+      check_size_min: data.check_size_min || 0,
+      check_size_max: data.check_size_max || 0,
+      investment_thesis: data.investment_thesis || "",
+      deal_count: data.deal_count || 0
     };
   } catch (error) {
     console.error("Error fetching current investor profile:", error);

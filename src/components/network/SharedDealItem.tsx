@@ -13,7 +13,7 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   const navigate = useNavigate();
   
   const handleViewDetails = () => {
-    navigate(`/deals/${deal.opportunityId}`);
+    navigate(`/deals/${deal.deal_id}`);
   };
   
   // Get the initials for avatar fallback
@@ -33,7 +33,7 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
           className="font-medium line-clamp-1 cursor-pointer hover:text-primary hover:underline"
           onClick={handleViewDetails}
         >
-          {deal.opportunityName}
+          {deal.deal?.name}
         </h4>
         <span className="text-xs text-muted-foreground shrink-0 ml-2">
           {new Date(deal.sharedAt).toLocaleDateString()}
@@ -42,18 +42,18 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
       
       <div className="flex items-center text-sm mb-2 gap-2">
         <Avatar className="h-6 w-6">
-          {deal.avatar && <AvatarImage src={deal.avatar} alt={deal.sharedBy} />}
-          <AvatarFallback className="text-xs">{getInitials(deal.sharedBy)}</AvatarFallback>
+          {deal.avatar && <AvatarImage src={deal.avatar} alt={deal.sharedBy || 'Investor'} />}
+          <AvatarFallback className="text-xs">{getInitials(deal.sharedBy || 'Investor')}</AvatarFallback>
         </Avatar>
-        <span>Shared by <span className="font-medium">{deal.sharedBy}</span></span>
+        <span>Shared by <span className="font-medium">{deal.sharedBy || 'Investor'}</span></span>
       </div>
       
       <div className="flex gap-2 text-xs text-muted-foreground mb-2">
-        <span>{deal.sector}</span>
+        <span>{deal.sector || deal.deal?.sector_tags?.[0] || 'N/A'}</span>
         <span>•</span>
-        <span>{deal.stage}</span>
+        <span>{deal.stage || deal.deal?.stage || 'N/A'}</span>
         <span>•</span>
-        <span>${formatCurrency(Math.round(deal.fundingAmount))}</span>
+        <span>${formatCurrency(Math.round(deal.fundingAmount || deal.deal?.checkSizeRequired || 0))}</span>
       </div>
       
       {deal.comment && (

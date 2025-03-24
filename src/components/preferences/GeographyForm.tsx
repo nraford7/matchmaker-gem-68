@@ -8,7 +8,7 @@ import { Investor } from "@/types";
 export const GeographyForm = () => {
   const form = useFormContext<Investor>();
   
-  const regions = ["US", "Canada", "Europe", "UK", "Asia", "Latin America", "Africa", "Middle East", "Australia"];
+  const regions = ["US", "Canada", "Europe", "UK", "Latin America", "Asia", "Africa", "Middle East", "Australia"];
   
   return (
     <Card>
@@ -24,13 +24,13 @@ export const GeographyForm = () => {
             <div key={region} className="flex items-center space-x-2">
               <Checkbox 
                 id={region}
-                checked={form.watch("preferredGeographies").includes(region)}
+                checked={(form.watch("preferred_geographies") || []).includes(region)}
                 onCheckedChange={(checked) => {
-                  const current = form.getValues("preferredGeographies");
+                  const current = form.getValues("preferred_geographies") || [];
                   if (checked) {
-                    form.setValue("preferredGeographies", [...current, region]);
+                    form.setValue("preferred_geographies", [...current, region]);
                   } else {
-                    form.setValue("preferredGeographies", current.filter(r => r !== region));
+                    form.setValue("preferred_geographies", current.filter(r => r !== region));
                   }
                 }}
               />

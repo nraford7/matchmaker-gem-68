@@ -74,21 +74,21 @@ export const PerformanceMetricsSection = () => {
           <>
             {renderMetricCard(
               "Investment Range", 
-              `$${(investor.checkSizeMin / 1000).toFixed(0)}K - $${(investor.checkSizeMax / 1000).toFixed(0)}K`, 
+              `$${(investor.check_size_min || 0 / 1000).toFixed(0)}K - $${((investor.check_size_max || 0) / 1000).toFixed(0)}K`, 
               <DollarSign className="h-4 w-4" />, 
               "Your preferred investment size"
             )}
             
             {renderMetricCard(
               "Sectors", 
-              investor.contextSectors.length, 
+              (investor as any).sector_tags?.length || 0, 
               <TrendingUp className="h-4 w-4" />, 
               "Number of sectors in your portfolio"
             )}
             
             {renderMetricCard(
               "Geographic Focus", 
-              investor.preferredGeographies.length, 
+              investor.preferred_geographies?.length || 0, 
               <Globe className="h-4 w-4" />, 
               "Number of focus regions"
             )}

@@ -41,5 +41,6 @@ export type EnhancedDeal = Deal & {
   milestones?: { description: string; timeline: string }[];
 };
 
-// Alias for backward compatibility
+// For backward compatibility
+export type Opportunity = Deal;
 export type EnhancedOpportunity = EnhancedDeal;

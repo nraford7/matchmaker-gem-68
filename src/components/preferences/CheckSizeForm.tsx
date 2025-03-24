@@ -37,7 +37,7 @@ export const CheckSizeForm = () => {
         <div className="grid grid-cols-2 gap-6">
           <FormField
             control={form.control}
-            name="checkSizeMin"
+            name="check_size_min"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Minimum</FormLabel>
@@ -64,7 +64,7 @@ export const CheckSizeForm = () => {
           
           <FormField
             control={form.control}
-            name="checkSizeMax"
+            name="check_size_max"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Maximum</FormLabel>

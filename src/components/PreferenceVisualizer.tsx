@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { 
   ResponsiveContainer, 
@@ -27,40 +28,43 @@ export const PreferenceVisualizer = ({ investor }: PreferenceVisualizerProps) =>
 
   useEffect(() => {
     // Generate data for radar chart based on investor preferences
+    // Use investor.sector_tags if available, fall back to empty array
+    const sectorTags = (investor as any).sector_tags || [];
+    
     const radarData: RadarData[] = [
       {
         subject: "Fintech",
-        value: investor.contextSectors.includes("Fintech") ? 80 : 20,
+        value: sectorTags.includes("Fintech") ? 80 : 20,
         fullMark: 100,
       },
       {
         subject: "Health Tech",
-        value: investor.contextSectors.includes("Health Tech") ? 90 : 10,
+        value: sectorTags.includes("Health Tech") ? 90 : 10,
         fullMark: 100,
       },
       {
         subject: "SaaS",
-        value: investor.contextSectors.includes("SaaS") ? 85 : 15,
+        value: sectorTags.includes("SaaS") ? 85 : 15,
         fullMark: 100,
       },
       {
         subject: "Early Stage",
-        value: investor.preferredStages.includes("Seed") || investor.preferredStages.includes("Pre-seed") ? 90 : 30,
+        value: investor.preferred_stages?.includes("Seed") || investor.preferred_stages?.includes("Pre-seed") ? 90 : 30,
         fullMark: 100,
       },
       {
         subject: "Growth Stage",
-        value: investor.preferredStages.includes("Series B") || investor.preferredStages.includes("Series C") ? 70 : 20,
+        value: investor.preferred_stages?.includes("Series B") || investor.preferred_stages?.includes("Series C") ? 70 : 20,
         fullMark: 100,
       },
       {
         subject: "US Market",
-        value: investor.preferredGeographies.includes("US") ? 85 : 20,
+        value: investor.preferred_geographies?.includes("US") ? 85 : 20,
         fullMark: 100,
       },
       {
         subject: "Europe",
-        value: investor.preferredGeographies.includes("Europe") ? 75 : 30,
+        value: investor.preferred_geographies?.includes("Europe") ? 75 : 30,
         fullMark: 100,
       },
     ];
@@ -79,7 +83,7 @@ export const PreferenceVisualizer = ({ investor }: PreferenceVisualizerProps) =>
         <CardContent className="p-4">
           <div className="text-sm font-medium">Investment Thesis</div>
           <p className="text-sm text-muted-foreground mt-2">
-            {investor.investmentThesis}
+            {investor.investment_thesis}
           </p>
         </CardContent>
       </Card>
