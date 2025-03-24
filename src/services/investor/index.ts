@@ -7,7 +7,7 @@ export * from "./connectionServices";
 export * from "./randomProfileServices";
 
 // Handle shared deals services
-export * from "./sharedDealsServices";
+export * from "./shared-deals";
 
 // Export recommendations function
 export { fetchRecommendationsForUser } from "./recommendations";

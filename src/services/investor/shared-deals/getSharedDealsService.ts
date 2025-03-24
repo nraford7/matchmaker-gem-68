@@ -1,5 +1,6 @@
+
 import { supabase } from "@/integrations/supabase/client";
-import { NetworkInvestor, NetworkDeal } from "@/types";
+import { NetworkDeal, NetworkInvestor } from "@/types";
 import { toast } from "sonner";
 import { SharedDeal } from "./types";
 
