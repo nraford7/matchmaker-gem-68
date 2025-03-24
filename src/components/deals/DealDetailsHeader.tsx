@@ -13,6 +13,9 @@ interface DealDetailsHeaderProps {
 }
 
 const DealDetailsHeader = ({ deal, onGoBack }: DealDetailsHeaderProps) => {
+  // In case matchScore isn't provided, use a default value (75% for demo purposes)
+  const matchScore = deal.matchScore !== undefined ? deal.matchScore : 0.75;
+  
   return (
     <>
       <Button variant="ghost" size="sm" onClick={onGoBack} className="mb-4">
@@ -26,11 +29,9 @@ const DealDetailsHeader = ({ deal, onGoBack }: DealDetailsHeaderProps) => {
             <div className="flex justify-between items-start">
               <h1 className="text-2xl font-bold">{deal.name}</h1>
               <div className="flex items-center gap-2">
-                {deal.matchScore && (
-                  <Badge variant={deal.matchScore > 0.8 ? "default" : "outline"} className="ml-2">
-                    {Math.round(deal.matchScore * 100)}% match
-                  </Badge>
-                )}
+                <Badge variant={matchScore > 0.8 ? "default" : "outline"} className="ml-2">
+                  {Math.round(matchScore * 100)}% match
+                </Badge>
                 <DealActions dealId={deal.id} dealName={deal.name} />
               </div>
             </div>
@@ -92,9 +93,7 @@ const DealDetailsHeader = ({ deal, onGoBack }: DealDetailsHeaderProps) => {
                 <div className="text-sm">
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="font-semibold">Why we recommend this to you</h3>
-                    {deal.matchScore && (
-                      <span className="text-primary font-medium">{Math.round(deal.matchScore * 100)}% match</span>
-                    )}
+                    <span className="text-primary font-medium">{Math.round(matchScore * 100)}% match</span>
                   </div>
                   <p className="text-muted-foreground">{deal.recommendation}</p>
                 </div>
