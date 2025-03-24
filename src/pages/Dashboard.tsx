@@ -75,19 +75,6 @@ const Dashboard = () => {
     loadDeals();
   }, []);
   
-  // Listen for feedback changes to refresh the data
-  useEffect(() => {
-    const handleFeedbackChange = () => {
-      loadDeals();
-    };
-    
-    window.addEventListener('matchFeedbackChanged', handleFeedbackChange as EventListener);
-    
-    return () => {
-      window.removeEventListener('matchFeedbackChanged', handleFeedbackChange as EventListener);
-    };
-  }, []);
-  
   return (
     <div className="container mx-auto py-6">
       <DashboardHeader />

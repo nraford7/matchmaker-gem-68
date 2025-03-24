@@ -1,53 +1,16 @@
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import { EnhancedDeal } from "@/types/deal";
-import { FileText, ThumbsDown, ThumbsUp } from "lucide-react";
+import { FileText } from "lucide-react";
 
 interface DealSidebarProps {
   deal: EnhancedDeal;
 }
 
 const DealSidebar = ({ deal }: DealSidebarProps) => {
-  const [feedback, setFeedback] = useState<'positive' | 'negative' | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  useEffect(() => {
-    const loadFeedback = async () => {
-      // In the future we can implement feedback loading here
-      setFeedback(null);
-    };
-    
-    loadFeedback();
-  }, [deal.id]);
-  
-  const handlePositiveFeedback = async () => {
-    if (isSubmitting) return;
-    
-    setIsSubmitting(true);
-    try {
-      // In the future we can implement feedback submission here
-      setFeedback(feedback === 'positive' ? null : 'positive');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleNegativeFeedback = async () => {
-    if (isSubmitting) return;
-    
-    setIsSubmitting(true);
-    try {
-      // In the future we can implement feedback submission here
-      setFeedback(feedback === 'negative' ? null : 'negative');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <>
       {deal.matchScore !== undefined && (
@@ -65,27 +28,6 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
               {deal.matchExplanation && (
                 <p className="text-sm text-muted-foreground mt-2">{deal.matchExplanation}</p>
               )}
-              
-              <div className="flex gap-2 mt-4">
-                <Button 
-                  className="flex-1 gap-1"
-                  variant={feedback === 'positive' ? "default" : "outline"}
-                  onClick={handlePositiveFeedback}
-                  disabled={isSubmitting}
-                >
-                  <ThumbsUp className="h-4 w-4" />
-                  Interested
-                </Button>
-                <Button 
-                  variant={feedback === 'negative' ? "default" : "outline"} 
-                  className="flex-1 gap-1"
-                  onClick={handleNegativeFeedback}
-                  disabled={isSubmitting}
-                >
-                  <ThumbsDown className="h-4 w-4" />
-                  Pass
-                </Button>
-              </div>
             </div>
           </CardContent>
         </Card>

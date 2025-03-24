@@ -5,7 +5,6 @@ export * from "./allDealsService";
 export * from "./activeDealsService";
 export * from "./savedDealsService";
 export * from "./createServices";
-export * from "./matchFeedbackService";
 export * from "./sharedDealsService";
 export * from "./pastDealsService";
 
