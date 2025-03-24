@@ -1,3 +1,4 @@
+
 import { NetworkSharedDeal } from "@/types";
 import { Handshake, MessageSquare } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
@@ -70,10 +71,14 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
       </div>
       
       {dealDescription && (
-        <p className="text-sm text-muted-foreground line-clamp-3 bg-muted/50 p-3 rounded relative">
-          {dealDescription}
-          <span className="absolute bottom-0 right-0 bg-muted/50 px-1 hidden peer-hover:inline">...</span>
-        </p>
+        <div className="relative overflow-hidden bg-muted/50 p-3 rounded">
+          <p className="text-sm text-muted-foreground overflow-hidden max-h-[4.5rem]">
+            {dealDescription}
+          </p>
+          <div className="absolute bottom-0 right-0 left-0 h-6 bg-gradient-to-t from-muted/80 to-transparent pointer-events-none">
+            <span className="absolute bottom-1 right-2 text-xs text-muted-foreground">...</span>
+          </div>
+        </div>
       )}
       
       {deal.comment && (
