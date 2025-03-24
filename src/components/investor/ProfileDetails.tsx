@@ -124,20 +124,23 @@ export const ProfileDetails = ({ investor }: ProfileDetailsProps) => {
         </div>
       )}
       
-      {investor.psychologicalProfileWeighted && Object.keys(investor.psychologicalProfileWeighted).length > 0 && (
+      {investor.psychologicalProfileRaw && Object.keys(investor.psychologicalProfileRaw).length > 0 && (
         <div className="pt-4 border-t">
           <h3 className="text-sm font-medium mb-2 flex items-center">
             <BarChart className="h-4 w-4 mr-2 text-muted-foreground" />
             Investor Profile
           </h3>
           <div className="space-y-2 mt-1">
-            {Object.entries(investor.psychologicalProfileWeighted).map(([trait, value]) => (
-              <div key={trait} className="flex items-center justify-between">
-                <span className="text-xs">{trait}</span>
-                <div className="w-32 bg-muted rounded-full h-2">
+            {Object.entries(investor.psychologicalProfileRaw).map(([trait, value]) => (
+              <div key={trait} className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium">{trait}</span>
+                  <span className="text-xs font-mono">{value}/100</span>
+                </div>
+                <div className="w-full bg-muted rounded-full h-2">
                   <div 
                     className="bg-primary h-2 rounded-full" 
-                    style={{ width: `${Math.min(100, (Number(value) / 25) * 100)}%` }}
+                    style={{ width: `${Math.min(100, Number(value))}%` }}
                   ></div>
                 </div>
               </div>

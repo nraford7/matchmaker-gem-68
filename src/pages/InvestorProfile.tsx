@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Building } from "lucide-react";
@@ -32,6 +33,15 @@ const InvestorProfile = () => {
       try {
         if (id) {
           const investorData = await fetchInvestorById(id);
+          // Normalize psychological profile data to make sure it's on a 0-100 scale
+          if (investorData && investorData.psychologicalProfileRaw) {
+            // Convert fractional values (0-1) to 0-100 scale if needed
+            Object.entries(investorData.psychologicalProfileRaw).forEach(([key, value]) => {
+              if (typeof value === 'number' && value <= 1) {
+                investorData.psychologicalProfileRaw[key] = Math.round(value * 100);
+              }
+            });
+          }
           setInvestor(investorData);
           
           // Check if user is following this investor
