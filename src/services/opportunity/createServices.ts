@@ -1,11 +1,11 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { Opportunity } from "@/types";
+import { Deal } from "@/types";
 import { toast } from "sonner";
 import { getCurrentUserId, validateUserAuth } from "./baseService";
 
 // Create a new opportunity
-export const createOpportunity = async (opportunity: Omit<Opportunity, "id" | "createdAt">): Promise<string | null> => {
+export const createOpportunity = async (opportunity: Omit<Deal, "id" | "createdAt">): Promise<string | null> => {
   try {
     const userId = await getCurrentUserId();
     if (!validateUserAuth(userId)) {
@@ -13,15 +13,15 @@ export const createOpportunity = async (opportunity: Omit<Opportunity, "id" | "c
     }
 
     const { data, error } = await supabase
-      .from("opportunities")
+      .from("deals") // Changed from "opportunities"
       .insert({
         name: opportunity.name,
         description: opportunity.description,
-        sector: opportunity.sector,
+        deal_type: opportunity.dealType,
         stage: opportunity.stage,
-        funding_amount: opportunity.fundingAmount,
-        location: opportunity.location,
-        pitch_deck: opportunity.pitchDeck,
+        check_size_required: opportunity.checkSizeRequired,
+        geographies: opportunity.geographies,
+        sector_tags: opportunity.sectorTags,
         user_id: userId
       })
       .select("id")

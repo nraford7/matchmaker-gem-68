@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -46,10 +45,10 @@ export const dispatchFeedbackEvent = (opportunityId: string, feedbackType: 'posi
 // Remove from saved deals
 export const removeFromSavedDeals = async (userId: string, opportunityId: string) => {
   const { error } = await supabase
-    .from("saved_opportunities")
+    .from("saved_deals")
     .delete()
     .eq("user_id", userId)
-    .eq("opportunity_id", opportunityId);
+    .eq("deal_id", opportunityId);
   
   if (error) {
     console.error("Error removing from saved deals:", error);

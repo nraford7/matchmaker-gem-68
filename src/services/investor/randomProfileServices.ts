@@ -32,16 +32,18 @@ const getRandomItems = (array: string[], min: number, max: number): string[] => 
 
 // Generate random investor preferences
 export const generateRandomProfile = (customData?: Partial<Omit<Investor, "id" | "name" | "email">>): Omit<Investor, "id" | "name" | "email"> => {
-  const checkSizeMin = customData?.checkSizeMin || [50000, 100000, 250000, 500000, 1000000][Math.floor(Math.random() * 5)];
-  const checkSizeMax = customData?.checkSizeMax || checkSizeMin * (Math.floor(Math.random() * 5) + 2);
+  const check_size_min = customData?.check_size_min || [50000, 100000, 250000, 500000, 1000000][Math.floor(Math.random() * 5)];
+  const check_size_max = customData?.check_size_max || check_size_min * (Math.floor(Math.random() * 5) + 2);
   
   return {
-    contextSectors: customData?.contextSectors || getRandomItems(sectors, 2, 5),
-    preferredStages: customData?.preferredStages || getRandomItems(stages, 1, 3),
-    preferredGeographies: customData?.preferredGeographies || getRandomItems(geographies, 1, 3),
-    checkSizeMin,
-    checkSizeMax,
-    investmentThesis: customData?.investmentThesis || theses[Math.floor(Math.random() * theses.length)]
+    // Use snake_case property names for the Investor type
+    sector_tags: customData?.sector_tags || getRandomItems(sectors, 2, 5),
+    preferred_stages: customData?.preferred_stages || getRandomItems(stages, 1, 3),
+    preferred_geographies: customData?.preferred_geographies || getRandomItems(geographies, 1, 3),
+    check_size_min,
+    check_size_max,
+    investment_thesis: customData?.investment_thesis || theses[Math.floor(Math.random() * theses.length)],
+    deal_count: 0 // Adding the required property
   };
 };
 
@@ -63,12 +65,12 @@ export const createRandomInvestorProfile = async (
         id: userId,
         name: name,
         email: email,
-        context_sectors: profile.contextSectors,
-        preferred_stages: profile.preferredStages,
-        check_size_min: profile.checkSizeMin,
-        check_size_max: profile.checkSizeMax,
-        preferred_geographies: profile.preferredGeographies,
-        investment_thesis: profile.investmentThesis,
+        context_sectors: profile.sector_tags,
+        preferred_stages: profile.preferred_stages,
+        check_size_min: profile.check_size_min,
+        check_size_max: profile.check_size_max,
+        preferred_geographies: profile.preferred_geographies,
+        investment_thesis: profile.investment_thesis,
         deal_count: Math.floor(Math.random() * 10) + 1 // Random deal count between 1-10
       });
 

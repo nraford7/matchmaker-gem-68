@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { getCurrentUserId } from "./baseService";
 import { NetworkSharedDeal } from "@/types";
@@ -163,5 +162,76 @@ export const fetchNetworkSharedDeals = async (): Promise<NetworkSharedDeal[]> =>
   } catch (error) {
     console.error("Error fetching network shared deals:", error);
     return [];
+  }
+};
+
+// Fetch a specific shared deal by ID
+export const fetchSharedDealById = async (sharedDealId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from("network_shared_deals")
+      .select(`
+        *,
+        shared_by:shared_by_user_id (
+          id,
+          name,
+          email,
+          company,
+          avatar_url
+        ),
+        deal:deal_id (*)
+      `)
+      .eq("id", sharedDealId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching shared deal:", error);
+      return null;
+    }
+
+    // Use the deals table instead of opportunities
+    if (!data || !data.deal) {
+      return null;
+    }
+
+    const deal = data.deal;
+    const sharedBy = data.shared_by;
+
+    // Convert to our NetworkSharedDeal type
+    return {
+      id: data.id,
+      sharedAt: data.created_at,
+      comment: data.comment,
+      investor: {
+        id: sharedBy.id,
+        name: sharedBy.name,
+        email: sharedBy.email,
+        company: sharedBy.company,
+        avatar_url: sharedBy.avatar_url,
+        deal_count: 0 // Required field
+      },
+      deal: {
+        id: deal.id,
+        name: deal.name,
+        description: deal.description,
+        sectorTags: deal.sector_tags,
+        sector_tags: deal.sector_tags,
+        stage: deal.stage,
+        check_size_required: deal.check_size_required,
+        checkSizeRequired: deal.check_size_required,
+        geographies: deal.geographies
+      },
+      // Backward compatibility fields
+      sharedBy: sharedBy.name,
+      avatar: sharedBy.avatar_url,
+      sector: deal.sector_tags?.[0],
+      stage: deal.stage,
+      fundingAmount: deal.check_size_required,
+      opportunityId: deal.id,
+      opportunityName: deal.name
+    };
+  } catch (error) {
+    console.error("Error in fetchSharedDealById:", error);
+    return null;
   }
 };

@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { 
@@ -26,8 +25,8 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
 
     // Get opportunity details for the past_deals entry
     const { data: opportunity, error: opportunityError } = await supabase
-      .from("opportunities")
-      .select("funding_amount")
+      .from("deals")
+      .select("check_size_required")
       .eq("id", opportunityId)
       .single();
 
@@ -74,9 +73,9 @@ export const submitNegativeFeedback = async (opportunityId: string): Promise<boo
       const { error: pastDealError } = await supabase
         .from("past_deals")
         .insert({
-          opportunity_id: opportunityId,
+          deal_id: opportunityId,
           user_id: userId,
-          final_amount: opportunity.funding_amount,
+          final_amount: opportunity.check_size_required,
           notes: "Not interested"
         });
 

@@ -1,95 +1,67 @@
 
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { Card } from "@/components/ui/card";
-import { PreferenceSidebar, TabsContainer } from "@/components/preferences";
-import { fetchCurrentInvestorProfile, updateInvestorProfile } from "@/services/investor";
-import { Investor } from "@/types";
-import { useAuth } from "@/contexts/AuthContext";
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import { PageTitle } from '@/components/PageTitle';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, FormProvider } from 'react-hook-form';
+import { z } from 'zod';
+import { TabsContainer } from '@/components/preferences/TabsContainer';
+import { Investor } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
 
-const Preferences = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+const profileSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(2, {
+    message: 'Name must be at least 2 characters',
+  }),
+  email: z.string().email({
+    message: 'Please enter a valid email address',
+  }),
+  company: z.string().optional(),
+  preferred_stages: z.array(z.string()).optional(),
+  preferred_geographies: z.array(z.string()).optional(),
+  check_size_min: z.number().optional(),
+  check_size_max: z.number().optional(),
+  investment_thesis: z.string().optional(),
+  deal_count: z.number().optional(),
+});
+
+const PreferencesPage = () => {
+  const { investorProfile } = useAuth();
   
   const form = useForm<Investor>({
+    resolver: zodResolver(profileSchema),
     defaultValues: {
-      id: "",
-      name: "",
-      email: "",
-      company: "",
-      avatar_url: "",
-      preferred_stages: [],
-      preferred_geographies: [],
-      check_size_min: 0,
-      check_size_max: 0,
-      investment_thesis: "",
-      deal_count: 0,
-      sector_tags: [] // Added for contextSectors field
-    }
+      id: investorProfile?.id || '',
+      name: investorProfile?.name || '',
+      email: investorProfile?.email || '',
+      company: investorProfile?.company || '',
+      preferred_stages: investorProfile?.preferred_stages || [],
+      preferred_geographies: investorProfile?.preferred_geographies || [],
+      check_size_min: investorProfile?.check_size_min || 0,
+      check_size_max: investorProfile?.check_size_max || 0,
+      investment_thesis: investorProfile?.investment_thesis || '',
+      deal_count: investorProfile?.deal_count || 0,
+      sector_tags: investorProfile?.sector_tags || []
+    },
   });
-  
-  useEffect(() => {
-    const loadProfile = async () => {
-      setIsLoading(true);
-      try {
-        if (user) {
-          const profile = await fetchCurrentInvestorProfile();
-          if (profile) {
-            form.reset({
-              ...profile,
-              // Make sure we handle any legacy property naming
-              sector_tags: profile.sector_tags || []
-            });
-          }
-        }
-      } catch (error) {
-        console.error("Error loading profile:", error);
-        toast.error("Failed to load profile data");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    loadProfile();
-  }, [user, form]);
-  
-  const onSubmit = async (data: Investor) => {
-    try {
-      const success = await updateInvestorProfile(data);
-      if (success) {
-        toast.success("Preferences saved successfully");
-        navigate("/");
-      }
-    } catch (error) {
-      console.error("Error saving preferences:", error);
-      toast.error("Failed to save preferences");
-    }
-  };
-  
+
   return (
-    <div className="container mx-auto py-6">
-      <h1 className="text-2xl font-bold mb-6">Investor Preferences</h1>
+    <div className="container mx-auto py-8">
+      <PageTitle
+        title="Investor Preferences"
+        subtitle="Customize your investment preferences and profile"
+      />
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="md:col-span-1">
-          <PreferenceSidebar />
-        </div>
-        
-        <div className="md:col-span-3">
-          <Card>
-            <TabsContainer 
-              form={form} 
-              onSubmit={onSubmit} 
-              isLoading={isLoading} 
-            />
-          </Card>
-        </div>
+      <div className="mt-8">
+        <Card className="p-6">
+          <FormProvider {...form}>
+            <TabsContainer />
+          </FormProvider>
+        </Card>
       </div>
     </div>
   );
 };
 
-export default Preferences;
+export default PreferencesPage;

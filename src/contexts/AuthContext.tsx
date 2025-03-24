@@ -1,7 +1,9 @@
+
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Deal } from '@/types';
 import { Investor } from '@/types';
+import { toast } from 'sonner';
 
 interface AuthContextType {
   user: any;
@@ -139,7 +141,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         check_size_max: data.check_size_max || 0,
         investment_thesis: data.investment_thesis || "",
         deal_count: data.deal_count || 0,
-        sector_tags: data.sector_tags || []
+        sector_tags: data.context_sectors || [] // Map context_sectors to sector_tags
       });
     } catch (error) {
       console.error("Error loading investor profile:", error);
@@ -230,6 +232,9 @@ const fetchSavedDeals = async () => {
       location: item.deals.geographies?.[0], // For backward compatibility
       fundingAmount: item.deals.check_size_required, // For backward compatibility
       createdAt: item.deals.created_at,
+      // Simple match score simulation for now
+      matchScore: Math.random() * 0.3 + 0.6,
+      matchExplanation: "Based on your sector and stage preferences"
     }));
 
     return mappedDeals;

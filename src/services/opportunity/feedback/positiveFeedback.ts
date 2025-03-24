@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { dispatchFeedbackEvent, getValidatedUserId, getExistingMatch } from "./feedbackUtils";
@@ -50,11 +49,11 @@ export const submitPositiveFeedback = async (opportunityId: string): Promise<boo
 
     // Save the deal to saved deals if positive feedback
     await supabase
-      .from("saved_opportunities")
+      .from("saved_deals")
       .upsert({ 
-        opportunity_id: opportunityId,
+        deal_id: opportunityId,
         user_id: userId
-      }, { onConflict: 'opportunity_id,user_id' });
+      }, { onConflict: 'deal_id,user_id' });
 
     // Dispatch custom event for UI updates
     dispatchFeedbackEvent(opportunityId, 'positive');
