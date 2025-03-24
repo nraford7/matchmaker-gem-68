@@ -15,8 +15,8 @@ interface SharedDeal {
   shared_by_user?: NetworkInvestor;
 }
 
-// Define a type for the investor connection result from database
-interface InvestorConnectionResult {
+// Define a type that accepts the actual structure returned by Supabase
+type DatabaseConnectionResult = {
   following_id: string;
   following: {
     id: string;
@@ -25,7 +25,7 @@ interface InvestorConnectionResult {
     company: string | null;
     avatar_url: string | null;
   } | null;
-}
+};
 
 // Get all deals shared with the current user
 export const getSharedDealsForUser = async (userId: string): Promise<SharedDeal[]> => {
@@ -193,9 +193,9 @@ export const getPotentialDealRecipients = async (): Promise<NetworkInvestor[]> =
     }
 
     // Map and filter out any null values or connections where following is null
-    const recipients = data
-      .filter((item: InvestorConnectionResult) => item && item.following)
-      .map((item: InvestorConnectionResult) => ({
+    const recipients = (data as DatabaseConnectionResult[])
+      .filter((item) => item && item.following)
+      .map((item) => ({
         id: item.following!.id,
         name: item.following!.name || "Unknown",
         email: item.following!.email || "",

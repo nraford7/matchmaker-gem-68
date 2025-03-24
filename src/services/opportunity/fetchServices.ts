@@ -26,6 +26,7 @@ export const fetchAllDeals = async (): Promise<Deal[]> => {
         ? JSON.parse(deal.psychological_fit)
         : deal.psychological_fit || {};
         
+      // Return a plain object that matches the Deal type structure
       return {
         id: deal.id,
         name: deal.name,
@@ -83,6 +84,7 @@ export const fetchDealById = async (id: string): Promise<Deal | null> => {
       ? JSON.parse(data.psychological_fit)
       : data.psychological_fit || {};
       
+    // Return a plain object that matches the Deal type structure
     return {
       id: data.id,
       name: data.name,
@@ -144,6 +146,7 @@ export const fetchUserDeals = async (): Promise<Deal[]> => {
         ? JSON.parse(deal.psychological_fit)
         : deal.psychological_fit || {};
         
+      // Return a plain object that matches the Deal type structure  
       return {
         id: deal.id,
         name: deal.name,
