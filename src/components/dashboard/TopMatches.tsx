@@ -18,14 +18,18 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   if (loading) {
     return (
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold flex items-center gap-2">
-            <TrendingUp className="w-5 h-5" />
-            Top Matches
-          </CardTitle>
-          <CardDescription>Investment opportunities that match your preferences</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <CardTitle>Top Matches</CardTitle>
+            </div>
+            <CardDescription className="mt-1">
+              Investment opportunities that match your preferences
+            </CardDescription>
+          </div>
         </CardHeader>
-        <CardContent className="pt-6">
+        <CardContent className="pt-4">
           <div className="text-center py-6">
             <p className="text-muted-foreground">Loading matches...</p>
           </div>
@@ -35,21 +39,34 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   }
   
   return (
-    <Card className="overflow-hidden border-border">
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold flex items-center gap-2">
-          <TrendingUp className="w-5 h-5" />
-          Top Matches
-        </CardTitle>
-        <CardDescription>Investment opportunities that match your preferences</CardDescription>
+    <Card className="shadow-sm">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <div>
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-primary" />
+            <CardTitle>Top Matches</CardTitle>
+          </div>
+          <CardDescription className="mt-1">
+            Investment opportunities that match your preferences
+          </CardDescription>
+        </div>
+        {topMatches.length > 6 && (
+          <Link
+            to="/deals"
+            className="text-sm font-medium text-primary flex items-center gap-1 hover:underline transition-colors"
+          >
+            View all
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        )}
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="pt-4">
         {topMatches.length === 0 ? (
           <div className="text-center py-6">
             <p className="text-muted-foreground">No matches found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             {topMatches.slice(0, 6).map((deal) => (
               <Link 
                 key={deal.id} 
@@ -133,15 +150,26 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
             ))}
           </div>
         )}
+        
+        {topMatches.length > 0 && topMatches.length <= 6 && (
+          <Link to="/deals" className="w-full">
+            <Button variant="outline" className="w-full group">
+              <span>View All Matches</span>
+              <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
+        )}
       </CardContent>
-      <CardFooter className="p-3">
-        <Link to="/deals" className="w-full">
-          <Button variant="outline" className="w-full group">
-            <span>View All Matches</span>
-            <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
-          </Button>
-        </Link>
-      </CardFooter>
+      {topMatches.length > 6 && (
+        <CardFooter className="p-3">
+          <Link to="/deals" className="w-full">
+            <Button variant="outline" className="w-full group">
+              <span>View All Matches</span>
+              <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
+        </CardFooter>
+      )}
     </Card>
   );
 };
