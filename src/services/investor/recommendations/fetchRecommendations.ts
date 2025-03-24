@@ -14,6 +14,11 @@ export const fetchRecommendationsForUser = async (): Promise<NetworkSharedDeal[]
 
     const networkSharedDeals = await fetchNetworkSharedDeals(userId);
     
+    // If no deals are found, we could return sample data in development
+    if (networkSharedDeals.length === 0 && process.env.NODE_ENV === 'development') {
+      console.log("No shared deals found, you could create sample data in the database");
+    }
+    
     // Sort by created_at (newest first)
     return networkSharedDeals.sort((a, b) => 
       new Date(b.sharedAt).getTime() - new Date(a.sharedAt).getTime()
