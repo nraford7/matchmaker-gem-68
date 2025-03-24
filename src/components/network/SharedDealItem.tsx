@@ -1,10 +1,11 @@
 
 import { NetworkSharedDeal } from "@/types";
-import { Handshake, MessageSquare } from "lucide-react";
+import { Handshake, MessageSquare, Tag } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { useNavigate, Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 
 interface SharedDealItemProps {
   deal: NetworkSharedDeal;
@@ -34,6 +35,10 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   const fundingAmount = deal.deal?.check_size_required || deal.fundingAmount || 0;
   
   const matchScore = deal.matchScore || Math.floor(Math.random() * 31) + 65;
+  
+  // Get sector tags from the deal
+  const sectorTags = deal.deal?.sector_tags || deal.deal?.sectorTags || deal.sector ? [deal.sector] : [];
+  const stage = deal.deal?.stage || deal.stage || '';
   
   const getRecommendation = () => {
     const recommendations = [
@@ -88,7 +93,26 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         </div>
       )}
       
-      <div className="mt-auto pt-2 border-t">
+      {/* Deal tags section - newly added */}
+      <div className="flex flex-wrap gap-2 mt-auto pt-3">
+        {sectorTags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {sectorTags.map((tag, index) => (
+              <Badge key={index} variant="secondary" className="bg-primary/10 hover:bg-primary/20 text-primary border-none">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
+        
+        {stage && (
+          <Badge variant="outline" className="bg-muted/80">
+            {stage}
+          </Badge>
+        )}
+      </div>
+      
+      <div className="pt-2 border-t">
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-xs font-medium">Match Score</span>
           <span className="text-xs font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-full">{matchScore}%</span>
