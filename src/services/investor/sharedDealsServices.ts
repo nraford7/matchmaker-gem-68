@@ -193,9 +193,9 @@ export const getPotentialDealRecipients = async (): Promise<NetworkInvestor[]> =
     }
 
     // Map and filter out any null values or connections where following is null
-    const recipients = (data as DatabaseConnectionResult[])
-      .filter((item) => item && item.following)
-      .map((item) => ({
+    const recipients = (data as unknown[])
+      .filter((item: any) => item && item.following)
+      .map((item: any) => ({
         id: item.following!.id,
         name: item.following!.name || "Unknown",
         email: item.following!.email || "",
