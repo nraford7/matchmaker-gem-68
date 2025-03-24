@@ -1,7 +1,6 @@
 
 import { EnhancedDeal } from "@/types/deal";
 import DealOverview from "./DealOverview";
-import DealRecommendation from "./DealRecommendation";
 import DealTeam from "./DealTeam";
 import DealFundsUsage from "./DealFundsUsage";
 import DealMilestones from "./DealMilestones";
@@ -31,9 +30,6 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
       </div>
       
       <div className="space-y-6">
-        {deal.recommendation && (
-          <DealRecommendation recommendation={deal.recommendation} />
-        )}
         <DealSidebar deal={deal} />
       </div>
     </div>
