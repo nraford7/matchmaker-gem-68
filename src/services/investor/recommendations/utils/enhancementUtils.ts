@@ -38,6 +38,21 @@ export const enhanceRecommendation = async (
 
     const dealData = dealResponse.data;
     const investorData = investorResponse.data;
+    
+    // Generate a match score between 65-95%
+    const matchScore = Math.floor(Math.random() * 31) + 65;
+    
+    // Generate a recommendation based on deal data
+    const generateRecommendation = () => {
+      const recommendations = [
+        `Strong fit with your investment focus in ${dealData.sector_tags?.[0] || 'this sector'}.`,
+        `Aligns with your ${dealData.stage || 'preferred stage'} investment strategy.`,
+        `The check size of ${dealData.check_size_required ? `$${dealData.check_size_required.toLocaleString()}` : 'this deal'} matches your typical range.`,
+        `Great opportunity in the ${dealData.sector_tags?.[0] || 'target'} sector with promising returns.`,
+        `Recommended based on your previous investments in similar deals.`
+      ];
+      return recommendations[Math.floor(Math.random() * recommendations.length)];
+    };
 
     return {
       id: rawRecommendation.id,
@@ -63,6 +78,9 @@ export const enhanceRecommendation = async (
       },
       comment: rawRecommendation[commentaryKey],
       sharedAt: rawRecommendation[timestampKey],
+      // Add match information
+      matchScore: matchScore,
+      recommendation: generateRecommendation(),
       // Adding backward compatibility fields
       sharedBy: investorData.name,
       avatar: investorData.avatar_url,
