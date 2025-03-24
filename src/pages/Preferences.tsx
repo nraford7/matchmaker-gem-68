@@ -28,14 +28,14 @@ const profileSchema = z.object({
 });
 
 const PreferencesPage = () => {
-  const { investorProfile } = useAuth();
+  const { user, investorProfile } = useAuth();
   
   const form = useForm<Investor>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      id: investorProfile?.id || '',
+      id: investorProfile?.id || user?.id || '',
       name: investorProfile?.name || '',
-      email: investorProfile?.email || '',
+      email: investorProfile?.email || user?.email || '',
       company: investorProfile?.company || '',
       preferred_stages: investorProfile?.preferred_stages || [],
       preferred_geographies: investorProfile?.preferred_geographies || [],

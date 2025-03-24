@@ -15,6 +15,18 @@ interface SharedDeal {
   shared_by_user?: NetworkInvestor;
 }
 
+// Define a type for the investor connection with following field
+interface InvestorConnectionWithFollowing {
+  following_id: string;
+  following: {
+    id: string;
+    name: string;
+    email: string | null;
+    company: string | null;
+    avatar_url: string | null;
+  } | null;
+}
+
 // Get all deals shared with the current user
 export const getSharedDealsForUser = async (userId: string): Promise<SharedDeal[]> => {
   try {
@@ -182,13 +194,13 @@ export const getPotentialDealRecipients = async (): Promise<NetworkInvestor[]> =
 
     // Map and filter out any null values
     const recipients = data
-      .filter(item => item && item.following)
-      .map(item => ({
-        id: item.following.id,
-        name: item.following.name || "Unknown",
-        email: item.following.email || "",
-        company: item.following.company || "",
-        avatar_url: item.following.avatar_url || "",
+      .filter((item: InvestorConnectionWithFollowing) => item && item.following)
+      .map((item: InvestorConnectionWithFollowing) => ({
+        id: item.following!.id,
+        name: item.following!.name || "Unknown",
+        email: item.following!.email || "",
+        company: item.following!.company || "",
+        avatar_url: item.following!.avatar_url || "",
         // Add other required fields with defaults
         sector_tags: [],
         preferred_stages: [],
