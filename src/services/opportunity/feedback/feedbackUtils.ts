@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -21,17 +20,14 @@ export const getValidatedUserId = async (): Promise<string | null> => {
 
 // Get existing match record
 export const getExistingMatch = async (userId: string, opportunityId: string) => {
-  // Fix the excessive type instantiation by using a more direct approach
-  const result = await supabase
+  const { data, error } = await supabase
     .from("matches")
     .select("*")
     .eq("user_id", userId)
     .eq("opportunity_id", opportunityId)
     .single();
   
-  const { data, error } = result;
-  
-  if (error && error.code !== "PGRST116") { // PGRST116 means no rows returned
+  if (error && error.code !== "PGRST116") {
     throw error;
   }
   
