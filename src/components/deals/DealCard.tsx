@@ -52,14 +52,7 @@ export const DealCard = ({
         
         {/* Stage badge and sector tags */}
         <div className="flex justify-between items-center mt-2">
-          {deal.location && (
-            <div className="text-xs text-muted-foreground">
-              <MapPin className="h-3 w-3 inline mr-1" />
-              {deal.location}
-            </div>
-          )}
-          
-          <div className="flex flex-wrap gap-2 justify-end">
+          <div className="flex flex-wrap gap-2 justify-start">
             {deal.stage && (
               <Badge variant="default" className="text-xs font-semibold">
                 {deal.stage}
@@ -71,6 +64,13 @@ export const DealCard = ({
               </Badge>
             ))}
           </div>
+          
+          {deal.location && (
+            <div className="text-xs text-muted-foreground">
+              <MapPin className="h-3 w-3 inline mr-1" />
+              {deal.location}
+            </div>
+          )}
         </div>
       </CardHeader>
       
