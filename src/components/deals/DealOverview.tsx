@@ -80,15 +80,8 @@ const DealOverview = ({ deal }: DealOverviewProps) => {
           
           {deal.exitStyle && (
             <div>
-              <h3 className="text-sm font-medium">Exit Style</h3>
+              <h3 className="text-sm font-medium">Exit Opportunities</h3>
               <p className="text-sm">{capitalize(deal.exitStyle)}</p>
-            </div>
-          )}
-          
-          {deal.dueDiligenceLevel && (
-            <div>
-              <h3 className="text-sm font-medium">Due Diligence Level</h3>
-              <p className="text-sm">{capitalize(deal.dueDiligenceLevel)}</p>
             </div>
           )}
         </div>
