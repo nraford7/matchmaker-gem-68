@@ -1,89 +1,125 @@
 
-import { Investor, Opportunity } from "@/types";
+import { v4 as uuidv4 } from "uuid";
+import { Investor, Deal } from "@/types";
 
+// Mock investor data
 export const mockInvestor: Investor = {
-  id: "inv-1",
+  id: uuidv4(),
   name: "Jane Smith",
-  email: "jane@acmecapital.com",
-  contextSectors: ["Fintech", "Health Tech", "SaaS"],
-  preferredStages: ["Seed", "Series A"],
-  checkSizeMin: 500000,
-  checkSizeMax: 2000000,
-  preferredGeographies: ["US", "Europe"],
-  investmentThesis: "Looking for innovative technology companies with strong founding teams and clear path to profitability. Focus on B2B SaaS, fintech infrastructure, and digital health solutions."
+  email: "jane.smith@example.com",
+  company: "Capital Ventures",
+  avatar_url: "https://i.pravatar.cc/150?img=5",
+  sector_tags: ["Fintech", "SaaS", "Healthcare"], // Used to be contextSectors
+  preferred_stages: ["Seed", "Series A"],
+  preferred_geographies: ["United States", "Europe"],
+  check_size_min: 500000,
+  check_size_max: 2000000,
+  investment_thesis: "Backing founders who are building the future of finance and healthcare technology.",
+  deal_count: 12
 };
 
-export const mockOpportunities: Opportunity[] = [
+// Mock deals data
+export const mockDeals: Deal[] = [
   {
-    id: "opp-1",
-    name: "FinanceAI",
-    description: "AI-powered financial analysis platform for small businesses. Our platform automates financial reporting, forecasting, and provides actionable insights to improve cash flow and profitability.",
-    sector: "Fintech",
+    id: uuidv4(),
+    name: "FinTech AI Platform",
+    description: "AI-powered financial analytics platform helping businesses make smarter financial decisions through predictive modeling and risk assessment.",
+    dealType: "Equity",
+    checkSizeRequired: 1500000,
+    sectorTags: ["Fintech", "AI", "Analytics"],
+    sector: "Fintech", // For backward compatibility
+    geographies: ["United States"],
+    location: "United States", // For backward compatibility
     stage: "Series A",
-    fundingAmount: 3500000,
-    location: "New York, US",
-    createdAt: new Date(2023, 6, 15).toISOString(),
-    matchScore: 0.92,
-    matchExplanation: "Strong sector match (Fintech) and stage match (Series A). Located in your preferred geography."
+    timeHorizon: "5-7 years",
+    fundingAmount: 1500000, // For backward compatibility
+    createdAt: new Date().toISOString(),
+    matchScore: 0.85,
+    matchExplanation: "Strong match based on your sector focus and investment range"
   },
   {
-    id: "opp-2",
-    name: "MedTech Solutions",
-    description: "Remote patient monitoring platform for chronic disease management. Our solution combines wearable devices with a mobile app to help doctors monitor patients and intervene early when needed.",
-    sector: "Health Tech",
-    stage: "Seed",
-    fundingAmount: 1200000,
-    location: "Boston, US",
-    createdAt: new Date(2023, 7, 2).toISOString(),
-    matchScore: 0.87,
-    matchExplanation: "Good sector match (Health Tech) and stage match (Seed). Funding amount within your range."
-  },
-  {
-    id: "opp-3",
-    name: "CloudOps",
-    description: "DevOps automation platform for cloud infrastructure. Our solution helps engineering teams deploy, monitor, and optimize their cloud resources more efficiently, reducing costs and improving reliability.",
-    sector: "SaaS",
+    id: uuidv4(),
+    name: "Health Tech Platform",
+    description: "Digital health platform connecting patients with healthcare providers through telemedicine, appointment scheduling, and electronic health records.",
+    dealType: "Equity",
+    checkSizeRequired: 2500000,
+    sectorTags: ["Health Tech", "Telemedicine"],
+    sector: "Health Tech", // For backward compatibility
+    geographies: ["United States", "Canada"],
+    location: "United States", // For backward compatibility
     stage: "Series A",
-    fundingAmount: 4500000,
-    location: "Berlin, Germany",
-    createdAt: new Date(2023, 7, 10).toISOString(),
-    matchScore: 0.78,
-    matchExplanation: "Sector match (SaaS) and located in your preferred geography. Funding amount slightly above your range."
+    timeHorizon: "5-7 years",
+    fundingAmount: 2500000, // For backward compatibility
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    matchScore: 0.72,
+    matchExplanation: "Good match based on your stage preference and check size"
   },
   {
-    id: "opp-4",
-    name: "RetailTech",
-    description: "AI-powered inventory management system for retail businesses. Our platform predicts demand, optimizes stock levels, and reduces waste through smart forecasting.",
-    sector: "Retail Tech",
+    id: uuidv4(),
+    name: "Enterprise SaaS Solution",
+    description: "Cloud-based enterprise software offering workflow automation, team collaboration, and business intelligence tools for mid-size companies.",
+    dealType: "Equity",
+    checkSizeRequired: 1800000,
+    sectorTags: ["SaaS", "Enterprise Software"],
+    sector: "SaaS", // For backward compatibility
+    geographies: ["Europe", "United Kingdom"],
+    location: "Europe", // For backward compatibility
+    stage: "Series B",
+    timeHorizon: "3-5 years",
+    fundingAmount: 1800000, // For backward compatibility
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    matchScore: 0.68,
+    matchExplanation: "Moderate match based on your sector interests"
+  },
+  {
+    id: uuidv4(),
+    name: "Sustainable Energy Tech",
+    description: "Developing innovative battery technology for renewable energy storage solutions, focusing on increasing efficiency and reducing costs.",
+    dealType: "Equity",
+    checkSizeRequired: 3000000,
+    sectorTags: ["CleanTech", "Energy"],
+    sector: "CleanTech", // For backward compatibility
+    geographies: ["Germany", "France"],
+    location: "Germany", // For backward compatibility
     stage: "Series A",
-    fundingAmount: 2800000,
-    location: "London, UK",
-    createdAt: new Date(2023, 7, 5).toISOString(),
-    matchScore: 0.65,
-    matchExplanation: "Stage match (Series A) and in preferred geography, but sector (Retail Tech) is outside your focus areas."
-  },
-  {
-    id: "opp-5",
-    name: "GreenEnergy",
-    description: "Renewable energy optimization platform for commercial buildings. Our solution uses AI to optimize energy usage, integrate renewables, and reduce carbon footprint.",
-    sector: "CleanTech",
-    stage: "Seed",
-    fundingAmount: 800000,
-    location: "San Francisco, US",
-    createdAt: new Date(2023, 7, 8).toISOString(),
+    timeHorizon: "7-10 years",
+    fundingAmount: 3000000, // For backward compatibility
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
     matchScore: 0.62,
-    matchExplanation: "Stage match (Seed) and funding in your range, but sector (CleanTech) is outside your focus areas."
+    matchExplanation: "Moderate match based on your investment range"
   },
   {
-    id: "opp-6",
-    name: "Supply Chain AI",
-    description: "AI-driven supply chain optimization platform. Our solution helps manufacturers and distributors predict disruptions, optimize inventory, and improve delivery reliability.",
-    sector: "Supply Chain",
-    stage: "Series A",
-    fundingAmount: 3200000,
-    location: "Chicago, US",
-    createdAt: new Date(2023, 6, 20).toISOString(),
-    matchScore: 0.58,
-    matchExplanation: "Stage match (Series A) and in preferred geography, but sector (Supply Chain) is outside your focus areas."
+    id: uuidv4(),
+    name: "E-commerce Marketplace",
+    description: "Niche B2B marketplace connecting sustainable product manufacturers with retailers, focusing on supply chain transparency and ethical sourcing.",
+    dealType: "Equity",
+    checkSizeRequired: 1200000,
+    sectorTags: ["E-commerce", "Retail"],
+    sector: "E-commerce", // For backward compatibility
+    geographies: ["United States", "Australia"],
+    location: "United States", // For backward compatibility
+    stage: "Seed",
+    timeHorizon: "5-7 years",
+    fundingAmount: 1200000, // For backward compatibility
+    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+    matchScore: 0.78,
+    matchExplanation: "Good match based on your preferred stage and sector"
+  },
+  {
+    id: uuidv4(),
+    name: "EdTech Learning Platform",
+    description: "Adaptive learning platform using AI to personalize educational content for K-12 students, offering real-time feedback and progress tracking.",
+    dealType: "Equity",
+    checkSizeRequired: 800000,
+    sectorTags: ["EdTech", "AI"],
+    sector: "EdTech", // For backward compatibility
+    geographies: ["India", "Southeast Asia"],
+    location: "India", // For backward compatibility
+    stage: "Seed",
+    timeHorizon: "5-7 years",
+    fundingAmount: 800000, // For backward compatibility
+    createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+    matchScore: 0.64,
+    matchExplanation: "Moderate match based on your check size range"
   }
 ];

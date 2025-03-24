@@ -38,7 +38,7 @@ export const NetworkCard = ({ investor, isFollowing, onToggleFollow }: NetworkCa
         <div className="flex justify-between">
           <div className="flex gap-4">
             <Avatar className="h-14 w-14 cursor-pointer" onClick={handleViewProfile}>
-              <AvatarImage src={investor.avatar || undefined} alt={investor.name} />
+              <AvatarImage src={investor.avatar_url || investor.avatar} alt={investor.name} />
               <AvatarFallback className="text-lg">{investor.name.charAt(0)}</AvatarFallback>
             </Avatar>
             
@@ -52,7 +52,7 @@ export const NetworkCard = ({ investor, isFollowing, onToggleFollow }: NetworkCa
               <p className="text-muted-foreground">{investor.company}</p>
               
               <div className="flex flex-wrap gap-1 mt-2">
-                {investor.contextSectors.map(sector => (
+                {(investor.sector_tags || investor.contextSectors || []).map(sector => (
                   <div 
                     key={sector} 
                     className="bg-muted text-xs px-2 py-1 rounded-full"
@@ -100,7 +100,7 @@ export const NetworkCard = ({ investor, isFollowing, onToggleFollow }: NetworkCa
         
         <div className="mt-4 pt-4 border-t flex items-center justify-between">
           <div className="text-sm">
-            <span className="font-medium">{investor.dealCount}</span> deals in portfolio
+            <span className="font-medium">{investor.deal_count || investor.dealCount}</span> deals in portfolio
           </div>
           <Button variant="link" size="sm" className="p-0 h-auto" onClick={handleViewProfile}>
             View Portfolio

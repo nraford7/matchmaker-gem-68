@@ -5,7 +5,9 @@ export type Deal = {
   description?: string;
   dealType?: string;
   checkSizeRequired?: number;
+  check_size_required?: number; // For consistency with DB
   sectorTags?: string[];
+  sector_tags?: string[]; // For consistency with DB
   geographies?: string[];
   stage?: string;
   timeHorizon?: string;
@@ -21,6 +23,11 @@ export type Deal = {
   updatedAt?: string;
   matchScore?: number;
   matchExplanation?: string;
+  // Additional fields for backward compatibility
+  sector?: string;
+  location?: string;
+  fundingAmount?: number;
+  pitchDeck?: string;
 };
 
 export type EnhancedDeal = Deal & {

@@ -21,7 +21,7 @@ export const ProfileAvatar = ({
   return (
     <div className="flex flex-row items-center gap-4">
       <Avatar className="h-16 w-16">
-        <AvatarImage src={investor.avatar || undefined} alt={investor.name} />
+        <AvatarImage src={investor.avatar_url || investor.avatar} alt={investor.name} />
         <AvatarFallback className="text-xl">{investor.name.charAt(0)}</AvatarFallback>
       </Avatar>
       <div className="flex-1">

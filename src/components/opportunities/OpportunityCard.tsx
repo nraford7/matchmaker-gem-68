@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Opportunity } from "@/types";
+import { Deal } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +14,7 @@ import { ActivateDealDialog } from "./ActivateDealDialog";
 import { CompleteDealDialog } from "./CompleteDealDialog";
 
 interface OpportunityCardProps {
-  opportunity: Opportunity;
+  opportunity: Deal;
   showMatchScore?: boolean;
 }
 
@@ -135,7 +136,7 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
         </div>
         <div className="flex items-center text-sm text-muted-foreground gap-1">
           <MapPin className="h-3 w-3" />
-          <span>{opportunity.location}</span>
+          <span>{opportunity.location || (opportunity.geographies ? opportunity.geographies[0] : "Unknown")}</span>
         </div>
       </CardHeader>
       <CardContent className="pb-2">
@@ -144,9 +145,9 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
         </Link>
         
         <div className="flex flex-wrap gap-1 mb-3">
-          <Badge variant="secondary">{opportunity.sector}</Badge>
+          <Badge variant="secondary">{opportunity.sector || (opportunity.sectorTags ? opportunity.sectorTags[0] : "Other")}</Badge>
           <Badge variant="secondary">
-            ${(opportunity.fundingAmount / 1000000).toFixed(1)}M
+            ${(opportunity.fundingAmount || opportunity.checkSizeRequired || 0 / 1000000).toFixed(1)}M
           </Badge>
         </div>
 

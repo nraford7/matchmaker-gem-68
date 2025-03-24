@@ -101,7 +101,7 @@ const Network = () => {
     investor => 
       investor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (investor.company && investor.company.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      investor.contextSectors.some(sector => 
+      (investor.sector_tags || investor.contextSectors || []).some(sector => 
         sector.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );

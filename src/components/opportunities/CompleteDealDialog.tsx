@@ -1,15 +1,15 @@
 
 import { useState } from "react";
-import { Opportunity } from "@/types";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+import { Deal } from "@/types";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { completeDeal } from "@/services/opportunity/activeDealsServices";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface CompleteDealDialogProps {
-  opportunity: Opportunity;
+  opportunity: Deal;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onComplete: () => void;
@@ -23,17 +23,34 @@ export const CompleteDealDialog = ({
   onComplete, 
   trigger 
 }: CompleteDealDialogProps) => {
-  const [finalAmount, setFinalAmount] = useState<string>(opportunity?.fundingAmount?.toString() || "");
+  const [finalAmount, setFinalAmount] = useState(
+    opportunity.checkSizeRequired?.toString() || 
+    opportunity.fundingAmount?.toString() || 
+    "0"
+  );
+  const [isSaving, setIsSaving] = useState(false);
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
 
-  const handleComplete = async () => {
-    if (!finalAmount || isNaN(Number(finalAmount))) {
-      return;
-    }
-    
-    const success = await completeDeal(opportunity.id, Number(finalAmount));
-    if (success) {
-      onComplete();
-      setFinalAmount("");
+    try {
+      const amount = parseFloat(finalAmount);
+      if (isNaN(amount)) {
+        toast.error("Please enter a valid number");
+        return;
+      }
+
+      const success = await completeDeal(opportunity.id, amount);
+      if (success) {
+        onComplete();
+        toast.success("Deal marked as completed");
+      }
+    } catch (error) {
+      console.error("Error completing deal:", error);
+      toast.error("Failed to complete deal");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -46,41 +63,44 @@ export const CompleteDealDialog = ({
         <DialogHeader>
           <DialogTitle>Complete Deal</DialogTitle>
           <DialogDescription>
-            Enter the final investment amount for this deal.
+            Mark this deal as completed and move it to your portfolio. 
+            This will remove it from your active deals.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="amount">Final Amount</Label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2">$</span>
-              <Input 
-                id="amount" 
-                className="pl-7" 
+        
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="finalAmount">Final Investment Amount</Label>
+              <Input
+                id="finalAmount"
+                placeholder="Enter final amount..."
                 value={finalAmount}
                 onChange={(e) => setFinalAmount(e.target.value)}
                 type="number"
+                min="0"
+                step="1000"
               />
-            </div>
-            {finalAmount && isNaN(Number(finalAmount)) && (
-              <p className="text-sm text-destructive flex items-center gap-1 mt-1">
-                <AlertTriangle className="h-3 w-3" />
-                Please enter a valid number
+              <p className="text-sm text-muted-foreground">
+                Enter the final investment amount in USD
               </p>
-            )}
+            </div>
           </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
-          <Button 
-            onClick={handleComplete}
-            disabled={!finalAmount || isNaN(Number(finalAmount))}
-          >
-            Complete Deal
-          </Button>
-        </DialogFooter>
+          
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              disabled={isSaving}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isSaving}>
+              {isSaving ? "Saving..." : "Complete Deal"}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

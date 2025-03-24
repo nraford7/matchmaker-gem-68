@@ -41,8 +41,10 @@ export const enhanceRecommendation = async (
         id: dealData.id,
         name: dealData.name,
         description: dealData.description,
+        sector_tags: dealData.sector_tags,
         sectorTags: dealData.sector_tags,
         stage: dealData.stage,
+        check_size_required: dealData.check_size_required,
         checkSizeRequired: dealData.check_size_required,
         geographies: dealData.geographies
       },
@@ -50,7 +52,9 @@ export const enhanceRecommendation = async (
         id: investorData.id,
         name: investorData.name,
         company: investorData.company,
-        avatarUrl: investorData.avatar_url
+        avatar_url: investorData.avatar_url,
+        avatar: investorData.avatar_url,
+        deal_count: 0 // Default value
       },
       comment: rawRecommendation[commentaryKey],
       sharedAt: rawRecommendation[timestampKey]

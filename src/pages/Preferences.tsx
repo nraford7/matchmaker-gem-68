@@ -1,134 +1,93 @@
 
 import { useState, useEffect } from "react";
-import { Form } from "@/components/ui/form";
-import { Investor } from "@/types";
-import { fetchCurrentInvestorProfile, updateInvestorProfile } from "@/services/investor";
-import { toast } from "sonner";
-import { useAuth } from "@/contexts/AuthContext";
-import { Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { TabsContainer } from "@/components/preferences/TabsContainer";
-import { PreferenceSidebar } from "@/components/preferences/PreferenceSidebar";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { PreferenceSidebar, TabsContainer } from "@/components/preferences";
+import { fetchCurrentInvestorProfile, updateInvestorProfile } from "@/services/investor";
+import { Investor } from "@/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Preferences = () => {
   const { user } = useAuth();
-  const [investor, setInvestor] = useState<Investor | null>(null);
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
   
   const form = useForm<Investor>({
     defaultValues: {
       id: "",
       name: "",
       email: "",
-      contextSectors: [],
-      preferredStages: [],
-      checkSizeMin: 0,
-      checkSizeMax: 0,
-      preferredGeographies: [],
-      investmentThesis: ""
+      company: "",
+      avatar_url: "",
+      preferred_stages: [],
+      preferred_geographies: [],
+      check_size_min: 0,
+      check_size_max: 0,
+      investment_thesis: "",
+      deal_count: 0,
+      sector_tags: [] // Added for contextSectors field
     }
   });
   
   useEffect(() => {
-    const loadData = async () => {
-      if (!user) return;
-      
+    const loadProfile = async () => {
       setIsLoading(true);
       try {
-        const investorData = await fetchCurrentInvestorProfile();
-        if (investorData) {
-          setInvestor(investorData);
-          form.reset(investorData);
+        if (user) {
+          const profile = await fetchCurrentInvestorProfile();
+          if (profile) {
+            form.reset({
+              ...profile,
+              // Make sure we handle any legacy property naming
+              sector_tags: profile.sector_tags || []
+            });
+          }
         }
       } catch (error) {
-        console.error("Error loading investor profile:", error);
+        console.error("Error loading profile:", error);
+        toast.error("Failed to load profile data");
       } finally {
         setIsLoading(false);
       }
     };
     
-    loadData();
+    loadProfile();
   }, [user, form]);
   
-  const handleSave = async (data: Investor) => {
-    setIsSaving(true);
+  const onSubmit = async (data: Investor) => {
     try {
       const success = await updateInvestorProfile(data);
       if (success) {
-        setInvestor(data);
-        toast.success("Your preferences have been saved successfully");
+        toast.success("Preferences saved successfully");
+        navigate("/");
       }
     } catch (error) {
       console.error("Error saving preferences:", error);
       toast.error("Failed to save preferences");
-    } finally {
-      setIsSaving(false);
     }
   };
   
-  if (!user) {
-    return (
-      <div className="container mx-auto py-12 text-center">
-        <h1 className="text-2xl font-bold mb-4">Please sign in to access your preferences</h1>
-        <Link to="/auth">
-          <Button>Sign In</Button>
-        </Link>
-      </div>
-    );
-  }
-  
-  if (isLoading) {
-    return (
-      <div className="container mx-auto py-12 flex justify-center items-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2">Loading your preferences...</span>
-      </div>
-    );
-  }
-  
   return (
     <div className="container mx-auto py-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Investment Preferences</h1>
-          <p className="text-muted-foreground">
-            Manage your investment criteria to improve match quality
-          </p>
+      <h1 className="text-2xl font-bold mb-6">Investor Preferences</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="md:col-span-1">
+          <PreferenceSidebar />
         </div>
         
-        <Button 
-          type="submit"
-          form="preferences-form"
-          disabled={isSaving}
-          className="ml-auto"
-        >
-          {isSaving ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            "Save Changes"
-          )}
-        </Button>
+        <div className="md:col-span-3">
+          <Card>
+            <TabsContainer 
+              form={form} 
+              onSubmit={onSubmit} 
+              isLoading={isLoading} 
+            />
+          </Card>
+        </div>
       </div>
-      
-      <Form {...form}>
-        <form id="preferences-form" onSubmit={form.handleSubmit(handleSave)}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <TabsContainer />
-            </div>
-            
-            <div>
-              <PreferenceSidebar />
-            </div>
-          </div>
-        </form>
-      </Form>
     </div>
   );
 };
