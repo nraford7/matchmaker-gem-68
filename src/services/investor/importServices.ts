@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { Investor } from "@/types";
 import { getCurrentUserId } from "./baseService";
