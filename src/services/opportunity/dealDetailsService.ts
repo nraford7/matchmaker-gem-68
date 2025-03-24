@@ -1,23 +1,22 @@
-
 import { supabase } from "@/integrations/supabase/client";
-import { EnhancedOpportunity } from "@/types/deal";
+import { EnhancedDeal } from "@/types/deal";
 import { toast } from "sonner";
 
-export const fetchDealData = async (id: string): Promise<EnhancedOpportunity | null> => {
+export const fetchDealData = async (id: string): Promise<EnhancedDeal | null> => {
   // Check if the ID is a sample ID (starting with 'sample-')
   if (id.startsWith('sample-')) {
     console.log("Loading sample deal data for ID:", id);
     // Create mock data for sample deals
-    const sampleDeal: EnhancedOpportunity = {
+    const sampleDeal: EnhancedDeal = {
       id: id,
-      name: `Sample Opportunity ${id.split('-')[1]}`,
-      description: "This is a sample opportunity description. It showcases what a real opportunity would look like in the system.",
-      sector: "SaaS",
+      name: `Sample Deal ${id.split('-')[1]}`,
+      description: "This is a sample deal description. It showcases what a real deal would look like in the system.",
+      sectorTags: ["SaaS", "Fintech"],
       stage: "Seed",
-      fundingAmount: 1500000,
-      location: "San Francisco, CA",
+      checkSizeRequired: 1500000,
+      geographies: ["San Francisco, CA"],
       createdAt: new Date().toISOString(),
-      pitchDeck: "https://example.com/sample-pitch-deck.pdf",
+      pitchDeckUrl: "https://example.com/sample-pitch-deck.pdf",
       
       teamSize: Math.floor(Math.random() * 20) + 3,
       foundedYear: 2018 + Math.floor(Math.random() * 5),
@@ -27,10 +26,9 @@ export const fetchDealData = async (id: string): Promise<EnhancedOpportunity | n
       timeline: `${Math.floor(Math.random() * 6) + 6} months`,
       revenue: (Math.random() * 500000).toFixed(0),
       growth: `${(Math.random() * 200 + 20).toFixed(0)}%`,
-      pitchDeckUrl: "https://example.com/pitchdeck.pdf",
       contactEmail: `founder@sample${id.split('-')[1]}.com`,
       projectedIRR: `${(Math.random() * 30 + 15).toFixed(1)}%`,
-      personalisedRecommendation: "This opportunity aligns with your focus on early-stage SaaS startups. The founding team has a strong technical background and the market size is significant.",
+      personalisedRecommendation: "This deal aligns with your focus on early-stage SaaS startups. The founding team has a strong technical background and the market size is significant.",
       team: [
         { name: "John Smith", role: "CEO & Co-founder" },
         { name: "Sarah Johnson", role: "CTO & Co-founder" },
@@ -55,7 +53,7 @@ export const fetchDealData = async (id: string): Promise<EnhancedOpportunity | n
   try {
     // Regular UUID-based query for real deals
     const { data, error } = await supabase
-      .from("opportunities")
+      .from("deals")
       .select("*")
       .eq("id", id)
       .single();
@@ -69,26 +67,34 @@ export const fetchDealData = async (id: string): Promise<EnhancedOpportunity | n
       return null;
     }
 
-    const opportunity: EnhancedOpportunity = {
+    const deal: EnhancedDeal = {
       id: data.id,
       name: data.name,
       description: data.description,
-      sector: data.sector,
+      dealType: data.deal_type,
+      checkSizeRequired: data.check_size_required,
+      sectorTags: data.sector_tags || [],
+      geographies: data.geographies || [],
       stage: data.stage,
-      fundingAmount: Number(data.funding_amount),
-      location: data.location,
+      timeHorizon: data.time_horizon,
+      esgTags: data.esg_tags || [],
+      involvementModel: data.involvement_model,
+      exitStyle: data.exit_style,
+      dueDiligenceLevel: data.due_diligence_level,
+      decisionConvictionRequired: data.decision_conviction_required,
+      investorSpeedRequired: data.investor_speed_required,
+      strategyProfile: data.strategy_profile,
+      psychologicalFit: data.psychological_fit,
       createdAt: data.created_at,
-      pitchDeck: data.pitch_deck,
       
       teamSize: Math.floor(Math.random() * 20) + 3,
       foundedYear: 2018 + Math.floor(Math.random() * 5),
-      industry: data.sector,
+      industry: (data.sector_tags && data.sector_tags[0]) || "Technology",
       businessModel: ["Subscription", "Freemium", "Transaction Fee", "Licensing", "Advertising"][Math.floor(Math.random() * 5)],
       competitors: ["Company A", "Company B", "Company C"].slice(0, Math.floor(Math.random() * 3) + 1),
       timeline: `${Math.floor(Math.random() * 6) + 6} months`,
-      revenue: (Math.random() * (data.stage === "Seed" ? 500000 : 5000000)).toFixed(0),
+      revenue: (Math.random() * 500000).toFixed(0),
       growth: `${(Math.random() * 200 + 20).toFixed(0)}%`,
-      pitchDeckUrl: data.pitch_deck || "https://example.com/pitchdeck.pdf",
       contactEmail: "founder@" + data.name.toLowerCase().replace(/\s/g, "") + ".com",
       projectedIRR: `${(Math.random() * 30 + 15).toFixed(1)}%`,
       personalisedRecommendation: [
@@ -116,7 +122,7 @@ export const fetchDealData = async (id: string): Promise<EnhancedOpportunity | n
       ].slice(0, Math.floor(Math.random() * 3) + 1)
     };
 
-    return opportunity;
+    return deal;
   } catch (error) {
     console.error("Error fetching deal details:", error);
     toast.error("Failed to load deal details");

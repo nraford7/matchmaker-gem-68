@@ -40,3 +40,6 @@ export type EnhancedDeal = Deal & {
   use_of_funds?: { category: string; percentage: number }[];
   milestones?: { description: string; timeline: string }[];
 };
+
+// Alias for backward compatibility
+export type EnhancedOpportunity = EnhancedDeal;
