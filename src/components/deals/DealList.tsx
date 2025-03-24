@@ -24,12 +24,12 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
           state={{ from: location.pathname }}
           className="block hover:no-underline focus:outline-none"
         >
-          <Card className="hover:shadow-md transition-all hover:border-primary/20">
+          <Card className="transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
             <CardContent className="p-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-lg">{deal.name}</h3>
+                    <h3 className="font-semibold text-lg hover:text-primary transition-colors">{deal.name}</h3>
                   </div>
                   
                   <div className="flex flex-wrap gap-2 mb-2">
@@ -81,13 +81,13 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
                   {showMatchScore && deal.matchScore && (
                     <div>
                       <p className="text-sm text-muted-foreground">Match Score</p>
-                      <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+                      <div className="w-full bg-muted rounded-full h-2.5 mt-1">
                         <div 
                           className="bg-primary h-2.5 rounded-full" 
                           style={{ width: `${Math.round(deal.matchScore * 100)}%` }}
                         ></div>
                       </div>
-                      <p className="text-xs text-right mt-1">{Math.round(deal.matchScore * 100)}%</p>
+                      <p className="text-xs text-right mt-1 text-foreground">{Math.round(deal.matchScore * 100)}%</p>
                     </div>
                   )}
                 </div>

@@ -21,7 +21,7 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
   };
 
   return (
-    <Card className="h-full flex flex-col overflow-hidden">
+    <Card className="h-full flex flex-col overflow-hidden transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
       <OpportunityCardHeader 
         opportunity={opportunity}
         onSave={handleSave}

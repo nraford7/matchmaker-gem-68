@@ -36,7 +36,7 @@ export const DealCard = ({
   };
   
   return (
-    <Card className="h-full hover:shadow-md transition-shadow flex flex-col">
+    <Card className="h-full flex flex-col transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
       <CardHeader className="pb-2 relative">
         <div className="flex justify-between items-start">
           <Link to={`/deals/${deal.id}`}>
@@ -114,7 +114,7 @@ export const DealCard = ({
                 variant="outline" 
                 size="sm" 
                 onClick={handleSave}
-                className="gap-1"
+                className="gap-1 hover:shadow-sm hover:border-primary/20"
               >
                 <Bookmark className="h-4 w-4" />
                 <span className="sr-only md:not-sr-only md:inline">Save</span>
@@ -126,7 +126,7 @@ export const DealCard = ({
                 variant="outline" 
                 size="sm" 
                 onClick={handleActivate}
-                className="gap-1"
+                className="gap-1 hover:shadow-sm hover:border-primary/20"
               >
                 <CheckCircle className="h-4 w-4" />
                 <span className="sr-only md:not-sr-only md:inline">Activate</span>

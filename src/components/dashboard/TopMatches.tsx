@@ -75,7 +75,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                 state={{ from: location.pathname }}
                 className="block group"
               >
-                <Card className="hover:shadow-md transition-shadow hover:border-primary/20 h-full flex flex-col">
+                <Card className="h-full flex flex-col transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
                   <CardContent className="p-4 flex flex-col h-full">
                     {/* Deal name */}
                     <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base">
