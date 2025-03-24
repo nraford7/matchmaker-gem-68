@@ -8,7 +8,7 @@ import { NetworkHighlights } from "@/components/network/NetworkHighlights";
 import { supabase } from "@/integrations/supabase/client";
 
 // Sample top matches as fallback if database fetch fails
-const SAMPLE_TOP_MATCHES: Opportunity[] = [
+const SAMPLE_TOP_MATCHES: Deal[] = [
   {
     id: "sample-1",
     name: "TechFlow AI",
