@@ -12,8 +12,17 @@ export * from './savedDealsServices';
 // For backward compatibility
 export { 
   fetchAllDeals as fetchDeals,
-  fetchAllDeals as fetchOpportunities,
-  fetchActiveDeals as fetchActiveOpportunities,
-  fetchSavedDeals as fetchSavedOpportunities,
-  fetchPastDeals as fetchPastOpportunities
+  fetchAllDeals as fetchOpportunities
 } from './fetchAllDealsService';
+
+export {
+  fetchActiveDeals as fetchActiveOpportunities
+} from './fetchActiveDealsService';
+
+export {
+  fetchSavedDeals as fetchSavedOpportunities
+} from './fetchSavedDealsService';
+
+export {
+  fetchPastDeals as fetchPastOpportunities
+} from './fetchPastDealsService';
