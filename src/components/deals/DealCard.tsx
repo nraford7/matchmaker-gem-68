@@ -38,9 +38,11 @@ export const DealCard = ({
     <Card className="h-full hover:shadow-md transition-shadow">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
-          <h3 className="text-lg font-medium leading-tight line-clamp-2">
-            {deal.name}
-          </h3>
+          <Link to={`/deals/${deal.id}`}>
+            <h3 className="text-lg font-medium leading-tight line-clamp-2 hover:text-primary transition-colors">
+              {deal.name}
+            </h3>
+          </Link>
           {showMatchScore && deal.matchScore && (
             <Badge variant={deal.matchScore > 0.8 ? "default" : "outline"} className="ml-2">
               {Math.round(deal.matchScore * 100)}% match
@@ -69,7 +71,7 @@ export const DealCard = ({
           {deal.checkSizeRequired && (
             <div className="flex justify-between">
               <span className="text-muted-foreground">Check size:</span>
-              <span className="font-medium">{formatCurrency(deal.checkSizeRequired)}</span>
+              <span className="font-medium">${formatCurrency(deal.checkSizeRequired)}</span>
             </div>
           )}
           {deal.geographies && deal.geographies.length > 0 && (
