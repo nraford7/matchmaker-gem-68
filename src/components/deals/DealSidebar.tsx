@@ -4,12 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { EnhancedOpportunity } from "@/types/deal";
+import { EnhancedDeal } from "@/types/deal";
 import { FileText, ThumbsDown, ThumbsUp } from "lucide-react";
-import { submitPositiveFeedback, submitNegativeFeedback, getFeedbackStatus } from "@/services/opportunity/matchFeedbackService";
 
 interface DealSidebarProps {
-  deal: EnhancedOpportunity;
+  deal: EnhancedDeal;
 }
 
 const DealSidebar = ({ deal }: DealSidebarProps) => {
@@ -18,24 +17,20 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
   
   useEffect(() => {
     const loadFeedback = async () => {
-      if (deal.matchScore !== undefined) {
-        const status = await getFeedbackStatus(deal.id);
-        setFeedback(status);
-      }
+      // In the future we can implement feedback loading here
+      setFeedback(null);
     };
     
     loadFeedback();
-  }, [deal.id, deal.matchScore]);
+  }, [deal.id]);
   
   const handlePositiveFeedback = async () => {
     if (isSubmitting) return;
     
     setIsSubmitting(true);
     try {
-      const success = await submitPositiveFeedback(deal.id);
-      if (success) {
-        setFeedback(feedback === 'positive' ? null : 'positive');
-      }
+      // In the future we can implement feedback submission here
+      setFeedback(feedback === 'positive' ? null : 'positive');
     } finally {
       setIsSubmitting(false);
     }
@@ -46,10 +41,8 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
     
     setIsSubmitting(true);
     try {
-      const success = await submitNegativeFeedback(deal.id);
-      if (success) {
-        setFeedback(feedback === 'negative' ? null : 'negative');
-      }
+      // In the future we can implement feedback submission here
+      setFeedback(feedback === 'negative' ? null : 'negative');
     } finally {
       setIsSubmitting(false);
     }
@@ -114,7 +107,7 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
             )}
             <div className="flex items-center">
               <span className="w-20 text-sm text-muted-foreground">Location:</span>
-              <span className="text-sm">{deal.location}</span>
+              <span className="text-sm">{deal.geographies?.join(', ') || "Not specified"}</span>
             </div>
             {deal.pitchDeckUrl && (
               <div className="mt-4">
@@ -134,45 +127,47 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Sector</span>
-              <span className="text-sm font-medium">{deal.sector}</span>
-            </div>
+            {deal.sectorTags && deal.sectorTags.length > 0 && (
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Sector</span>
+                <span className="text-sm font-medium">{deal.sectorTags[0]}</span>
+              </div>
+            )}
             <Separator />
             <div className="flex justify-between">
               <span className="text-sm text-muted-foreground">Stage</span>
-              <span className="text-sm font-medium">{deal.stage}</span>
+              <span className="text-sm font-medium">{deal.stage || "Not specified"}</span>
             </div>
             <Separator />
             <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Funding</span>
-              <span className="text-sm font-medium">${(deal.fundingAmount / 1000000).toFixed(1)}M</span>
+              <span className="text-sm text-muted-foreground">Check Size</span>
+              <span className="text-sm font-medium">${deal.checkSizeRequired?.toLocaleString() || "Not specified"}</span>
             </div>
             <Separator />
+            {deal.involvementModel && (
+              <>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Involvement</span>
+                  <span className="text-sm font-medium">{deal.involvementModel}</span>
+                </div>
+                <Separator />
+              </>
+            )}
+            {deal.timeHorizon && (
+              <>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Time Horizon</span>
+                  <span className="text-sm font-medium">{deal.timeHorizon}</span>
+                </div>
+                <Separator />
+              </>
+            )}
             {deal.projectedIRR && (
-              <>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Projected IRR</span>
-                  <span className="text-sm font-medium">{deal.projectedIRR}</span>
-                </div>
-                <Separator />
-              </>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Projected IRR</span>
+                <span className="text-sm font-medium">{deal.projectedIRR}</span>
+              </div>
             )}
-            {deal.timeline && (
-              <>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Timeline</span>
-                  <span className="text-sm font-medium">{deal.timeline}</span>
-                </div>
-                <Separator />
-              </>
-            )}
-            <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Added</span>
-              <span className="text-sm font-medium">
-                {new Date(deal.createdAt).toLocaleDateString()}
-              </span>
-            </div>
           </div>
         </CardContent>
       </Card>

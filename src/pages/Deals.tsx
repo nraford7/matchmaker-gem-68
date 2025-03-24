@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Loader2, Briefcase, FilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Opportunity } from "@/types";
+import { Deal } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
-import { fetchOpportunities, fetchActiveDeals, fetchSavedDeals, fetchPastDeals } from "@/services/opportunityService";
+import { fetchDeals, fetchActiveDeals, fetchSavedDeals, fetchPastDeals } from "@/services/deal";
 import { 
   DealsTabs, 
   AllOpportunities, 
@@ -21,12 +21,16 @@ export type StatsSummary = {
   sectorCount: { [key: string]: number };
 };
 
-const calculateStats = (deals: Opportunity[]): StatsSummary => {
-  const totalAmount = deals.reduce((sum, deal) => sum + deal.fundingAmount, 0);
+const calculateStats = (deals: Deal[]): StatsSummary => {
+  const totalAmount = deals.reduce((sum, deal) => sum + (deal.checkSizeRequired || 0), 0);
   const sectorCount: { [key: string]: number } = {};
   
   deals.forEach(deal => {
-    sectorCount[deal.sector] = (sectorCount[deal.sector] || 0) + 1;
+    if (deal.sectorTags) {
+      deal.sectorTags.forEach(sector => {
+        sectorCount[sector] = (sectorCount[sector] || 0) + 1;
+      });
+    }
   });
   
   const topSector = Object.entries(sectorCount)
@@ -44,10 +48,10 @@ const calculateStats = (deals: Opportunity[]): StatsSummary => {
 
 const Deals = () => {
   const { user } = useAuth();
-  const [activeDeals, setActiveDeals] = useState<Opportunity[]>([]);
-  const [savedDeals, setSavedDeals] = useState<Opportunity[]>([]);
-  const [pastDeals, setPastDeals] = useState<Opportunity[]>([]);
-  const [allOpportunities, setAllOpportunities] = useState<Opportunity[]>([]);
+  const [activeDeals, setActiveDeals] = useState<Deal[]>([]);
+  const [savedDeals, setSavedDeals] = useState<Deal[]>([]);
+  const [pastDeals, setPastDeals] = useState<Deal[]>([]);
+  const [allDeals, setAllDeals] = useState<Deal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -66,13 +70,13 @@ const Deals = () => {
           fetchActiveDeals(),
           fetchSavedDeals(),
           fetchPastDeals(),
-          fetchOpportunities()
+          fetchDeals()
         ]);
         
         setActiveDeals(active);
         setSavedDeals(saved);
         setPastDeals(past);
-        setAllOpportunities(all);
+        setAllDeals(all);
         
         setActiveStats(calculateStats(active));
         setSavedStats(calculateStats(saved));
@@ -88,12 +92,11 @@ const Deals = () => {
     loadData();
   }, [user]);
   
-  const filteredOpportunities = allOpportunities.filter(opp => {
+  const filteredDeals = allDeals.filter(deal => {
     return searchQuery === "" || 
-      opp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      opp.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      opp.sector.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      opp.stage.toLowerCase().includes(searchQuery.toLowerCase());
+      deal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (deal.description || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (deal.sectorTags || []).some(sector => sector.toLowerCase().includes(searchQuery.toLowerCase()));
   });
   
   if (!user) {
@@ -142,8 +145,8 @@ const Deals = () => {
           />
 
           <AllOpportunities 
-            allOpportunities={allOpportunities}
-            filteredOpportunities={filteredOpportunities}
+            allDeals={allDeals}
+            filteredDeals={filteredDeals}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           />

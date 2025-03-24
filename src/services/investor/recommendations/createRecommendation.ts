@@ -5,7 +5,7 @@ import { getCurrentUserId } from "../baseService";
 
 // Make recommendation to another investor
 export const recommendDealToInvestor = async (
-  opportunityId: string, 
+  dealId: string, 
   recipientId: string, 
   commentary: string | null = null
 ): Promise<boolean> => {
@@ -19,7 +19,7 @@ export const recommendDealToInvestor = async (
     const { error } = await supabase
       .from("investor_recommendations")
       .insert({
-        opportunity_id: opportunityId,
+        deal_id: dealId,
         recommender_id: userId,
         recipient_id: recipientId,
         commentary: commentary
@@ -40,7 +40,7 @@ export const recommendDealToInvestor = async (
 
 // Share a deal with another investor (alternative method)
 export const shareDealWithInvestor = async (
-  opportunityId: string, 
+  dealId: string, 
   recipientId: string, 
   comment: string | null = null
 ): Promise<boolean> => {
@@ -54,7 +54,7 @@ export const shareDealWithInvestor = async (
     const { error } = await supabase
       .from("network_shared_deals")
       .insert({
-        opportunity_id: opportunityId,
+        deal_id: dealId,
         shared_by_user_id: userId,
         shared_with_user_id: recipientId,
         comment: comment

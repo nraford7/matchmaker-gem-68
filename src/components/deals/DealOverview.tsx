@@ -1,12 +1,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Briefcase, Calendar, TrendingUp, Users } from "lucide-react";
-import { EnhancedOpportunity } from "@/types/deal";
-import { formatCurrency } from "@/lib/utils";
+import { EnhancedDeal } from "@/types/deal";
 
 interface DealOverviewProps {
-  deal: EnhancedOpportunity;
+  deal: EnhancedDeal;
 }
 
 const DealOverview = ({ deal }: DealOverviewProps) => {
@@ -15,80 +13,77 @@ const DealOverview = ({ deal }: DealOverviewProps) => {
       <CardHeader>
         <CardTitle>Overview</CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="mb-4">{deal.description}</p>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-          <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Funding Amount</p>
-            <p className="text-lg font-medium">
-              ${(deal.fundingAmount / 1000000).toFixed(1)}M
-            </p>
-          </div>
-          {deal.foundedYear && (
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Founded</p>
-              <p className="text-lg font-medium flex items-center">
-                <Calendar className="h-4 w-4 mr-1" />
-                {deal.foundedYear}
-              </p>
-            </div>
-          )}
-          {deal.businessModel && (
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Business Model</p>
-              <p className="text-lg font-medium flex items-center">
-                <Briefcase className="h-4 w-4 mr-1" />
-                {deal.businessModel}
-              </p>
-            </div>
-          )}
-          {deal.teamSize && (
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Team Size</p>
-              <p className="text-lg font-medium flex items-center">
-                <Users className="h-4 w-4 mr-1" />
-                {deal.teamSize} employees
-              </p>
-            </div>
-          )}
-          {deal.revenue && (
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Annual Revenue</p>
-              <p className="text-lg font-medium">
-                ${formatCurrency(deal.revenue)}
-              </p>
-            </div>
-          )}
-          {deal.growth && (
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">YoY Growth</p>
-              <p className="text-lg font-medium flex items-center">
-                <TrendingUp className="h-4 w-4 mr-1" />
-                {deal.growth}
-              </p>
-            </div>
-          )}
-          {deal.projectedIRR && (
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Projected IRR</p>
-              <p className="text-lg font-medium">
-                {deal.projectedIRR}
-              </p>
-            </div>
-          )}
+      <CardContent className="space-y-4">
+        <div>
+          <h3 className="text-sm font-medium mb-1">Description</h3>
+          <p className="text-sm">
+            {deal.description || "No description provided."}
+          </p>
         </div>
         
-        {deal.competitors && deal.competitors.length > 0 && (
-          <div className="mt-6">
-            <p className="text-sm text-muted-foreground mb-2">Competitors</p>
-            <div className="flex flex-wrap gap-2">
-              {deal.competitors.map((competitor, index) => (
-                <Badge key={index} variant="outline">{competitor}</Badge>
+        {deal.esgTags && deal.esgTags.length > 0 && (
+          <div>
+            <h3 className="text-sm font-medium mb-1">ESG / Impact Focus</h3>
+            <div className="flex flex-wrap gap-1">
+              {deal.esgTags.map((tag, index) => (
+                <Badge key={index} variant="secondary" className="text-xs">
+                  {tag}
+                </Badge>
               ))}
             </div>
           </div>
         )}
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {deal.teamSize && (
+            <div>
+              <h3 className="text-sm font-medium">Team Size</h3>
+              <p className="text-sm">{deal.teamSize} employees</p>
+            </div>
+          )}
+          
+          {deal.foundedYear && (
+            <div>
+              <h3 className="text-sm font-medium">Founded</h3>
+              <p className="text-sm">{deal.foundedYear}</p>
+            </div>
+          )}
+          
+          {deal.revenue && (
+            <div>
+              <h3 className="text-sm font-medium">Revenue</h3>
+              <p className="text-sm">${deal.revenue}</p>
+            </div>
+          )}
+          
+          {deal.growth && (
+            <div>
+              <h3 className="text-sm font-medium">Growth</h3>
+              <p className="text-sm">{deal.growth} YoY</p>
+            </div>
+          )}
+          
+          {deal.involvementModel && (
+            <div>
+              <h3 className="text-sm font-medium">Involvement Model</h3>
+              <p className="text-sm">{deal.involvementModel}</p>
+            </div>
+          )}
+          
+          {deal.exitStyle && (
+            <div>
+              <h3 className="text-sm font-medium">Exit Style</h3>
+              <p className="text-sm">{deal.exitStyle}</p>
+            </div>
+          )}
+          
+          {deal.dueDiligenceLevel && (
+            <div>
+              <h3 className="text-sm font-medium">Due Diligence Level</h3>
+              <p className="text-sm">{deal.dueDiligenceLevel}</p>
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

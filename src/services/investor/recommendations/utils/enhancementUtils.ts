@@ -1,44 +1,59 @@
 
+import { supabase } from "@/integrations/supabase/client";
 import { NetworkSharedDeal } from "@/types";
-import { fetchOpportunityDetails } from "./opportunityUtils";
-import { fetchInvestorProfile } from "./investorUtils";
 
 // Enhance recommendation with opportunity and investor details
 export const enhanceRecommendation = async (
-  recommendation: any, 
-  opportunityIdField: string,
-  investorIdField: string,
-  commentField: string,
-  createdAtField: string
+  rawRecommendation: any,
+  dealIdKey: string,
+  investorIdKey: string,
+  commentaryKey: string,
+  timestampKey: string
 ): Promise<NetworkSharedDeal | null> => {
   try {
-    // Fetch opportunity details
-    const opportunityData = await fetchOpportunityDetails(recommendation[opportunityIdField]);
-    if (!opportunityData) {
-      console.log(`No opportunity data found for ID: ${recommendation[opportunityIdField]}`);
+    // Get deal details
+    const { data: dealData, error: dealError } = await supabase
+      .from("deals")
+      .select("id, name, description, sector_tags, stage, check_size_required, geographies")
+      .eq("id", rawRecommendation[dealIdKey])
+      .single();
+
+    if (dealError) {
+      console.error("Error fetching deal details:", dealError);
       return null;
     }
-    
-    // Fetch investor profile
-    const investorData = await fetchInvestorProfile(recommendation[investorIdField]);
-    if (!investorData) {
-      console.log(`No investor data found for ID: ${recommendation[investorIdField]}`);
+
+    // Get investor details
+    const { data: investorData, error: investorError } = await supabase
+      .from("investor_profiles")
+      .select("id, name, company, avatar_url")
+      .eq("id", rawRecommendation[investorIdKey])
+      .single();
+
+    if (investorError) {
+      console.error("Error fetching investor details:", investorError);
       return null;
     }
-    
-    // Create the enhanced recommendation object
+
     return {
-      id: recommendation.id,
-      opportunityId: recommendation[opportunityIdField],
-      opportunityName: opportunityData.name,
-      sector: opportunityData.sector,
-      stage: opportunityData.stage,
-      fundingAmount: Number(opportunityData.funding_amount),
-      location: opportunityData.location || "Unknown", // Provide a default if location is not available
-      sharedBy: investorData.name,
-      avatar: investorData.avatar_url,
-      comment: recommendation[commentField],
-      sharedAt: recommendation[createdAtField]
+      id: rawRecommendation.id,
+      deal: {
+        id: dealData.id,
+        name: dealData.name,
+        description: dealData.description,
+        sectorTags: dealData.sector_tags,
+        stage: dealData.stage,
+        checkSizeRequired: dealData.check_size_required,
+        geographies: dealData.geographies
+      },
+      investor: {
+        id: investorData.id,
+        name: investorData.name,
+        company: investorData.company,
+        avatarUrl: investorData.avatar_url
+      },
+      comment: rawRecommendation[commentaryKey],
+      sharedAt: rawRecommendation[timestampKey]
     };
   } catch (error) {
     console.error("Error enhancing recommendation:", error);

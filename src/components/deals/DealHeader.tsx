@@ -1,45 +1,54 @@
 
+import { EnhancedDeal } from "@/types/deal";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Bookmark, Download, MapPin, Share } from "lucide-react";
-import { EnhancedOpportunity } from "@/types/deal";
+import { formatCurrency } from "@/lib/utils";
 
 interface DealHeaderProps {
-  deal: EnhancedOpportunity;
+  deal: EnhancedDeal;
 }
 
 const DealHeader = ({ deal }: DealHeaderProps) => {
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
-      <div>
-        <h1 className="text-3xl font-bold">{deal.name}</h1>
-        <div className="flex items-center gap-2 mt-2 flex-wrap">
+    <div>
+      <h1 className="text-3xl font-bold">{deal.name}</h1>
+      
+      <div className="flex flex-wrap gap-2 mt-3">
+        {deal.sectorTags && deal.sectorTags.map((sector, index) => (
+          <Badge key={index} variant="secondary">
+            {sector}
+          </Badge>
+        ))}
+        
+        {deal.stage && (
           <Badge variant="outline">{deal.stage}</Badge>
-          <Badge variant="secondary">{deal.sector}</Badge>
-          {deal.industry && deal.industry !== deal.sector && (
-            <Badge variant="secondary">{deal.industry}</Badge>
-          )}
-          <div className="flex items-center text-sm text-muted-foreground">
-            <MapPin className="h-3 w-3 mr-1" />
-            <span>{deal.location}</span>
-          </div>
-        </div>
+        )}
+        
+        {deal.dealType && (
+          <Badge variant="outline">{deal.dealType}</Badge>
+        )}
       </div>
       
-      <div className="flex gap-2">
-        <Button variant="outline" size="sm" className="gap-1">
-          <Bookmark className="h-4 w-4" />
-          Save
-        </Button>
-        <Button variant="outline" size="sm" className="gap-1">
-          <Share className="h-4 w-4" />
-          Share
-        </Button>
-        {deal.pitchDeckUrl && (
-          <Button variant="outline" size="sm" className="gap-1">
-            <Download className="h-4 w-4" />
-            Download Pitch
-          </Button>
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <p className="text-sm text-muted-foreground">Check Size</p>
+          <p className="font-medium">{deal.checkSizeRequired ? formatCurrency(deal.checkSizeRequired) : "Not specified"}</p>
+        </div>
+        
+        <div>
+          <p className="text-sm text-muted-foreground">Location</p>
+          <p className="font-medium">{deal.geographies?.join(', ') || "Global"}</p>
+        </div>
+        
+        <div>
+          <p className="text-sm text-muted-foreground">Time Horizon</p>
+          <p className="font-medium">{deal.timeHorizon || "Not specified"}</p>
+        </div>
+        
+        {deal.decisionConvictionRequired && (
+          <div>
+            <p className="text-sm text-muted-foreground">Decision Conviction</p>
+            <p className="font-medium">{deal.decisionConvictionRequired}/5</p>
+          </div>
         )}
       </div>
     </div>

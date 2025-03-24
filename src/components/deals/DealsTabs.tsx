@@ -2,13 +2,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Filter, Briefcase, Save, Archive } from "lucide-react";
-import { OpportunityList } from "@/components/opportunities";
-import { Opportunity } from "@/types";
+import { Deal } from "@/types";
+import { DealList } from "./DealList";
 
 interface DealsTabsProps {
-  activeDeals: Opportunity[];
-  savedDeals: Opportunity[];
-  pastDeals: Opportunity[];
+  activeDeals: Deal[];
+  savedDeals: Deal[];
+  pastDeals: Deal[];
 }
 
 export const DealsTabs = ({ activeDeals, savedDeals, pastDeals }: DealsTabsProps) => {
@@ -43,7 +43,7 @@ export const DealsTabs = ({ activeDeals, savedDeals, pastDeals }: DealsTabsProps
             <Button variant="default" className="mt-4">Find Opportunities</Button>
           </div>
         ) : (
-          <OpportunityList opportunities={activeDeals} />
+          <DealList deals={activeDeals} />
         )}
       </TabsContent>
       
@@ -54,7 +54,7 @@ export const DealsTabs = ({ activeDeals, savedDeals, pastDeals }: DealsTabsProps
             <Button variant="default" className="mt-4">Browse Opportunities</Button>
           </div>
         ) : (
-          <OpportunityList opportunities={savedDeals} showMatchScore={true} />
+          <DealList deals={savedDeals} showMatchScore={true} />
         )}
       </TabsContent>
       
@@ -64,7 +64,7 @@ export const DealsTabs = ({ activeDeals, savedDeals, pastDeals }: DealsTabsProps
             <p className="text-lg text-muted-foreground">No past deals</p>
           </div>
         ) : (
-          <OpportunityList opportunities={pastDeals} />
+          <DealList deals={pastDeals} />
         )}
       </TabsContent>
     </Tabs>

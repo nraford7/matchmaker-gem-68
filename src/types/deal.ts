@@ -1,7 +1,29 @@
 
-import { Opportunity } from "@/types";
+export type Deal = {
+  id: string;
+  name: string;
+  description?: string;
+  dealType?: string;
+  checkSizeRequired?: number;
+  sectorTags?: string[];
+  geographies?: string[];
+  stage?: string;
+  timeHorizon?: string;
+  esgTags?: string[];
+  involvementModel?: string;
+  exitStyle?: string;
+  dueDiligenceLevel?: string;
+  decisionConvictionRequired?: number;
+  investorSpeedRequired?: number;
+  strategyProfile?: Record<string, any>;
+  psychologicalFit?: Record<string, any>;
+  createdAt: string;
+  updatedAt?: string;
+  matchScore?: number;
+  matchExplanation?: string;
+};
 
-export type EnhancedOpportunity = Opportunity & {
+export type EnhancedDeal = Deal & {
   teamSize?: number;
   foundedYear?: number;
   industry?: string;

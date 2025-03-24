@@ -11,38 +11,38 @@ export type Database = {
     Tables: {
       active_deals: {
         Row: {
-          created_at: string
+          created_at: string | null
+          deal_id: string | null
           id: string
           notes: string | null
-          opportunity_id: string
           stage: string
-          updated_at: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           id?: string
           notes?: string | null
-          opportunity_id: string
           stage: string
-          updated_at?: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           id?: string
           notes?: string | null
-          opportunity_id?: string
           stage?: string
-          updated_at?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "active_deals_opportunity_id_fkey"
-            columns: ["opportunity_id"]
+            foreignKeyName: "active_deals_deal_id_fkey"
+            columns: ["deal_id"]
             isOneToOne: false
-            referencedRelation: "opportunities"
+            referencedRelation: "deals"
             referencedColumns: ["id"]
           },
         ]
@@ -77,6 +77,72 @@ export type Database = {
           opportunities_viewed?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      deals: {
+        Row: {
+          check_size_required: number | null
+          created_at: string | null
+          deal_type: string | null
+          decision_conviction_required: number | null
+          description: string | null
+          due_diligence_level: string | null
+          esg_tags: string[] | null
+          exit_style: string | null
+          geographies: string[] | null
+          id: string
+          investor_speed_required: number | null
+          involvement_model: string | null
+          name: string
+          psychological_fit: Json | null
+          sector_tags: string[] | null
+          stage: string | null
+          strategy_profile: Json | null
+          time_horizon: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          check_size_required?: number | null
+          created_at?: string | null
+          deal_type?: string | null
+          decision_conviction_required?: number | null
+          description?: string | null
+          due_diligence_level?: string | null
+          esg_tags?: string[] | null
+          exit_style?: string | null
+          geographies?: string[] | null
+          id?: string
+          investor_speed_required?: number | null
+          involvement_model?: string | null
+          name: string
+          psychological_fit?: Json | null
+          sector_tags?: string[] | null
+          stage?: string | null
+          strategy_profile?: Json | null
+          time_horizon?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          check_size_required?: number | null
+          created_at?: string | null
+          deal_type?: string | null
+          decision_conviction_required?: number | null
+          description?: string | null
+          due_diligence_level?: string | null
+          esg_tags?: string[] | null
+          exit_style?: string | null
+          geographies?: string[] | null
+          id?: string
+          investor_speed_required?: number | null
+          involvement_model?: string | null
+          name?: string
+          psychological_fit?: Json | null
+          sector_tags?: string[] | null
+          stage?: string | null
+          strategy_profile?: Json | null
+          time_horizon?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -200,72 +266,72 @@ export type Database = {
       investor_recommendations: {
         Row: {
           commentary: string | null
-          created_at: string
+          created_at: string | null
+          deal_id: string | null
           id: string
-          opportunity_id: string
           recipient_id: string
           recommender_id: string
         }
         Insert: {
           commentary?: string | null
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           id?: string
-          opportunity_id: string
           recipient_id: string
           recommender_id: string
         }
         Update: {
           commentary?: string | null
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           id?: string
-          opportunity_id?: string
           recipient_id?: string
           recommender_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "investor_recommendations_opportunity_id_fkey"
-            columns: ["opportunity_id"]
+            foreignKeyName: "investor_recommendations_deal_id_fkey"
+            columns: ["deal_id"]
             isOneToOne: false
-            referencedRelation: "opportunities"
+            referencedRelation: "deals"
             referencedColumns: ["id"]
           },
         ]
       }
       matches: {
         Row: {
-          created_at: string
+          created_at: string | null
+          deal_id: string | null
           feedback: string | null
           id: string
-          opportunity_id: string
           score: number | null
-          updated_at: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           feedback?: string | null
           id?: string
-          opportunity_id: string
           score?: number | null
-          updated_at?: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           feedback?: string | null
           id?: string
-          opportunity_id?: string
           score?: number | null
-          updated_at?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "matches_opportunity_id_fkey"
-            columns: ["opportunity_id"]
+            foreignKeyName: "matches_deal_id_fkey"
+            columns: ["deal_id"]
             isOneToOne: false
-            referencedRelation: "opportunities"
+            referencedRelation: "deals"
             referencedColumns: ["id"]
           },
         ]
@@ -273,114 +339,72 @@ export type Database = {
       network_shared_deals: {
         Row: {
           comment: string | null
-          created_at: string
+          created_at: string | null
+          deal_id: string | null
           id: string
-          opportunity_id: string
           shared_by_user_id: string
           shared_with_user_id: string
         }
         Insert: {
           comment?: string | null
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           id?: string
-          opportunity_id: string
           shared_by_user_id: string
           shared_with_user_id: string
         }
         Update: {
           comment?: string | null
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           id?: string
-          opportunity_id?: string
           shared_by_user_id?: string
           shared_with_user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "network_shared_deals_opportunity_id_fkey"
-            columns: ["opportunity_id"]
+            foreignKeyName: "network_shared_deals_deal_id_fkey"
+            columns: ["deal_id"]
             isOneToOne: false
-            referencedRelation: "opportunities"
+            referencedRelation: "deals"
             referencedColumns: ["id"]
           },
         ]
       }
-      opportunities: {
-        Row: {
-          created_at: string
-          description: string
-          funding_amount: number
-          id: string
-          location: string
-          name: string
-          pitch_deck: string | null
-          sector: string
-          stage: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          description: string
-          funding_amount: number
-          id?: string
-          location: string
-          name: string
-          pitch_deck?: string | null
-          sector: string
-          stage: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          funding_amount?: number
-          id?: string
-          location?: string
-          name?: string
-          pitch_deck?: string | null
-          sector?: string
-          stage?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       past_deals: {
         Row: {
-          completion_date: string
-          created_at: string
+          completion_date: string | null
+          created_at: string | null
+          deal_id: string | null
           final_amount: number
           id: string
           notes: string | null
-          opportunity_id: string
           user_id: string
         }
         Insert: {
-          completion_date?: string
-          created_at?: string
+          completion_date?: string | null
+          created_at?: string | null
+          deal_id?: string | null
           final_amount: number
           id?: string
           notes?: string | null
-          opportunity_id: string
           user_id: string
         }
         Update: {
-          completion_date?: string
-          created_at?: string
+          completion_date?: string | null
+          created_at?: string | null
+          deal_id?: string | null
           final_amount?: number
           id?: string
           notes?: string | null
-          opportunity_id?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "past_deals_opportunity_id_fkey"
-            columns: ["opportunity_id"]
+            foreignKeyName: "past_deals_deal_id_fkey"
+            columns: ["deal_id"]
             isOneToOne: false
-            referencedRelation: "opportunities"
+            referencedRelation: "deals"
             referencedColumns: ["id"]
           },
         ]
@@ -412,31 +436,31 @@ export type Database = {
         }
         Relationships: []
       }
-      saved_opportunities: {
+      saved_deals: {
         Row: {
-          created_at: string
+          created_at: string | null
+          deal_id: string | null
           id: string
-          opportunity_id: string
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           id?: string
-          opportunity_id: string
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
+          deal_id?: string | null
           id?: string
-          opportunity_id?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "saved_opportunities_opportunity_id_fkey"
-            columns: ["opportunity_id"]
+            foreignKeyName: "saved_deals_deal_id_fkey"
+            columns: ["deal_id"]
             isOneToOne: false
-            referencedRelation: "opportunities"
+            referencedRelation: "deals"
             referencedColumns: ["id"]
           },
         ]

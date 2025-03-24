@@ -1,17 +1,8 @@
 
-export * from "./DealsSummary";
-export * from "./DealsSearchBar";
-export * from "./DealsTabs";
-export * from "./SectorDistribution";
 export * from "./AllOpportunities";
+export * from "./DealCard";
+export * from "./DealList";
+export * from "./DealsTabs";
+export * from "./DealsSearchBar";
 export * from "./PortfolioInsights";
-// Also export the pre-existing components
-export * from "./DealFundsUsage";
-export * from "./DealHeader";
-export * from "./DealMilestones";
-export * from "./DealOverview";
-export * from "./DealRecommendation";
-export * from "./DealSidebar";
-export * from "./DealTeam";
-export * from "./NotFoundState";
-export * from "./DealLoading";
+export * from "./DealsSummary";
