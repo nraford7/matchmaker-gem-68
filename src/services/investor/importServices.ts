@@ -138,14 +138,15 @@ const createOrUpdateProfile = async (data: Record<string, any>): Promise<boolean
       return false;
     }
     
-    // Generate a UUID for the new profile
-    const uuid = crypto.randomUUID();
+    // Important: Do NOT set id - this was causing the foreign key constraint error
+    // The id column in investor_profiles references auth.users - we should only create
+    // investor profiles where user_id = auth.uid, not id = auth.uid
     
     // Directly insert into the database with error handling
     const { error } = await supabase
       .from("investor_profiles")
       .insert({
-        id: uuid,
+        // Remove the id field, as it has a foreign key constraint to auth.users
         name: data.name,
         email: data.email,
         company: data.company || null,
