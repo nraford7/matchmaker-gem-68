@@ -18,7 +18,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   if (loading) {
     return (
       <Card>
-        <CardHeader className="bg-muted/50 pb-4">
+        <CardHeader>
           <CardTitle className="text-xl font-semibold flex items-center gap-2">
             <TrendingUp className="w-5 h-5" />
             Top Matches
@@ -36,7 +36,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   
   return (
     <Card className="overflow-hidden border-border">
-      <CardHeader className="bg-muted/50 pb-4">
+      <CardHeader>
         <CardTitle className="text-xl font-semibold flex items-center gap-2">
           <TrendingUp className="w-5 h-5" />
           Top Matches
@@ -134,7 +134,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
           </div>
         )}
       </CardContent>
-      <CardFooter className="bg-muted/30 p-3">
+      <CardFooter className="p-3">
         <Link to="/deals" className="w-full">
           <Button variant="outline" className="w-full group">
             <span>View All Matches</span>
