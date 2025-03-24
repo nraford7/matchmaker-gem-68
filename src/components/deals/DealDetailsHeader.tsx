@@ -29,9 +29,6 @@ const DealDetailsHeader = ({ deal, onGoBack }: DealDetailsHeaderProps) => {
             <div className="flex justify-between items-start">
               <h1 className="text-2xl font-bold">{deal.name}</h1>
               <div className="flex items-center gap-2">
-                <Badge variant={matchScore > 0.8 ? "default" : "outline"} className="ml-2">
-                  {Math.round(matchScore * 100)}% match
-                </Badge>
                 <DealActions dealId={deal.id} dealName={deal.name} />
               </div>
             </div>
