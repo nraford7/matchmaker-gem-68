@@ -1,11 +1,11 @@
 
-import { NetworkSharedDeal } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
+import { NetworkSharedDeal } from "@/types";
 import { enhanceRecommendation } from "./utils/enhancementUtils";
 
 export const fetchNetworkSharedDeals = async (userId: string): Promise<NetworkSharedDeal[]> => {
   try {
-    // Fetch shared deals directly using supabase
+    // Fetch shared deals made to the current user
     const { data: sharedDealsData, error: sharedDealsError } = await supabase
       .from("network_shared_deals")
       .select(`
@@ -41,7 +41,9 @@ export const fetchNetworkSharedDeals = async (userId: string): Promise<NetworkSh
     const enhancedDeals = await Promise.all(enhancedDealsPromises);
 
     // Filter out any null values from failed enhancements
-    return enhancedDeals.filter(Boolean) as NetworkSharedDeal[];
+    return enhancedDeals.filter(
+      (deal): deal is NetworkSharedDeal => deal !== null
+    );
   } catch (error) {
     console.error("Error fetching network shared deals:", error);
     return [];

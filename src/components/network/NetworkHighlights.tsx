@@ -30,7 +30,6 @@ export const NetworkHighlights = () => {
       setLoading(true);
       try {
         const deals = await fetchRecommendationsForUser();
-        console.log("Fetched shared deals:", deals); // Add logging to debug
         setSharedDeals(deals);
       } catch (error) {
         console.error("Error loading shared deals:", error);
