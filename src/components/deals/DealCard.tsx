@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Deal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
-import { Eye, Bookmark, CheckCircle, ArrowRightCircle } from "lucide-react";
+import { Bookmark, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -88,40 +88,31 @@ export const DealCard = ({
           )}
         </div>
       </CardContent>
-      <CardFooter className="pt-0">
-        <div className="w-full flex items-center gap-2">
-          <Link to={`/deals/${deal.id}`} className="flex-1">
-            <Button variant="outline" size="sm" className="w-full flex items-center gap-1">
-              <Eye className="h-4 w-4" />
-              View Details
-            </Button>
-          </Link>
-          
-          {showActions && (
-            <>
-              {onSave && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleSave}
-                >
-                  <Bookmark className="h-4 w-4" />
-                </Button>
-              )}
-              
-              {onActivate && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleActivate}
-                >
-                  <CheckCircle className="h-4 w-4" />
-                </Button>
-              )}
-            </>
-          )}
-        </div>
-      </CardFooter>
+      {showActions && (onSave || onActivate) && (
+        <CardFooter className="pt-0">
+          <div className="w-full flex items-center justify-end gap-2">
+            {onSave && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleSave}
+              >
+                <Bookmark className="h-4 w-4" />
+              </Button>
+            )}
+            
+            {onActivate && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleActivate}
+              >
+                <CheckCircle className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </CardFooter>
+      )}
     </Card>
   );
 };
