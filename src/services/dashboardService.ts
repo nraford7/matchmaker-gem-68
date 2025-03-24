@@ -1,7 +1,7 @@
 
 import { NetworkSharedDeal, Opportunity } from "@/types";
 import { fetchAllInvestors } from "./investor";
-import { fetchSavedDeals } from "./opportunity";
+import { fetchDeals } from "./opportunity";
 import { fetchRecommendationsForUser } from "./investor/recommendations/fetchRecommendations";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const fetchTopMatches = async (limit = 3): Promise<Opportunity[]> => {
   // This is currently a simplified implementation
   // Will be enhanced with real match-making logic
-  const savedDeals = await fetchSavedDeals();
+  const savedDeals = await fetchDeals();
   
   // Sort by match score (descending)
   const sortedDeals = [...savedDeals].sort((a, b) => 

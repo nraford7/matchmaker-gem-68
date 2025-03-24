@@ -1,6 +1,4 @@
-
 import { supabase } from "@/integrations/supabase/client";
-import { Deal } from "@/types";
 import { toast } from "sonner";
 
 // Add a deal to active deals
@@ -158,6 +156,90 @@ export const updateActiveDealNotes = async (dealId: string, notes: string): Prom
   } catch (error) {
     console.error("Error updating deal notes:", error);
     toast.error("Failed to update deal notes");
+    return false;
+  }
+};
+
+// Activate a deal (for compatibility with existing components)
+export const activateDeal = async (dealId: string, stage: string): Promise<boolean> => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast.error("You must be logged in to activate deals");
+      return false;
+    }
+
+    const { error } = await supabase
+      .from("active_deals")
+      .insert({ 
+        deal_id: dealId,
+        stage: stage,
+        user_id: user.id
+      });
+
+    if (error) {
+      if (error.code === "23505") { // Unique violation
+        toast.info("Deal already active");
+        return true;
+      }
+      throw error;
+    }
+
+    // Remove from saved deals if it was saved
+    await supabase
+      .from("saved_deals")
+      .delete()
+      .eq("deal_id", dealId)
+      .eq("user_id", user.id);
+
+    toast.success("Deal activated successfully");
+    return true;
+  } catch (error) {
+    console.error("Error activating deal:", error);
+    toast.error("Failed to activate deal");
+    return false;
+  }
+};
+
+// Complete a deal (for compatibility with existing components)
+export const completeDeal = async (dealId: string, finalAmount: number): Promise<boolean> => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast.error("You must be logged in to complete deals");
+      return false;
+    }
+
+    const { error } = await supabase
+      .from("past_deals")
+      .insert({ 
+        deal_id: dealId,
+        final_amount: finalAmount,
+        user_id: user.id
+      });
+
+    if (error) {
+      if (error.code === "23505") { // Unique violation
+        toast.info("Deal already completed");
+        return true;
+      }
+      throw error;
+    }
+
+    // Remove from active deals
+    await supabase
+      .from("active_deals")
+      .delete()
+      .eq("deal_id", dealId)
+      .eq("user_id", user.id);
+
+    toast.success("Deal completed successfully");
+    return true;
+  } catch (error) {
+    console.error("Error completing deal:", error);
+    toast.error("Failed to complete deal");
     return false;
   }
 };

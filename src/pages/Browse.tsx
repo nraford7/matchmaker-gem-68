@@ -4,7 +4,7 @@ import { PageTitle } from '@/components/PageTitle';
 import { SearchBar } from '@/components/SearchBar';
 import { OpportunityList } from '@/components/opportunities';
 import { Deal } from '@/types';
-import { mockDeals } from '@/data/mockData'; // Changed from mockOpportunities to mockDeals
+import { mockDeals } from '@/data/mockData'; 
 
 const Browse = () => {
   const [searchQuery, setSearchQuery] = useState('');

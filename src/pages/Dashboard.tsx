@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { Opportunity } from "@/types";
 import { DashboardHeader } from "@/components/DashboardHeader";
-import { fetchSavedDeals } from "@/services/opportunity";
+import { fetchDeals } from "@/services/opportunity";
 import { TopMatches, SavedDeals, PerformanceMetricsSection } from "@/components/dashboard";
 import { NetworkHighlights } from "@/components/network";
 
@@ -53,8 +52,8 @@ const Dashboard = () => {
   
   const loadDeals = async () => {
     try {
-      // Fetch saved deals which include match scores
-      const deals = await fetchSavedDeals();
+      // Fetch deals which include match scores
+      const deals = await fetchDeals();
       setSavedDeals(deals);
       
       // Filter for top matches

@@ -4,6 +4,11 @@ import { Deal } from "@/types";
 import { toast } from "sonner";
 import { getCurrentUserId, validateUserAuth } from "./baseService";
 
+// Create a simple avatar (placeholder function for compatibility)
+export const createAvatar = async (): Promise<string> => {
+  return `https://api.dicebear.com/6.x/initials/svg?seed=${Math.random().toString(36).substring(7)}`;
+};
+
 // Create a new opportunity
 export const createOpportunity = async (opportunity: Omit<Deal, "id" | "createdAt">): Promise<string | null> => {
   try {

@@ -2,14 +2,13 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Deal, NetworkDeal, NetworkInvestor } from "@/types";
 import { toast } from "sonner";
-import { createAvatar } from "../opportunity/createServices";
 
 interface SharedDeal {
   id: string;
   deal_id: string;
   shared_by_user_id: string;
   shared_with_user_id: string;
-  message: string;
+  comment: string;
   created_at: string;
   // Joined fields
   deal?: NetworkDeal;
@@ -26,7 +25,7 @@ export const getSharedDealsForUser = async (userId: string): Promise<SharedDeal[
         deal_id,
         shared_by_user_id,
         shared_with_user_id,
-        message,
+        comment,
         created_at,
         deal:deal_id (
           id,
@@ -56,6 +55,8 @@ export const getSharedDealsForUser = async (userId: string): Promise<SharedDeal[
 
     // Handle null values and ensure proper typing
     return (data || []).map(item => {
+      if (!item) return null;
+      
       // If deal is null, provide default values
       if (!item.deal) {
         return {
@@ -88,7 +89,7 @@ export const getSharedDealsForUser = async (userId: string): Promise<SharedDeal[
       }
 
       return item;
-    });
+    }).filter(Boolean) as SharedDeal[];
   } catch (error) {
     console.error("Error fetching shared deals:", error);
     toast.error("Failed to load shared deals");
@@ -135,7 +136,7 @@ export const shareDealWithUser = async (
         deal_id: dealId,
         shared_by_user_id: user.id,
         shared_with_user_id: targetUserId,
-        message
+        comment: message
       });
 
     if (error) {
@@ -165,7 +166,7 @@ export const getPotentialDealRecipients = async (): Promise<NetworkInvestor[]> =
       .from("investor_connections")
       .select(`
         connection_user_id,
-        connection_user:connection_user_id (
+        connected_user:connection_user_id (
           id,
           name,
           email,
@@ -182,14 +183,13 @@ export const getPotentialDealRecipients = async (): Promise<NetworkInvestor[]> =
 
     // Map and filter out any null values
     const recipients = data
-      .map(item => item.connection_user)
-      .filter(Boolean)
-      .map(user => ({
-        id: user.id,
-        name: user.name || "Unknown",
-        email: user.email || "",
-        company: user.company || "",
-        avatar_url: user.avatar_url || "",
+      .filter(item => item && item.connected_user)
+      .map(item => ({
+        id: item.connected_user.id,
+        name: item.connected_user.name || "Unknown",
+        email: item.connected_user.email || "",
+        company: item.connected_user.company || "",
+        avatar_url: item.connected_user.avatar_url || "",
         // Add other required fields with defaults
         sector_tags: [],
         preferred_stages: [],
