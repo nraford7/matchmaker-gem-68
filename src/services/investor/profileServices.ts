@@ -24,7 +24,18 @@ export const updateInvestorProfile = async (investor: Omit<Investor, "id">): Pro
         check_size_min: investor.checkSizeMin,
         check_size_max: investor.checkSizeMax,
         preferred_geographies: investor.preferredGeographies,
-        investment_thesis: investor.investmentThesis
+        investment_thesis: investor.investmentThesis,
+        // New context fields
+        role: investor.role,
+        source_of_wealth: investor.sourceOfWealth,
+        preferred_assets: investor.preferredAssets,
+        values_filter: investor.valuesFilter,
+        time_horizon: investor.timeHorizon,
+        // Psychological profile
+        psychological_profile_raw: investor.psychologicalProfileRaw,
+        psychological_profile_weighted: investor.psychologicalProfileWeighted,
+        // Strategy profile
+        strategy_profile: investor.strategyProfile
       });
 
     if (error) {

@@ -1,4 +1,3 @@
-
 export interface Investor {
   id: string;
   name: string;
@@ -9,6 +8,32 @@ export interface Investor {
   checkSizeMax: number;
   preferredGeographies: string[];
   investmentThesis: string;
+  role?: string;
+  sourceOfWealth?: string;
+  preferredAssets?: string[];
+  valuesFilter?: string[];
+  timeHorizon?: string;
+  psychologicalProfileRaw?: {
+    Cautious: number;
+    Methodical: number;
+    Individualist: number;
+    Spontaneous: number;
+  };
+  psychologicalProfileWeighted?: {
+    Cautious: number;
+    Methodical: number;
+    Individualist: number;
+    Spontaneous: number;
+  };
+  strategyProfile?: {
+    checkSizeBehavior: string;
+    dueDiligence: string;
+    timeHorizon: string;
+    exitStrategy: string;
+    sectors: string[];
+    esg: string[];
+    involvementLevel: string;
+  };
 }
 
 export interface NetworkInvestor {
@@ -24,6 +49,32 @@ export interface NetworkInvestor {
   checkSizeMax?: number;
   preferredGeographies?: string[];
   investmentThesis?: string;
+  role?: string;
+  sourceOfWealth?: string;
+  preferredAssets?: string[];
+  valuesFilter?: string[];
+  timeHorizon?: string;
+  psychologicalProfileRaw?: {
+    Cautious: number;
+    Methodical: number;
+    Individualist: number;
+    Spontaneous: number;
+  };
+  psychologicalProfileWeighted?: {
+    Cautious: number;
+    Methodical: number;
+    Individualist: number;
+    Spontaneous: number;
+  };
+  strategyProfile?: {
+    checkSizeBehavior: string;
+    dueDiligence: string;
+    timeHorizon: string;
+    exitStrategy: string;
+    sectors: string[];
+    esg: string[];
+    involvementLevel: string;
+  };
 }
 
 export interface Opportunity {
@@ -51,7 +102,6 @@ export interface Match {
   feedback?: 'positive' | 'negative' | null;
 }
 
-// NetworkSharedDeal type for shared opportunities
 export interface NetworkSharedDeal {
   id: string;
   opportunityId: string;
@@ -59,7 +109,7 @@ export interface NetworkSharedDeal {
   sector: string;
   stage: string;
   fundingAmount: number;
-  location: string; // Added location field
+  location: string;
   sharedBy: string;
   avatar: string | null;
   comment: string | null;
