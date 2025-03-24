@@ -1,7 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
-import { SampleDealsButton } from "./SampleDealsButton";
 
 export const NetworkHighlightsEmpty = () => {
   return (
@@ -22,7 +21,9 @@ export const NetworkHighlightsEmpty = () => {
           <p className="text-muted-foreground text-sm mb-4 max-w-md">
             When investors in your network share deals with you, they'll appear here with their comments.
           </p>
-          <SampleDealsButton />
+          <p className="text-sm text-muted-foreground">
+            Try connecting with more investors or asking your connections to share deals with you.
+          </p>
         </div>
       </CardContent>
     </Card>
