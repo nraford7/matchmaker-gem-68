@@ -12,3 +12,4 @@ export * from "./NetworkTabs";
 export * from "./SampleDealsButton";
 export * from "./SharedDealItem";
 export * from "./SuggestedConnections";
+export * from "./GenerateInvestorsButton";
