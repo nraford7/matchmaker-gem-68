@@ -3,17 +3,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { NetworkSharedDeal } from "@/types";
 import { enhanceRecommendation } from "./utils/enhancementUtils";
 
-// Fetch network shared deals
 export const fetchNetworkSharedDeals = async (userId: string): Promise<NetworkSharedDeal[]> => {
   try {
     // Fetch shared deals made to the current user
-    let { data: sharedDealsData, error: sharedDealsError } = await supabase
+    const { data: sharedDealsData, error: sharedDealsError } = await supabase
       .from("network_shared_deals")
       .select(`
         id,
         comment,
         created_at,
-        opportunity_id,
+        deal_id,
         shared_by_user_id
       `)
       .eq("shared_with_user_id", userId)
@@ -24,30 +23,22 @@ export const fetchNetworkSharedDeals = async (userId: string): Promise<NetworkSh
       return [];
     }
 
-    console.log("Raw network shared deals data:", sharedDealsData);
-
     if (!sharedDealsData || sharedDealsData.length === 0) {
-      console.log("No network shared deals found");
       return [];
     }
 
     // Process each shared deal to get full details
-    const enhancedDeals = await Promise.all(
-      sharedDealsData.map(async deal => {
-        try {
-          return await enhanceRecommendation(
-            deal,
-            "opportunity_id",
-            "shared_by_user_id",
-            "comment",
-            "created_at"
-          );
-        } catch (error) {
-          console.error("Error enhancing deal:", error, deal);
-          return null;
-        }
-      })
+    const enhancedDealsPromises = sharedDealsData.map(deal => 
+      enhanceRecommendation(
+        deal,
+        "deal_id",
+        "shared_by_user_id",
+        "comment",
+        "created_at"
+      )
     );
+    
+    const enhancedDeals = await Promise.all(enhancedDealsPromises);
 
     // Filter out any null values from failed enhancements
     return enhancedDeals.filter(

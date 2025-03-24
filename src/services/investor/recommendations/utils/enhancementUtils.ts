@@ -2,7 +2,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { NetworkSharedDeal } from "@/types";
 
-// Enhance recommendation with opportunity and investor details
 export const enhanceRecommendation = async (
   rawRecommendation: any,
   dealIdKey: string,
@@ -11,29 +10,34 @@ export const enhanceRecommendation = async (
   timestampKey: string
 ): Promise<NetworkSharedDeal | null> => {
   try {
-    // Get deal details
-    const { data: dealData, error: dealError } = await supabase
-      .from("deals")
-      .select("id, name, description, sector_tags, stage, check_size_required, geographies")
-      .eq("id", rawRecommendation[dealIdKey])
-      .single();
+    // Parallel fetching of deal and investor details
+    const [dealResponse, investorResponse] = await Promise.all([
+      supabase
+        .from("deals")
+        .select("id, name, description, sector_tags, stage, check_size_required, geographies")
+        .eq("id", rawRecommendation[dealIdKey])
+        .single(),
+      
+      supabase
+        .from("investor_profiles")
+        .select("id, name, company, avatar_url")
+        .eq("id", rawRecommendation[investorIdKey])
+        .single()
+    ]);
 
-    if (dealError) {
-      console.error("Error fetching deal details:", dealError);
+    // Check for errors
+    if (dealResponse.error) {
+      console.error("Error fetching deal details:", dealResponse.error);
       return null;
     }
 
-    // Get investor details
-    const { data: investorData, error: investorError } = await supabase
-      .from("investor_profiles")
-      .select("id, name, company, avatar_url")
-      .eq("id", rawRecommendation[investorIdKey])
-      .single();
-
-    if (investorError) {
-      console.error("Error fetching investor details:", investorError);
+    if (investorResponse.error) {
+      console.error("Error fetching investor details:", investorResponse.error);
       return null;
     }
+
+    const dealData = dealResponse.data;
+    const investorData = investorResponse.data;
 
     return {
       id: rawRecommendation.id,
@@ -48,6 +52,7 @@ export const enhanceRecommendation = async (
         checkSizeRequired: dealData.check_size_required,
         geographies: dealData.geographies
       },
+      deal_id: dealData.id, // Adding deal_id for compatibility
       investor: {
         id: investorData.id,
         name: investorData.name,
@@ -57,7 +62,15 @@ export const enhanceRecommendation = async (
         deal_count: 0 // Default value
       },
       comment: rawRecommendation[commentaryKey],
-      sharedAt: rawRecommendation[timestampKey]
+      sharedAt: rawRecommendation[timestampKey],
+      // Adding backward compatibility fields
+      sharedBy: investorData.name,
+      avatar: investorData.avatar_url,
+      sector: dealData.sector_tags?.[0] || '',
+      stage: dealData.stage,
+      fundingAmount: dealData.check_size_required,
+      opportunityId: dealData.id,
+      opportunityName: dealData.name
     };
   } catch (error) {
     console.error("Error enhancing recommendation:", error);

@@ -41,17 +41,10 @@ export const NetworkHighlights = () => {
     loadSharedDeals();
   }, []);
   
-  const viewAllDeals = () => {
-    navigate("/network?tab=shared");
-  };
+  const viewAllDeals = () => navigate("/network?tab=shared");
   
-  if (loading) {
-    return <NetworkHighlightsLoading />;
-  }
-  
-  if (sharedDeals.length === 0) {
-    return <NetworkHighlightsEmpty />;
-  }
+  if (loading) return <NetworkHighlightsLoading />;
+  if (sharedDeals.length === 0) return <NetworkHighlightsEmpty />;
 
   // Calculate pagination
   const totalPages = Math.ceil(sharedDeals.length / DEALS_PER_PAGE);
@@ -97,7 +90,7 @@ export const NetworkHighlights = () => {
                 />
               </PaginationItem>
               
-              {[...Array(totalPages)].map((_, i) => (
+              {Array.from({ length: totalPages }).map((_, i) => (
                 <PaginationItem key={i}>
                   <PaginationLink 
                     onClick={() => setCurrentPage(i + 1)}
