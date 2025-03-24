@@ -26,6 +26,8 @@ export type Deal = {
   matchExplanation?: string;
   // Added IRR field
   IRR?: number;
+  // Added recommendation field for investor fit info
+  recommendation?: string;
   // Additional fields for backward compatibility
   sector?: string;
   fundingAmount?: number;
