@@ -35,7 +35,7 @@ export const DealCard = ({
   };
   
   return (
-    <Card className="h-full hover:shadow-md transition-shadow">
+    <Card className="h-full hover:shadow-md transition-shadow flex flex-col">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
           <Link to={`/deals/${deal.id}`}>
@@ -62,8 +62,8 @@ export const DealCard = ({
           )}
         </div>
       </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground line-clamp-3">
+      <CardContent className="flex-1 flex flex-col">
+        <p className="text-sm text-muted-foreground line-clamp-3 mb-auto">
           {deal.description || "No description available"}
         </p>
         
