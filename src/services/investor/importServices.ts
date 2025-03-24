@@ -3,7 +3,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Investor } from "@/types";
 import { getCurrentUserId } from "./baseService";
 import { toast } from "sonner";
-import { createRandomInvestorProfile } from "./randomProfileServices";
 
 // Process a CSV file and create investor profiles
 export const processCSVFile = async (file: File): Promise<boolean> => {
@@ -122,6 +121,14 @@ const processRows = async (rows: string[], headers: string[]): Promise<number> =
 // Create or update an investor profile
 const createOrUpdateProfile = async (data: Record<string, any>): Promise<boolean> => {
   try {
+    // Get the current user ID - important for RLS policies
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      console.error("No user ID found. User must be logged in to create investor profiles.");
+      toast.error("You must be logged in to import investor profiles");
+      return false;
+    }
+    
     // Generate a UUID for the new profile
     const uuid = crypto.randomUUID();
     
@@ -139,7 +146,8 @@ const createOrUpdateProfile = async (data: Record<string, any>): Promise<boolean
         check_size_min: data.checkSizeMin || null,
         check_size_max: data.checkSizeMax || null,
         investment_thesis: data.investmentThesis || null,
-        deal_count: Math.floor(Math.random() * 10) + 1 // Random deal count between 1-10
+        deal_count: Math.floor(Math.random() * 10) + 1, // Random deal count between 1-10
+        user_id: userId // Add the user ID to associate with the current user
       });
     
     if (error) {
