@@ -18,7 +18,9 @@ const SAMPLE_TOP_MATCHES: Opportunity[] = [
     location: "San Francisco, US",
     createdAt: new Date().toISOString(),
     matchScore: 0.92,
-    matchExplanation: "Strong match on sector and stage preferences"
+    matchExplanation: "Strong match on sector and stage preferences. TechFlow's focus on enterprise automation aligns with your investment thesis in B2B SaaS. Their validation metrics show promising growth potential.",
+    sectorTags: ["SaaS", "Enterprise Software", "AI"],
+    IRR: 25
   },
   {
     id: "sample-2",
@@ -30,7 +32,9 @@ const SAMPLE_TOP_MATCHES: Opportunity[] = [
     location: "Boston, US",
     createdAt: new Date().toISOString(),
     matchScore: 0.89,
-    matchExplanation: "Aligns with preferred investment sectors and regions"
+    matchExplanation: "Aligns with your health tech investment focus and geographic preferences. The team has a strong background in medical devices and AI, with early traction in clinical trials.",
+    sectorTags: ["Health Tech", "Wearables", "AI"],
+    IRR: 32
   },
   {
     id: "sample-3",
@@ -42,7 +46,9 @@ const SAMPLE_TOP_MATCHES: Opportunity[] = [
     location: "New York, US",
     createdAt: new Date().toISOString(),
     matchScore: 0.87,
-    matchExplanation: "Matches your target funding amount and security focus"
+    matchExplanation: "Matches your target funding amount and cybersecurity focus. Their proprietary threat detection system has shown 95% accuracy in early deployments with Fortune 500 clients.",
+    sectorTags: ["Cybersecurity", "Blockchain", "Enterprise Software"],
+    IRR: 21
   }
 ];
 
