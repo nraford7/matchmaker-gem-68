@@ -90,7 +90,12 @@ const DealDetailsHeader = ({ deal, onGoBack }: DealDetailsHeaderProps) => {
               <>
                 <hr className="my-3 border-border" />
                 <div className="text-sm">
-                  <h3 className="font-semibold mb-2">Investor Fit</h3>
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="font-semibold">Why we recommend this to you</h3>
+                    {deal.matchScore && (
+                      <span className="text-primary font-medium">{Math.round(deal.matchScore * 100)}% match</span>
+                    )}
+                  </div>
                   <p className="text-muted-foreground">{deal.recommendation}</p>
                 </div>
               </>
