@@ -76,7 +76,7 @@ export const DealCard = ({
           {deal.checkSizeRequired && (
             <div className="flex items-center text-sm">
               <DollarSign className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
-              <span className="text-muted-foreground mr-2">Check size:</span>
+              <span className="text-muted-foreground mr-2">Investment Ask:</span>
               <span className="font-medium ml-auto">${formatCurrency(deal.checkSizeRequired)}</span>
             </div>
           )}
@@ -84,7 +84,7 @@ export const DealCard = ({
           {deal.location && (
             <div className="flex items-center text-sm">
               <MapPin className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
-              <span className="text-muted-foreground mr-2">Location:</span>
+              <span className="text-muted-foreground mr-2">Estimated IRR:</span>
               <span className="font-medium ml-auto">{deal.location}</span>
             </div>
           )}
@@ -92,7 +92,7 @@ export const DealCard = ({
           {deal.timeHorizon && (
             <div className="flex items-center text-sm">
               <Clock className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
-              <span className="text-muted-foreground mr-2">Time horizon:</span>
+              <span className="text-muted-foreground mr-2">Estimated Time for Returns:</span>
               <span className="font-medium ml-auto">{deal.timeHorizon}</span>
             </div>
           )}
