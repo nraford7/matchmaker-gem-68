@@ -43,59 +43,64 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
         </CardTitle>
         <CardDescription>Investment opportunities that match your preferences</CardDescription>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="p-6">
         {topMatches.length === 0 ? (
-          <div className="text-center py-6 px-6">
+          <div className="text-center">
             <p className="text-muted-foreground">No matches found</p>
           </div>
         ) : (
-          <div className="divide-y divide-border">
-            {topMatches.slice(0, 5).map((deal) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {topMatches.slice(0, 6).map((deal) => (
               <Link 
                 key={deal.id} 
                 to={`/deals/${deal.id}`}
                 state={{ from: location.pathname }}
                 className="block group"
               >
-                <div className="p-4 hover:bg-accent/50 transition-colors">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-medium group-hover:text-primary transition-colors">
-                      {deal.name}
-                    </h3>
-                    <div className="flex items-center gap-1.5">
-                      {deal.matchScore && (
-                        <Badge variant="default" className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary">
-                          {Math.round(deal.matchScore * 100)}% match
-                        </Badge>
-                      )}
-                    </div>
+                <div className="border rounded-md p-4 h-full hover:border-primary hover:shadow-md transition-all bg-card">
+                  {/* Deal name */}
+                  <h3 className="font-medium mb-2 text-sm line-clamp-1">
+                    {deal.name}
+                  </h3>
+                  
+                  {/* Tags section */}
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {deal.sectorTags && deal.sectorTags.slice(0, 2).map((tag, idx) => (
+                      <Badge key={idx} variant="outline" className="text-xs py-0 px-1.5">
+                        {tag}
+                      </Badge>
+                    ))}
+                    {deal.stage && (
+                      <Badge variant="secondary" className="text-xs py-0 px-1.5">
+                        {deal.stage}
+                      </Badge>
+                    )}
                   </div>
                   
+                  {/* Match score */}
+                  {deal.matchScore && (
+                    <Badge variant="default" className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary mb-2">
+                      {Math.round(deal.matchScore * 100)}% match
+                    </Badge>
+                  )}
+                  
                   {/* Deal description with line clamp */}
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                  <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
                     {deal.description || "No description available"}
                   </p>
                   
-                  <div className="grid grid-cols-2 gap-2 mb-2">
+                  <div className="grid grid-cols-2 gap-1 text-xs">
                     {/* Location */}
                     {deal.location && (
-                      <div className="flex items-center text-xs text-muted-foreground">
+                      <div className="flex items-center text-muted-foreground">
                         <MapPin className="h-3 w-3 mr-1 flex-shrink-0" />
                         <span className="truncate">{deal.location}</span>
                       </div>
                     )}
                     
-                    {/* Stage */}
-                    {deal.stage && (
-                      <div className="flex items-center text-xs text-muted-foreground">
-                        <Info className="h-3 w-3 mr-1 flex-shrink-0" />
-                        <span>{deal.stage}</span>
-                      </div>
-                    )}
-                    
                     {/* Funding amount */}
                     {(deal.checkSizeRequired || deal.fundingAmount) && (
-                      <div className="flex items-center text-xs text-muted-foreground">
+                      <div className="flex items-center text-muted-foreground">
                         <DollarSign className="h-3 w-3 mr-1 flex-shrink-0" />
                         <span>${formatCurrency(deal.checkSizeRequired || deal.fundingAmount || 0)}</span>
                       </div>
@@ -103,26 +108,17 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                     
                     {/* IRR if available */}
                     {deal.IRR !== undefined && (
-                      <div className="flex items-center text-xs text-muted-foreground">
+                      <div className="flex items-center text-muted-foreground">
                         <TrendingUp className="h-3 w-3 mr-1 flex-shrink-0" />
                         <span>{deal.IRR}% IRR</span>
                       </div>
                     )}
                   </div>
                   
-                  {/* Tags section */}
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {deal.sectorTags && deal.sectorTags.map((tag, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs py-0 px-1.5">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  
-                  {/* Match explanation */}
+                  {/* Match explanation - simplified for card view */}
                   {deal.matchExplanation && (
-                    <div className="mt-3 bg-muted/30 p-2 rounded-sm text-xs border-l-2 border-primary">
-                      <p className="text-muted-foreground">{deal.matchExplanation}</p>
+                    <div className="mt-2 text-xs text-muted-foreground line-clamp-1">
+                      <span className="font-semibold">Why it matches:</span> {deal.matchExplanation}
                     </div>
                   )}
                 </div>
