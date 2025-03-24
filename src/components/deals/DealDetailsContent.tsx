@@ -15,11 +15,11 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2 space-y-6">
-        <DealOverview deal={deal} />
-        
         {deal.recommendation && (
           <DealRecommendation recommendation={deal.recommendation} />
         )}
+        
+        <DealOverview deal={deal} />
         
         {deal.team && deal.team.length > 0 && (
           <DealTeam team={deal.team} />
