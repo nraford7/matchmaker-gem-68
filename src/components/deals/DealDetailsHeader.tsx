@@ -85,6 +85,16 @@ const DealDetailsHeader = ({ deal, onGoBack }: DealDetailsHeaderProps) => {
                 <span className="font-medium ml-auto">{deal.timeHorizon}</span>
               </div>
             )}
+            
+            {deal.recommendation && (
+              <>
+                <hr className="my-3 border-border" />
+                <div className="text-sm">
+                  <h3 className="font-semibold mb-2">Investor Fit</h3>
+                  <p className="text-muted-foreground">{deal.recommendation}</p>
+                </div>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
