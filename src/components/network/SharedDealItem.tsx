@@ -1,4 +1,3 @@
-
 import { NetworkSharedDeal } from "@/types";
 import { Handshake, MessageSquare } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
@@ -14,11 +13,9 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   const navigate = useNavigate();
   
   const handleViewDetails = () => {
-    // Use deal_id with fallback to opportunityId for backwards compatibility
     navigate(`/deals/${deal.deal_id || deal.deal?.id || deal.opportunityId}`);
   };
   
-  // Get the initials for avatar fallback
   const getInitials = (name: string = ''): string => {
     return name
       .split(' ')
@@ -35,10 +32,8 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   const avatarUrl = deal.investor?.avatar_url || deal.avatar;
   const fundingAmount = deal.deal?.check_size_required || deal.fundingAmount || 0;
   
-  // Generate a mock match score if real one isn't available (between 65-95%)
   const matchScore = deal.matchScore || Math.floor(Math.random() * 31) + 65;
   
-  // Generate a recommendation based on available data
   const getRecommendation = () => {
     const recommendations = [
       "Strong fit with your investment preferences.",
@@ -52,7 +47,6 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   
   return (
     <div className="border rounded-md p-4 hover:shadow-md transition-shadow h-full flex flex-col gap-3">
-      {/* Deal Header with improved spacing */}
       <div className="flex justify-between items-start">
         <h4 
           className="font-semibold text-base line-clamp-1 cursor-pointer hover:text-primary hover:underline"
@@ -65,7 +59,6 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         </span>
       </div>
       
-      {/* Shared by section with better alignment */}
       <div className="flex items-center text-sm gap-2">
         <Avatar className="h-6 w-6">
           {avatarUrl && <AvatarImage src={avatarUrl} alt={investorName} />}
@@ -76,14 +69,13 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         </span>
       </div>
       
-      {/* Description with better spacing and styling - now with more height */}
       {dealDescription && (
-        <p className="text-sm text-muted-foreground line-clamp-3 bg-muted/50 p-3 rounded">
+        <p className="text-sm text-muted-foreground line-clamp-3 bg-muted/50 p-3 rounded relative">
           {dealDescription}
+          <span className="absolute bottom-0 right-0 bg-muted/50 px-1 hidden peer-hover:inline">...</span>
         </p>
       )}
       
-      {/* Comment section with improved styling */}
       {deal.comment && (
         <div className="bg-muted/80 p-3 rounded-md flex gap-2">
           <MessageSquare className="h-4 w-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
@@ -91,7 +83,6 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         </div>
       )}
       
-      {/* Match score with improved visualization */}
       <div className="mt-auto pt-2 border-t">
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-xs font-medium">Match Score</span>
