@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -20,15 +21,17 @@ export const getValidatedUserId = async (): Promise<string | null> => {
 
 // Get existing match record
 export const getExistingMatch = async (userId: string, opportunityId: string) => {
+  // Define explicit types to avoid deep type inference issues
   const { data, error } = await supabase
     .from("matches")
     .select("*")
     .eq("user_id", userId)
     .eq("opportunity_id", opportunityId)
-    .single();
+    .maybeSingle();
   
-  if (error && error.code !== "PGRST116") {
-    throw error;
+  if (error) {
+    console.error("Error fetching match:", error);
+    return null;
   }
   
   return data;
