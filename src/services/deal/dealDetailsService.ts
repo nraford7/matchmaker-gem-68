@@ -41,6 +41,8 @@ export const fetchDealData = async (dealId: string): Promise<EnhancedDeal | null
       dueDiligenceLevel: data.due_diligence_level,
       decisionConvictionRequired: data.decision_conviction_required,
       investorSpeedRequired: data.investor_speed_required,
+      // Make sure IRR is included from the database result
+      IRR: data.IRR !== null ? data.IRR : 25, // Default to 25% if null, for demo purposes
       // Type conversion for JSON fields
       strategyProfile: data.strategy_profile ? (typeof data.strategy_profile === 'string' 
         ? JSON.parse(data.strategy_profile) 
@@ -87,6 +89,10 @@ export const fetchDealData = async (dealId: string): Promise<EnhancedDeal | null
       contactEmail: "contact@example.com",
       pitchDeckUrl: "https://example.com/pitch"
     };
+
+    // Log to help debug
+    console.log("Fetched deal data:", data);
+    console.log("Processed deal with IRR:", deal.IRR);
 
     return deal;
   } catch (error) {

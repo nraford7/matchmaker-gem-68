@@ -31,6 +31,7 @@ const DealDetails = () => {
     const loadDeal = async () => {
       setIsLoading(true);
       const data = await fetchDealData(id);
+      console.log("Deal data in component:", data); // Add this for debugging
       setDealData(data);
       setIsLoading(false);
     };
@@ -105,7 +106,8 @@ const DealDetails = () => {
               </div>
             )}
             
-            {dealData.IRR !== undefined && dealData.IRR !== null && (
+            {/* Make sure we're checking for the IRR field correctly */}
+            {typeof dealData.IRR !== 'undefined' && dealData.IRR !== null && (
               <div className="flex items-center text-sm">
                 <TrendingUp className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
                 <span className="text-muted-foreground mr-2">Estimated IRR:</span>
