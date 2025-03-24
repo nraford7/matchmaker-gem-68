@@ -68,11 +68,13 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
   };
 
   return (
-    <Card key={opportunity.id} className="overflow-hidden">
+    <Card className="h-full flex flex-col overflow-hidden">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
-          <Link to={`/deals/${opportunity.id}`} className="hover:underline">
-            <CardTitle className="text-lg">{opportunity.name}</CardTitle>
+          <Link to={`/deals/${opportunity.id}`} className="hover:underline flex-1">
+            <CardTitle className="text-lg line-clamp-2">
+              {opportunity.name}
+            </CardTitle>
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline">{opportunity.stage}</Badge>
@@ -139,9 +141,11 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
           <span>{opportunity.location || (opportunity.geographies ? opportunity.geographies[0] : "Unknown")}</span>
         </div>
       </CardHeader>
-      <CardContent className="pb-2">
+      <CardContent className="flex-grow pb-2">
         <Link to={`/deals/${opportunity.id}`} className="block hover:text-primary transition-colors">
-          <p className="text-sm line-clamp-3 mb-3">{opportunity.description}</p>
+          <p className="text-sm line-clamp-3 mb-3 min-h-[4.5rem]"> {/* Added minimum height */}
+            {opportunity.description}
+          </p>
         </Link>
         
         <div className="flex flex-wrap gap-1 mb-3">
@@ -164,7 +168,7 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex justify-between pt-2">
+      <CardFooter className="flex justify-between pt-2 mt-auto"> {/* Added mt-auto to push to bottom */}
         <Button variant="ghost" size="sm" asChild>
           <Link to={`/deals/${opportunity.id}`}>View Details</Link>
         </Button>

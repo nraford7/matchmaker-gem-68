@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardDescription, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -25,17 +24,31 @@ export const SavedDeals = ({ savedDeals, loading }: SavedDealsProps) => {
               Opportunities you've saved for later
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="min-h-[400px]">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-6 text-center">
+              <div className="flex flex-col items-center justify-center py-6 text-center h-full">
                 <p className="text-lg text-muted-foreground">
                   Loading saved deals...
                 </p>
               </div>
             ) : savedDeals.length > 0 ? (
-              <OpportunityList opportunities={savedDeals} />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-full">
+                {savedDeals.map((deal) => (
+                  <div 
+                    key={deal.id} 
+                    className="flex"
+                  >
+                    <div className="flex-1 flex flex-col">
+                      <OpportunityList 
+                        opportunities={[deal]} 
+                        showMatchScore={true}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="flex flex-col items-center justify-center py-12 text-center h-full">
                 <p className="text-lg text-muted-foreground mb-4">
                   You haven't saved any opportunities yet
                 </p>
