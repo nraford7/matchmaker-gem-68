@@ -20,6 +20,9 @@ export type NetworkSharedDeal = {
   sharedAt: string;
   comment?: string;
   investor: NetworkInvestor;
+  // Match information
+  matchScore?: number;
+  recommendation?: string;
   // For backward compatibility
   sharedBy?: string;
   avatar?: string;
