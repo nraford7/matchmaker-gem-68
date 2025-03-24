@@ -23,6 +23,7 @@ export const fetchAllDeals = async (): Promise<Deal[]> => {
       checkSizeRequired: item.check_size_required,
       sectorTags: item.sector_tags,
       geographies: item.geographies,
+      location: item.location,
       stage: item.stage,
       timeHorizon: item.time_horizon,
       esgTags: item.esg_tags,

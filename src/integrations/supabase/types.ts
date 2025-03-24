@@ -94,6 +94,7 @@ export type Database = {
           id: string
           investor_speed_required: number | null
           involvement_model: string | null
+          location: string | null
           name: string
           psychological_fit: Json | null
           sector_tags: string[] | null
@@ -115,6 +116,7 @@ export type Database = {
           id?: string
           investor_speed_required?: number | null
           involvement_model?: string | null
+          location?: string | null
           name: string
           psychological_fit?: Json | null
           sector_tags?: string[] | null
@@ -136,6 +138,7 @@ export type Database = {
           id?: string
           investor_speed_required?: number | null
           involvement_model?: string | null
+          location?: string | null
           name?: string
           psychological_fit?: Json | null
           sector_tags?: string[] | null

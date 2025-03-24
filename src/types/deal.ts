@@ -9,7 +9,7 @@ export type Deal = {
   sectorTags?: string[];
   sector_tags?: string[]; // For consistency with DB
   geographies?: string[]; // Kept for backward compatibility
-  location?: string; // New single location field
+  location?: string; // Single location field
   stage?: string;
   timeHorizon?: string;
   esgTags?: string[];

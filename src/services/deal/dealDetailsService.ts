@@ -32,6 +32,7 @@ export const fetchDealData = async (dealId: string): Promise<EnhancedDeal | null
       checkSizeRequired: data.check_size_required,
       sectorTags: data.sector_tags,
       geographies: data.geographies,
+      location: data.location,
       stage: data.stage,
       timeHorizon: data.time_horizon,
       esgTags: data.esg_tags,

@@ -36,7 +36,7 @@ const DealHeader = ({ deal }: DealHeaderProps) => {
         
         <div>
           <p className="text-sm text-muted-foreground">Location</p>
-          <p className="font-medium">{deal.geographies?.join(', ') || "Global"}</p>
+          <p className="font-medium">{deal.location || "Global"}</p>
         </div>
         
         <div>

@@ -107,7 +107,7 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
             )}
             <div className="flex items-center">
               <span className="w-20 text-sm text-muted-foreground">Location:</span>
-              <span className="text-sm">{deal.geographies?.join(', ') || "Not specified"}</span>
+              <span className="text-sm">{deal.location || deal.geographies?.join(', ') || "Not specified"}</span>
             </div>
             {deal.pitchDeckUrl && (
               <div className="mt-4">
