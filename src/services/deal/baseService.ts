@@ -2,21 +2,34 @@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-// Get current user ID
+// Helper to get current user session
 export const getCurrentUserId = async (): Promise<string | null> => {
   try {
-    const { data: { session } } = await supabase.auth.getSession();
-    return session?.user.id || null;
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error getting user session:", sessionError);
+      throw sessionError;
+    }
+    
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      console.log("No user found in session");
+      return null;
+    }
+    
+    console.log("Current user ID:", userId);
+    return userId;
   } catch (error) {
     console.error("Error getting current user:", error);
     return null;
   }
 };
 
-// Validate if user is authenticated
+// Helper to validate user authentication
 export const validateUserAuth = (userId: string | null): boolean => {
   if (!userId) {
-    toast.error("You must be logged in to perform this action");
+    console.log("User authentication validation failed");
+    toast.error("Please login to continue");
     return false;
   }
   return true;

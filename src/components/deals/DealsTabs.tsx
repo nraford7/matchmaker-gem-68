@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Filter, Briefcase, Save, Archive, ArrowDown, ArrowUp } from "lucide-react";
@@ -29,6 +29,13 @@ type SortOption = {
 
 export const DealsTabs = ({ activeDeals, savedDeals, pastDeals }: DealsTabsProps) => {
   const [sortOption, setSortOption] = useState<SortOption | null>(null);
+  
+  // Add logging to track the incoming data
+  useEffect(() => {
+    console.log('DealsTabs - Active Deals:', activeDeals);
+    console.log('DealsTabs - Saved Deals:', savedDeals);
+    console.log('DealsTabs - Past Deals:', pastDeals);
+  }, [activeDeals, savedDeals, pastDeals]);
   
   // Function to sort deals based on the current sort option
   const sortDeals = (deals: Deal[]) => {

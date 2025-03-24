@@ -9,8 +9,11 @@ export const fetchPastDeals = async (): Promise<Deal[]> => {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
+      console.log("No authenticated user found");
       throw new Error("User not authenticated");
     }
+
+    console.log("Fetching past deals for user:", userId);
 
     const { data, error } = await supabase
       .from("past_deals")
@@ -33,10 +36,16 @@ export const fetchPastDeals = async (): Promise<Deal[]> => {
       .eq("user_id", userId);
 
     if (error) {
+      console.error("Supabase error fetching past deals:", error);
       throw error;
     }
 
-    return data.map((item) => ({
+    console.log("Raw past deals data from Supabase:", data);
+
+    // Filter out any null entries
+    const validDeals = data.filter(item => item.deals);
+    
+    const mappedDeals = validDeals.map((item) => ({
       id: item.deals.id,
       name: item.deals.name,
       description: item.deals.description,
@@ -48,6 +57,9 @@ export const fetchPastDeals = async (): Promise<Deal[]> => {
       createdAt: item.deals.created_at,
       IRR: item.deals.IRR
     }));
+
+    console.log("Processed past deals:", mappedDeals);
+    return mappedDeals;
   } catch (error) {
     console.error("Error fetching past deals:", error);
     toast.error("Failed to load past deals");

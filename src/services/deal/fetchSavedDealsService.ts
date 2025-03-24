@@ -9,8 +9,11 @@ export const fetchSavedDeals = async (): Promise<Deal[]> => {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {
+      console.log("No authenticated user found");
       throw new Error("User not authenticated");
     }
+
+    console.log("Fetching saved deals for user:", userId);
 
     const { data, error } = await supabase
       .from("saved_deals")
@@ -36,10 +39,16 @@ export const fetchSavedDeals = async (): Promise<Deal[]> => {
       .eq("user_id", userId);
 
     if (error) {
+      console.error("Supabase error fetching saved deals:", error);
       throw error;
     }
 
-    return data.map((item) => ({
+    console.log("Raw saved deals data from Supabase:", data);
+
+    // Filter out any null entries
+    const validDeals = data.filter(item => item.deals);
+    
+    const mappedDeals = validDeals.map((item) => ({
       id: item.deals.id,
       name: item.deals.name,
       description: item.deals.description,
@@ -57,6 +66,9 @@ export const fetchSavedDeals = async (): Promise<Deal[]> => {
       matchScore: Math.random() * 0.3 + 0.6,
       matchExplanation: "Based on your sector and stage preferences"
     }));
+
+    console.log("Processed saved deals:", mappedDeals);
+    return mappedDeals;
   } catch (error) {
     console.error("Error fetching saved deals:", error);
     toast.error("Failed to load saved deals");

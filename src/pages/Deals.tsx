@@ -66,12 +66,19 @@ const Deals = () => {
       
       setIsLoading(true);
       try {
+        console.log("Fetching deals data for user:", user.id);
+        
         const [active, saved, past, all] = await Promise.all([
           fetchActiveDeals(),
           fetchSavedDeals(),
           fetchPastDeals(),
           fetchDeals()
         ]);
+        
+        console.log("Fetched active deals:", active);
+        console.log("Fetched saved deals:", saved);
+        console.log("Fetched past deals:", past);
+        console.log("Fetched all deals:", all);
         
         setActiveDeals(active);
         setSavedDeals(saved);
