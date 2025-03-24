@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Opportunity } from "@/types";
+import { Deal } from "@/types";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { fetchDeals } from "@/services/opportunity";
 import { TopMatches, PerformanceMetricsSection } from "@/components/dashboard";
@@ -54,7 +54,7 @@ const SAMPLE_TOP_MATCHES: Opportunity[] = [
 ];
 
 const Dashboard = () => {
-  const [topMatches, setTopMatches] = useState<Opportunity[]>([]);
+  const [topMatches, setTopMatches] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
   
   const loadDeals = async () => {
@@ -71,7 +71,7 @@ const Dashboard = () => {
         throw error;
       }
       
-      // Map the database response to our Opportunity type
+      // Map the database response to our Deal type
       if (data && data.length > 0) {
         const mappedDeals = data.map(deal => ({
           id: deal.id,
@@ -81,13 +81,14 @@ const Dashboard = () => {
           sectorTags: deal.sector_tags || [],
           stage: deal.stage || "Series A",
           fundingAmount: deal.check_size_required || Math.floor(Math.random() * 5000000) + 500000,
+          checkSizeRequired: deal.check_size_required,
           location: deal.location || "San Francisco, US",
           geographies: deal.geographies || [],
           createdAt: deal.created_at,
           IRR: deal.IRR || Math.floor(Math.random() * 30) + 10,
           // Calculate a random match score between 70% and 95% 
           // In a real app, this would be calculated based on investor preferences
-          matchScore: deal.matchScore || (Math.random() * 0.25 + 0.70), 
+          matchScore: Math.random() * 0.25 + 0.70, 
           matchExplanation: deal.recommendation || "Matches your investment focus and target check size."
         }));
         
