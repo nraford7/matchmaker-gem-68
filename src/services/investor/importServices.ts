@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Investor } from "@/types";
 import { getCurrentUserId } from "./baseService";
@@ -138,15 +137,12 @@ const createOrUpdateProfile = async (data: Record<string, any>): Promise<boolean
       return false;
     }
     
-    // Important: Do NOT set id - this was causing the foreign key constraint error
-    // The id column in investor_profiles references auth.users - we should only create
-    // investor profiles where user_id = auth.uid, not id = auth.uid
-    
-    // Directly insert into the database with error handling
+    // Important: Map the input data to match the database schema
     const { error } = await supabase
       .from("investor_profiles")
       .insert({
-        // Remove the id field, as it has a foreign key constraint to auth.users
+        id: userId, // This is required and should be the same as user_id
+        user_id: userId,
         name: data.name,
         email: data.email,
         company: data.company || null,
@@ -169,8 +165,7 @@ const createOrUpdateProfile = async (data: Record<string, any>): Promise<boolean
         psychological_profile_weighted: data.psychologicalProfileWeighted || {},
         strategy_profile: data.strategyProfile || {},
         weighting_preferences: data.weightingPreferences || {},
-        deal_count: Math.floor(Math.random() * 10) + 1, // Random deal count between 1-10
-        user_id: userId // Add the user ID to associate with the current user
+        deal_count: Math.floor(Math.random() * 10) + 1 // Random deal count between 1-10
       });
     
     if (error) {
