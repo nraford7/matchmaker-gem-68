@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Deal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
-import { Bookmark, CheckCircle } from "lucide-react";
+import { Bookmark, CheckCircle, MapPin, Clock, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -49,45 +49,56 @@ export const DealCard = ({
             </Badge>
           )}
         </div>
-        <div className="flex gap-2 flex-wrap mt-1">
+        
+        {/* Stage badge and sector tags */}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {deal.stage && (
+            <Badge variant="default" className="text-xs font-semibold">
+              {deal.stage}
+            </Badge>
+          )}
           {deal.sectorTags && deal.sectorTags.map((sector, idx) => (
             <Badge key={idx} variant="secondary" className="text-xs">
               {sector}
             </Badge>
           ))}
-          {deal.stage && (
-            <Badge variant="outline" className="text-xs">
-              {deal.stage}
-            </Badge>
-          )}
         </div>
       </CardHeader>
+      
       <CardContent className="flex-1 flex flex-col">
+        {/* Description */}
         <p className="text-sm text-muted-foreground line-clamp-3 mb-auto">
           {deal.description || "No description available"}
         </p>
         
-        <div className="mt-4 text-sm space-y-1">
+        {/* Key details with icons */}
+        <div className="mt-4 space-y-2 pt-2 border-t border-border">
           {deal.checkSizeRequired && (
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Check size:</span>
-              <span className="font-medium">${formatCurrency(deal.checkSizeRequired)}</span>
+            <div className="flex items-center text-sm">
+              <DollarSign className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
+              <span className="text-muted-foreground mr-2">Check size:</span>
+              <span className="font-medium ml-auto">${formatCurrency(deal.checkSizeRequired)}</span>
             </div>
           )}
-          {deal.geographies && deal.geographies.length > 0 && (
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Location:</span>
-              <span className="font-medium">{deal.geographies.join(', ')}</span>
+          
+          {deal.location && (
+            <div className="flex items-center text-sm">
+              <MapPin className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
+              <span className="text-muted-foreground mr-2">Location:</span>
+              <span className="font-medium ml-auto">{deal.location}</span>
             </div>
           )}
+          
           {deal.timeHorizon && (
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Time horizon:</span>
-              <span className="font-medium">{deal.timeHorizon}</span>
+            <div className="flex items-center text-sm">
+              <Clock className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
+              <span className="text-muted-foreground mr-2">Time horizon:</span>
+              <span className="font-medium ml-auto">{deal.timeHorizon}</span>
             </div>
           )}
         </div>
       </CardContent>
+      
       {showActions && (onSave || onActivate) && (
         <CardFooter className="pt-0">
           <div className="w-full flex items-center justify-end gap-2">
@@ -96,8 +107,10 @@ export const DealCard = ({
                 variant="outline" 
                 size="sm" 
                 onClick={handleSave}
+                className="gap-1"
               >
                 <Bookmark className="h-4 w-4" />
+                <span className="sr-only md:not-sr-only md:inline">Save</span>
               </Button>
             )}
             
@@ -106,8 +119,10 @@ export const DealCard = ({
                 variant="outline" 
                 size="sm" 
                 onClick={handleActivate}
+                className="gap-1"
               >
                 <CheckCircle className="h-4 w-4" />
+                <span className="sr-only md:not-sr-only md:inline">Activate</span>
               </Button>
             )}
           </div>

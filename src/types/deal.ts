@@ -8,7 +8,8 @@ export type Deal = {
   check_size_required?: number; // For consistency with DB
   sectorTags?: string[];
   sector_tags?: string[]; // For consistency with DB
-  geographies?: string[];
+  geographies?: string[]; // Kept for backward compatibility
+  location?: string; // New single location field
   stage?: string;
   timeHorizon?: string;
   esgTags?: string[];
@@ -25,7 +26,6 @@ export type Deal = {
   matchExplanation?: string;
   // Additional fields for backward compatibility
   sector?: string;
-  location?: string;
   fundingAmount?: number;
   pitchDeck?: string;
 };

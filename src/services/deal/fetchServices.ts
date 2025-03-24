@@ -24,6 +24,7 @@ export const fetchDeals = async (): Promise<Deal[]> => {
       checkSizeRequired: item.check_size_required,
       sectorTags: item.sector_tags,
       geographies: item.geographies,
+      location: item.location, // Use the new location field
       stage: item.stage,
       timeHorizon: item.time_horizon,
       esgTags: item.esg_tags,
@@ -65,6 +66,7 @@ export const fetchActiveDeals = async (): Promise<Deal[]> => {
           check_size_required,
           sector_tags,
           geographies,
+          location,
           stage,
           time_horizon,
           esg_tags,
@@ -85,6 +87,7 @@ export const fetchActiveDeals = async (): Promise<Deal[]> => {
       checkSizeRequired: item.deals.check_size_required,
       sectorTags: item.deals.sector_tags,
       geographies: item.deals.geographies,
+      location: item.deals.location,
       stage: item.stage || item.deals.stage,
       timeHorizon: item.deals.time_horizon,
       esgTags: item.deals.esg_tags,
@@ -118,6 +121,7 @@ export const fetchSavedDeals = async (): Promise<Deal[]> => {
           check_size_required,
           sector_tags,
           geographies,
+          location,
           stage,
           time_horizon,
           esg_tags,
@@ -138,6 +142,7 @@ export const fetchSavedDeals = async (): Promise<Deal[]> => {
       checkSizeRequired: item.deals.check_size_required,
       sectorTags: item.deals.sector_tags,
       geographies: item.deals.geographies,
+      location: item.deals.location,
       stage: item.deals.stage,
       timeHorizon: item.deals.time_horizon,
       esgTags: item.deals.esg_tags,
@@ -174,6 +179,7 @@ export const fetchPastDeals = async (): Promise<Deal[]> => {
           description,
           sector_tags,
           geographies,
+          location,
           created_at
         )
       `)
@@ -189,6 +195,7 @@ export const fetchPastDeals = async (): Promise<Deal[]> => {
       description: item.deals.description,
       sectorTags: item.deals.sector_tags,
       geographies: item.deals.geographies,
+      location: item.deals.location,
       stage: "Closed",
       checkSizeRequired: Number(item.final_amount),
       createdAt: item.deals.created_at
