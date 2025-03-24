@@ -3,7 +3,6 @@ import { Opportunity } from "@/types";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { fetchDeals } from "@/services/opportunity";
 import { TopMatches, SavedDeals, PerformanceMetricsSection } from "@/components/dashboard";
-import { NetworkHighlights } from "@/components/network";
 
 // Sample top matches to display when no matches are found in the database
 const SAMPLE_TOP_MATCHES: Opportunity[] = [
@@ -96,10 +95,6 @@ const Dashboard = () => {
       <DashboardHeader />
       
       <TopMatches topMatches={topMatches} loading={loading} />
-      
-      <div className="mb-6">
-        <NetworkHighlights />
-      </div>
       
       <SavedDeals savedDeals={savedDeals} loading={loading} />
       
