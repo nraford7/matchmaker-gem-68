@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from "react-router-dom";
-import { ArrowRight, Users, TrendingUp, MapPin, DollarSign, Info } from "lucide-react";
+import { ArrowRight, TrendingUp, MapPin, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,8 +18,8 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   if (loading) {
     return (
       <Card>
-        <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 pb-4">
-          <CardTitle className="flex items-center gap-2">
+        <CardHeader className="bg-muted/50 pb-4">
+          <CardTitle className="flex items-center gap-2 text-xl">
             <TrendingUp className="w-5 h-5" />
             Top Matches
           </CardTitle>
@@ -35,9 +35,9 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   }
   
   return (
-    <Card className="overflow-hidden border-primary/20">
-      <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 pb-4">
-        <CardTitle className="flex items-center gap-2">
+    <Card className="overflow-hidden border-border">
+      <CardHeader className="bg-muted/50 pb-4">
+        <CardTitle className="flex items-center gap-2 text-xl">
           <TrendingUp className="w-5 h-5" />
           Top Matches
         </CardTitle>
@@ -45,7 +45,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
       </CardHeader>
       <CardContent className="p-6">
         {topMatches.length === 0 ? (
-          <div className="text-center">
+          <div className="text-center py-6">
             <p className="text-muted-foreground">No matches found</p>
           </div>
         ) : (
@@ -57,71 +57,78 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                 state={{ from: location.pathname }}
                 className="block group"
               >
-                <div className="border rounded-md p-4 h-full hover:border-primary hover:shadow-md transition-all bg-card">
-                  {/* Deal name */}
-                  <h3 className="font-medium mb-2 text-sm line-clamp-1">
-                    {deal.name}
-                  </h3>
-                  
-                  {/* Tags section */}
-                  <div className="flex flex-wrap gap-1 mb-2">
-                    {deal.sectorTags && deal.sectorTags.slice(0, 2).map((tag, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs py-0 px-1.5">
-                        {tag}
-                      </Badge>
-                    ))}
-                    {deal.stage && (
-                      <Badge variant="secondary" className="text-xs py-0 px-1.5">
-                        {deal.stage}
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  {/* Match score */}
-                  {deal.matchScore && (
-                    <Badge variant="default" className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary mb-2">
-                      {Math.round(deal.matchScore * 100)}% match
-                    </Badge>
-                  )}
-                  
-                  {/* Deal description with line clamp */}
-                  <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
-                    {deal.description || "No description available"}
-                  </p>
-                  
-                  <div className="grid grid-cols-2 gap-1 text-xs">
-                    {/* Location */}
-                    {deal.location && (
-                      <div className="flex items-center text-muted-foreground">
-                        <MapPin className="h-3 w-3 mr-1 flex-shrink-0" />
-                        <span className="truncate">{deal.location}</span>
-                      </div>
-                    )}
+                <Card className="hover:shadow-md transition-shadow hover:border-primary/20 h-full flex flex-col">
+                  <CardContent className="p-4 flex flex-col h-full">
+                    {/* Deal name */}
+                    <h3 className="font-semibold mb-2 line-clamp-1 hover:text-primary transition-colors text-base">
+                      {deal.name}
+                    </h3>
                     
-                    {/* Funding amount */}
-                    {(deal.checkSizeRequired || deal.fundingAmount) && (
-                      <div className="flex items-center text-muted-foreground">
-                        <DollarSign className="h-3 w-3 mr-1 flex-shrink-0" />
-                        <span>${formatCurrency(deal.checkSizeRequired || deal.fundingAmount || 0)}</span>
-                      </div>
-                    )}
-                    
-                    {/* IRR if available */}
-                    {deal.IRR !== undefined && (
-                      <div className="flex items-center text-muted-foreground">
-                        <TrendingUp className="h-3 w-3 mr-1 flex-shrink-0" />
-                        <span>{deal.IRR}% IRR</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Match explanation - simplified for card view */}
-                  {deal.matchExplanation && (
-                    <div className="mt-2 text-xs text-muted-foreground line-clamp-1">
-                      <span className="font-semibold">Why it matches:</span> {deal.matchExplanation}
+                    {/* Tags section */}
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {deal.sectorTags && deal.sectorTags.slice(0, 2).map((tag, idx) => (
+                        <Badge key={idx} variant="secondary" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
+                      {deal.stage && (
+                        <Badge variant="outline" className="text-xs">
+                          {deal.stage}
+                        </Badge>
+                      )}
                     </div>
-                  )}
-                </div>
+                    
+                    {/* Deal description with line clamp */}
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                      {deal.description || "No description available"}
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-1 text-sm mt-auto">
+                      {/* Location */}
+                      {deal.location && (
+                        <div className="flex items-center text-muted-foreground">
+                          <MapPin className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
+                          <span className="truncate">{deal.location}</span>
+                        </div>
+                      )}
+                      
+                      {/* Funding amount */}
+                      {(deal.checkSizeRequired || deal.fundingAmount) && (
+                        <div className="flex items-center text-muted-foreground">
+                          <DollarSign className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
+                          <span>${formatCurrency(deal.checkSizeRequired || deal.fundingAmount || 0)}</span>
+                        </div>
+                      )}
+                      
+                      {/* IRR if available */}
+                      {deal.IRR !== undefined && (
+                        <div className="flex items-center text-muted-foreground">
+                          <TrendingUp className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
+                          <span>{deal.IRR}% IRR</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Match score */}
+                    {deal.matchScore && (
+                      <div className="mt-3 pt-3 border-t border-border">
+                        <div className="flex justify-between items-center text-xs mb-1.5">
+                          <span className="text-muted-foreground">Match Score</span>
+                          <Badge variant="default" className="text-xs bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary">
+                            {Math.round(deal.matchScore * 100)}%
+                          </Badge>
+                        </div>
+                        
+                        {/* Match explanation - simplified for card view */}
+                        {deal.matchExplanation && (
+                          <p className="text-xs text-muted-foreground line-clamp-1">
+                            {deal.matchExplanation}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </Link>
             ))}
           </div>
