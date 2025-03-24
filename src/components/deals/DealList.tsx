@@ -8,9 +8,10 @@ import { formatCurrency } from "@/lib/utils";
 
 interface DealListProps {
   deals: Deal[];
+  showMatchScore?: boolean;
 }
 
-export const DealList = ({ deals }: DealListProps) => {
+export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
   const location = useLocation();
   
   return (
@@ -70,7 +71,7 @@ export const DealList = ({ deals }: DealListProps) => {
                     </div>
                   )}
                   
-                  {deal.matchScore && (
+                  {showMatchScore && deal.matchScore && (
                     <div>
                       <p className="text-sm text-muted-foreground">Match Score</p>
                       <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">

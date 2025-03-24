@@ -3,14 +3,32 @@ import { Link, useLocation } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Deal } from "@/types";
 
 interface TopMatchesProps {
   topMatches: Deal[];
+  loading?: boolean;
 }
 
-export const TopMatches = ({ topMatches }: TopMatchesProps) => {
+export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   const location = useLocation();
+  
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Top Matches</CardTitle>
+          <CardDescription>Investment opportunities that match your preferences</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-6">
+            <p className="text-muted-foreground">Loading matches...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
   
   return (
     <Card>
