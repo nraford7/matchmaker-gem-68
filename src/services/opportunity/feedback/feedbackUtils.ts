@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -61,7 +62,7 @@ export const removeFromActiveDeals = async (userId: string, opportunityId: strin
     .from("active_deals")
     .delete()
     .eq("user_id", userId)
-    .eq("opportunity_id", opportunityId);
+    .eq("deal_id", opportunityId);
   
   if (error) {
     console.error("Error removing from active deals:", error);

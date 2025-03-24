@@ -24,6 +24,7 @@ const profileSchema = z.object({
   check_size_max: z.number().optional(),
   investment_thesis: z.string().optional(),
   deal_count: z.number().optional(),
+  sector_tags: z.array(z.string()).optional(),
 });
 
 const PreferencesPage = () => {

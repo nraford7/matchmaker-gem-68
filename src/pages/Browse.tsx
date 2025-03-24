@@ -22,7 +22,9 @@ const Browse = () => {
       deal.name.toLowerCase().includes(query.toLowerCase()) ||
       deal.description?.toLowerCase().includes(query.toLowerCase()) ||
       deal.stage?.toLowerCase().includes(query.toLowerCase()) ||
-      (deal.sector && deal.sector.toLowerCase().includes(query.toLowerCase()))
+      (deal.sector_tags && deal.sector_tags.some(tag => 
+        tag.toLowerCase().includes(query.toLowerCase()))
+      )
     );
     
     setFilteredDeals(filtered);
