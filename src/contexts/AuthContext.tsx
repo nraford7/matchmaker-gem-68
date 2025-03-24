@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -5,7 +6,7 @@ import { User, Session } from '@supabase/supabase-js';
 interface AuthContextType {
   session: Session | null;
   user: User | null;
-  loading: boolean;
+  loading: boolean; // Added loading property
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
