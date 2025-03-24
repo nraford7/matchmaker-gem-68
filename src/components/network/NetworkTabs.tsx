@@ -4,7 +4,8 @@ import { NetworkInvestor } from "@/types";
 import { NetworkSearchBar } from "./NetworkSearchBar";
 import { InvestorList } from "./InvestorList";
 import { EmptyState } from "./EmptyState";
-import { Loader2 } from "lucide-react";
+import { Loader2, Users } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface NetworkTabsProps {
   isLoading: boolean;
@@ -36,51 +37,66 @@ export const NetworkTabs = ({
   }
 
   return (
-    <Tabs defaultValue={selectedTab} onValueChange={onTabChange}>
-      <div className="flex justify-between items-center mb-4">
-        <TabsList>
-          <TabsTrigger value="following">Following</TabsTrigger>
-          <TabsTrigger value="discover">Discover</TabsTrigger>
-        </TabsList>
-        
-        <NetworkSearchBar 
-          searchQuery={searchQuery}
-          onSearchChange={onSearchChange}
-        />
-      </div>
-      
-      <TabsContent value="following" className="mt-0">
-        {filteredInvestors.length === 0 && (
-          <EmptyState 
-            type={searchQuery ? "search" : "following"}
-            searchQuery={searchQuery}
-            onClearSearch={() => onSearchChange("")}
-            onDiscoverInvestors={() => onTabChange("discover")}
-          />
-        )}
-        
-        <InvestorList 
-          investors={filteredInvestors} 
-          followedInvestors={followedInvestors} 
-          onToggleFollow={onToggleFollow} 
-        />
-      </TabsContent>
-      
-      <TabsContent value="discover" className="mt-0">
-        {filteredInvestors.length === 0 && (
-          <EmptyState 
-            type="search"
-            searchQuery={searchQuery}
-            onClearSearch={() => onSearchChange("")}
-          />
-        )}
-        
-        <InvestorList 
-          investors={filteredInvestors} 
-          followedInvestors={followedInvestors} 
-          onToggleFollow={onToggleFollow} 
-        />
-      </TabsContent>
-    </Tabs>
+    <Card className="shadow-sm">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <div>
+          <div className="flex items-center gap-2">
+            <Users className="h-5 w-5 text-primary" />
+            <CardTitle>Investors</CardTitle>
+          </div>
+          <CardDescription className="mt-1">
+            Connect with investors and discover new opportunities
+          </CardDescription>
+        </div>
+      </CardHeader>
+      <CardContent className="pt-4">
+        <Tabs defaultValue={selectedTab} onValueChange={onTabChange}>
+          <div className="flex justify-between items-center mb-4">
+            <TabsList>
+              <TabsTrigger value="following">Following</TabsTrigger>
+              <TabsTrigger value="discover">Discover</TabsTrigger>
+            </TabsList>
+            
+            <NetworkSearchBar 
+              searchQuery={searchQuery}
+              onSearchChange={onSearchChange}
+            />
+          </div>
+          
+          <TabsContent value="following" className="mt-0">
+            {filteredInvestors.length === 0 && (
+              <EmptyState 
+                type={searchQuery ? "search" : "following"}
+                searchQuery={searchQuery}
+                onClearSearch={() => onSearchChange("")}
+                onDiscoverInvestors={() => onTabChange("discover")}
+              />
+            )}
+            
+            <InvestorList 
+              investors={filteredInvestors} 
+              followedInvestors={followedInvestors} 
+              onToggleFollow={onToggleFollow} 
+            />
+          </TabsContent>
+          
+          <TabsContent value="discover" className="mt-0">
+            {filteredInvestors.length === 0 && (
+              <EmptyState 
+                type="search"
+                searchQuery={searchQuery}
+                onClearSearch={() => onSearchChange("")}
+              />
+            )}
+            
+            <InvestorList 
+              investors={filteredInvestors} 
+              followedInvestors={followedInvestors} 
+              onToggleFollow={onToggleFollow} 
+            />
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 };
