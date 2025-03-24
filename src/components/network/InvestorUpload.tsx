@@ -28,9 +28,9 @@ export const InvestorUpload = () => {
       let success = false;
       
       // Process based on file type
-      if (file.name.endsWith(".csv")) {
+      if (file.name.toLowerCase().endsWith(".csv")) {
         success = await processCSVFile(file);
-      } else if (file.name.endsWith(".json")) {
+      } else if (file.name.toLowerCase().endsWith(".json")) {
         success = await processJSONFile(file);
       } else {
         toast.error("Unsupported file format. Please upload CSV or JSON files.");
@@ -45,7 +45,7 @@ export const InvestorUpload = () => {
       }
     } catch (error) {
       console.error("Error uploading file:", error);
-      toast.error("Failed to process file");
+      toast.error("Failed to process file: " + (error instanceof Error ? error.message : "Unknown error"));
     } finally {
       setIsUploading(false);
       // Reset the input

@@ -122,23 +122,32 @@ const processRows = async (rows: string[], headers: string[]): Promise<number> =
 // Create or update an investor profile
 const createOrUpdateProfile = async (data: Record<string, any>): Promise<boolean> => {
   try {
-    // Generate a UUID if creating a new profile
+    // Generate a UUID for the new profile
     const uuid = crypto.randomUUID();
     
-    // Create profile with random data for missing fields
-    return await createRandomInvestorProfile(
-      uuid, 
-      data.name, 
-      data.email,
-      {
-        contextSectors: data.contextSectors || [],
-        preferredStages: data.preferredStages || [],
-        preferredGeographies: data.preferredGeographies || [],
-        checkSizeMin: data.checkSizeMin || undefined,
-        checkSizeMax: data.checkSizeMax || undefined,
-        investmentThesis: data.investmentThesis || ""
-      }
-    );
+    // Directly insert into the database with error handling
+    const { error } = await supabase
+      .from("investor_profiles")
+      .insert({
+        id: uuid,
+        name: data.name,
+        email: data.email,
+        company: data.company || null,
+        context_sectors: data.contextSectors || [],
+        preferred_stages: data.preferredStages || [],
+        preferred_geographies: data.preferredGeographies || [],
+        check_size_min: data.checkSizeMin || null,
+        check_size_max: data.checkSizeMax || null,
+        investment_thesis: data.investmentThesis || null,
+        deal_count: Math.floor(Math.random() * 10) + 1 // Random deal count between 1-10
+      });
+    
+    if (error) {
+      console.error("Error creating investor profile:", error);
+      return false;
+    }
+    
+    return true;
   } catch (error) {
     console.error("Error creating/updating investor profile:", error);
     return false;
