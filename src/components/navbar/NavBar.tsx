@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
 import { PublicNavBar } from "./PublicNavBar";
 import { NavLinks } from "./NavLinks";
 import { MobileNavigation } from "./MobileNavigation";
