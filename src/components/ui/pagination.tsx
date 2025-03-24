@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
 
@@ -36,6 +37,7 @@ PaginationItem.displayName = "PaginationItem"
 
 type PaginationLinkProps = {
   isActive?: boolean
+  onClick?: () => void
 } & Pick<ButtonProps, "size"> &
   React.ComponentProps<"a">
 
@@ -43,6 +45,7 @@ const PaginationLink = ({
   className,
   isActive,
   size = "icon",
+  onClick,
   ...props
 }: PaginationLinkProps) => (
   <a
@@ -52,8 +55,14 @@ const PaginationLink = ({
         variant: isActive ? "outline" : "ghost",
         size,
       }),
+      isActive ? "bg-primary/10 hover:bg-primary/20 border-primary/20" : "hover:bg-primary/5",
+      "cursor-pointer transition-colors",
       className
     )}
+    onClick={(e) => {
+      e.preventDefault();
+      onClick?.();
+    }}
     {...props}
   />
 )
@@ -66,7 +75,7 @@ const PaginationPrevious = ({
   <PaginationLink
     aria-label="Go to previous page"
     size="default"
-    className={cn("gap-1 pl-2.5", className)}
+    className={cn("gap-1 pl-2.5 transition-colors hover:text-primary", className)}
     {...props}
   >
     <ChevronLeft className="h-4 w-4" />
@@ -82,7 +91,7 @@ const PaginationNext = ({
   <PaginationLink
     aria-label="Go to next page"
     size="default"
-    className={cn("gap-1 pr-2.5", className)}
+    className={cn("gap-1 pr-2.5 transition-colors hover:text-primary", className)}
     {...props}
   >
     <span>Next</span>

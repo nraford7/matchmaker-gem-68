@@ -15,6 +15,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationEllipsis, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious 
+} from "@/components/ui/pagination";
 
 interface AllOpportunitiesProps {
   allDeals: Deal[];
@@ -29,6 +38,9 @@ type SortOption = {
   direction: 'asc' | 'desc';
 };
 
+// Number of deals to show per page
+const DEALS_PER_PAGE = 20;
+
 export const AllOpportunities = ({ 
   allDeals, 
   filteredDeals, 
@@ -36,6 +48,7 @@ export const AllOpportunities = ({
   setSearchQuery 
 }: AllOpportunitiesProps) => {
   const [sortOption, setSortOption] = useState<SortOption | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   
   // Sort deals based on the selected option
   const sortedDeals = [...filteredDeals].sort((a, b) => {
@@ -59,8 +72,92 @@ export const AllOpportunities = ({
     }
   });
   
+  // Calculate total number of pages
+  const totalPages = Math.ceil(sortedDeals.length / DEALS_PER_PAGE);
+  
+  // Get current page of deals
+  const currentDeals = sortedDeals.slice(
+    (currentPage - 1) * DEALS_PER_PAGE,
+    currentPage * DEALS_PER_PAGE
+  );
+  
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of the deals section
+    window.scrollTo({ top: document.getElementById('available-deals')?.offsetTop || 0, behavior: 'smooth' });
+  };
+  
+  // Generate page numbers for pagination
+  const renderPaginationItems = () => {
+    const items = [];
+    
+    // Calculate which page numbers to display
+    const maxPagesToShow = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+    
+    // Adjust start page if we're near the end
+    if (endPage - startPage + 1 < maxPagesToShow) {
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    }
+    
+    // Always show first page
+    if (startPage > 1) {
+      items.push(
+        <PaginationItem key="first">
+          <PaginationLink isActive={currentPage === 1} onClick={() => handlePageChange(1)}>
+            1
+          </PaginationLink>
+        </PaginationItem>
+      );
+      
+      // Add ellipsis if needed
+      if (startPage > 2) {
+        items.push(
+          <PaginationItem key="ellipsis-start">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+    }
+    
+    // Add page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      items.push(
+        <PaginationItem key={i}>
+          <PaginationLink isActive={currentPage === i} onClick={() => handlePageChange(i)}>
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+    
+    // Always show last page
+    if (endPage < totalPages) {
+      // Add ellipsis if needed
+      if (endPage < totalPages - 1) {
+        items.push(
+          <PaginationItem key="ellipsis-end">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+      
+      items.push(
+        <PaginationItem key="last">
+          <PaginationLink isActive={currentPage === totalPages} onClick={() => handlePageChange(totalPages)}>
+            {totalPages}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+    
+    return items;
+  };
+  
   return (
-    <div className="mb-12">
+    <div className="mb-12" id="available-deals">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
@@ -149,24 +246,42 @@ export const AllOpportunities = ({
           <CardDescription>
             {searchQuery 
               ? `Found ${sortedDeals.length} result${sortedDeals.length !== 1 ? 's' : ''} for "${searchQuery}"`
-              : "Browse all available investment opportunities"
+              : `Showing ${Math.min(sortedDeals.length, (currentPage - 1) * DEALS_PER_PAGE + 1)}-${Math.min(sortedDeals.length, currentPage * DEALS_PER_PAGE)} of ${sortedDeals.length} deals`
             }
-            {!searchQuery && sortedDeals.length < allDeals.length && (
-              <span className="ml-1">
-                ({sortedDeals.length} of {allDeals.length})
-              </span>
-            )}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <DealsSearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           
-          {sortedDeals.length === 0 ? (
+          {currentDeals.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground">No deals found</p>
             </div>
           ) : (
-            <DealList deals={sortedDeals} />
+            <>
+              <DealList deals={currentDeals} />
+              
+              {/* Pagination controls */}
+              {totalPages > 1 && (
+                <Pagination className="mt-6">
+                  <PaginationContent>
+                    {currentPage > 1 && (
+                      <PaginationItem>
+                        <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
+                      </PaginationItem>
+                    )}
+                    
+                    {renderPaginationItems()}
+                    
+                    {currentPage < totalPages && (
+                      <PaginationItem>
+                        <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+                      </PaginationItem>
+                    )}
+                  </PaginationContent>
+                </Pagination>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
