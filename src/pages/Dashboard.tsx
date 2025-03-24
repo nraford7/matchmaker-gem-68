@@ -1,8 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { Opportunity } from "@/types";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { fetchDeals } from "@/services/opportunity";
 import { TopMatches, PerformanceMetricsSection } from "@/components/dashboard";
+import { NetworkHighlights } from "@/components/network/NetworkHighlights";
 
 // Sample top matches to display when no matches are found in the database
 const SAMPLE_TOP_MATCHES: Opportunity[] = [
@@ -79,7 +81,11 @@ const Dashboard = () => {
     <div className="container mx-auto py-6">
       <DashboardHeader />
       
-      <TopMatches topMatches={topMatches} loading={loading} />
+      <div className="grid gap-6 mb-6">
+        <TopMatches topMatches={topMatches} loading={loading} />
+        
+        <NetworkHighlights />
+      </div>
       
       <PerformanceMetricsSection />
     </div>
