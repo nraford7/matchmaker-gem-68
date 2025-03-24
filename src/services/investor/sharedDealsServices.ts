@@ -15,8 +15,8 @@ interface SharedDeal {
   shared_by_user?: NetworkInvestor;
 }
 
-// Define a type for the investor connection with following field
-interface InvestorConnectionWithFollowing {
+// Define a type for the investor connection result from database
+interface InvestorConnectionResult {
   following_id: string;
   following: {
     id: string;
@@ -192,10 +192,10 @@ export const getPotentialDealRecipients = async (): Promise<NetworkInvestor[]> =
       throw error;
     }
 
-    // Map and filter out any null values
+    // Map and filter out any null values or connections where following is null
     const recipients = data
-      .filter((item: InvestorConnectionWithFollowing) => item && item.following)
-      .map((item: InvestorConnectionWithFollowing) => ({
+      .filter((item: InvestorConnectionResult) => item && item.following)
+      .map((item: InvestorConnectionResult) => ({
         id: item.following!.id,
         name: item.following!.name || "Unknown",
         email: item.following!.email || "",

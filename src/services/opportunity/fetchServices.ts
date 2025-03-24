@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { Deal } from "@/types";
 import { toast } from "sonner";
@@ -43,11 +44,11 @@ export const fetchAllDeals = async (): Promise<Deal[]> => {
         dueDiligenceLevel: deal.due_diligence_level,
         decisionConvictionRequired: deal.decision_conviction_required,
         investorSpeedRequired: deal.investor_speed_required,
-        strategyProfile: strategyProfile,
-        psychologicalFit: psychologicalFit,
+        strategyProfile,
+        psychologicalFit,
         createdAt: deal.created_at,
         updatedAt: deal.updated_at
-      } as Deal;
+      };
     });
   } catch (error) {
     console.error("Error fetching deals:", error);
@@ -100,11 +101,11 @@ export const fetchDealById = async (id: string): Promise<Deal | null> => {
       dueDiligenceLevel: data.due_diligence_level,
       decisionConvictionRequired: data.decision_conviction_required,
       investorSpeedRequired: data.investor_speed_required,
-      strategyProfile: strategyProfile,
-      psychologicalFit: psychologicalFit,
+      strategyProfile,
+      psychologicalFit,
       createdAt: data.created_at,
       updatedAt: data.updated_at
-    } as Deal;
+    };
   } catch (error) {
     console.error("Error fetching deal:", error);
     toast.error("Failed to load deal details");
@@ -161,11 +162,11 @@ export const fetchUserDeals = async (): Promise<Deal[]> => {
         dueDiligenceLevel: deal.due_diligence_level,
         decisionConvictionRequired: deal.decision_conviction_required,
         investorSpeedRequired: deal.investor_speed_required,
-        strategyProfile: strategyProfile,
-        psychologicalFit: psychologicalFit,
+        strategyProfile,
+        psychologicalFit,
         createdAt: deal.created_at,
         updatedAt: deal.updated_at
-      } as Deal;
+      };
     });
   } catch (error) {
     console.error("Error fetching user deals:", error);
@@ -174,5 +175,5 @@ export const fetchUserDeals = async (): Promise<Deal[]> => {
   }
 };
 
-// Export fetchDeals (this was missing)
+// Export fetchDeals (aliased to fetchAllDeals)
 export const fetchDeals = fetchAllDeals;
