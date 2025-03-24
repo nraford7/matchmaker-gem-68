@@ -70,6 +70,13 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         </span>
       </div>
       
+      {deal.comment && (
+        <div className="bg-muted/80 p-3 rounded-md flex gap-2">
+          <MessageSquare className="h-4 w-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
+          <p className="text-sm italic">{deal.comment}</p>
+        </div>
+      )}
+      
       {dealDescription && (
         <div className="relative overflow-hidden bg-muted/50 p-3 rounded">
           <p className="text-sm text-muted-foreground overflow-hidden max-h-[4.5rem]">
@@ -78,13 +85,6 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
           <div className="absolute bottom-0 right-0 left-0 h-6 bg-gradient-to-t from-muted/80 to-transparent pointer-events-none">
             <span className="absolute bottom-1 right-2 text-xs text-muted-foreground">...</span>
           </div>
-        </div>
-      )}
-      
-      {deal.comment && (
-        <div className="bg-muted/80 p-3 rounded-md flex gap-2">
-          <MessageSquare className="h-4 w-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
-          <p className="text-sm italic">{deal.comment}</p>
         </div>
       )}
       
