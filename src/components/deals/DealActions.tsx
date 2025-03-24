@@ -11,6 +11,7 @@ import {
 import { toast } from "sonner";
 import { saveDeal } from "@/services/deal/savedDealsServices";
 import { activateDeal } from "@/services/deal/activeDealsServices";
+import { findInvestorByEmail } from "@/services/investor/shared-deals/recipientsService";
 import { shareDealWithInvestor } from "@/services/investor/recommendations/createRecommendation";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -29,6 +30,7 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
   const [shareMessage, setShareMessage] = useState("");
   const [selectedStage, setSelectedStage] = useState("Due Diligence");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleSaveDeal = async () => {
     try {
@@ -42,12 +44,14 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
     }
   };
 
-  const handleShareDeal = async () => {
+  const handleShareDeal = () => {
     setShareDialogOpen(true);
+    setDropdownOpen(false);
   };
 
-  const handleActivateDeal = async () => {
+  const handleActivateDeal = () => {
     setActivateDialogOpen(true);
+    setDropdownOpen(false);
   };
 
   const submitShareDeal = async () => {
@@ -58,11 +62,15 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
 
     setIsProcessing(true);
     try {
-      // In a real app, we would first lookup the user by email
-      // For demo purposes, we're using a hardcoded user ID
-      const recipientId = "00000000-0000-0000-0000-000000000000"; // Replace with actual lookup logic
+      // Find investor by email first
+      const investor = await findInvestorByEmail(recipientEmail);
+      if (!investor) {
+        toast.error("No investor found with this email");
+        setIsProcessing(false);
+        return;
+      }
       
-      const success = await shareDealWithInvestor(dealId, recipientId, shareMessage);
+      const success = await shareDealWithInvestor(dealId, investor.id, shareMessage);
       if (success) {
         toast.success("Deal shared successfully");
         setShareDialogOpen(false);
@@ -95,7 +103,7 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon">
             <svg
