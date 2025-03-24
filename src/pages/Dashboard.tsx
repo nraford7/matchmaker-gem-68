@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Opportunity } from "@/types";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { fetchDeals } from "@/services/opportunity";
-import { TopMatches, SavedDeals, PerformanceMetricsSection } from "@/components/dashboard";
+import { TopMatches, PerformanceMetricsSection } from "@/components/dashboard";
 
 // Sample top matches to display when no matches are found in the database
 const SAMPLE_TOP_MATCHES: Opportunity[] = [
@@ -46,14 +46,12 @@ const SAMPLE_TOP_MATCHES: Opportunity[] = [
 
 const Dashboard = () => {
   const [topMatches, setTopMatches] = useState<Opportunity[]>([]);
-  const [savedDeals, setSavedDeals] = useState<Opportunity[]>([]);
   const [loading, setLoading] = useState(true);
   
   const loadDeals = async () => {
     try {
       // Fetch deals which include match scores
       const deals = await fetchDeals();
-      setSavedDeals(deals);
       
       // Filter for top matches
       const matches = deals.filter(o => (o.matchScore || 0) > 0.7);
@@ -95,8 +93,6 @@ const Dashboard = () => {
       <DashboardHeader />
       
       <TopMatches topMatches={topMatches} loading={loading} />
-      
-      <SavedDeals savedDeals={savedDeals} loading={loading} />
       
       <PerformanceMetricsSection />
     </div>
