@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, TrendingUp } from "lucide-react";
 import { Deal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
+import DealActions from "./DealActions";
 
 interface DealListProps {
   deals: Deal[];
@@ -27,7 +28,10 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
             <CardContent className="p-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2">
-                  <h3 className="font-semibold text-lg mb-1">{deal.name}</h3>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-semibold text-lg">{deal.name}</h3>
+                    <DealActions dealId={deal.id} dealName={deal.name} />
+                  </div>
                   
                   <div className="flex flex-wrap gap-2 mb-2">
                     {deal.sectorTags && deal.sectorTags.map((sector, index) => (

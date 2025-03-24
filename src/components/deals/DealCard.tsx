@@ -3,9 +3,10 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Deal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
-import { Bookmark, CheckCircle, MapPin, Clock, DollarSign, TrendingUp } from "lucide-react";
+import { Bookmark, CheckCircle, MapPin, Clock, DollarSign, TrendingUp, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import DealActions from "./DealActions";
 
 interface DealCardProps {
   deal: Deal;
@@ -43,11 +44,15 @@ export const DealCard = ({
               {deal.name}
             </h3>
           </Link>
-          {showMatchScore && deal.matchScore && (
-            <Badge variant={deal.matchScore > 0.8 ? "default" : "outline"} className="ml-2">
-              {Math.round(deal.matchScore * 100)}% match
-            </Badge>
-          )}
+          
+          <div className="flex items-center gap-2">
+            {showMatchScore && deal.matchScore && (
+              <Badge variant={deal.matchScore > 0.8 ? "default" : "outline"} className="ml-2">
+                {Math.round(deal.matchScore * 100)}% match
+              </Badge>
+            )}
+            <DealActions dealId={deal.id} dealName={deal.name} />
+          </div>
         </div>
         
         {/* Stage badge and sector tags */}
