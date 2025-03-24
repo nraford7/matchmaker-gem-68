@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Deal } from "@/types";
 import { toast } from "sonner";
@@ -175,5 +174,5 @@ export const fetchUserDeals = async (): Promise<Deal[]> => {
   }
 };
 
-// Define fetchDeals as alias for fetchAllDeals (so we can export it as fetchSavedDeals)
+// Export fetchDeals (this was missing)
 export const fetchDeals = fetchAllDeals;
