@@ -51,17 +51,26 @@ export const DealCard = ({
         </div>
         
         {/* Stage badge and sector tags */}
-        <div className="flex flex-wrap gap-2 mt-2">
-          {deal.stage && (
-            <Badge variant="default" className="text-xs font-semibold">
-              {deal.stage}
-            </Badge>
+        <div className="flex justify-between items-center mt-2">
+          {deal.location && (
+            <div className="text-xs text-muted-foreground">
+              <MapPin className="h-3 w-3 inline mr-1" />
+              {deal.location}
+            </div>
           )}
-          {deal.sectorTags && deal.sectorTags.map((sector, idx) => (
-            <Badge key={idx} variant="secondary" className="text-xs">
-              {sector}
-            </Badge>
-          ))}
+          
+          <div className="flex flex-wrap gap-2 justify-end">
+            {deal.stage && (
+              <Badge variant="default" className="text-xs font-semibold">
+                {deal.stage}
+              </Badge>
+            )}
+            {deal.sectorTags && deal.sectorTags.map((sector, idx) => (
+              <Badge key={idx} variant="secondary" className="text-xs">
+                {sector}
+              </Badge>
+            ))}
+          </div>
         </div>
       </CardHeader>
       
