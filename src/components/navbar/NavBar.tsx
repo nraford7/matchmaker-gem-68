@@ -1,0 +1,50 @@
+
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { PublicNavBar } from "./PublicNavBar";
+import { NavLinks } from "./NavLinks";
+import { MobileNavigation } from "./MobileNavigation";
+import { UserMenu } from "./UserMenu";
+
+export const NavBar = () => {
+  const { user, signOut } = useAuth();
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const isMobile = useIsMobile();
+  
+  // If user is not authenticated, show minimal navbar
+  if (!user && currentPath !== "/") {
+    return <PublicNavBar />;
+  }
+  
+  // Full navbar for authenticated users or home page
+  return (
+    <div className="border-b">
+      <div className="container mx-auto flex h-16 items-center justify-between">
+        <div className="flex items-center gap-6">
+          <Link to="/" className="font-bold text-xl">
+            OpportunityMatcher
+          </Link>
+          
+          {/* Desktop navigation */}
+          <NavLinks />
+        </div>
+        
+        <div className="flex items-center gap-4">
+          {/* Mobile navigation */}
+          {isMobile && <MobileNavigation />}
+          
+          {user ? (
+            <UserMenu user={user} signOut={signOut} />
+          ) : (
+            <Link to="/auth">
+              <Button>Sign In</Button>
+            </Link>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
