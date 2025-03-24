@@ -10,13 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { saveDeal } from "@/services/deal/savedDealsServices";
-import { activateDeal } from "@/services/deal/activeDealsServices";
-import { findInvestorByEmail } from "@/services/investor/shared-deals/recipientsService";
-import { shareDealWithInvestor } from "@/services/investor/recommendations/createRecommendation";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import ShareDealDialog from "./ShareDealDialog";
+import ActivateDealDialog from "./ActivateDealDialog";
 
 interface DealActionsProps {
   dealId: string;
@@ -26,10 +21,6 @@ interface DealActionsProps {
 const DealActions = ({ dealId, dealName }: DealActionsProps) => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [activateDialogOpen, setActivateDialogOpen] = useState(false);
-  const [recipientEmail, setRecipientEmail] = useState("");
-  const [shareMessage, setShareMessage] = useState("");
-  const [selectedStage, setSelectedStage] = useState("Due Diligence");
-  const [isProcessing, setIsProcessing] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleSaveDeal = async () => {
@@ -52,53 +43,6 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
   const handleActivateDeal = () => {
     setActivateDialogOpen(true);
     setDropdownOpen(false);
-  };
-
-  const submitShareDeal = async () => {
-    if (!recipientEmail.trim()) {
-      toast.error("Please enter a recipient email");
-      return;
-    }
-
-    setIsProcessing(true);
-    try {
-      // Find investor by email first
-      const investor = await findInvestorByEmail(recipientEmail);
-      if (!investor) {
-        toast.error("No investor found with this email");
-        setIsProcessing(false);
-        return;
-      }
-      
-      const success = await shareDealWithInvestor(dealId, investor.id, shareMessage);
-      if (success) {
-        toast.success("Deal shared successfully");
-        setShareDialogOpen(false);
-        setRecipientEmail("");
-        setShareMessage("");
-      }
-    } catch (error) {
-      console.error("Error sharing deal:", error);
-      toast.error("Failed to share deal");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const submitActivateDeal = async () => {
-    setIsProcessing(true);
-    try {
-      const success = await activateDeal(dealId, selectedStage);
-      if (success) {
-        toast.success("Deal added to active deals");
-        setActivateDialogOpen(false);
-      }
-    } catch (error) {
-      console.error("Error activating deal:", error);
-      toast.error("Failed to add deal to active deals");
-    } finally {
-      setIsProcessing(false);
-    }
   };
 
   return (
@@ -139,82 +83,19 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Share Dialog */}
-      <Dialog open={shareDialogOpen} onOpenChange={setShareDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Share Deal</DialogTitle>
-            <DialogDescription>
-              Share "{dealName}" with another investor
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="recipient" className="text-right">
-                Recipient
-              </Label>
-              <Input
-                id="recipient"
-                placeholder="investor@example.com"
-                className="col-span-3"
-                value={recipientEmail}
-                onChange={(e) => setRecipientEmail(e.target.value)}
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="message" className="text-right">
-                Message
-              </Label>
-              <Textarea
-                id="message"
-                placeholder="Check out this deal I found..."
-                className="col-span-3"
-                value={shareMessage}
-                onChange={(e) => setShareMessage(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit" onClick={submitShareDeal} disabled={isProcessing}>
-              {isProcessing ? "Sharing..." : "Share Deal"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ShareDealDialog 
+        dealId={dealId}
+        dealName={dealName}
+        open={shareDialogOpen}
+        onOpenChange={setShareDialogOpen}
+      />
 
-      {/* Activate Dialog */}
-      <Dialog open={activateDialogOpen} onOpenChange={setActivateDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Add to Active Deals</DialogTitle>
-            <DialogDescription>
-              Add "{dealName}" to your active deals
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="stage" className="text-right">
-                Stage
-              </Label>
-              <select
-                id="stage"
-                className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                value={selectedStage}
-                onChange={(e) => setSelectedStage(e.target.value)}
-              >
-                <option value="Due Diligence">Due Diligence</option>
-                <option value="Term Sheet">Term Sheet</option>
-                <option value="Closing">Closing</option>
-              </select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit" onClick={submitActivateDeal} disabled={isProcessing}>
-              {isProcessing ? "Adding..." : "Add to Active Deals"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ActivateDealDialog 
+        dealId={dealId}
+        dealName={dealName}
+        open={activateDialogOpen}
+        onOpenChange={setActivateDialogOpen}
+      />
     </>
   );
 };
