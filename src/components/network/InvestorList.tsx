@@ -14,7 +14,7 @@ export const InvestorList = ({
   onToggleFollow 
 }: InvestorListProps) => {
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-3">
       {investors.map(investor => (
         <NetworkCard 
           key={investor.id} 

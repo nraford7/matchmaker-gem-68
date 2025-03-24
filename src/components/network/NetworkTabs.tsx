@@ -51,7 +51,7 @@ export const NetworkTabs = ({
       </CardHeader>
       <CardContent className="pt-4">
         <Tabs defaultValue={selectedTab} onValueChange={onTabChange}>
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
             <TabsList>
               <TabsTrigger value="following">Following</TabsTrigger>
               <TabsTrigger value="discover">Discover</TabsTrigger>

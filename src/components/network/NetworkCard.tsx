@@ -33,64 +33,69 @@ export const NetworkCard = ({ investor, isFollowing, onToggleFollow }: NetworkCa
   };
   
   return (
-    <Card>
-      <CardContent className="p-6">
+    <Card className="shadow-sm hover:shadow-md transition-shadow">
+      <CardContent className="p-4">
         <div className="flex justify-between">
-          <div className="flex gap-4">
-            <Avatar className="h-14 w-14 cursor-pointer" onClick={handleViewProfile}>
+          <div className="flex gap-3">
+            <Avatar className="h-10 w-10 cursor-pointer" onClick={handleViewProfile}>
               <AvatarImage src={investor.avatar_url || investor.avatar} alt={investor.name} />
-              <AvatarFallback className="text-lg">{investor.name.charAt(0)}</AvatarFallback>
+              <AvatarFallback className="text-sm">{investor.name.charAt(0)}</AvatarFallback>
             </Avatar>
             
             <div>
               <h3 
-                className="font-medium text-lg hover:text-primary cursor-pointer" 
+                className="font-medium text-base hover:text-primary cursor-pointer" 
                 onClick={handleViewProfile}
               >
                 {investor.name}
               </h3>
-              <p className="text-muted-foreground">{investor.company}</p>
+              <p className="text-xs text-muted-foreground">{investor.company}</p>
               
-              <div className="flex flex-wrap gap-1 mt-2">
-                {(investor.sector_tags || investor.contextSectors || []).map(sector => (
+              <div className="flex flex-wrap gap-1 mt-1.5">
+                {(investor.sector_tags || investor.contextSectors || []).slice(0, 3).map(sector => (
                   <div 
                     key={sector} 
-                    className="bg-muted text-xs px-2 py-1 rounded-full"
+                    className="bg-muted text-xs px-1.5 py-0.5 rounded-full text-[10px]"
                   >
                     {sector}
                   </div>
                 ))}
+                {(investor.sector_tags || investor.contextSectors || []).length > 3 && (
+                  <div className="text-[10px] text-muted-foreground">
+                    +{(investor.sector_tags || investor.contextSectors || []).length - 3} more
+                  </div>
+                )}
               </div>
             </div>
           </div>
           
-          <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-col items-end gap-1.5">
             <Button 
               variant={isFollowing ? "outline" : "default"}
               onClick={() => onToggleFollow(investor.id)}
-              className="h-9"
+              className="h-7 text-xs px-3"
             >
               {isFollowing ? "Following" : "Follow"}
             </Button>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-1 h-7">
+                <Button variant="ghost" size="sm" className="h-6 gap-1 text-xs px-2">
                   Actions
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem className="gap-2" onClick={handleViewProfile}>
-                  <Users className="h-4 w-4" />
+              <DropdownMenuContent align="end" className="text-xs">
+                <DropdownMenuItem className="gap-1.5 text-xs" onClick={handleViewProfile}>
+                  <Users className="h-3 w-3" />
                   View Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem className="gap-2">
-                  <MessageSquare className="h-4 w-4" />
+                <DropdownMenuItem className="gap-1.5 text-xs">
+                  <MessageSquare className="h-3 w-3" />
                   Message
                 </DropdownMenuItem>
-                <DropdownMenuItem className="gap-2">
-                  <Share2 className="h-4 w-4" />
+                <DropdownMenuItem className="gap-1.5 text-xs">
+                  <Share2 className="h-3 w-3" />
                   Share Profile
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -98,11 +103,11 @@ export const NetworkCard = ({ investor, isFollowing, onToggleFollow }: NetworkCa
           </div>
         </div>
         
-        <div className="mt-4 pt-4 border-t flex items-center justify-between">
-          <div className="text-sm">
+        <div className="mt-3 pt-2 border-t flex items-center justify-between">
+          <div className="text-xs">
             <span className="font-medium">{investor.deal_count || investor.dealCount}</span> deals in portfolio
           </div>
-          <Button variant="link" size="sm" className="p-0 h-auto" onClick={handleViewProfile}>
+          <Button variant="link" size="sm" className="p-0 h-auto text-xs" onClick={handleViewProfile}>
             View Portfolio
           </Button>
         </div>
