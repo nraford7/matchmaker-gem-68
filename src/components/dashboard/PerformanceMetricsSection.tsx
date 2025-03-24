@@ -81,7 +81,7 @@ export const PerformanceMetricsSection = () => {
             
             {renderMetricCard(
               "Sectors", 
-              investor.preferredSectors.length, 
+              investor.contextSectors.length, 
               <TrendingUp className="h-4 w-4" />, 
               "Number of sectors in your portfolio"
             )}

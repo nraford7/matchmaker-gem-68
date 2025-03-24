@@ -23,7 +23,7 @@ const Preferences = () => {
       id: "",
       name: "",
       email: "",
-      preferredSectors: [],
+      contextSectors: [],
       preferredStages: [],
       checkSizeMin: 0,
       checkSizeMax: 0,

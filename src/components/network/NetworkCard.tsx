@@ -52,7 +52,7 @@ export const NetworkCard = ({ investor, isFollowing, onToggleFollow }: NetworkCa
               <p className="text-muted-foreground">{investor.company}</p>
               
               <div className="flex flex-wrap gap-1 mt-2">
-                {investor.sectors.map(sector => (
+                {investor.contextSectors.map(sector => (
                   <div 
                     key={sector} 
                     className="bg-muted text-xs px-2 py-1 rounded-full"

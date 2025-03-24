@@ -36,7 +36,7 @@ export const generateRandomProfile = (): Omit<Investor, "id" | "name" | "email">
   const checkSizeMax = checkSizeMin * (Math.floor(Math.random() * 5) + 2);
   
   return {
-    preferredSectors: getRandomItems(sectors, 2, 5),
+    contextSectors: getRandomItems(sectors, 2, 5),
     preferredStages: getRandomItems(stages, 1, 3),
     preferredGeographies: getRandomItems(geographies, 1, 3),
     checkSizeMin,
@@ -58,7 +58,7 @@ export const createRandomInvestorProfile = async (userId: string, name: string, 
         id: userId,
         name: name,
         email: email,
-        sectors: profile.preferredSectors,
+        context_sectors: profile.contextSectors,
         preferred_stages: profile.preferredStages,
         check_size_min: profile.checkSizeMin,
         check_size_max: profile.checkSizeMax,

@@ -28,7 +28,7 @@ export const InvestorMetrics = () => {
   // Calculate sector distribution
   const getSectorDistribution = () => {
     // Flatten all sectors from all investors
-    const allSectors = investors.flatMap(investor => investor.sectors);
+    const allSectors = investors.flatMap(investor => investor.contextSectors);
     
     // Count occurrences of each sector
     const sectorCounts: Record<string, number> = {};

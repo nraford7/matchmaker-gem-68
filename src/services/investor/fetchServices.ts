@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { NetworkInvestor, Investor } from "@/types";
 import { toast } from "sonner";
@@ -129,10 +130,33 @@ export const fetchCurrentInvestorProfile = async (): Promise<Investor | null> =>
       stageFocus: data.stage_focus,
       preferredGeographies: data.preferred_geographies || [],
       investmentThesis: data.investment_thesis || "",
-      psychologicalProfileRaw: data.psychological_profile_raw || {},
-      psychologicalProfileWeighted: data.psychological_profile_weighted || {},
-      strategyProfile: data.strategy_profile || {},
-      weightingPreferences: data.weighting_preferences || {}
+      psychologicalProfileRaw: data.psychological_profile_raw ? data.psychological_profile_raw as {
+        Cautious?: number;
+        Methodical?: number;
+        Individualist?: number;
+        Spontaneous?: number;
+      } : {},
+      psychologicalProfileWeighted: data.psychological_profile_weighted ? data.psychological_profile_weighted as {
+        Cautious?: number;
+        Methodical?: number;
+        Individualist?: number;
+        Spontaneous?: number;
+      } : {},
+      strategyProfile: data.strategy_profile ? data.strategy_profile as {
+        checkSizeBehavior?: string;
+        dueDiligence?: string;
+        timeHorizon?: string;
+        exitStrategy?: string;
+        portfolioStyle?: string;
+        sectorPreferences?: string[];
+        esg?: string[];
+        involvementLevel?: string;
+        controlPreference?: string;
+      } : {},
+      weightingPreferences: data.weighting_preferences ? data.weighting_preferences as {
+        mostImportantFactors?: string[];
+        leastImportantFactors?: string[];
+      } : {}
     };
   } catch (error) {
     console.error("Error fetching current investor profile:", error);

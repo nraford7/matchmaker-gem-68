@@ -5,7 +5,7 @@ export const mockInvestor: Investor = {
   id: "inv-1",
   name: "Jane Smith",
   email: "jane@acmecapital.com",
-  preferredSectors: ["Fintech", "Health Tech", "SaaS"],
+  contextSectors: ["Fintech", "Health Tech", "SaaS"],
   preferredStages: ["Seed", "Series A"],
   checkSizeMin: 500000,
   checkSizeMax: 2000000,
