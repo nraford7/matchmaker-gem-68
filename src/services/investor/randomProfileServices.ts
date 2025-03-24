@@ -31,26 +31,31 @@ const getRandomItems = (array: string[], min: number, max: number): string[] => 
 };
 
 // Generate random investor preferences
-export const generateRandomProfile = (): Omit<Investor, "id" | "name" | "email"> => {
-  const checkSizeMin = [50000, 100000, 250000, 500000, 1000000][Math.floor(Math.random() * 5)];
-  const checkSizeMax = checkSizeMin * (Math.floor(Math.random() * 5) + 2);
+export const generateRandomProfile = (customData?: Partial<Omit<Investor, "id" | "name" | "email">>): Omit<Investor, "id" | "name" | "email"> => {
+  const checkSizeMin = customData?.checkSizeMin || [50000, 100000, 250000, 500000, 1000000][Math.floor(Math.random() * 5)];
+  const checkSizeMax = customData?.checkSizeMax || checkSizeMin * (Math.floor(Math.random() * 5) + 2);
   
   return {
-    contextSectors: getRandomItems(sectors, 2, 5),
-    preferredStages: getRandomItems(stages, 1, 3),
-    preferredGeographies: getRandomItems(geographies, 1, 3),
+    contextSectors: customData?.contextSectors || getRandomItems(sectors, 2, 5),
+    preferredStages: customData?.preferredStages || getRandomItems(stages, 1, 3),
+    preferredGeographies: customData?.preferredGeographies || getRandomItems(geographies, 1, 3),
     checkSizeMin,
     checkSizeMax,
-    investmentThesis: theses[Math.floor(Math.random() * theses.length)]
+    investmentThesis: customData?.investmentThesis || theses[Math.floor(Math.random() * theses.length)]
   };
 };
 
 // Create random investor profile for a user
-export const createRandomInvestorProfile = async (userId: string, name: string, email: string): Promise<boolean> => {
+export const createRandomInvestorProfile = async (
+  userId: string, 
+  name: string, 
+  email: string, 
+  customData?: Partial<Omit<Investor, "id" | "name" | "email">>
+): Promise<boolean> => {
   try {
-    console.log("Creating random investor profile for user:", userId);
+    console.log("Creating investor profile for user:", userId);
     
-    const profile = generateRandomProfile();
+    const profile = generateRandomProfile(customData);
     
     const { error } = await supabase
       .from("investor_profiles")
@@ -68,7 +73,7 @@ export const createRandomInvestorProfile = async (userId: string, name: string, 
       });
 
     if (error) {
-      console.error("Error creating random investor profile:", error);
+      console.error("Error creating investor profile:", error);
       return false;
     }
 
