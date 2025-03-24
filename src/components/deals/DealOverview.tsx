@@ -8,6 +8,14 @@ interface DealOverviewProps {
 }
 
 const DealOverview = ({ deal }: DealOverviewProps) => {
+  // Function to capitalize the first letter of each word
+  const capitalize = (text: string) => {
+    if (!text) return "";
+    return text.split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -27,7 +35,7 @@ const DealOverview = ({ deal }: DealOverviewProps) => {
             <div className="flex flex-wrap gap-1">
               {deal.esgTags.map((tag, index) => (
                 <Badge key={index} variant="secondary" className="text-xs">
-                  {tag}
+                  {capitalize(tag)}
                 </Badge>
               ))}
             </div>
@@ -59,28 +67,28 @@ const DealOverview = ({ deal }: DealOverviewProps) => {
           {deal.growth && (
             <div>
               <h3 className="text-sm font-medium">Growth</h3>
-              <p className="text-sm">{deal.growth} YoY</p>
+              <p className="text-sm">{deal.growth && deal.growth.replace('YoY', '')}</p>
             </div>
           )}
           
           {deal.involvementModel && (
             <div>
               <h3 className="text-sm font-medium">Involvement Model</h3>
-              <p className="text-sm">{deal.involvementModel}</p>
+              <p className="text-sm">{capitalize(deal.involvementModel)}</p>
             </div>
           )}
           
           {deal.exitStyle && (
             <div>
               <h3 className="text-sm font-medium">Exit Style</h3>
-              <p className="text-sm">{deal.exitStyle}</p>
+              <p className="text-sm">{capitalize(deal.exitStyle)}</p>
             </div>
           )}
           
           {deal.dueDiligenceLevel && (
             <div>
               <h3 className="text-sm font-medium">Due Diligence Level</h3>
-              <p className="text-sm">{deal.dueDiligenceLevel}</p>
+              <p className="text-sm">{capitalize(deal.dueDiligenceLevel)}</p>
             </div>
           )}
         </div>
