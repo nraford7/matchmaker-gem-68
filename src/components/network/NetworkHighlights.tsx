@@ -52,36 +52,36 @@ export const NetworkHighlights = () => {
   const paginatedDeals = sharedDeals.slice(startIndex, startIndex + DEALS_PER_PAGE);
   
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="shadow-sm">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-muted-foreground" />
+            <Users className="h-5 w-5 text-primary" />
             <CardTitle>Network Highlights</CardTitle>
           </div>
-          <CardDescription>
+          <CardDescription className="mt-1">
             Deals shared with you by investors in your network
           </CardDescription>
         </div>
         {sharedDeals.length > DEALS_PER_PAGE && (
           <button 
             onClick={viewAllDeals}
-            className="text-sm font-medium text-primary flex items-center gap-1 hover:underline"
+            className="text-sm font-medium text-primary flex items-center gap-1 hover:underline transition-colors"
           >
             View all
             <ArrowRight className="h-4 w-4" />
           </button>
         )}
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+      <CardContent className="pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {paginatedDeals.map((deal) => (
             <SharedDealItem key={deal.id} deal={deal} />
           ))}
         </div>
         
         {totalPages > 1 && (
-          <Pagination className="mt-4">
+          <Pagination className="mt-6">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious 

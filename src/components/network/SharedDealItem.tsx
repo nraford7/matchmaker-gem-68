@@ -53,59 +53,63 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   };
   
   return (
-    <div className="border rounded-md p-3 hover:shadow-md transition-shadow h-full flex flex-col">
-      <div className="flex justify-between items-start mb-2">
+    <div className="border rounded-md p-4 hover:shadow-md transition-shadow h-full flex flex-col gap-3">
+      {/* Deal Header with improved spacing */}
+      <div className="flex justify-between items-start">
         <h4 
-          className="font-medium line-clamp-1 cursor-pointer hover:text-primary hover:underline"
+          className="font-semibold text-base line-clamp-1 cursor-pointer hover:text-primary hover:underline"
           onClick={handleViewDetails}
         >
           {dealName}
         </h4>
-        <span className="text-xs text-muted-foreground shrink-0 ml-2">
+        <span className="text-xs text-muted-foreground shrink-0 ml-2 bg-muted px-2 py-0.5 rounded-full">
           {new Date(deal.sharedAt).toLocaleDateString()}
         </span>
       </div>
       
-      <div className="flex items-center text-sm mb-2 gap-2">
+      {/* Shared by section with better alignment */}
+      <div className="flex items-center text-sm gap-2">
         <Avatar className="h-6 w-6">
           {avatarUrl && <AvatarImage src={avatarUrl} alt={investorName} />}
           <AvatarFallback className="text-xs">{getInitials(investorName)}</AvatarFallback>
         </Avatar>
         <span>
-          Shared by <Link to={`/investor/${investorId}`} className="font-medium hover:underline">{investorName}</Link>
+          Shared by <Link to={`/investor/${investorId}`} className="font-medium hover:underline text-primary">{investorName}</Link>
         </span>
       </div>
       
+      {/* Description with better spacing and styling */}
       {dealDescription && (
-        <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
+        <p className="text-sm text-muted-foreground line-clamp-2 bg-muted/50 p-2 rounded">
           {dealDescription}
         </p>
       )}
       
-      <div className="flex gap-2 text-xs text-muted-foreground mb-2">
-        <span>{sectorTag}</span>
-        <span>•</span>
-        <span>{stageInfo}</span>
-        <span>•</span>
-        <span>${formatCurrency(Math.round(fundingAmount))}</span>
+      {/* Deal metadata with badge styling */}
+      <div className="flex flex-wrap gap-2 text-xs">
+        <span className="bg-secondary px-2 py-1 rounded-full">{sectorTag}</span>
+        <span className="bg-secondary px-2 py-1 rounded-full">{stageInfo}</span>
+        <span className="bg-secondary px-2 py-1 rounded-full">${formatCurrency(Math.round(fundingAmount))}</span>
       </div>
       
+      {/* Comment section with improved styling */}
       {deal.comment && (
-        <div className="bg-muted p-2 rounded-md mb-3 flex gap-2">
+        <div className="bg-muted/80 p-3 rounded-md flex gap-2">
           <MessageSquare className="h-4 w-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
-          <p className="text-xs italic">{deal.comment}</p>
+          <p className="text-sm italic">{deal.comment}</p>
         </div>
       )}
       
-      <div className="mt-auto">
-        <div className="flex items-center justify-between mb-1">
+      {/* Match score with improved visualization */}
+      <div className="mt-auto pt-2 border-t">
+        <div className="flex items-center justify-between mb-1.5">
           <span className="text-xs font-medium">Match Score</span>
-          <span className="text-xs font-semibold">{matchScore}%</span>
+          <span className="text-xs font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-full">{matchScore}%</span>
         </div>
-        <Progress value={matchScore} className="h-2 mb-2" />
-        <p className="text-xs text-muted-foreground flex items-center gap-1">
-          <Handshake className="h-3 w-3 text-primary" />
-          {getRecommendation()}
+        <Progress value={matchScore} className="h-2 mb-3" />
+        <p className="text-xs text-muted-foreground flex items-start gap-2">
+          <Handshake className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
+          <span>{getRecommendation()}</span>
         </p>
       </div>
     </div>
