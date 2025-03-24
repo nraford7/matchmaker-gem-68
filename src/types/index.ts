@@ -1,29 +1,100 @@
-
 export interface Investor {
   id: string;
   name: string;
   email: string;
-  preferredSectors: string[];
-  preferredStages: string[];
+  role?: string;
+  sourceOfWealth?: string[];
   checkSizeMin: number;
   checkSizeMax: number;
+  preferredAssets?: string[];
+  contextSectors: string[];
+  valuesFilter?: string[];
+  timeHorizon?: string;
+  structure?: string;
+  aum?: string;
+  geographicFocus?: string;
+  stageFocus?: string;
+  preferredStages: string[];
   preferredGeographies: string[];
   investmentThesis: string;
+  psychologicalProfileRaw?: {
+    Cautious?: number;
+    Methodical?: number;
+    Individualist?: number;
+    Spontaneous?: number;
+  };
+  psychologicalProfileWeighted?: {
+    Cautious?: number;
+    Methodical?: number;
+    Individualist?: number;
+    Spontaneous?: number;
+  };
+  strategyProfile?: {
+    checkSizeBehavior?: string;
+    dueDiligence?: string;
+    timeHorizon?: string;
+    exitStrategy?: string;
+    portfolioStyle?: string;
+    sectorPreferences?: string[];
+    esg?: string[];
+    involvementLevel?: string;
+    controlPreference?: string;
+  };
+  weightingPreferences?: {
+    mostImportantFactors?: string[];
+    leastImportantFactors?: string[];
+  };
 }
 
 export interface NetworkInvestor {
   id: string;
   name: string;
   company: string;
-  sectors: string[];
+  contextSectors: string[];
   dealCount: number;
   avatar: string | null;
   email?: string;
-  preferredStages?: string[];
+  role?: string;
+  sourceOfWealth?: string[];
   checkSizeMin?: number;
   checkSizeMax?: number;
+  preferredAssets?: string[];
+  valuesFilter?: string[];
+  timeHorizon?: string;
+  structure?: string;
+  aum?: string;
+  geographicFocus?: string;
+  stageFocus?: string;
+  preferredStages?: string[];
   preferredGeographies?: string[];
   investmentThesis?: string;
+  psychologicalProfileRaw?: {
+    Cautious?: number;
+    Methodical?: number;
+    Individualist?: number;
+    Spontaneous?: number;
+  };
+  psychologicalProfileWeighted?: {
+    Cautious?: number;
+    Methodical?: number;
+    Individualist?: number;
+    Spontaneous?: number;
+  };
+  strategyProfile?: {
+    checkSizeBehavior?: string;
+    dueDiligence?: string;
+    timeHorizon?: string;
+    exitStrategy?: string;
+    portfolioStyle?: string;
+    sectorPreferences?: string[];
+    esg?: string[];
+    involvementLevel?: string;
+    controlPreference?: string;
+  };
+  weightingPreferences?: {
+    mostImportantFactors?: string[];
+    leastImportantFactors?: string[];
+  };
 }
 
 export interface Opportunity {
@@ -51,7 +122,6 @@ export interface Match {
   feedback?: 'positive' | 'negative' | null;
 }
 
-// NetworkSharedDeal type for shared opportunities
 export interface NetworkSharedDeal {
   id: string;
   opportunityId: string;
@@ -59,7 +129,7 @@ export interface NetworkSharedDeal {
   sector: string;
   stage: string;
   fundingAmount: number;
-  location: string; // Added location field
+  location: string;
   sharedBy: string;
   avatar: string | null;
   comment: string | null;

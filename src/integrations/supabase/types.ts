@@ -106,52 +106,91 @@ export type Database = {
       }
       investor_profiles: {
         Row: {
+          aum: string | null
           avatar_url: string | null
           check_size_max: number | null
           check_size_min: number | null
           company: string | null
+          context_sectors: string[]
           created_at: string
           deal_count: number
           email: string | null
+          geographic_focus: string | null
           id: string
           investment_thesis: string | null
           name: string
+          preferred_assets: string[] | null
           preferred_geographies: string[] | null
           preferred_stages: string[] | null
-          sectors: string[]
+          psychological_profile_raw: Json | null
+          psychological_profile_weighted: Json | null
+          role: string | null
+          source_of_wealth: string[] | null
+          stage_focus: string | null
+          strategy_profile: Json | null
+          structure: string | null
+          time_horizon: string | null
           updated_at: string
+          values_filter: string[] | null
+          weighting_preferences: Json | null
         }
         Insert: {
+          aum?: string | null
           avatar_url?: string | null
           check_size_max?: number | null
           check_size_min?: number | null
           company?: string | null
+          context_sectors?: string[]
           created_at?: string
           deal_count?: number
           email?: string | null
+          geographic_focus?: string | null
           id: string
           investment_thesis?: string | null
           name: string
+          preferred_assets?: string[] | null
           preferred_geographies?: string[] | null
           preferred_stages?: string[] | null
-          sectors?: string[]
+          psychological_profile_raw?: Json | null
+          psychological_profile_weighted?: Json | null
+          role?: string | null
+          source_of_wealth?: string[] | null
+          stage_focus?: string | null
+          strategy_profile?: Json | null
+          structure?: string | null
+          time_horizon?: string | null
           updated_at?: string
+          values_filter?: string[] | null
+          weighting_preferences?: Json | null
         }
         Update: {
+          aum?: string | null
           avatar_url?: string | null
           check_size_max?: number | null
           check_size_min?: number | null
           company?: string | null
+          context_sectors?: string[]
           created_at?: string
           deal_count?: number
           email?: string | null
+          geographic_focus?: string | null
           id?: string
           investment_thesis?: string | null
           name?: string
+          preferred_assets?: string[] | null
           preferred_geographies?: string[] | null
           preferred_stages?: string[] | null
-          sectors?: string[]
+          psychological_profile_raw?: Json | null
+          psychological_profile_weighted?: Json | null
+          role?: string | null
+          source_of_wealth?: string[] | null
+          stage_focus?: string | null
+          strategy_profile?: Json | null
+          structure?: string | null
+          time_horizon?: string | null
           updated_at?: string
+          values_filter?: string[] | null
+          weighting_preferences?: Json | null
         }
         Relationships: []
       }

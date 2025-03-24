@@ -1,5 +1,5 @@
 
-import { Mail, Briefcase, Tag, Clock, MapPin, DollarSign } from "lucide-react";
+import { Mail, Briefcase, Tag, Clock, MapPin, DollarSign, Award, Compass, Layers, BarChart } from "lucide-react";
 import { NetworkInvestor } from "@/types";
 
 interface ProfileDetailsProps {
@@ -16,6 +16,13 @@ export const ProfileDetails = ({ investor }: ProfileDetailsProps) => {
         </div>
       )}
       
+      {investor.role && (
+        <div className="flex items-center text-sm">
+          <Award className="h-4 w-4 mr-2 text-muted-foreground" />
+          <span>{investor.role}</span>
+        </div>
+      )}
+      
       <div className="flex items-center text-sm">
         <Briefcase className="h-4 w-4 mr-2 text-muted-foreground" />
         <span>{investor.dealCount} deals in portfolio</span>
@@ -27,7 +34,7 @@ export const ProfileDetails = ({ investor }: ProfileDetailsProps) => {
           Sectors
         </h3>
         <div className="flex flex-wrap gap-1.5 mt-1">
-          {investor.sectors.map(sector => (
+          {investor.contextSectors.map(sector => (
             <div 
               key={sector} 
               className="bg-muted text-xs px-2 py-1 rounded-full"
@@ -85,6 +92,57 @@ export const ProfileDetails = ({ investor }: ProfileDetailsProps) => {
           <p className="text-sm">
             ${(investor.checkSizeMin/1000).toFixed(0)}K - ${(investor.checkSizeMax/1000).toFixed(0)}K
           </p>
+        </div>
+      )}
+      
+      {investor.preferredAssets && investor.preferredAssets.length > 0 && (
+        <div className="pt-4 border-t">
+          <h3 className="text-sm font-medium mb-2 flex items-center">
+            <Layers className="h-4 w-4 mr-2 text-muted-foreground" />
+            Preferred Assets
+          </h3>
+          <div className="flex flex-wrap gap-1.5 mt-1">
+            {investor.preferredAssets.map(asset => (
+              <div 
+                key={asset} 
+                className="bg-muted text-xs px-2 py-1 rounded-full"
+              >
+                {asset}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      {investor.timeHorizon && (
+        <div className="pt-4 border-t">
+          <h3 className="text-sm font-medium mb-2 flex items-center">
+            <Compass className="h-4 w-4 mr-2 text-muted-foreground" />
+            Time Horizon
+          </h3>
+          <p className="text-sm">{investor.timeHorizon}</p>
+        </div>
+      )}
+      
+      {investor.psychologicalProfileWeighted && Object.keys(investor.psychologicalProfileWeighted).length > 0 && (
+        <div className="pt-4 border-t">
+          <h3 className="text-sm font-medium mb-2 flex items-center">
+            <BarChart className="h-4 w-4 mr-2 text-muted-foreground" />
+            Investor Profile
+          </h3>
+          <div className="space-y-2 mt-1">
+            {Object.entries(investor.psychologicalProfileWeighted).map(([trait, value]) => (
+              <div key={trait} className="flex items-center justify-between">
+                <span className="text-xs">{trait}</span>
+                <div className="w-32 bg-muted rounded-full h-2">
+                  <div 
+                    className="bg-primary h-2 rounded-full" 
+                    style={{ width: `${Math.min(100, (Number(value) / 25) * 100)}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

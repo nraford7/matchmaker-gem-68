@@ -10,7 +10,7 @@ export const SectorsForm = () => {
   
   const sectors = ["Fintech", "Health Tech", "SaaS", "AI/ML", "Cybersecurity", 
     "EdTech", "CleanTech", "E-commerce", "Gaming", "IoT", 
-    "Consumer Tech", "Enterprise Software"];
+    "Consumer Tech", "Enterprise Software", "Mobility", "Infrastructure"];
   
   return (
     <Card>
@@ -26,13 +26,13 @@ export const SectorsForm = () => {
             <div key={sector} className="flex items-center space-x-2">
               <Checkbox 
                 id={sector}
-                checked={form.watch("preferredSectors").includes(sector)}
+                checked={form.watch("contextSectors").includes(sector)}
                 onCheckedChange={(checked) => {
-                  const current = form.getValues("preferredSectors");
+                  const current = form.getValues("contextSectors");
                   if (checked) {
-                    form.setValue("preferredSectors", [...current, sector]);
+                    form.setValue("contextSectors", [...current, sector]);
                   } else {
-                    form.setValue("preferredSectors", current.filter(s => s !== sector));
+                    form.setValue("contextSectors", current.filter(s => s !== sector));
                   }
                 }}
               />

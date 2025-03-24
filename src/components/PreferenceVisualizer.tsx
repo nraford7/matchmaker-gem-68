@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { 
   ResponsiveContainer, 
@@ -31,17 +30,17 @@ export const PreferenceVisualizer = ({ investor }: PreferenceVisualizerProps) =>
     const radarData: RadarData[] = [
       {
         subject: "Fintech",
-        value: investor.preferredSectors.includes("Fintech") ? 80 : 20,
+        value: investor.contextSectors.includes("Fintech") ? 80 : 20,
         fullMark: 100,
       },
       {
         subject: "Health Tech",
-        value: investor.preferredSectors.includes("Health Tech") ? 90 : 10,
+        value: investor.contextSectors.includes("Health Tech") ? 90 : 10,
         fullMark: 100,
       },
       {
         subject: "SaaS",
-        value: investor.preferredSectors.includes("SaaS") ? 85 : 15,
+        value: investor.contextSectors.includes("SaaS") ? 85 : 15,
         fullMark: 100,
       },
       {
