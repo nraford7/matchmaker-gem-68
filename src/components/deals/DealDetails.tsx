@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,6 @@ import DealTeam from "@/components/deals/DealTeam";
 import DealFundsUsage from "@/components/deals/DealFundsUsage";
 import DealMilestones from "@/components/deals/DealMilestones";
 import DealSidebar from "@/components/deals/DealSidebar";
-import DealRecommendation from "@/components/deals/DealRecommendation";
 import NotFoundState from "@/components/deals/NotFoundState";
 import DealLoading from "@/components/deals/DealLoading";
 import { fetchDealData } from "@/services/deal";
@@ -40,7 +38,6 @@ const DealDetails = () => {
     loadDeal();
   }, [id, navigate]);
 
-  // Function to handle going back to the previous page
   const handleGoBack = () => {
     navigate(-1);
   };
@@ -128,10 +125,6 @@ const DealDetails = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          {dealData.personalisedRecommendation && (
-            <DealRecommendation recommendation={dealData.personalisedRecommendation} />
-          )}
-          
           <DealOverview deal={dealData} />
           
           {dealData.team && dealData.team.length > 0 && (
