@@ -1,8 +1,35 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { getCurrentUserId, validateUserAuth } from "./baseService";
+import { getCurrentUserId } from "./baseService";
 import { Deal } from "@/types";
 import { toast } from "sonner";
+
+// Utility function to map database deal to Deal type
+const mapDealFromDb = (dbDeal: any): Deal => {
+  return {
+    id: dbDeal.id,
+    name: dbDeal.name,
+    description: dbDeal.description,
+    dealType: dbDeal.deal_type,
+    checkSizeRequired: dbDeal.check_size_required,
+    check_size_required: dbDeal.check_size_required,
+    sectorTags: dbDeal.sector_tags,
+    sector_tags: dbDeal.sector_tags,
+    geographies: dbDeal.geographies,
+    stage: dbDeal.stage,
+    timeHorizon: dbDeal.time_horizon,
+    esgTags: dbDeal.esg_tags,
+    involvementModel: dbDeal.involvement_model,
+    exitStyle: dbDeal.exit_style,
+    dueDiligenceLevel: dbDeal.due_diligence_level,
+    decisionConvictionRequired: dbDeal.decision_conviction_required,
+    investorSpeedRequired: dbDeal.investor_speed_required,
+    strategyProfile: dbDeal.strategy_profile,
+    psychologicalFit: dbDeal.psychological_fit,
+    createdAt: dbDeal.created_at,
+    updatedAt: dbDeal.updated_at
+  };
+};
 
 // Fetch all opportunities
 export const fetchAllOpportunities = async (): Promise<Deal[]> => {
@@ -14,9 +41,8 @@ export const fetchAllOpportunities = async (): Promise<Deal[]> => {
 
     if (error) throw error;
 
-    // Simplified to avoid deep type instantiation
-    const deals = data as Deal[];
-    return deals;
+    // Map the database results to the Deal type
+    return (data || []).map(mapDealFromDb);
   } catch (error) {
     console.error("Error fetching all opportunities:", error);
     return [];
@@ -34,8 +60,8 @@ export const fetchOpportunityById = async (id: string): Promise<Deal | null> => 
 
     if (error) throw error;
 
-    // Simplified to avoid deep type instantiation
-    return data as Deal;
+    // Map the database result to the Deal type
+    return mapDealFromDb(data);
   } catch (error) {
     console.error(`Error fetching opportunity ${id}:`, error);
     return null;
@@ -53,8 +79,8 @@ export const fetchFeaturedOpportunities = async (limit = 3): Promise<Deal[]> => 
 
     if (error) throw error;
 
-    // Simplified to avoid deep type instantiation
-    return data as Deal[];
+    // Map the database results to the Deal type
+    return (data || []).map(mapDealFromDb);
   } catch (error) {
     console.error("Error fetching featured opportunities:", error);
     return [];
@@ -72,8 +98,8 @@ export const fetchTrendingOpportunities = async (limit = 5): Promise<Deal[]> => 
 
     if (error) throw error;
 
-    // Simplified to avoid deep type instantiation
-    return data as Deal[];
+    // Map the database results to the Deal type
+    return (data || []).map(mapDealFromDb);
   } catch (error) {
     console.error("Error fetching trending opportunities:", error);
     return [];
@@ -84,7 +110,7 @@ export const fetchTrendingOpportunities = async (limit = 5): Promise<Deal[]> => 
 export const fetchMatchingOpportunities = async (): Promise<Deal[]> => {
   const userId = await getCurrentUserId();
   
-  if (!validateUserAuth(userId)) {
+  if (!userId) {
     return [];
   }
 
@@ -99,8 +125,8 @@ export const fetchMatchingOpportunities = async (): Promise<Deal[]> => {
 
     if (error) throw error;
 
-    // Simplified to avoid deep type instantiation
-    const deals = data as Deal[];
+    // Map the database results to the Deal type
+    const deals = (data || []).map(mapDealFromDb);
     
     // Add mock match scores for demonstration
     const dealsWithMatchScores = deals.map(deal => ({
@@ -115,3 +141,6 @@ export const fetchMatchingOpportunities = async (): Promise<Deal[]> => {
     return [];
   }
 };
+
+// Add this for backwards compatibility
+export const fetchDeals = fetchAllOpportunities;

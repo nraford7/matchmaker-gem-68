@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { getCurrentUserId, validateUserAuth } from "./baseService";
+import { getCurrentUserId } from "./baseService";
 import { Deal, InvestorConnection } from "@/types";
 import { toast } from "sonner";
 
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 export const getSharedDeals = async (): Promise<Deal[]> => {
   const userId = await getCurrentUserId();
   
-  if (!validateUserAuth(userId)) {
+  if (!userId) {
     return [];
   }
 
@@ -16,15 +16,41 @@ export const getSharedDeals = async (): Promise<Deal[]> => {
     // This is a simplified query that would need to be adjusted based on your actual database schema
     // In a real app, you'd have a table that tracks shared deals
     const { data, error } = await supabase
-      .from("shared_deals")
+      .from("network_shared_deals")
       .select("*, deals(*)")
-      .eq("shared_with", userId);
+      .eq("shared_with_user_id", userId);
 
     if (error) throw error;
 
     // Extract the deal data from the response
-    const deals = data?.map(item => item.deals) || [];
-    return deals as Deal[];
+    const deals = data?.map(item => {
+      const deal = item.deals;
+      return {
+        ...deal,
+        id: deal.id,
+        name: deal.name,
+        description: deal.description,
+        dealType: deal.deal_type,
+        checkSizeRequired: deal.check_size_required,
+        sectorTags: deal.sector_tags,
+        sector_tags: deal.sector_tags,
+        geographies: deal.geographies,
+        stage: deal.stage,
+        timeHorizon: deal.time_horizon,
+        esgTags: deal.esg_tags,
+        involvementModel: deal.involvement_model,
+        exitStyle: deal.exit_style,
+        dueDiligenceLevel: deal.due_diligence_level,
+        decisionConvictionRequired: deal.decision_conviction_required,
+        investorSpeedRequired: deal.investor_speed_required,
+        strategyProfile: deal.strategy_profile,
+        psychologicalFit: deal.psychological_fit,
+        createdAt: deal.created_at,
+        updatedAt: deal.updated_at
+      };
+    }) || [];
+    
+    return deals;
   } catch (error) {
     console.error("Error fetching shared deals:", error);
     return [];
@@ -38,7 +64,7 @@ export const shareDealWithConnections = async (
 ): Promise<boolean> => {
   const userId = await getCurrentUserId();
   
-  if (!validateUserAuth(userId)) {
+  if (!userId) {
     return false;
   }
 
@@ -46,14 +72,14 @@ export const shareDealWithConnections = async (
     // Build an array of records to insert
     const sharedRecords = connectionIds.map(connectionId => ({
       deal_id: dealId,
-      shared_by: userId,
-      shared_with: connectionId,
+      shared_by_user_id: userId,
+      shared_with_user_id: connectionId,
       created_at: new Date().toISOString()
     }));
 
     // Insert the sharing records
     const { error } = await supabase
-      .from("shared_deals")
+      .from("network_shared_deals")
       .insert(sharedRecords);
 
     if (error) throw error;
@@ -71,7 +97,7 @@ export const shareDealWithConnections = async (
 export const getUserConnections = async (): Promise<InvestorConnection[]> => {
   const userId = await getCurrentUserId();
   
-  if (!validateUserAuth(userId)) {
+  if (!userId) {
     return [];
   }
 
@@ -81,29 +107,27 @@ export const getUserConnections = async (): Promise<InvestorConnection[]> => {
       .from("investor_connections")
       .select(`
         id,
-        user_id,
-        connection_id,
-        status,
+        follower_id,
+        following_id,
         created_at,
-        profiles:connection_id(id, full_name, email, company, avatar_url)
+        investor_profiles:following_id(id, name, email, company, avatar_url)
       `)
-      .eq("user_id", userId)
-      .eq("status", "connected");
+      .eq("follower_id", userId);
 
     if (error) throw error;
 
     // Transform the data to the expected format
     const connections = data.map(connection => {
-      const profile = connection.profiles;
+      const profile = connection.investor_profiles;
       return {
         id: connection.id,
-        userId: connection.user_id,
-        connectionId: connection.connection_id,
-        status: connection.status,
+        userId: connection.follower_id,
+        connectionId: connection.following_id,
+        status: "connected", // Assuming all connections are 'connected'
         createdAt: connection.created_at,
         connectionUser: {
           id: profile?.id,
-          name: profile?.full_name,
+          name: profile?.name,
           email: profile?.email,
           company: profile?.company,
           avatarUrl: profile?.avatar_url

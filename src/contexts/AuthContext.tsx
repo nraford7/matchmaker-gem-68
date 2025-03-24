@@ -2,11 +2,14 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
+import { Investor } from '@/types';
+import { fetchCurrentInvestorProfile } from '@/services/investor/fetchServices';
 
 interface AuthContextType {
   session: Session | null;
   user: User | null;
-  loading: boolean; // Added loading property
+  loading: boolean;
+  investorProfile: Investor | null;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -19,21 +22,46 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [investorProfile, setInvestorProfile] = useState<Investor | null>(null);
 
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      async (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          // Fetch investor profile when user is authenticated
+          try {
+            const profile = await fetchCurrentInvestorProfile();
+            setInvestorProfile(profile);
+          } catch (error) {
+            console.error("Error fetching investor profile:", error);
+          }
+        } else {
+          setInvestorProfile(null);
+        }
+        
         setLoading(false);
       }
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        // Fetch investor profile when user is authenticated
+        try {
+          const profile = await fetchCurrentInvestorProfile();
+          setInvestorProfile(profile);
+        } catch (error) {
+          console.error("Error fetching investor profile:", error);
+        }
+      }
+      
       setLoading(false);
     });
 
@@ -98,6 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     session,
     user,
     loading,
+    investorProfile,
     signIn,
     signUp,
     signOut,
