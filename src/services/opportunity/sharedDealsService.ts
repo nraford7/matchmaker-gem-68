@@ -41,8 +41,8 @@ export const getSharedDealsForUser = async (userId: string): Promise<SharedDeal[
       throw error;
     }
 
-    // Handle null values and ensure proper typing
-    return (data || []).map(item => {
+    // Use type assertion to address the type mismatch
+    return (data as unknown as SharedDeal[]).map(item => {
       if (!item) return null;
       
       // If deal is null, provide default values

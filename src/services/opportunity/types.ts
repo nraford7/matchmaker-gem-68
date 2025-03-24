@@ -10,5 +10,5 @@ export interface SharedDeal {
   created_at: string;
   // Joined fields
   deal?: NetworkDeal;
-  shared_by_user?: NetworkInvestor;
+  shared_by_user?: Partial<NetworkInvestor>;
 }
