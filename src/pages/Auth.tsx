@@ -9,7 +9,6 @@ import { toast } from 'sonner';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signIn } = useAuth();
   const navigate = useNavigate();
@@ -21,22 +20,15 @@ const Auth = () => {
       toast.error('Please enter a valid email address');
       return;
     }
-
-    if (!password || password.length < 6) {
-      toast.error('Please enter a valid password (minimum 6 characters)');
-      return;
-    }
     
     setIsLoading(true);
     
     try {
-      await signIn(email, password);
+      await signIn(email);
       // No need to check for error as the signIn function handles errors internally
-      toast.success('Successfully signed in!');
-      navigate('/dashboard');
-    } catch (error: any) {
-      // This catch block handles errors passed from signIn
-      toast.error(error.message || 'Failed to sign in');
+      toast.success('Check your email for the login link!');
+    } catch (error) {
+      // This catch block may never be reached since errors are handled in signIn
       console.error('Authentication error:', error);
     } finally {
       setIsLoading(false);
@@ -49,7 +41,7 @@ const Auth = () => {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold tracking-tight">Sign in to your account</CardTitle>
           <CardDescription>
-            Enter your credentials to access your account
+            Enter your email to receive a magic link for passwordless sign in
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -67,23 +59,10 @@ const Auth = () => {
                 required
               />
             </div>
-            <div className="space-y-2">
-              <Input
-                id="password"
-                placeholder="••••••••"
-                type="password"
-                autoCapitalize="none"
-                autoComplete="current-password"
-                autoCorrect="off"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
           </CardContent>
           <CardFooter>
             <Button className="w-full" type="submit" disabled={isLoading}>
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? 'Sending link...' : 'Send Magic Link'}
             </Button>
           </CardFooter>
         </form>

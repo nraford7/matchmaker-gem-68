@@ -8,4 +8,4 @@ export * from "./createServices";
 export * from "./matchFeedbackService";
 
 // Export the fetchDeals function as fetchSavedDeals for backward compatibility
-export { fetchDeals } from "./fetchServices";
+export { fetchDeals as fetchSavedDeals } from "./fetchServices";

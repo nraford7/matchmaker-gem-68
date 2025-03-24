@@ -29,18 +29,3 @@ export type NetworkSharedDeal = {
   opportunityId?: string;
   opportunityName?: string;
 };
-
-export type InvestorConnection = {
-  id: string;
-  userId: string;
-  connectionId: string;
-  status: string;
-  createdAt: string;
-  connectionUser: {
-    id?: string;
-    name?: string;
-    email?: string;
-    company?: string;
-    avatarUrl?: string;
-  };
-};

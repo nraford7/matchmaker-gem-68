@@ -8,11 +8,11 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
   const location = useLocation();
 
-  // If still loading, show a loading indicator
-  if (loading) {
+  // If still loading, show nothing (or could add a loading spinner)
+  if (isLoading) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
 
