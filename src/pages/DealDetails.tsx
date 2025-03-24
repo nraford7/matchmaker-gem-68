@@ -1,5 +1,4 @@
-
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MapPin, DollarSign, TrendingUp, Clock } from "lucide-react";
@@ -20,6 +19,7 @@ import { formatCurrency } from "@/lib/utils";
 const DealDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [dealData, setDealData] = useState<EnhancedDeal | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,7 +42,13 @@ const DealDetails = () => {
 
   // Function to handle going back to the previous page
   const handleGoBack = () => {
-    navigate(-1);
+    if (location.state?.from) {
+      // If we have a "from" location stored in the state, navigate to it
+      navigate(location.state.from);
+    } else {
+      // Otherwise just go back in the history
+      navigate(-1);
+    }
   };
 
   if (isLoading) {
@@ -107,7 +113,6 @@ const DealDetails = () => {
               </div>
             )}
             
-            {/* Make sure we're checking for the IRR field correctly */}
             {typeof dealData.IRR !== 'undefined' && dealData.IRR !== null && (
               <div className="flex items-center text-sm">
                 <TrendingUp className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
@@ -131,7 +136,6 @@ const DealDetails = () => {
         <div className="md:col-span-2 space-y-6">
           <DealOverview deal={dealData} />
           
-          {/* Add the new Recommendation component here */}
           {dealData.recommendation && (
             <DealRecommendation recommendation={dealData.recommendation} />
           )}

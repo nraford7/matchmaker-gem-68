@@ -1,63 +1,68 @@
-import { Card, CardContent, CardHeader, CardDescription, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
+
+import { Link, useLocation } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Opportunity } from "@/types";
-import { OpportunityList } from "@/components/opportunities";
-import { Bookmark } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Deal } from "@/types";
 
 interface SavedDealsProps {
-  savedDeals: Opportunity[];
-  loading: boolean;
+  savedDeals: Deal[];
 }
 
-export const SavedDeals = ({ savedDeals, loading }: SavedDealsProps) => {
+export const SavedDeals = ({ savedDeals }: SavedDealsProps) => {
+  const location = useLocation();
+  
   return (
-    <Tabs defaultValue="saved" className="w-full mb-6">
-      <TabsContent value="saved" className="space-y-4">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Bookmark className="h-5 w-5 text-muted-foreground" />
-              <CardTitle>Your Saved Deals</CardTitle>
-            </div>
-            <CardDescription>
-              Opportunities you've saved for later
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="min-h-[400px]">
-            {loading ? (
-              <div className="flex flex-col items-center justify-center py-6 text-center h-full">
-                <p className="text-lg text-muted-foreground">
-                  Loading saved deals...
-                </p>
-              </div>
-            ) : savedDeals.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-full">
-                {savedDeals.map((deal) => (
-                  <div 
-                    key={deal.id} 
-                    className="flex"
-                  >
-                    <div className="flex-1 flex flex-col">
-                      <OpportunityList 
-                        opportunities={[deal]} 
-                        showMatchScore={true}
-                      />
+    <Card>
+      <CardHeader>
+        <CardTitle>Saved Deals</CardTitle>
+        <CardDescription>Track your saved investment opportunities</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {savedDeals.length === 0 ? (
+          <div className="text-center py-6">
+            <p className="text-muted-foreground">No saved deals yet</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {savedDeals.slice(0, 5).map((deal) => (
+              <Link 
+                key={deal.id} 
+                to={`/deals/${deal.id}`}
+                state={{ from: location.pathname }}
+                className="block group"
+              >
+                <div className="flex justify-between items-center py-2 px-4 rounded-lg hover:bg-accent transition-colors">
+                  <div>
+                    <p className="font-medium group-hover:text-primary transition-colors">{deal.name}</p>
+                    <div className="flex gap-2 mt-1">
+                      {deal.sectorTags && deal.sectorTags[0] && (
+                        <Badge variant="outline" className="text-xs">
+                          {deal.sectorTags[0]}
+                        </Badge>
+                      )}
+                      {deal.stage && (
+                        <Badge variant="secondary" className="text-xs">
+                          {deal.stage}
+                        </Badge>
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 text-center h-full">
-                <p className="text-lg text-muted-foreground mb-4">
-                  You haven't saved any opportunities yet
-                </p>
-                <Button variant="outline">Browse Opportunities</Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </TabsContent>
-    </Tabs>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </CardContent>
+      <CardFooter>
+        <Link to="/deals" className="w-full">
+          <Button variant="outline" className="w-full">
+            View All Deals
+          </Button>
+        </Link>
+      </CardFooter>
+    </Card>
   );
 };
