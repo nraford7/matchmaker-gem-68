@@ -12,6 +12,7 @@ import DealMilestones from "@/components/deals/DealMilestones";
 import DealSidebar from "@/components/deals/DealSidebar";
 import NotFoundState from "@/components/deals/NotFoundState";
 import DealLoading from "@/components/deals/DealLoading";
+import DealRecommendation from "@/components/deals/DealRecommendation";
 import { fetchDealData } from "@/services/deal";
 import { EnhancedDeal } from "@/types/deal";
 import { formatCurrency } from "@/lib/utils";
@@ -129,6 +130,11 @@ const DealDetails = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           <DealOverview deal={dealData} />
+          
+          {/* Add the new Recommendation component here */}
+          {dealData.recommendation && (
+            <DealRecommendation recommendation={dealData.recommendation} />
+          )}
           
           {dealData.team && dealData.team.length > 0 && (
             <DealTeam team={dealData.team} />
