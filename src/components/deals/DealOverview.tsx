@@ -60,7 +60,7 @@ const DealOverview = ({ deal }: DealOverviewProps) => {
           {deal.revenue && (
             <div>
               <h3 className="text-sm font-medium">Revenue</h3>
-              <p className="text-sm">${deal.revenue}</p>
+              <p className="text-sm">{deal.revenue}</p>
             </div>
           )}
           
