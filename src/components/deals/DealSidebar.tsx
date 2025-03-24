@@ -11,6 +11,14 @@ interface DealSidebarProps {
 }
 
 const DealSidebar = ({ deal }: DealSidebarProps) => {
+  // Function to capitalize the first letter of each word
+  const capitalize = (text: string) => {
+    if (!text) return "";
+    return text.split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   return (
     <>
       {deal.matchScore !== undefined && (
@@ -72,13 +80,13 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
             {deal.sectorTags && deal.sectorTags.length > 0 && (
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Sector</span>
-                <span className="text-sm font-medium">{deal.sectorTags[0]}</span>
+                <span className="text-sm font-medium">{capitalize(deal.sectorTags[0])}</span>
               </div>
             )}
             <Separator />
             <div className="flex justify-between">
               <span className="text-sm text-muted-foreground">Stage</span>
-              <span className="text-sm font-medium">{deal.stage || "Not specified"}</span>
+              <span className="text-sm font-medium">{capitalize(deal.stage || "Not specified")}</span>
             </div>
             <Separator />
             <div className="flex justify-between">
@@ -99,7 +107,7 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
               <>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Involvement</span>
-                  <span className="text-sm font-medium">{deal.involvementModel}</span>
+                  <span className="text-sm font-medium">{capitalize(deal.involvementModel)}</span>
                 </div>
                 <Separator />
               </>
@@ -108,7 +116,7 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
               <>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Time Horizon</span>
-                  <span className="text-sm font-medium">{deal.timeHorizon}</span>
+                  <span className="text-sm font-medium">{capitalize(deal.timeHorizon)}</span>
                 </div>
                 <Separator />
               </>
@@ -116,7 +124,7 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
             {deal.projectedIRR && !deal.IRR && (
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Projected IRR</span>
-                <span className="text-sm font-medium">{deal.projectedIRR}</span>
+                <span className="text-sm font-medium">{capitalize(deal.projectedIRR)}</span>
               </div>
             )}
           </div>
