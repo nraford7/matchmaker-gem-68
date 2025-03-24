@@ -1,6 +1,5 @@
 
-import { Users, Upload } from "lucide-react";
-import { InvestorUpload } from "./InvestorUpload";
+import { Users } from "lucide-react";
 
 export const NetworkHeader = () => {
   return (
@@ -10,7 +9,6 @@ export const NetworkHeader = () => {
           <Users className="h-8 w-8 text-primary" />
           Network
         </h1>
-        <InvestorUpload />
       </div>
       <p className="text-muted-foreground">
         Connect with other investors and discover opportunities
