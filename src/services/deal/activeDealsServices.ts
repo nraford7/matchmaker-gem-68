@@ -43,6 +43,32 @@ export const activateDeal = async (dealId: string, stage: string): Promise<boole
   }
 };
 
+// Remove a deal from active deals
+export const deactivateDeal = async (dealId: string): Promise<boolean> => {
+  try {
+    const userId = await getCurrentUserId();
+    if (!validateUserAuth(userId)) {
+      return false;
+    }
+
+    const { error } = await supabase
+      .from("active_deals")
+      .delete()
+      .eq("deal_id", dealId)
+      .eq("user_id", userId);
+
+    if (error) {
+      throw error;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error deactivating deal:", error);
+    toast.error("Failed to remove from active deals");
+    return false;
+  }
+};
+
 // Move a deal to past deals
 export const completeDeal = async (dealId: string, finalAmount: number): Promise<boolean> => {
   try {

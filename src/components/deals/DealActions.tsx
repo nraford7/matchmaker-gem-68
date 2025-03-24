@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Share, BookmarkPlus, Briefcase } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Share, BookmarkPlus, BookmarkMinus, Briefcase, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,9 +9,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { saveDeal } from "@/services/deal/savedDealsServices";
+import { saveDeal, unsaveDeal } from "@/services/deal/savedDealsServices";
+import { activateDeal, deactivateDeal } from "@/services/deal/activeDealsServices";
 import ShareDealDialog from "./ShareDealDialog";
 import ActivateDealDialog from "./ActivateDealDialog";
+import { checkDealIsSaved, checkDealIsActive } from "@/services/deal/dealStatusService";
 
 interface DealActionsProps {
   dealId: string;
@@ -22,17 +24,51 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [activateDialogOpen, setActivateDialogOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkDealStatus = async () => {
+      setIsLoading(true);
+      try {
+        const [savedStatus, activeStatus] = await Promise.all([
+          checkDealIsSaved(dealId),
+          checkDealIsActive(dealId)
+        ]);
+        
+        setIsSaved(savedStatus);
+        setIsActive(activeStatus);
+      } catch (error) {
+        console.error("Error checking deal status:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkDealStatus();
+  }, [dealId]);
 
   const handleSaveDeal = async () => {
     try {
-      const success = await saveDeal(dealId);
-      if (success) {
-        toast.success("Deal saved successfully");
+      if (isSaved) {
+        const success = await unsaveDeal(dealId);
+        if (success) {
+          setIsSaved(false);
+          toast.success("Deal removed from saved deals");
+        }
+      } else {
+        const success = await saveDeal(dealId);
+        if (success) {
+          setIsSaved(true);
+          toast.success("Deal saved successfully");
+        }
       }
     } catch (error) {
-      console.error("Error saving deal:", error);
-      toast.error("Failed to save deal");
+      console.error("Error toggling save deal:", error);
+      toast.error("Failed to update saved status");
     }
+    setDropdownOpen(false);
   };
 
   const handleShareDeal = () => {
@@ -41,7 +77,25 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
   };
 
   const handleActivateDeal = () => {
-    setActivateDialogOpen(true);
+    if (!isActive) {
+      setActivateDialogOpen(true);
+      setDropdownOpen(false);
+    } else {
+      handleDeactivateDeal();
+    }
+  };
+
+  const handleDeactivateDeal = async () => {
+    try {
+      const success = await deactivateDeal(dealId);
+      if (success) {
+        setIsActive(false);
+        toast.success("Deal removed from active deals");
+      }
+    } catch (error) {
+      console.error("Error removing from active deals:", error);
+      toast.error("Failed to remove from active deals");
+    }
     setDropdownOpen(false);
   };
 
@@ -49,7 +103,7 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
     <>
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" disabled={isLoading}>
             <svg
               width="15"
               height="15"
@@ -69,16 +123,34 @@ const DealActions = ({ dealId, dealName }: DealActionsProps) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={handleSaveDeal} className="cursor-pointer">
-            <BookmarkPlus className="mr-2 h-4 w-4" />
-            Save Deal
+            {isSaved ? (
+              <>
+                <BookmarkMinus className="mr-2 h-4 w-4" />
+                Unsave Deal
+              </>
+            ) : (
+              <>
+                <BookmarkPlus className="mr-2 h-4 w-4" />
+                Save Deal
+              </>
+            )}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleShareDeal} className="cursor-pointer">
             <Share className="mr-2 h-4 w-4" />
             Share Deal
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleActivateDeal} className="cursor-pointer">
-            <Briefcase className="mr-2 h-4 w-4" />
-            Add to Active Deals
+            {isActive ? (
+              <>
+                <X className="mr-2 h-4 w-4" />
+                Remove from Active Deals
+              </>
+            ) : (
+              <>
+                <Briefcase className="mr-2 h-4 w-4" />
+                Add to Active Deals
+              </>
+            )}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

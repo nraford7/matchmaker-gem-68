@@ -34,3 +34,29 @@ export const saveDeal = async (dealId: string): Promise<boolean> => {
     return false;
   }
 };
+
+// Remove a deal from saved deals
+export const unsaveDeal = async (dealId: string): Promise<boolean> => {
+  try {
+    const userId = await getCurrentUserId();
+    if (!validateUserAuth(userId)) {
+      return false;
+    }
+
+    const { error } = await supabase
+      .from("saved_deals")
+      .delete()
+      .eq("deal_id", dealId)
+      .eq("user_id", userId);
+
+    if (error) {
+      throw error;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error unsaving deal:", error);
+    toast.error("Failed to remove deal from saved");
+    return false;
+  }
+};
