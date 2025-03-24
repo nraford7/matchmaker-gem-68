@@ -93,12 +93,21 @@ const processRows = async (rows: string[], headers: string[]): Promise<number> =
     const item: Record<string, any> = {};
     headers.forEach((header, index) => {
       // Handle array fields
-      if (["contextSectors", "preferredStages", "preferredGeographies"].includes(header)) {
+      if (["contextSectors", "preferredStages", "preferredGeographies", "preferredAssets", "valuesFilter", "sourceOfWealth"].includes(header)) {
         item[header] = values[index] ? values[index].split(";") : [];
       } 
       // Handle numeric fields
       else if (["checkSizeMin", "checkSizeMax"].includes(header)) {
         item[header] = values[index] ? parseInt(values[index], 10) : null;
+      }
+      // Handle JSON fields
+      else if (["psychologicalProfileRaw", "psychologicalProfileWeighted", "strategyProfile", "weightingPreferences"].includes(header)) {
+        try {
+          item[header] = values[index] ? JSON.parse(values[index]) : {};
+        } catch (e) {
+          console.warn(`Could not parse JSON field ${header}:`, e);
+          item[header] = {};
+        }
       }
       // Handle all other fields as strings
       else {
@@ -146,6 +155,19 @@ const createOrUpdateProfile = async (data: Record<string, any>): Promise<boolean
         check_size_min: data.checkSizeMin || null,
         check_size_max: data.checkSizeMax || null,
         investment_thesis: data.investmentThesis || null,
+        role: data.role || null,
+        source_of_wealth: data.sourceOfWealth || null,
+        stage_focus: data.stageFocus || null,
+        geographic_focus: data.geographicFocus || null,
+        preferred_assets: data.preferredAssets || null,
+        values_filter: data.valuesFilter || null,
+        time_horizon: data.timeHorizon || null,
+        structure: data.structure || null,
+        aum: data.aum || null,
+        psychological_profile_raw: data.psychologicalProfileRaw || {},
+        psychological_profile_weighted: data.psychologicalProfileWeighted || {},
+        strategy_profile: data.strategyProfile || {},
+        weighting_preferences: data.weightingPreferences || {},
         deal_count: Math.floor(Math.random() * 10) + 1, // Random deal count between 1-10
         user_id: userId // Add the user ID to associate with the current user
       });

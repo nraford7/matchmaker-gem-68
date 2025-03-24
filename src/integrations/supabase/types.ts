@@ -131,6 +131,7 @@ export type Database = {
           structure: string | null
           time_horizon: string | null
           updated_at: string
+          user_id: string | null
           values_filter: string[] | null
           weighting_preferences: Json | null
         }
@@ -160,6 +161,7 @@ export type Database = {
           structure?: string | null
           time_horizon?: string | null
           updated_at?: string
+          user_id?: string | null
           values_filter?: string[] | null
           weighting_preferences?: Json | null
         }
@@ -189,6 +191,7 @@ export type Database = {
           structure?: string | null
           time_horizon?: string | null
           updated_at?: string
+          user_id?: string | null
           values_filter?: string[] | null
           weighting_preferences?: Json | null
         }

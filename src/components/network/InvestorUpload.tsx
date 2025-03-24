@@ -75,11 +75,16 @@ export const InvestorUpload = () => {
               File Format
             </label>
             <p className="text-sm text-muted-foreground">
-              Files should include at minimum the "name" and "email" fields. Other supported fields: contextSectors, preferredStages, preferredGeographies, checkSizeMin, checkSizeMax, investmentThesis.
+              Files should include at minimum the "name" and "email" fields.
             </p>
-            <p className="text-sm text-muted-foreground">
-              For CSV files, use semicolons (;) to separate multiple values in array fields like contextSectors.
-            </p>
+            <div className="text-xs text-muted-foreground space-y-1 border p-3 rounded-md">
+              <p className="font-medium">Supported fields:</p>
+              <p>• Required: name, email</p>
+              <p>• Text fields: company, role, stageFocus, geographicFocus, investmentThesis, timeHorizon, structure, aum</p>
+              <p>• Array fields (separate with semicolons in CSV): contextSectors, preferredStages, preferredGeographies, preferredAssets, valuesFilter, sourceOfWealth</p>
+              <p>• Numeric fields: checkSizeMin, checkSizeMax</p>
+              <p>• JSON fields: psychologicalProfileRaw, psychologicalProfileWeighted, strategyProfile, weightingPreferences</p>
+            </div>
           </div>
           
           <div className="grid w-full gap-2">
