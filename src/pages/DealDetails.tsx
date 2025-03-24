@@ -2,8 +2,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import DealHeader from "@/components/deals/DealHeader";
+import { ArrowLeft, MapPin, DollarSign, TrendingUp, Clock } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import DealOverview from "@/components/deals/DealOverview";
 import DealTeam from "@/components/deals/DealTeam";
 import DealFundsUsage from "@/components/deals/DealFundsUsage";
@@ -14,6 +15,7 @@ import NotFoundState from "@/components/deals/NotFoundState";
 import DealLoading from "@/components/deals/DealLoading";
 import { fetchDealData } from "@/services/opportunity/dealDetailsService";
 import { EnhancedOpportunity } from "@/types/deal";
+import { formatCurrency } from "@/lib/utils";
 
 const DealDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,22 +54,84 @@ const DealDetails = () => {
 
   return (
     <div className="container mx-auto py-6 max-w-6xl">
-      <div className="mb-6">
-        <Button variant="ghost" size="sm" onClick={handleGoBack} className="mb-2">
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Back
-        </Button>
+      <Button variant="ghost" size="sm" onClick={handleGoBack} className="mb-4">
+        <ArrowLeft className="h-4 w-4 mr-1" />
+        Back
+      </Button>
+      
+      <Card className="mb-6 shadow-sm hover:shadow-md transition-shadow">
+        <CardHeader className="pb-2">
+          <div className="flex flex-col space-y-4">
+            <div className="flex justify-between items-start">
+              <h1 className="text-2xl font-bold">{dealData.name}</h1>
+              {dealData.matchScore && (
+                <Badge variant={dealData.matchScore > 0.8 ? "default" : "outline"} className="ml-2">
+                  {Math.round(dealData.matchScore * 100)}% match
+                </Badge>
+              )}
+            </div>
+            
+            <div className="flex flex-wrap gap-2">
+              {dealData.sectorTags && dealData.sectorTags.map((sector, index) => (
+                <Badge key={index} variant="secondary">
+                  {sector}
+                </Badge>
+              ))}
+              
+              {dealData.stage && (
+                <Badge variant="default">
+                  {dealData.stage}
+                </Badge>
+              )}
+            </div>
+            
+            <div className="text-sm text-muted-foreground flex items-center">
+              <MapPin className="h-4 w-4 mr-1" />
+              {dealData.location || dealData.geographies?.join(', ') || "Global"}
+            </div>
+          </div>
+        </CardHeader>
         
-        <DealHeader deal={dealData} />
-      </div>
+        <CardContent>
+          <p className="text-muted-foreground mb-4">
+            {dealData.description}
+          </p>
+          
+          <div className="space-y-3 pt-3 border-t border-border">
+            {dealData.checkSizeRequired && (
+              <div className="flex items-center text-sm">
+                <DollarSign className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
+                <span className="text-muted-foreground mr-2">Investment Ask:</span>
+                <span className="font-medium ml-auto">${formatCurrency(dealData.checkSizeRequired)}</span>
+              </div>
+            )}
+            
+            {dealData.IRR !== undefined && dealData.IRR !== null && (
+              <div className="flex items-center text-sm">
+                <TrendingUp className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
+                <span className="text-muted-foreground mr-2">Estimated IRR:</span>
+                <span className="font-medium ml-auto">{dealData.IRR}%</span>
+              </div>
+            )}
+            
+            {dealData.timeHorizon && (
+              <div className="flex items-center text-sm">
+                <Clock className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
+                <span className="text-muted-foreground mr-2">Estimated Time for Returns:</span>
+                <span className="font-medium ml-auto">{dealData.timeHorizon}</span>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          <DealOverview deal={dealData} />
-          
           {dealData.personalisedRecommendation && (
             <DealRecommendation recommendation={dealData.personalisedRecommendation} />
           )}
+          
+          <DealOverview deal={dealData} />
           
           {dealData.team && dealData.team.length > 0 && (
             <DealTeam team={dealData.team} />
