@@ -33,8 +33,6 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   const dealName = deal.deal?.name || deal.opportunityName || 'Unnamed Deal';
   const dealDescription = deal.deal?.description || '';
   const avatarUrl = deal.investor?.avatar_url || deal.avatar;
-  const sectorTag = deal.deal?.sector_tags?.[0] || deal.sector || 'N/A';
-  const stageInfo = deal.deal?.stage || deal.stage || 'N/A';
   const fundingAmount = deal.deal?.check_size_required || deal.fundingAmount || 0;
   
   // Generate a mock match score if real one isn't available (between 65-95%)
@@ -43,11 +41,11 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   // Generate a recommendation based on available data
   const getRecommendation = () => {
     const recommendations = [
-      `Strong fit with your ${sectorTag} sector focus and ${stageInfo} stage preferences.`,
-      `Aligns with your investment strategy in the ${sectorTag} space.`,
+      "Strong fit with your investment preferences.",
+      "Aligns with your investment strategy.",
       `Check size of ${formatCurrency(fundingAmount)} matches your typical investment range.`,
-      `${stageInfo} stage opportunity with potential for significant returns.`,
-      `Recommended based on your previous interest in ${sectorTag} deals.`
+      "Opportunity with potential for significant returns.",
+      "Recommended based on your previous interests."
     ];
     return deal.recommendation || recommendations[Math.floor(Math.random() * recommendations.length)];
   };
@@ -78,19 +76,12 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
         </span>
       </div>
       
-      {/* Description with better spacing and styling */}
+      {/* Description with better spacing and styling - now with more height */}
       {dealDescription && (
-        <p className="text-sm text-muted-foreground line-clamp-2 bg-muted/50 p-2 rounded">
+        <p className="text-sm text-muted-foreground line-clamp-3 bg-muted/50 p-3 rounded">
           {dealDescription}
         </p>
       )}
-      
-      {/* Deal metadata with badge styling */}
-      <div className="flex flex-wrap gap-2 text-xs">
-        <span className="bg-secondary px-2 py-1 rounded-full">{sectorTag}</span>
-        <span className="bg-secondary px-2 py-1 rounded-full">{stageInfo}</span>
-        <span className="bg-secondary px-2 py-1 rounded-full">${formatCurrency(Math.round(fundingAmount))}</span>
-      </div>
       
       {/* Comment section with improved styling */}
       {deal.comment && (
