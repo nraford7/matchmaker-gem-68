@@ -1,3 +1,4 @@
+
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import DealSidebar from "@/components/deals/DealSidebar";
 import NotFoundState from "@/components/deals/NotFoundState";
 import DealLoading from "@/components/deals/DealLoading";
 import DealRecommendation from "@/components/deals/DealRecommendation";
+import DealActions from "@/components/deals/DealActions";
 import { fetchDealData } from "@/services/deal";
 import { EnhancedDeal } from "@/types/deal";
 import { formatCurrency } from "@/lib/utils";
@@ -71,11 +73,14 @@ const DealDetails = () => {
           <div className="flex flex-col space-y-4">
             <div className="flex justify-between items-start">
               <h1 className="text-2xl font-bold">{dealData.name}</h1>
-              {dealData.matchScore && (
-                <Badge variant={dealData.matchScore > 0.8 ? "default" : "outline"} className="ml-2">
-                  {Math.round(dealData.matchScore * 100)}% match
-                </Badge>
-              )}
+              <div className="flex items-center gap-2">
+                {dealData.matchScore && (
+                  <Badge variant={dealData.matchScore > 0.8 ? "default" : "outline"} className="ml-2">
+                    {Math.round(dealData.matchScore * 100)}% match
+                  </Badge>
+                )}
+                <DealActions dealId={dealData.id} dealName={dealData.name} />
+              </div>
             </div>
             
             <div className="flex flex-wrap gap-2">
