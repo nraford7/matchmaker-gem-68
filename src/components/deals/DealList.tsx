@@ -30,7 +30,6 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
                 <div className="md:col-span-2">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="font-semibold text-lg">{deal.name}</h3>
-                    <DealActions dealId={deal.id} dealName={deal.name} />
                   </div>
                   
                   <div className="flex flex-wrap gap-2 mb-2">
@@ -57,9 +56,13 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
                   </div>
                 </div>
                 
-                <div className="flex flex-col justify-between border-l-0 md:border-l pl-0 md:pl-4">
+                <div className="flex flex-col justify-between border-l-0 md:border-l pl-0 md:pl-4 relative">
+                  <div className="absolute top-0 right-0">
+                    <DealActions dealId={deal.id} dealName={deal.name} />
+                  </div>
+                  
                   {deal.checkSizeRequired && (
-                    <div className="mb-2">
+                    <div className="mb-2 mt-6 md:mt-0">
                       <p className="text-sm text-muted-foreground">Investment Ask</p>
                       <p className="font-medium">${formatCurrency(deal.checkSizeRequired)}</p>
                     </div>

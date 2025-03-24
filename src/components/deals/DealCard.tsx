@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Deal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
-import { Bookmark, CheckCircle, MapPin, Clock, DollarSign, TrendingUp, MoreHorizontal } from "lucide-react";
+import { Bookmark, CheckCircle, MapPin, Clock, DollarSign, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import DealActions from "./DealActions";
@@ -37,7 +37,7 @@ export const DealCard = ({
   
   return (
     <Card className="h-full hover:shadow-md transition-shadow flex flex-col">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-2 relative">
         <div className="flex justify-between items-start">
           <Link to={`/deals/${deal.id}`}>
             <h3 className="text-lg font-medium leading-tight line-clamp-2 hover:text-primary transition-colors">
@@ -45,38 +45,31 @@ export const DealCard = ({
             </h3>
           </Link>
           
-          <div className="flex items-center gap-2">
-            {showMatchScore && deal.matchScore && (
-              <Badge variant={deal.matchScore > 0.8 ? "default" : "outline"} className="ml-2">
-                {Math.round(deal.matchScore * 100)}% match
-              </Badge>
-            )}
+          <div className="absolute top-4 right-4">
             <DealActions dealId={deal.id} dealName={deal.name} />
           </div>
         </div>
         
         {/* Stage badge and sector tags */}
-        <div className="flex justify-between items-center mt-2">
-          <div className="flex flex-wrap gap-2 justify-start">
-            {deal.stage && (
-              <Badge variant="default" className="text-xs font-semibold">
-                {deal.stage}
-              </Badge>
-            )}
-            {deal.sectorTags && deal.sectorTags.map((sector, idx) => (
-              <Badge key={idx} variant="secondary" className="text-xs">
-                {sector}
-              </Badge>
-            ))}
-          </div>
-          
-          {deal.location && (
-            <div className="text-xs text-muted-foreground">
-              <MapPin className="h-3 w-3 inline mr-1" />
-              {deal.location}
-            </div>
+        <div className="flex flex-wrap gap-2 justify-start mt-2">
+          {deal.stage && (
+            <Badge variant="default" className="text-xs font-semibold">
+              {deal.stage}
+            </Badge>
           )}
+          {deal.sectorTags && deal.sectorTags.map((sector, idx) => (
+            <Badge key={idx} variant="secondary" className="text-xs">
+              {sector}
+            </Badge>
+          ))}
         </div>
+        
+        {deal.location && (
+          <div className="text-xs text-muted-foreground mt-2">
+            <MapPin className="h-3 w-3 inline mr-1" />
+            {deal.location}
+          </div>
+        )}
       </CardHeader>
       
       <CardContent className="flex-1 flex flex-col">

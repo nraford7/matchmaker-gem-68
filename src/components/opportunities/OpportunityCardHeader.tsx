@@ -24,15 +24,15 @@ export const OpportunityCardHeader = ({
   setCompletingId
 }: OpportunityCardHeaderProps) => {
   return (
-    <CardHeader className="pb-2">
-      <div className="flex justify-between items-start">
+    <CardHeader className="pb-2 relative">
+      <div className="flex items-start">
         <Link to={`/deals/${opportunity.id}`} className="hover:underline flex-1">
           <CardTitle className="text-lg line-clamp-2">
             {opportunity.name}
           </CardTitle>
         </Link>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline">{opportunity.stage}</Badge>
+        <Badge variant="outline" className="ml-2">{opportunity.stage}</Badge>
+        <div className="ml-2">
           <DealActions dealId={opportunity.id} dealName={opportunity.name} />
         </div>
       </div>
