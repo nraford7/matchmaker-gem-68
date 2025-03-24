@@ -1,7 +1,6 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { dispatchFeedbackEvent, getValidatedUserId, getExistingMatch } from "./feedbackUtils";
-import { removeFeedback } from "./removeFeedback";
 
 // Submit positive feedback for a match
 export const submitPositiveFeedback = async (opportunityId: string): Promise<boolean> => {
@@ -12,17 +11,48 @@ export const submitPositiveFeedback = async (opportunityId: string): Promise<boo
   }
   
   try {
-    const userId = await getValidatedUserId();
-    if (!userId) {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast.error("You must be logged in to provide feedback");
       return false;
     }
 
     // Check if there's an existing match record
-    const existingMatch = await getExistingMatch(userId, opportunityId);
+    const { data: existingMatch, error: matchError } = await supabase
+      .from("matches")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("opportunity_id", opportunityId)
+      .maybeSingle();
+
+    if (matchError) {
+      console.error("Error fetching match:", matchError);
+      toast.error("Failed to check existing feedback");
+      return false;
+    }
 
     // If feedback is already positive, remove it (toggle behavior)
     if (existingMatch && existingMatch.feedback === "positive") {
-      return removeFeedback(opportunityId);
+      const { error: deleteError } = await supabase
+        .from("matches")
+        .delete()
+        .eq("id", existingMatch.id);
+
+      if (deleteError) {
+        console.error("Error removing feedback:", deleteError);
+        toast.error("Failed to remove feedback");
+        return false;
+      }
+      
+      // Dispatch custom event for UI updates
+      const event = new CustomEvent('feedback-updated', { 
+        detail: { opportunityId, feedbackType: null } 
+      });
+      window.dispatchEvent(event);
+      
+      toast.success("Feedback removed");
+      return true;
     }
 
     if (existingMatch) {
@@ -32,19 +62,27 @@ export const submitPositiveFeedback = async (opportunityId: string): Promise<boo
         .update({ feedback: "positive" })
         .eq("id", existingMatch.id);
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        console.error("Error updating feedback:", updateError);
+        toast.error("Failed to update feedback");
+        return false;
+      }
     } else {
       // Insert new match
       const { error: insertError } = await supabase
         .from("matches")
         .insert({
-          user_id: userId,
+          user_id: user.id,
           opportunity_id: opportunityId,
           feedback: "positive",
           score: 0.8 // Default score since we don't have a real score yet
         });
 
-      if (insertError) throw insertError;
+      if (insertError) {
+        console.error("Error inserting feedback:", insertError);
+        toast.error("Failed to submit feedback");
+        return false;
+      }
     }
 
     // Save the deal to saved deals if positive feedback
@@ -52,11 +90,14 @@ export const submitPositiveFeedback = async (opportunityId: string): Promise<boo
       .from("saved_deals")
       .upsert({ 
         deal_id: opportunityId,
-        user_id: userId
+        user_id: user.id
       }, { onConflict: 'deal_id,user_id' });
 
     // Dispatch custom event for UI updates
-    dispatchFeedbackEvent(opportunityId, 'positive');
+    const event = new CustomEvent('feedback-updated', { 
+      detail: { opportunityId, feedbackType: 'positive' } 
+    });
+    window.dispatchEvent(event);
     
     toast.success("Marked as interested");
     return true;
