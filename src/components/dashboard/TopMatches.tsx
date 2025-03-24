@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Deal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
 
 interface TopMatchesProps {
   topMatches: Deal[];
@@ -130,15 +131,21 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                     {deal.matchScore && (
                       <div className="mt-3 pt-3 border-t border-border">
                         <div className="flex justify-between items-center text-xs mb-1.5">
-                          <span className="text-muted-foreground">Match Score</span>
-                          <Badge variant="default" className="text-xs bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary">
+                          <span className="text-foreground font-medium">Match Score</span>
+                          <span className="text-foreground font-medium">
                             {Math.round(deal.matchScore * 100)}%
-                          </Badge>
+                          </span>
                         </div>
+                        
+                        {/* Progress bar for match score */}
+                        <Progress 
+                          value={Math.round(deal.matchScore * 100)} 
+                          className="h-1.5 mb-2" 
+                        />
                         
                         {/* Match explanation - simplified for card view */}
                         {deal.matchExplanation && (
-                          <p className="text-xs text-muted-foreground line-clamp-1">
+                          <p className="text-xs text-foreground line-clamp-1">
                             {deal.matchExplanation}
                           </p>
                         )}
