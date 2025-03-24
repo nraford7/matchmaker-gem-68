@@ -1,12 +1,13 @@
 
 // Re-export everything from the service files
 export * from "./baseService";
-export * from "./fetchServices";
-export * from "./activeDealsServices";
-export * from "./savedDealsServices";
+export * from "./allDealsService";
+export * from "./activeDealsService";
+export * from "./savedDealsService";
 export * from "./createServices";
 export * from "./matchFeedbackService";
+export * from "./sharedDealsService";
+export * from "./pastDealsService";
 
-// Export the fetchDeals function as fetchSavedDeals for backward compatibility
-export { fetchDeals as fetchSavedDeals } from "./fetchServices";
-
+// Export the fetchAllDeals function as fetchDeals for backward compatibility
+export { fetchAllDeals as fetchDeals } from "./allDealsService";

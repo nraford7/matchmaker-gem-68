@@ -1,5 +1,5 @@
+
 import { supabase } from "@/integrations/supabase/client";
-import { NetworkInvestor, NetworkDeal } from "@/types";
 import { toast } from "sonner";
 import { SharedDeal } from "./types";
 
@@ -58,7 +58,7 @@ export const getSharedDealsForUser = async (userId: string): Promise<SharedDeal[
             sector_tags: [],
             geographies: [],
             created_at: item.created_at
-          } as NetworkDeal
+          }
         };
       }
 
@@ -72,7 +72,7 @@ export const getSharedDealsForUser = async (userId: string): Promise<SharedDeal[
             email: "",
             company: "",
             avatar_url: ""
-          } as NetworkInvestor
+          }
         };
       }
 
