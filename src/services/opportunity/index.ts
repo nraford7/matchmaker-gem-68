@@ -7,5 +7,5 @@ export * from "./savedDealsServices";
 export * from "./createServices";
 export * from "./matchFeedbackService";
 
-// Export the fetchSavedDeals function from fetchServices (if it exists there)
+// Export the fetchDeals function as fetchSavedDeals for backward compatibility
 export { fetchDeals as fetchSavedDeals } from "./fetchServices";

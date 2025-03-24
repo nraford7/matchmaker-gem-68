@@ -1,12 +1,11 @@
 
 import { useState } from "react";
-import { Deal } from "@/types";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { completeDeal } from "@/services/opportunity/activeDealsServices";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Deal } from "@/types";
+import { completeDeal } from "@/services/opportunity";
 
 interface CompleteDealDialogProps {
   opportunity: Deal;
@@ -20,37 +19,18 @@ export const CompleteDealDialog = ({
   opportunity, 
   isOpen, 
   onOpenChange, 
-  onComplete, 
-  trigger 
+  onComplete,
+  trigger
 }: CompleteDealDialogProps) => {
-  const [finalAmount, setFinalAmount] = useState(
-    opportunity.checkSizeRequired?.toString() || 
-    opportunity.fundingAmount?.toString() || 
-    "0"
+  const [amount, setAmount] = useState<string>(
+    opportunity.checkSizeRequired?.toString() || "0"
   );
-  const [isSaving, setIsSaving] = useState(false);
-  
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSaving(true);
 
-    try {
-      const amount = parseFloat(finalAmount);
-      if (isNaN(amount)) {
-        toast.error("Please enter a valid number");
-        return;
-      }
-
-      const success = await completeDeal(opportunity.id, amount);
-      if (success) {
-        onComplete();
-        toast.success("Deal marked as completed");
-      }
-    } catch (error) {
-      console.error("Error completing deal:", error);
-      toast.error("Failed to complete deal");
-    } finally {
-      setIsSaving(false);
+  const handleComplete = async () => {
+    const finalAmount = parseFloat(amount) || 0;
+    const success = await completeDeal(opportunity.id, finalAmount);
+    if (success) {
+      onComplete();
     }
   };
 
@@ -63,44 +43,33 @@ export const CompleteDealDialog = ({
         <DialogHeader>
           <DialogTitle>Complete Deal</DialogTitle>
           <DialogDescription>
-            Mark this deal as completed and move it to your portfolio. 
-            This will remove it from your active deals.
+            Specify the final amount for this deal.
           </DialogDescription>
         </DialogHeader>
-        
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="finalAmount">Final Investment Amount</Label>
+        <div className="grid gap-4 py-4">
+          <div className="space-y-2">
+            <Label htmlFor="amount">Final Amount</Label>
+            <div className="flex items-center">
+              <span className="mr-2">$</span>
               <Input
-                id="finalAmount"
-                placeholder="Enter final amount..."
-                value={finalAmount}
-                onChange={(e) => setFinalAmount(e.target.value)}
+                id="amount"
                 type="number"
-                min="0"
-                step="1000"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="1000000"
               />
-              <p className="text-sm text-muted-foreground">
-                Enter the final investment amount in USD
-              </p>
             </div>
+            <p className="text-xs text-muted-foreground">
+              Enter the final investment amount in dollars
+            </p>
           </div>
-          
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              disabled={isSaving}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSaving}>
-              {isSaving ? "Saving..." : "Complete Deal"}
-            </Button>
-          </DialogFooter>
-        </form>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button onClick={handleComplete}>Mark as Completed</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
