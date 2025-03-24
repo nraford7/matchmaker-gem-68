@@ -15,7 +15,7 @@ export const submitPositiveFeedback = async (dealId: string): Promise<boolean> =
     // Check if feedback already exists
     const { data, error: checkError } = await supabase
       .from("matches")
-      .select("id, feedback_type")
+      .select("id, feedback")
       .eq("deal_id", dealId)
       .eq("user_id", user.id)
       .maybeSingle();
@@ -27,7 +27,7 @@ export const submitPositiveFeedback = async (dealId: string): Promise<boolean> =
     // If feedback already exists, update it
     if (data) {
       // If already positive, remove it (toggle off)
-      if (data.feedback_type === 'positive') {
+      if (data.feedback === 'positive') {
         const { error } = await supabase
           .from("matches")
           .delete()
@@ -41,7 +41,7 @@ export const submitPositiveFeedback = async (dealId: string): Promise<boolean> =
       // If negative, update to positive
       const { error } = await supabase
         .from("matches")
-        .update({ feedback_type: 'positive' })
+        .update({ feedback: 'positive' })
         .eq("id", data.id);
         
       if (error) throw error;
@@ -55,8 +55,8 @@ export const submitPositiveFeedback = async (dealId: string): Promise<boolean> =
       .insert({
         deal_id: dealId,
         user_id: user.id,
-        feedback_type: 'positive',
-        match_score: 0.8 // Default match score
+        feedback: 'positive',
+        score: 0.8 // Default match score
       });
       
     if (error) throw error;
@@ -83,7 +83,7 @@ export const submitNegativeFeedback = async (dealId: string): Promise<boolean> =
     // Check if feedback already exists
     const { data, error: checkError } = await supabase
       .from("matches")
-      .select("id, feedback_type")
+      .select("id, feedback")
       .eq("deal_id", dealId)
       .eq("user_id", user.id)
       .maybeSingle();
@@ -95,7 +95,7 @@ export const submitNegativeFeedback = async (dealId: string): Promise<boolean> =
     // If feedback already exists, update it
     if (data) {
       // If already negative, remove it (toggle off)
-      if (data.feedback_type === 'negative') {
+      if (data.feedback === 'negative') {
         const { error } = await supabase
           .from("matches")
           .delete()
@@ -109,7 +109,7 @@ export const submitNegativeFeedback = async (dealId: string): Promise<boolean> =
       // If positive, update to negative
       const { error } = await supabase
         .from("matches")
-        .update({ feedback_type: 'negative' })
+        .update({ feedback: 'negative' })
         .eq("id", data.id);
         
       if (error) throw error;
@@ -123,8 +123,8 @@ export const submitNegativeFeedback = async (dealId: string): Promise<boolean> =
       .insert({
         deal_id: dealId,
         user_id: user.id,
-        feedback_type: 'negative',
-        match_score: 0.2 // Default low match score for negative feedback
+        feedback: 'negative',
+        score: 0.2 // Default low match score for negative feedback
       });
       
     if (error) throw error;
@@ -149,7 +149,7 @@ export const getFeedbackStatus = async (dealId: string): Promise<'positive' | 'n
     
     const { data, error } = await supabase
       .from("matches")
-      .select("feedback_type")
+      .select("feedback")
       .eq("deal_id", dealId)
       .eq("user_id", user.id)
       .maybeSingle();
@@ -158,7 +158,7 @@ export const getFeedbackStatus = async (dealId: string): Promise<'positive' | 'n
       throw error;
     }
     
-    return data?.feedback_type as 'positive' | 'negative' | null;
+    return data?.feedback as 'positive' | 'negative' | null;
   } catch (error) {
     console.error("Error getting feedback status:", error);
     return null;

@@ -165,8 +165,8 @@ export const getPotentialDealRecipients = async (): Promise<NetworkInvestor[]> =
     const { data, error } = await supabase
       .from("investor_connections")
       .select(`
-        connection_user_id,
-        connected_user:connection_user_id (
+        following_id,
+        following:following_id (
           id,
           name,
           email,
@@ -174,8 +174,7 @@ export const getPotentialDealRecipients = async (): Promise<NetworkInvestor[]> =
           avatar_url
         )
       `)
-      .eq("user_id", user.id)
-      .eq("status", "accepted");
+      .eq("follower_id", user.id);
 
     if (error) {
       throw error;
@@ -183,13 +182,13 @@ export const getPotentialDealRecipients = async (): Promise<NetworkInvestor[]> =
 
     // Map and filter out any null values
     const recipients = data
-      .filter(item => item && item.connected_user)
+      .filter(item => item && item.following)
       .map(item => ({
-        id: item.connected_user.id,
-        name: item.connected_user.name || "Unknown",
-        email: item.connected_user.email || "",
-        company: item.connected_user.company || "",
-        avatar_url: item.connected_user.avatar_url || "",
+        id: item.following.id,
+        name: item.following.name || "Unknown",
+        email: item.following.email || "",
+        company: item.following.company || "",
+        avatar_url: item.following.avatar_url || "",
         // Add other required fields with defaults
         sector_tags: [],
         preferred_stages: [],
