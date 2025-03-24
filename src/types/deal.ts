@@ -24,6 +24,8 @@ export type Deal = {
   updatedAt?: string;
   matchScore?: number;
   matchExplanation?: string;
+  // Added IRR field
+  IRR?: number;
   // Additional fields for backward compatibility
   sector?: string;
   fundingAmount?: number;

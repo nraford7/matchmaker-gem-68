@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Deal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
-import { Bookmark, CheckCircle, MapPin, Clock, DollarSign } from "lucide-react";
+import { Bookmark, CheckCircle, MapPin, Clock, DollarSign, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -90,11 +90,11 @@ export const DealCard = ({
             </div>
           )}
           
-          {deal.location && (
+          {deal.IRR !== undefined && deal.IRR !== null && (
             <div className="flex items-center text-sm">
-              <MapPin className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
+              <TrendingUp className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
               <span className="text-muted-foreground mr-2">Estimated IRR:</span>
-              <span className="font-medium ml-auto">{deal.location}</span>
+              <span className="font-medium ml-auto">{deal.IRR}%</span>
             </div>
           )}
           

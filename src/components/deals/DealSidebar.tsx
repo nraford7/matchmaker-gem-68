@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { EnhancedDeal } from "@/types/deal";
-import { FileText } from "lucide-react";
+import { FileText, TrendingUp } from "lucide-react";
 
 interface DealSidebarProps {
   deal: EnhancedDeal;
@@ -86,6 +86,15 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
               <span className="text-sm font-medium">${deal.checkSizeRequired?.toLocaleString() || "Not specified"}</span>
             </div>
             <Separator />
+            {deal.IRR !== undefined && deal.IRR !== null && (
+              <>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Projected IRR</span>
+                  <span className="text-sm font-medium">{deal.IRR}%</span>
+                </div>
+                <Separator />
+              </>
+            )}
             {deal.involvementModel && (
               <>
                 <div className="flex justify-between">
@@ -104,7 +113,7 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
                 <Separator />
               </>
             )}
-            {deal.projectedIRR && (
+            {deal.projectedIRR && !deal.IRR && (
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Projected IRR</span>
                 <span className="text-sm font-medium">{deal.projectedIRR}</span>
