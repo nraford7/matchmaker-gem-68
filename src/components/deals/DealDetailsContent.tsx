@@ -45,14 +45,14 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
               {deal.use_of_funds && deal.use_of_funds.length > 0 && (
                 <DealFundsUsage useOfFunds={deal.use_of_funds} />
               )}
-            </div>
-            
-            <div className="space-y-6">
-              <DealSidebar deal={deal} />
               
               {deal.milestones && deal.milestones.length > 0 && (
                 <DealMilestones milestones={deal.milestones} />
               )}
+            </div>
+            
+            <div className="space-y-6">
+              <DealSidebar deal={deal} />
             </div>
           </div>
         </TabsContent>
