@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, TrendingUp, MapPin, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,15 +50,6 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
             Investment opportunities that match your preferences
           </CardDescription>
         </div>
-        {topMatches.length > 6 && (
-          <Link
-            to="/deals"
-            className="text-sm font-medium text-primary flex items-center gap-1 hover:underline transition-colors"
-          >
-            View all
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        )}
       </CardHeader>
       <CardContent className="pt-4">
         {topMatches.length === 0 ? (
@@ -77,12 +67,10 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
               >
                 <Card className="h-full flex flex-col transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
                   <CardContent className="p-4 flex flex-col h-full">
-                    {/* Deal name */}
                     <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base">
                       {deal.name}
                     </h3>
                     
-                    {/* Tags section */}
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {deal.sectorTags && deal.sectorTags.slice(0, 2).map((tag, idx) => (
                         <Badge key={idx} variant="secondary" className="text-xs">
@@ -96,13 +84,11 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                       )}
                     </div>
                     
-                    {/* Deal description with line clamp */}
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
                       {deal.description || "No description available"}
                     </p>
                     
                     <div className="grid grid-cols-2 gap-1 text-xs mt-auto">
-                      {/* Location */}
                       {deal.location && (
                         <div className="flex items-center text-muted-foreground">
                           <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
@@ -110,7 +96,6 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                         </div>
                       )}
                       
-                      {/* Funding amount */}
                       {(deal.checkSizeRequired || deal.fundingAmount) && (
                         <div className="flex items-center text-muted-foreground">
                           <DollarSign className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
@@ -118,7 +103,6 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                         </div>
                       )}
                       
-                      {/* IRR if available */}
                       {deal.IRR !== undefined && (
                         <div className="flex items-center text-muted-foreground">
                           <TrendingUp className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
@@ -127,7 +111,6 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                       )}
                     </div>
                     
-                    {/* Match score */}
                     {deal.matchScore && (
                       <div className="mt-3 pt-3 border-t border-border">
                         <div className="flex justify-between items-center text-xs mb-1.5">
@@ -137,13 +120,11 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                           </span>
                         </div>
                         
-                        {/* Progress bar for match score */}
                         <Progress 
                           value={Math.round(deal.matchScore * 100)} 
                           className="h-1.5 mb-2" 
                         />
                         
-                        {/* Match explanation - simplified for card view */}
                         {deal.matchExplanation && (
                           <p className="text-xs text-foreground line-clamp-1">
                             {deal.matchExplanation}
