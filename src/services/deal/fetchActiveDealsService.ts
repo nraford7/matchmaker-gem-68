@@ -34,7 +34,8 @@ export const fetchActiveDeals = async (): Promise<Deal[]> => {
           time_horizon,
           esg_tags,
           created_at,
-          IRR
+          IRR,
+          introduced_by_id
         )
       `)
       .eq("user_id", userId);
@@ -62,7 +63,8 @@ export const fetchActiveDeals = async (): Promise<Deal[]> => {
       timeHorizon: item.deals.time_horizon,
       esgTags: item.deals.esg_tags,
       createdAt: item.deals.created_at,
-      IRR: item.deals.IRR
+      IRR: item.deals.IRR,
+      introducedById: item.deals.introduced_by_id
     }));
 
     console.log("Processed active deals:", mappedDeals);

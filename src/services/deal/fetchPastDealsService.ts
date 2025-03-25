@@ -30,7 +30,8 @@ export const fetchPastDeals = async (): Promise<Deal[]> => {
           geographies,
           location,
           created_at,
-          IRR
+          IRR,
+          introduced_by_id
         )
       `)
       .eq("user_id", userId);
@@ -55,7 +56,8 @@ export const fetchPastDeals = async (): Promise<Deal[]> => {
       stage: "Closed",
       checkSizeRequired: Number(item.final_amount),
       createdAt: item.deals.created_at,
-      IRR: item.deals.IRR
+      IRR: item.deals.IRR,
+      introducedById: item.deals.introduced_by_id
     }));
 
     console.log("Processed past deals:", mappedDeals);
