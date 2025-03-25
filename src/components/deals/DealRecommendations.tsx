@@ -16,7 +16,7 @@ const DealRecommendations = ({ deal }: DealRecommendationsProps) => {
   return (
     <div className="space-y-4">
       <Card>
-        <CardHeader className="py-4">
+        <CardHeader className="p-6">
           <CardTitle className="text-2xl font-semibold leading-none tracking-tight">
             Investor Fit Analysis
           </CardTitle>
