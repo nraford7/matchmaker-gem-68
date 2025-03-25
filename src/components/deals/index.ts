@@ -1,4 +1,3 @@
-
 export * from "./AllOpportunities";
 export * from "./DealCard";
 export * from "./DealList";
@@ -13,3 +12,5 @@ export * from "./Pagination";
 export * from "./DealsHeader";
 export * from "./utils/SortUtils";
 export * from "./card";
+export * from "./DealComments";
+export * from "./DealStatus";
