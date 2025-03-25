@@ -27,7 +27,7 @@ const DealDeck = ({ deal }: DealDeckProps) => {
         <div className="space-y-4">
           <ul className="space-y-2 list-disc pl-6">
             {investmentSummary.map((point, index) => (
-              <li key={index} className="text-sm font-bold">
+              <li key={index} className="text-sm text-primary">
                 {point}
               </li>
             ))}
