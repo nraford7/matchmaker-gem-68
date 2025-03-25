@@ -63,15 +63,6 @@ export const NetworkHighlights = () => {
             Deals shared with you by investors in your network
           </CardDescription>
         </div>
-        {sharedDeals.length > DEALS_PER_PAGE && (
-          <button 
-            onClick={viewAllDeals}
-            className="text-sm font-medium text-primary flex items-center gap-1 hover:underline transition-colors"
-          >
-            View all
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        )}
       </CardHeader>
       <CardContent className="pt-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
