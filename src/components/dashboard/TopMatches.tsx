@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, TrendingUp, MapPin, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,14 +7,52 @@ import { Button } from "@/components/ui/button";
 import { Deal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
+import { useEffect, useState } from "react";
+import { fetchInvestorProfile } from "@/services/investor/recommendations/utils/investorUtils";
 
 interface TopMatchesProps {
   topMatches: Deal[];
   loading?: boolean;
 }
 
+interface IntroducerInfo {
+  id: string;
+  name: string | null;
+}
+
 export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   const location = useLocation();
+  const [introducers, setIntroducers] = useState<Record<string, IntroducerInfo>>({});
+  
+  useEffect(() => {
+    // Fetch introducer information for all deals
+    const fetchIntroducers = async () => {
+      const introducerData: Record<string, IntroducerInfo> = {};
+      
+      for (const deal of topMatches) {
+        if (deal.introducedById) {
+          try {
+            const profileData = await fetchInvestorProfile(deal.introducedById);
+            
+            if (profileData) {
+              introducerData[deal.id] = {
+                id: deal.introducedById,
+                name: profileData.name
+              };
+            }
+          } catch (error) {
+            console.error("Error fetching introducer profile:", error);
+          }
+        }
+      }
+      
+      setIntroducers(introducerData);
+    };
+    
+    if (topMatches.length > 0) {
+      fetchIntroducers();
+    }
+  }, [topMatches]);
   
   if (loading) {
     return (
@@ -76,9 +115,16 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                       </div>
                     )}
                     
-                    <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base pr-14">
-                      {deal.name}
-                    </h3>
+                    <div className="mb-2">
+                      <h3 className="font-semibold line-clamp-1 group-hover:text-primary transition-colors text-base pr-14">
+                        {deal.name}
+                      </h3>
+                      {introducers[deal.id] && (
+                        <div className="text-xs text-muted-foreground mt-0.5">
+                          Introduced by: <span className="font-medium">{introducers[deal.id].name || "Unknown Investor"}</span>
+                        </div>
+                      )}
+                    </div>
                     
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {deal.sectorTags && deal.sectorTags.slice(0, 2).map((tag, idx) => (

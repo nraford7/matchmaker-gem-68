@@ -41,6 +41,8 @@ export const fetchDealData = async (dealId: string): Promise<EnhancedDeal | null
       dueDiligenceLevel: data.due_diligence_level,
       decisionConvictionRequired: data.decision_conviction_required,
       investorSpeedRequired: data.investor_speed_required,
+      // Include the introduced_by_id field
+      introducedById: data.introduced_by_id,
       // Make sure IRR is included from the database result
       IRR: data.IRR !== null ? data.IRR : 25, // Default to 25% if null, for demo purposes
       // Include the recommendation field from the database
@@ -96,6 +98,7 @@ export const fetchDealData = async (dealId: string): Promise<EnhancedDeal | null
     console.log("Fetched deal data:", data);
     console.log("Processed deal with IRR:", deal.IRR);
     console.log("Deal recommendation:", deal.recommendation);
+    console.log("Deal introduced by:", deal.introducedById);
 
     return deal;
   } catch (error) {

@@ -7,6 +7,8 @@ import { Bookmark, CheckCircle, MapPin, Clock, DollarSign, TrendingUp } from "lu
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import DealActions from "./DealActions";
+import { useEffect, useState } from "react";
+import { fetchInvestorProfile } from "@/services/investor/recommendations/utils/investorUtils";
 
 interface DealCardProps {
   deal: Deal;
@@ -23,6 +25,28 @@ export const DealCard = ({
   onSave,
   onActivate
 }: DealCardProps) => {
+  const [introducer, setIntroducer] = useState<{ id: string; name: string | null } | null>(null);
+  
+  useEffect(() => {
+    const loadIntroducer = async () => {
+      if (deal.introducedById) {
+        try {
+          const profileData = await fetchInvestorProfile(deal.introducedById);
+          if (profileData) {
+            setIntroducer({
+              id: deal.introducedById,
+              name: profileData.name
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching introducer:", error);
+        }
+      }
+    };
+    
+    loadIntroducer();
+  }, [deal.introducedById]);
+  
   const handleSave = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -39,11 +63,18 @@ export const DealCard = ({
     <Card className="h-full flex flex-col transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
       <CardHeader className="pb-2 relative">
         <div className="flex justify-between items-start">
-          <Link to={`/deals/${deal.id}`}>
-            <h3 className="text-lg font-medium leading-tight line-clamp-2 hover:text-primary transition-colors">
-              {deal.name}
-            </h3>
-          </Link>
+          <div>
+            <Link to={`/deals/${deal.id}`}>
+              <h3 className="text-lg font-medium leading-tight line-clamp-2 hover:text-primary transition-colors">
+                {deal.name}
+              </h3>
+            </Link>
+            {introducer && (
+              <div className="text-xs text-muted-foreground mt-0.5">
+                Introduced by: <span className="font-medium">{introducer.name || "Unknown Investor"}</span>
+              </div>
+            )}
+          </div>
           
           <div className="absolute top-4 right-4">
             <DealActions dealId={deal.id} dealName={deal.name} />

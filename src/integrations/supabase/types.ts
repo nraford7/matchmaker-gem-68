@@ -92,6 +92,7 @@ export type Database = {
           exit_style: string | null
           geographies: string[] | null
           id: string
+          introduced_by_id: string | null
           investor_speed_required: number | null
           involvement_model: string | null
           IRR: number | null
@@ -116,6 +117,7 @@ export type Database = {
           exit_style?: string | null
           geographies?: string[] | null
           id?: string
+          introduced_by_id?: string | null
           investor_speed_required?: number | null
           involvement_model?: string | null
           IRR?: number | null
@@ -140,6 +142,7 @@ export type Database = {
           exit_style?: string | null
           geographies?: string[] | null
           id?: string
+          introduced_by_id?: string | null
           investor_speed_required?: number | null
           involvement_model?: string | null
           IRR?: number | null
@@ -153,7 +156,15 @@ export type Database = {
           time_horizon?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "deals_introduced_by_id_fkey"
+            columns: ["introduced_by_id"]
+            isOneToOne: false
+            referencedRelation: "investor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       investor_connections: {
         Row: {

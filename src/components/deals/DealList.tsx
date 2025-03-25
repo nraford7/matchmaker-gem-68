@@ -6,14 +6,52 @@ import { MapPin, TrendingUp } from "lucide-react";
 import { Deal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 import DealActions from "./DealActions";
+import { useEffect, useState } from "react";
+import { fetchInvestorProfile } from "@/services/investor/recommendations/utils/investorUtils";
 
 interface DealListProps {
   deals: Deal[];
   showMatchScore?: boolean;
 }
 
+interface IntroducerInfo {
+  id: string;
+  name: string | null;
+}
+
 export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
   const location = useLocation();
+  const [introducers, setIntroducers] = useState<Record<string, IntroducerInfo>>({});
+  
+  useEffect(() => {
+    // Fetch introducer information for all deals
+    const fetchIntroducers = async () => {
+      const introducerData: Record<string, IntroducerInfo> = {};
+      
+      for (const deal of deals) {
+        if (deal.introducedById) {
+          try {
+            const profileData = await fetchInvestorProfile(deal.introducedById);
+            
+            if (profileData) {
+              introducerData[deal.id] = {
+                id: deal.introducedById,
+                name: profileData.name
+              };
+            }
+          } catch (error) {
+            console.error("Error fetching introducer profile:", error);
+          }
+        }
+      }
+      
+      setIntroducers(introducerData);
+    };
+    
+    if (deals.length > 0) {
+      fetchIntroducers();
+    }
+  }, [deals]);
   
   return (
     <div className="space-y-4">
@@ -29,7 +67,14 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-lg hover:text-primary transition-colors">{deal.name}</h3>
+                    <div>
+                      <h3 className="font-semibold text-lg hover:text-primary transition-colors">{deal.name}</h3>
+                      {introducers[deal.id] && (
+                        <div className="text-xs text-muted-foreground">
+                          Introduced by: <span className="font-medium">{introducers[deal.id].name || "Unknown Investor"}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   
                   <div className="flex flex-wrap gap-2 mb-2">

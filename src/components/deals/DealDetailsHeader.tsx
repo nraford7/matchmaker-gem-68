@@ -2,10 +2,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { EnhancedDeal } from "@/types/deal";
+import { EnhancedDeal } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 import { ArrowLeft, MapPin, DollarSign, TrendingUp, Clock } from "lucide-react";
 import DealActions from "./DealActions";
+import { useEffect, useState } from "react";
+import { fetchInvestorProfile } from "@/services/investor/recommendations/utils/investorUtils";
 
 interface DealDetailsHeaderProps {
   deal: EnhancedDeal;
@@ -15,6 +17,27 @@ interface DealDetailsHeaderProps {
 const DealDetailsHeader = ({ deal, onGoBack }: DealDetailsHeaderProps) => {
   // In case matchScore isn't provided, use a default value (75% for demo purposes)
   const matchScore = deal.matchScore !== undefined ? deal.matchScore : 0.75;
+  const [introducer, setIntroducer] = useState<{ id: string; name: string | null } | null>(null);
+  
+  useEffect(() => {
+    const loadIntroducer = async () => {
+      if (deal.introducedById) {
+        try {
+          const profileData = await fetchInvestorProfile(deal.introducedById);
+          if (profileData) {
+            setIntroducer({
+              id: deal.introducedById,
+              name: profileData.name
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching introducer:", error);
+        }
+      }
+    };
+    
+    loadIntroducer();
+  }, [deal.introducedById]);
   
   return (
     <>
@@ -27,7 +50,14 @@ const DealDetailsHeader = ({ deal, onGoBack }: DealDetailsHeaderProps) => {
         <CardHeader className="pb-2">
           <div className="flex flex-col space-y-4">
             <div className="flex justify-between items-start">
-              <h1 className="text-2xl font-bold">{deal.name}</h1>
+              <div>
+                <h1 className="text-2xl font-bold">{deal.name}</h1>
+                {introducer && (
+                  <div className="text-sm text-muted-foreground mt-1">
+                    Introduced by: <span className="font-medium">{introducer.name || "Unknown Investor"}</span>
+                  </div>
+                )}
+              </div>
               <div className="flex items-center gap-2">
                 <DealActions dealId={deal.id} dealName={deal.name} />
               </div>

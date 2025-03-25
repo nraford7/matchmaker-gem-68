@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Deal } from "@/types";
 import { DashboardHeader } from "@/components/DashboardHeader";
@@ -86,6 +85,7 @@ const Dashboard = () => {
           geographies: deal.geographies || [],
           createdAt: deal.created_at,
           IRR: deal.IRR || Math.floor(Math.random() * 30) + 10,
+          introducedById: deal.introduced_by_id,
           // Calculate a random match score between 70% and 95% 
           // In a real app, this would be calculated based on investor preferences
           matchScore: Math.random() * 0.25 + 0.70, 

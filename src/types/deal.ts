@@ -28,6 +28,8 @@ export type Deal = {
   IRR?: number;
   // Added recommendation field for investor fit info
   recommendation?: string;
+  // Added introduced by field
+  introducedById?: string;
   // Additional fields for backward compatibility
   sector?: string;
   fundingAmount?: number;
