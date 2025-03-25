@@ -12,3 +12,4 @@ export * from "./types";
 export * from "./Pagination";
 export * from "./DealsHeader";
 export * from "./utils/SortUtils";
+export * from "./card";
