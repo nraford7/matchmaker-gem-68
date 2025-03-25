@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { ArrowRight, TrendingUp, MapPin, DollarSign } from "lucide-react";
+import { ArrowRight, TrendingUp, MapPin, DollarSign, BadgePercent } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -66,8 +66,20 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                 className="block group"
               >
                 <Card className="h-full flex flex-col transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
-                  <CardContent className="p-4 flex flex-col h-full">
-                    <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base">
+                  <CardContent className="p-4 flex flex-col h-full relative">
+                    {deal.matchScore && (
+                      <div className="absolute top-3 right-3 flex flex-col items-center bg-primary/10 rounded-lg px-2 py-1 border border-primary/20">
+                        <div className="flex items-center gap-1">
+                          <BadgePercent className="h-4 w-4 text-primary" />
+                          <span className="text-xl font-bold text-primary">
+                            {Math.round(deal.matchScore * 100)}%
+                          </span>
+                        </div>
+                        <span className="text-xs text-primary/80 font-medium">Match Score</span>
+                      </div>
+                    )}
+                    
+                    <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base pr-16">
                       {deal.name}
                     </h3>
                     
@@ -111,25 +123,11 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                       )}
                     </div>
                     
-                    {deal.matchScore && (
+                    {deal.matchScore && deal.matchExplanation && (
                       <div className="mt-3 pt-3 border-t border-border">
-                        <div className="flex justify-between items-center text-xs mb-1.5">
-                          <span className="text-foreground font-medium">Match Score</span>
-                          <span className="text-foreground font-medium">
-                            {Math.round(deal.matchScore * 100)}%
-                          </span>
-                        </div>
-                        
-                        <Progress 
-                          value={Math.round(deal.matchScore * 100)} 
-                          className="h-1.5 mb-2" 
-                        />
-                        
-                        {deal.matchExplanation && (
-                          <p className="text-xs text-foreground line-clamp-1">
-                            {deal.matchExplanation}
-                          </p>
-                        )}
+                        <p className="text-xs text-foreground line-clamp-2">
+                          {deal.matchExplanation}
+                        </p>
                       </div>
                     )}
                   </CardContent>
