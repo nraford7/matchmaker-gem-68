@@ -28,10 +28,10 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
         <div>
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
-            <CardTitle>Top Matches</CardTitle>
+            <CardTitle>Illuminations</CardTitle>
           </div>
           <CardDescription className="mt-1">
-            Investment opportunities that match your preferences
+            Newly discovered territories of opportunity, illuminated by our proprietary intelligence system
           </CardDescription>
         </div>
       </CardHeader>
@@ -45,7 +45,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
         {topMatches.length > 0 && topMatches.length <= 6 && (
           <Link to="/deals" className="w-full">
             <Button variant="outline" className="w-full group">
-              <span>View All Matches</span>
+              <span>Explore All Illuminations</span>
               <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
@@ -55,7 +55,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
         <CardFooter className="p-3">
           <Link to="/deals" className="w-full">
             <Button variant="outline" className="w-full group">
-              <span>View All Matches</span>
+              <span>Explore All Illuminations</span>
               <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
