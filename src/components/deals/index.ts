@@ -9,3 +9,6 @@ export * from "./DealsSummary";
 export * from "./SortDropdown";
 export * from "./TabContent";
 export * from "./types";
+export * from "./Pagination";
+export * from "./DealsHeader";
+export * from "./utils/SortUtils";
