@@ -1,6 +1,5 @@
-
 import { Link, useLocation } from "react-router-dom";
-import { ArrowRight, TrendingUp, MapPin, DollarSign, BadgePercent } from "lucide-react";
+import { ArrowRight, TrendingUp, MapPin, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -69,16 +68,15 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                 <Card className="h-full flex flex-col transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
                   <CardContent className="p-4 flex flex-col h-full relative">
                     {deal.matchScore && (
-                      <div className="absolute top-0 right-0 flex flex-col items-center justify-center bg-primary/10 rounded-md px-2 py-1.5 border border-primary/20 h-full max-h-[72px]">
-                        <BadgePercent className="h-3.5 w-3.5 text-primary mb-0.5" />
-                        <span className="text-base font-bold text-primary leading-tight">
+                      <div className="absolute right-3 top-4 flex flex-col items-center bg-primary/10 rounded-md px-2 py-1 border border-primary/20">
+                        <span className="text-sm font-bold text-primary leading-tight">
                           {Math.round(deal.matchScore * 100)}%
                         </span>
                         <span className="text-xs text-primary/80 font-medium leading-tight">Match</span>
                       </div>
                     )}
                     
-                    <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base pr-16">
+                    <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base pr-14">
                       {deal.name}
                     </h3>
                     
