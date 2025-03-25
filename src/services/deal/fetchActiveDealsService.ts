@@ -64,7 +64,10 @@ export const fetchActiveDeals = async (): Promise<Deal[]> => {
       esgTags: item.deals.esg_tags,
       createdAt: item.deals.created_at,
       IRR: item.deals.IRR,
-      introducedById: item.deals.introduced_by_id
+      introducedById: item.deals.introduced_by_id,
+      // Add match score simulation similar to saved deals
+      matchScore: Math.random() * 0.3 + 0.6,
+      matchExplanation: "Based on your sector and stage preferences"
     }));
 
     console.log("Processed active deals:", mappedDeals);

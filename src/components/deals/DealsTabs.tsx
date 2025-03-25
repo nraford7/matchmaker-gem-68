@@ -53,6 +53,7 @@ export const DealsTabs = ({ activeDeals, savedDeals, pastDeals }: DealsTabsProps
         <TabContent 
           deals={sortedActiveDeals} 
           sortOption={sortOption} 
+          showMatchScore={true}
           emptyStateText="No active deals"
           emptyStateButtonText="Find Opportunities"
         />
