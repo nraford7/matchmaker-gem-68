@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EnhancedDeal } from "@/types/deal";
-import { Lightbulb, Percent, ThumbsUp, ThumbsDown, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
+import { Percent, ThumbsUp, ThumbsDown, ArrowUpCircle, ArrowDownCircle, Lightbulb } from "lucide-react";
 import DealRecommendation from "./DealRecommendation";
 
 interface DealRecommendationsProps {
@@ -17,8 +17,7 @@ const DealRecommendations = ({ deal }: DealRecommendationsProps) => {
     <div className="space-y-4">
       <Card>
         <CardHeader className="py-4">
-          <CardTitle className="flex items-center text-lg">
-            <Lightbulb className="h-5 w-5 mr-2 text-primary" />
+          <CardTitle className="text-lg">
             Investor Fit Analysis
           </CardTitle>
         </CardHeader>
