@@ -23,28 +23,33 @@ const DealRecommendations = ({ deal }: DealRecommendationsProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 pt-0">
-          {/* Top section with score and points in a grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Match score section */}
-            <div className="bg-muted/20 rounded-lg p-4 flex flex-col md:flex-row items-center md:justify-start gap-4">
-              <div className="relative h-20 w-20 flex-shrink-0 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full border-4 border-muted-foreground/10"></div>
-                <div 
-                  className={`absolute inset-0 rounded-full border-4 border-l-transparent border-b-transparent border-r-transparent ${isGoodMatch ? 'border-t-primary' : 'border-t-destructive'}`}
-                  style={{ transform: `rotate(${Math.round(matchScore * 360)}deg)` }}
-                ></div>
-                <div className="text-2xl font-bold">{Math.round(matchScore * 100)}%</div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">
-                  {isGoodMatch ? 'Good Match' : 'Potential Mismatch'}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Based on your investment profile
-                </p>
-              </div>
+          {/* Match score section - horizontal full width */}
+          <div className="bg-muted/20 rounded-lg p-4 flex items-center gap-4">
+            <div className="relative h-20 w-20 flex-shrink-0 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-4 border-muted-foreground/10"></div>
+              <div 
+                className={`absolute inset-0 rounded-full border-4 border-l-transparent border-b-transparent border-r-transparent ${isGoodMatch ? 'border-t-primary' : 'border-t-destructive'}`}
+                style={{ transform: `rotate(${Math.round(matchScore * 360)}deg)` }}
+              ></div>
+              <div className="text-2xl font-bold">{Math.round(matchScore * 100)}%</div>
             </div>
-            
+            <div>
+              <h3 className="text-lg font-semibold">
+                {isGoodMatch ? 'Good Match' : 'Potential Mismatch'}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Based on your investment profile
+              </p>
+              <p className="text-sm mt-1">
+                {isGoodMatch 
+                  ? "This opportunity aligns well with your investment criteria and preferences."
+                  : "This opportunity may not fully align with your typical investment parameters."}
+              </p>
+            </div>
+          </div>
+          
+          {/* Two-column layout for alignment and consideration points */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Alignment points */}
             <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-4">
               <h3 className="text-base font-medium flex items-center mb-2 text-green-700 dark:text-green-400">
@@ -98,7 +103,7 @@ const DealRecommendations = ({ deal }: DealRecommendationsProps) => {
           {/* Recommendation card - now more compact */}
           <DealRecommendation recommendation={deal.recommendation || ""} />
           
-          {/* Next steps section - more compact */}
+          {/* Next steps section */}
           <div className="bg-muted/20 rounded-lg p-4">
             <h4 className="text-sm font-medium mb-1 flex items-center">
               <Lightbulb className="h-4 w-4 mr-1 text-primary" />
