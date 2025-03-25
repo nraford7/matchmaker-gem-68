@@ -46,7 +46,7 @@ export const DealCardHeader = ({ deal }: DealCardHeaderProps) => {
           </Link>
           {introducer && (
             <div className="text-xs text-muted-foreground mt-0.5">
-              Introduced by: <span className="font-medium">{introducer.name || "Unknown Investor"}</span>
+              Introduced by: <Link to={`/investor/${introducer.id}`} className="font-medium hover:text-primary transition-colors">{introducer.name || "Unknown Investor"}</Link>
             </div>
           )}
         </div>

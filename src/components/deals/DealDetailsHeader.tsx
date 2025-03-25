@@ -8,6 +8,7 @@ import { ArrowLeft, MapPin, DollarSign, TrendingUp, Clock } from "lucide-react";
 import DealActions from "./DealActions";
 import { useEffect, useState } from "react";
 import { fetchInvestorProfile } from "@/services/investor/recommendations/utils/investorUtils";
+import { Link } from "react-router-dom";
 
 interface DealDetailsHeaderProps {
   deal: EnhancedDeal;
@@ -54,7 +55,7 @@ const DealDetailsHeader = ({ deal, onGoBack }: DealDetailsHeaderProps) => {
                 <h1 className="text-2xl font-bold">{deal.name}</h1>
                 {introducer && (
                   <div className="text-sm text-muted-foreground mt-1">
-                    Introduced by: <span className="font-medium">{introducer.name || "Unknown Investor"}</span>
+                    Introduced by: <Link to={`/investor/${introducer.id}`} className="font-medium hover:underline text-primary">{introducer.name || "Unknown Investor"}</Link>
                   </div>
                 )}
               </div>

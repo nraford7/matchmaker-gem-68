@@ -71,7 +71,7 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
                       <h3 className="font-semibold text-lg hover:text-primary transition-colors">{deal.name}</h3>
                       {introducers[deal.id] && (
                         <div className="text-xs text-muted-foreground">
-                          Introduced by: <span className="font-medium">{introducers[deal.id].name || "Unknown Investor"}</span>
+                          Introduced by: <Link to={`/investor/${introducers[deal.id].id}`} className="font-medium hover:text-primary transition-colors">{introducers[deal.id].name || "Unknown Investor"}</Link>
                         </div>
                       )}
                     </div>

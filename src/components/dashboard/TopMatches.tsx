@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, TrendingUp, MapPin, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -121,7 +120,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                       </h3>
                       {introducers[deal.id] && (
                         <div className="text-xs text-muted-foreground mt-0.5">
-                          Introduced by: <span className="font-medium">{introducers[deal.id].name || "Unknown Investor"}</span>
+                          Introduced by: <Link to={`/investor/${introducers[deal.id].id}`} className="font-medium hover:text-primary transition-colors">{introducers[deal.id].name || "Unknown Investor"}</Link>
                         </div>
                       )}
                     </div>

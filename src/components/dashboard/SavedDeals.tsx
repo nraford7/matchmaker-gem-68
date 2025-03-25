@@ -76,7 +76,7 @@ export const SavedDeals = ({ savedDeals }: SavedDealsProps) => {
                     <p className="font-medium group-hover:text-primary transition-colors">{deal.name}</p>
                     {introducers[deal.id] && (
                       <div className="text-xs text-muted-foreground">
-                        Introduced by: <span className="font-medium">{introducers[deal.id].name || "Unknown Investor"}</span>
+                        Introduced by: <Link to={`/investor/${introducers[deal.id].id}`} className="font-medium hover:text-primary transition-colors">{introducers[deal.id].name || "Unknown Investor"}</Link>
                       </div>
                     )}
                     <div className="flex gap-2 mt-1">
