@@ -19,7 +19,7 @@ const DealOverview = ({ deal }: DealOverviewProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Overview</CardTitle>
+        <CardTitle>Company Overview</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
