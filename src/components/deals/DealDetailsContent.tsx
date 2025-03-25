@@ -18,15 +18,15 @@ interface DealDetailsContentProps {
 const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
   return (
     <div className="md:col-span-3 mt-6">
-      <Tabs defaultValue="details" className="w-full">
+      <Tabs defaultValue="deck" className="w-full">
         <TabsList className="mb-4">
-          <TabsTrigger value="details" className="flex items-center gap-1">
-            <FileText className="h-4 w-4" />
-            Details
-          </TabsTrigger>
           <TabsTrigger value="deck" className="flex items-center gap-1">
             <Presentation className="h-4 w-4" />
             Deck
+          </TabsTrigger>
+          <TabsTrigger value="details" className="flex items-center gap-1">
+            <FileText className="h-4 w-4" />
+            Details
           </TabsTrigger>
           <TabsTrigger value="comments" className="flex items-center gap-1">
             <MessageSquare className="h-4 w-4" />
@@ -37,6 +37,10 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
             Status
           </TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="deck">
+          <DealDeck deal={deal} />
+        </TabsContent>
         
         <TabsContent value="details" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -60,10 +64,6 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
               <DealSidebar deal={deal} />
             </div>
           </div>
-        </TabsContent>
-        
-        <TabsContent value="deck">
-          <DealDeck deal={deal} />
         </TabsContent>
         
         <TabsContent value="comments">
