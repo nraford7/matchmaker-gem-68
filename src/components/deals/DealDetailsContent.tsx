@@ -29,13 +29,13 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
             <FileText className="h-4 w-4" />
             Details
           </TabsTrigger>
-          <TabsTrigger value="recommendations" className="flex items-center gap-1">
-            <Lightbulb className="h-4 w-4" />
-            Recommendations
-          </TabsTrigger>
           <TabsTrigger value="comments" className="flex items-center gap-1">
             <MessageSquare className="h-4 w-4" />
             Comments
+          </TabsTrigger>
+          <TabsTrigger value="recommendations" className="flex items-center gap-1">
+            <Lightbulb className="h-4 w-4" />
+            Recommendations
           </TabsTrigger>
           <TabsTrigger value="status" className="flex items-center gap-1">
             <ClipboardCheck className="h-4 w-4" />
@@ -71,12 +71,12 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
           </div>
         </TabsContent>
         
-        <TabsContent value="recommendations">
-          <DealRecommendations deal={deal} />
-        </TabsContent>
-        
         <TabsContent value="comments">
           <DealComments dealId={deal.id} />
+        </TabsContent>
+        
+        <TabsContent value="recommendations">
+          <DealRecommendations deal={deal} />
         </TabsContent>
         
         <TabsContent value="status">
