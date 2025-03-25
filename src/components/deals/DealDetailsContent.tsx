@@ -1,7 +1,7 @@
 
 import { EnhancedDeal } from "@/types/deal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MessageSquare, FileText, ClipboardCheck, Presentation } from "lucide-react";
+import { MessageSquare, FileText, ClipboardCheck, Presentation, Lightbulb } from "lucide-react";
 import DealOverview from "./DealOverview";
 import DealTeam from "./DealTeam";
 import DealFundsUsage from "./DealFundsUsage";
@@ -10,6 +10,7 @@ import DealSidebar from "./DealSidebar";
 import DealComments from "./DealComments";
 import DealStatus from "./DealStatus";
 import DealDeck from "./DealDeck";
+import DealRecommendations from "./DealRecommendations";
 
 interface DealDetailsContentProps {
   deal: EnhancedDeal;
@@ -27,6 +28,10 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
           <TabsTrigger value="details" className="flex items-center gap-1">
             <FileText className="h-4 w-4" />
             Details
+          </TabsTrigger>
+          <TabsTrigger value="recommendations" className="flex items-center gap-1">
+            <Lightbulb className="h-4 w-4" />
+            Recommendations
           </TabsTrigger>
           <TabsTrigger value="comments" className="flex items-center gap-1">
             <MessageSquare className="h-4 w-4" />
@@ -64,6 +69,10 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
               <DealSidebar deal={deal} />
             </div>
           </div>
+        </TabsContent>
+        
+        <TabsContent value="recommendations">
+          <DealRecommendations deal={deal} />
         </TabsContent>
         
         <TabsContent value="comments">
