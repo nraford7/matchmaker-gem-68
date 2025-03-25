@@ -31,11 +31,11 @@ const DealDetailsContent = ({ deal }: DealDetailsContentProps) => {
           </TabsTrigger>
           <TabsTrigger value="comments" className="flex items-center gap-1">
             <MessageSquare className="h-4 w-4" />
-            Comments
+            Discussion
           </TabsTrigger>
           <TabsTrigger value="recommendations" className="flex items-center gap-1">
             <Lightbulb className="h-4 w-4" />
-            Recommendations
+            Recommendation
           </TabsTrigger>
           <TabsTrigger value="status" className="flex items-center gap-1">
             <ClipboardCheck className="h-4 w-4" />
