@@ -35,7 +35,9 @@ export const fetchAllDeals = async (): Promise<Deal[]> => {
       strategyProfile: typeof item.strategy_profile === 'object' ? item.strategy_profile : {},
       psychologicalFit: typeof item.psychological_fit === 'object' ? item.psychological_fit : {},
       createdAt: item.created_at,
-      IRR: item.IRR
+      IRR: item.IRR,
+      // Add the introduced_by_id field
+      introducedById: item.introduced_by_id
     }));
   } catch (error) {
     console.error("Error fetching deals:", error);
