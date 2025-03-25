@@ -16,22 +16,22 @@ type NavLink = {
 export const navigationLinks: NavLink[] = [
   {
     path: "/dashboard",
-    label: "Dashboard",
+    label: "The Cartography",
     icon: LayoutDashboard
   },
   {
     path: "/deals",
-    label: "Deals",
+    label: "The Observatory",
     icon: Briefcase
   },
   {
     path: "/network",
-    label: "Network",
+    label: "The Assembly",
     icon: Users
   },
   {
     path: "/insights",
-    label: "Insights",
+    label: "The Observatory Lens",
     icon: ChartPie
   }
 ];
