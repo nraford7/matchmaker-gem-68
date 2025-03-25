@@ -6,3 +6,6 @@ export * from "./DealsTabs";
 export * from "./DealsSearchBar";
 export * from "./PortfolioInsights";
 export * from "./DealsSummary";
+export * from "./SortDropdown";
+export * from "./TabContent";
+export * from "./types";
