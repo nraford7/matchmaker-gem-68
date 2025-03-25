@@ -68,18 +68,15 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
                 <Card className="h-full flex flex-col transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
                   <CardContent className="p-4 flex flex-col h-full relative">
                     {deal.matchScore && (
-                      <div className="absolute top-3 right-3 flex flex-col items-center bg-primary/10 rounded-lg px-2 py-1 border border-primary/20">
-                        <div className="flex items-center gap-1">
-                          <BadgePercent className="h-4 w-4 text-primary" />
-                          <span className="text-xl font-bold text-primary">
-                            {Math.round(deal.matchScore * 100)}%
-                          </span>
-                        </div>
-                        <span className="text-xs text-primary/80 font-medium">Match Score</span>
+                      <div className="absolute top-2 right-2 flex items-center gap-0.5 bg-primary/10 rounded-md px-1.5 py-0.5 border border-primary/20">
+                        <BadgePercent className="h-3 w-3 text-primary" />
+                        <span className="text-sm font-bold text-primary">
+                          {Math.round(deal.matchScore * 100)}%
+                        </span>
                       </div>
                     )}
                     
-                    <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base pr-16">
+                    <h3 className="font-semibold mb-2 line-clamp-1 group-hover:text-primary transition-colors text-base pr-12">
                       {deal.name}
                     </h3>
                     
