@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { uploadFile, triggerMakeAutomation, deleteFile } from "@/services/fileUploadService";
@@ -47,10 +48,24 @@ export const useDocumentProcessor = (
     const files = event.target.files;
     if (files && files.length > 0) {
       const file = files[0];
+      
+      // Delete the previous file if one exists
+      if (documentUrl) {
+        try {
+          console.log("Deleting previously uploaded file before uploading new file");
+          await deleteFile(documentUrl);
+        } catch (error) {
+          console.error("Error deleting previous file:", error);
+          // Continue with upload even if delete fails
+        }
+      }
+      
       setSelectedFile(file);
       setIsUploading(true);
       setUploadProgress(0);
       setError(undefined);
+      setHasProcessed(false); // Reset processing state for new file
+      setDocumentUrl(null); // Clear the previous document URL
       
       const stopSimulation = simulateProgress(setUploadProgress, undefined, 0, 1500);
       
