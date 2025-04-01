@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
@@ -94,5 +93,47 @@ export const triggerMakeAutomation = async (
     console.error("Error triggering Make.com automation:", error);
     toast.error("Failed to process document");
     return null;
+  }
+};
+
+/**
+ * Deletes a file from Supabase storage
+ */
+export const deleteFile = async (
+  fileUrl: string,
+  bucket: string = "pitch-documents"
+): Promise<boolean> => {
+  try {
+    // Extract the file path from the URL
+    const url = new URL(fileUrl);
+    const pathSegments = url.pathname.split('/');
+    // The file name should be the last segment of the path
+    const fileName = pathSegments[pathSegments.length - 1];
+    
+    console.log(`Attempting to delete file from bucket ${bucket}: ${fileName}`);
+    
+    // Check if user has permission to delete from this bucket
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    
+    if (!userId) {
+      console.error("User not authenticated for file deletion");
+      return false;
+    }
+
+    const { error } = await supabase.storage
+      .from(bucket)
+      .remove([fileName]);
+
+    if (error) {
+      console.error(`Error deleting file from bucket ${bucket}:`, error);
+      return false;
+    }
+
+    console.log("File deleted successfully");
+    return true;
+  } catch (error) {
+    console.error("Error in deleteFile:", error);
+    return false;
   }
 };

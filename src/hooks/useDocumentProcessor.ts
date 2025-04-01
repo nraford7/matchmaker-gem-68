@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { uploadFile, triggerMakeAutomation } from "@/services/fileUploadService";
+import { uploadFile, triggerMakeAutomation, deleteFile } from "@/services/fileUploadService";
 import { UseFormReturn } from "react-hook-form";
 import { MAKE_WEBHOOK_URL, OpportunityFormValues } from "@/components/opportunity/types";
 import { useAuth } from "@/contexts/AuthContext";
@@ -146,7 +146,20 @@ export const useDocumentProcessor = (
     }
   };
 
-  const cancelProcess = () => {
+  const cancelProcess = async () => {
+    if (documentUrl && !hasProcessed) {
+      try {
+        const deleted = await deleteFile(documentUrl);
+        if (deleted) {
+          console.log("File was deleted from storage after cancellation");
+        } else {
+          console.warn("Could not delete file from storage");
+        }
+      } catch (error) {
+        console.error("Error deleting file:", error);
+      }
+    }
+    
     setSelectedFile(null);
     setIsUploading(false);
     setIsUploaded(false);
@@ -154,10 +167,11 @@ export const useDocumentProcessor = (
     setUploadProgress(0);
     setProcessingProgress(0);
     setError(undefined);
+    setDocumentUrl(null);
     
     if (documentUrl) {
       toast.info("Upload cancelled", {
-        description: "Your document was saved but not analyzed"
+        description: "Your document was removed"
       });
     } else {
       toast.info("Upload cancelled");
