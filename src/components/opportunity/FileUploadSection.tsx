@@ -1,4 +1,3 @@
-
 import React from "react";
 import { FileText, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,12 +32,9 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
   onStartAnalysis
 }) => {
   const handleReplaceFile = () => {
-    // Delete the existing file first, then open the file browser
-    onCancelUpload();
-    // Use setTimeout to ensure the file input is clicked after state updates
-    setTimeout(() => {
-      document.getElementById("pitchDeck")?.click();
-    }, 100);
+    // We'll just directly open the file browser
+    // The actual file deletion will happen in onFileChange when a new file is selected
+    document.getElementById("pitchDeck")?.click();
   };
 
   if (selectedFile && (isUploading || isUploaded || isProcessing)) {

@@ -19,6 +19,10 @@ export const useFileUpload = () => {
     if (files && files.length > 0) {
       const file = files[0];
       
+      // If we're replacing a file, don't reset the UI completely
+      // We'll just update the file and re-upload
+      const isReplacing = documentUrl !== null;
+      
       // Delete the previous file if one exists
       if (documentUrl) {
         try {
@@ -65,7 +69,7 @@ export const useFileUpload = () => {
           console.log("File uploaded by anonymous user");
         }
         
-        toast.success("Document uploaded successfully", {
+        toast.success(isReplacing ? "File replaced successfully" : "Document uploaded successfully", {
           description: "You can now analyze it with AI"
         });
         
