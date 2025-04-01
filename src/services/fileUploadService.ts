@@ -1,17 +1,35 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 
 /**
- * Checks if a bucket exists in Supabase storage
+ * Creates a bucket in Supabase storage if it doesn't exist
  */
-const checkBucketExists = async (bucketName: string): Promise<boolean> => {
+const ensureBucketExists = async (bucketName: string): Promise<boolean> => {
   try {
     // Check if the bucket exists
     const { data: buckets } = await supabase.storage.listBuckets();
-    return buckets?.some(bucket => bucket.name === bucketName) || false;
+    const bucketExists = buckets?.some(bucket => bucket.name === bucketName);
+    
+    if (!bucketExists) {
+      console.log(`Bucket ${bucketName} doesn't exist. Creating it...`);
+      // Create the bucket if it doesn't exist
+      const { error } = await supabase.storage.createBucket(bucketName, {
+        public: true, // Make bucket public to ensure files can be accessed
+      });
+      
+      if (error) {
+        console.error("Error creating bucket:", error);
+        return false;
+      }
+      console.log(`Bucket ${bucketName} created successfully`);
+      return true;
+    }
+    
+    return true;
   } catch (error) {
-    console.error("Error checking bucket exists:", error);
+    console.error("Error ensuring bucket exists:", error);
     return false;
   }
 };
@@ -24,12 +42,12 @@ export const uploadFile = async (
   bucket: string = "pitch-documents"
 ): Promise<string | null> => {
   try {
-    // Check if the bucket exists before uploading
-    const bucketExists = await checkBucketExists(bucket);
+    // Create the bucket if it doesn't exist
+    const bucketExists = await ensureBucketExists(bucket);
     if (!bucketExists) {
-      console.log(`Bucket ${bucket} doesn't exist. Using default bucket.`);
-      // Fall back to a public bucket or create a more user-friendly message
-      bucket = "uploads"; // Try a default bucket that might already exist
+      console.error(`Failed to create or access bucket ${bucket}`);
+      toast.error("Failed to access storage");
+      return null;
     }
     
     const fileExt = file.name.split(".").pop();
