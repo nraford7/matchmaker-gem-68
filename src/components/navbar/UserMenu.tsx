@@ -1,13 +1,11 @@
 
 import { User } from "@supabase/supabase-js";
-import { Button } from "@/components/ui/button";
 import { 
   Popover, 
-  PopoverContent, 
-  PopoverTrigger 
+  PopoverContent
 } from "@/components/ui/popover";
-import { UserAvatar } from "./UserAvatar";
 import { UserMenuContent } from "./UserMenuContent";
+import { UserMenuTrigger } from "./UserMenuTrigger";
 
 interface UserMenuProps {
   user: User;
@@ -17,24 +15,17 @@ interface UserMenuProps {
 export const UserMenu = ({ user, signOut }: UserMenuProps) => {
   return (
     <div className="flex items-center gap-4">
+      {/* Profile info popover (hidden on mobile) */}
       <Popover>
-        <PopoverTrigger asChild>
-          <div className="hidden md:flex flex-col items-end justify-center cursor-pointer hover:opacity-80 transition-opacity">
-            <span className="text-sm font-medium">{user.user_metadata.full_name || user.email}</span>
-            <span className="text-xs text-muted-foreground">{user.user_metadata.company || ""}</span>
-          </div>
-        </PopoverTrigger>
+        <UserMenuTrigger user={user} variant="profile" />
         <PopoverContent className="w-56" align="end">
           <UserMenuContent user={user} signOut={signOut} />
         </PopoverContent>
       </Popover>
       
+      {/* Avatar popover (visible on all screen sizes) */}
       <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline" size="icon" className="rounded-full">
-            <UserAvatar user={user} />
-          </Button>
-        </PopoverTrigger>
+        <UserMenuTrigger user={user} variant="avatar" />
         <PopoverContent className="w-56" align="end">
           <UserMenuContent user={user} signOut={signOut} />
         </PopoverContent>
