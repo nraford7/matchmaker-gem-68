@@ -17,18 +17,28 @@ export const uploadFile = async (
     const fileName = `${uuidv4()}.${fileExt}`;
     const filePath = `${fileName}`;
 
-    // Try to upload to the specified bucket
+    // Check if user has permission to upload to this bucket
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    
+    if (!userId) {
+      console.error("User not authenticated for upload");
+      toast.error("Authentication required to upload files");
+      return null;
+    }
+
+    // Try to upload to the specified bucket with authenticated user
     const { error: uploadError, data } = await supabase.storage
       .from(bucket)
       .upload(filePath, file, {
         cacheControl: "3600",
-        upsert: false,
+        upsert: true, // Changed to true to allow overwriting if needed
       });
 
     if (uploadError) {
       console.error(`Error uploading to bucket ${bucket}:`, uploadError);
       
-      // If there's an error with the specified bucket, try the "public" bucket as fallback
+      // If there's an error with permissions, try the "public" bucket as fallback
       if (bucket !== "public") {
         console.log("Trying fallback to 'public' bucket...");
         return uploadFile(file, "public");

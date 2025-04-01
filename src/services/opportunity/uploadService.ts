@@ -14,15 +14,30 @@ export const uploadOpportunityWithDocument = async (
   makeWebhookUrl?: string
 ): Promise<string | null> => {
   try {
+    // Get and validate the current user
     const userId = await getCurrentUserId();
     if (!validateUserAuth(userId)) {
+      toast.error("Authentication required to upload opportunities");
       return null;
     }
+
+    console.log("Uploading opportunity for user:", userId);
 
     // If document is provided, upload it to the pitch-documents bucket
     let documentUrl = null;
     if (document) {
+      // Make sure the user is authenticated before uploading
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        toast.error("Authentication required to upload documents");
+        return null;
+      }
+      
       documentUrl = await uploadFile(document, "pitch-documents");
+      if (!documentUrl) {
+        toast.error("Document upload failed");
+        return null;
+      }
     }
 
     // Add the document URL to the opportunity
@@ -50,6 +65,7 @@ export const uploadOpportunityWithDocument = async (
       .single();
 
     if (error) {
+      console.error("Error inserting opportunity:", error);
       throw error;
     }
 
