@@ -1,6 +1,6 @@
 
 import React from "react";
-import { FileText, FileType, UploadCloud, Replace } from "lucide-react";
+import { FileText, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form";
 import { FileUploadProgress } from "./FileUploadProgress";
@@ -32,6 +32,15 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
   onCancelUpload,
   onStartAnalysis
 }) => {
+  const handleReplaceFile = () => {
+    // Delete the existing file first, then open the file browser
+    onCancelUpload();
+    // Use setTimeout to ensure the file input is clicked after state updates
+    setTimeout(() => {
+      document.getElementById("pitchDeck")?.click();
+    }, 100);
+  };
+
   if (selectedFile && (isUploading || isUploaded || isProcessing)) {
     return (
       <div className="space-y-4">
@@ -49,6 +58,7 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
             processingProgress={processingProgress}
             onCancel={onCancelUpload}
             onStartAnalysis={onStartAnalysis}
+            onReplaceFile={handleReplaceFile}
             error={error}
           />
         </div>
@@ -90,8 +100,7 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
               <Button type="button" onClick={onStartAnalysis}>
                 Analyze with AI
               </Button>
-              <Button type="button" variant="secondary" onClick={() => document.getElementById("pitchDeck")?.click()}>
-                <Replace className="mr-1" size={16} />
+              <Button type="button" variant="secondary" onClick={handleReplaceFile}>
                 Replace File
               </Button>
               <Button type="button" variant="outline" onClick={onCancelUpload}>
