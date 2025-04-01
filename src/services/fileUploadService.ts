@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
@@ -121,13 +122,24 @@ export const deleteFile = async (
       return false;
     }
 
-    const { error } = await supabase.storage
+    // First try to delete from the specified bucket
+    let { error } = await supabase.storage
       .from(bucket)
       .remove([fileName]);
 
+    // If there's an error, try the public bucket as fallback
     if (error) {
       console.error(`Error deleting file from bucket ${bucket}:`, error);
-      return false;
+      console.log("Trying fallback to 'public' bucket for deletion...");
+      
+      const { error: publicBucketError } = await supabase.storage
+        .from("public")
+        .remove([fileName]);
+      
+      if (publicBucketError) {
+        console.error("Error deleting file from public bucket:", publicBucketError);
+        return false;
+      }
     }
 
     console.log("File deleted successfully");

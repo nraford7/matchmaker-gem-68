@@ -164,6 +164,7 @@ export const useDocumentProcessor = (
   const cancelProcess = async () => {
     if (documentUrl && !hasProcessed) {
       try {
+        console.log("Attempting to delete file after cancellation:", documentUrl);
         const deleted = await deleteFile(documentUrl);
         if (deleted) {
           console.log("File was deleted from storage after cancellation");
@@ -172,9 +173,11 @@ export const useDocumentProcessor = (
         }
       } catch (error) {
         console.error("Error deleting file:", error);
+        // Continue with cancellation even if delete fails
       }
     }
     
+    // Reset all state variables regardless of whether the file deletion was successful
     setSelectedFile(null);
     setIsUploading(false);
     setIsUploaded(false);
