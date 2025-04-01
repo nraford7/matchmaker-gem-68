@@ -59,7 +59,7 @@ const sectors = [
   { id: "other", label: "Other" },
 ];
 
-const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/your-webhook-id";
+const MAKE_WEBHOOK_URL = "https://hook.eu2.make.com/ykc7xsfxeii8eggdjpu94xsen7sxbhmm";
 
 const UploadOpportunity = () => {
   const navigate = useNavigate();
@@ -88,26 +88,21 @@ const UploadOpportunity = () => {
   const onSubmit = async (data: OpportunityFormValues) => {
     setIsSubmitting(true);
     
-    // Add stakeholders to the form data
     data.stakeholders = stakeholders;
     
     try {
-      // Add the document URL to the data if available
       if (documentUrl) {
         console.log("Including document URL in submission:", documentUrl);
       }
       
-      // In a real app, you would upload the data to your backend here
       console.log("Form data:", data);
       
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       toast.success("Opportunity successfully uploaded", {
         description: "Your deal has been added to the platform",
       });
       
-      // Navigate to dashboard after successful submission
       navigate("/dashboard");
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -125,7 +120,6 @@ const UploadOpportunity = () => {
       const file = files[0];
       setSelectedFile(file);
       
-      // Start processing the document
       await processDocument(file);
     }
   };
@@ -134,7 +128,6 @@ const UploadOpportunity = () => {
     setIsProcessing(true);
     
     try {
-      // 1. Upload the file to Supabase
       const fileUrl = await uploadFile(file);
       if (!fileUrl) {
         throw new Error("Failed to upload file to storage");
@@ -143,7 +136,6 @@ const UploadOpportunity = () => {
       setDocumentUrl(fileUrl);
       console.log("Document uploaded successfully:", fileUrl);
       
-      // 2. Trigger Make.com automation with the file URL
       const extractedData = await triggerMakeAutomation(fileUrl, MAKE_WEBHOOK_URL);
       
       if (!extractedData) {
@@ -154,7 +146,6 @@ const UploadOpportunity = () => {
         return;
       }
       
-      // 3. Fill the form with extracted data
       form.reset({
         name: extractedData.name || "",
         description: extractedData.description || "",
@@ -164,17 +155,14 @@ const UploadOpportunity = () => {
         location: extractedData.location || "",
       });
       
-      // Set stakeholders if available
       if (extractedData.stakeholders && Array.isArray(extractedData.stakeholders)) {
         setStakeholders(extractedData.stakeholders);
       }
       
-      // Set sectors if available
       if (extractedData.sectors && Array.isArray(extractedData.sectors)) {
         setSelectedSectors(extractedData.sectors);
       }
       
-      // Show success message
       toast.success("Document processed successfully", {
         description: "We've analyzed your document and filled out the form. Please review and make any necessary corrections."
       });
@@ -219,7 +207,6 @@ const UploadOpportunity = () => {
         ? current.filter(s => s !== sector)
         : [...current, sector];
       
-      // Update the form value
       form.setValue("sectors", updated, { shouldValidate: true });
       
       return updated;
@@ -242,7 +229,6 @@ const UploadOpportunity = () => {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                {/* Document Upload Section - Now First */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <FileText className="h-5 w-5 text-primary" />
@@ -285,7 +271,6 @@ const UploadOpportunity = () => {
                   </div>
                 </div>
 
-                {/* Opportunity Details Section */}
                 <div className="border-t pt-6">
                   <div className="flex items-center gap-2 mb-4">
                     <InfoIcon className="h-5 w-5 text-primary" />
@@ -327,7 +312,6 @@ const UploadOpportunity = () => {
                   </div>
 
                   <div className="grid grid-cols-1 gap-6 mt-4">
-                    {/* Multi-select sectors using checkboxes */}
                     <FormField
                       control={form.control}
                       name="sectors"
@@ -434,14 +418,12 @@ const UploadOpportunity = () => {
                   </div>
                 </div>
 
-                {/* Stakeholders Section (renamed from People Involved) */}
                 <div className="border-t pt-6 space-y-4">
                   <div className="flex items-center gap-2">
                     <UsersIcon className="h-5 w-5 text-primary" />
                     <h3 className="text-lg font-medium">Stakeholders</h3>
                   </div>
                   
-                  {/* List of added stakeholders */}
                   {stakeholders.length > 0 && (
                     <div className="space-y-2">
                       {stakeholders.map((stakeholder, index) => (
@@ -472,7 +454,6 @@ const UploadOpportunity = () => {
                     </div>
                   )}
                   
-                  {/* Form to add new stakeholder */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border border-dashed rounded-md">
                     <div>
                       <FormLabel htmlFor="stakeholderName">Name</FormLabel>
