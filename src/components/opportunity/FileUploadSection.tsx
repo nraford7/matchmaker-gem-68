@@ -90,8 +90,8 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
               <Button type="button" onClick={onStartAnalysis}>
                 Analyze with AI
               </Button>
-              <Button type="button" variant="outline" onClick={() => document.getElementById("pitchDeck")?.click()}>
-                Choose a Different File
+              <Button type="button" onClick={() => document.getElementById("pitchDeck")?.click()}>
+                Replace File
               </Button>
               <Button type="button" variant="outline" onClick={onCancelUpload}>
                 Cancel
