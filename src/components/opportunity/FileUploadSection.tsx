@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useRef } from "react";
 import { FileText, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form";
@@ -31,10 +32,16 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
   onCancelUpload,
   onStartAnalysis
 }) => {
+  // Create a ref to the file input
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleReplaceFile = () => {
-    // We'll just directly open the file browser
-    // The actual file deletion will happen in onFileChange when a new file is selected
-    document.getElementById("pitchDeck")?.click();
+    // Using the ref to access the file input element directly
+    if (fileInputRef.current) {
+      // Reset the value to ensure onChange triggers even if selecting the same file again
+      fileInputRef.current.value = "";
+      fileInputRef.current.click();
+    }
   };
 
   if (selectedFile && (isUploading || isUploaded || isProcessing)) {
@@ -57,6 +64,15 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
             onReplaceFile={handleReplaceFile}
             error={error}
           />
+          {/* Hidden file input accessible via ref */}
+          <input
+            ref={fileInputRef}
+            id="pitchDeck"
+            type="file"
+            accept=".pdf,.ppt,.pptx,.doc,.docx"
+            className="hidden"
+            onChange={onFileChange}
+          />
         </div>
       </div>
     );
@@ -75,10 +91,11 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
             <p className="mb-3 text-muted-foreground">
               Drag and drop your pitch document (PDF, PPT, or Word), or
             </p>
-            <Button type="button" variant="outline" onClick={() => document.getElementById("pitchDeck")?.click()}>
+            <Button type="button" variant="outline" onClick={handleReplaceFile}>
               Browse files
             </Button>
             <input
+              ref={fileInputRef}
               id="pitchDeck"
               type="file"
               accept=".pdf,.ppt,.pptx,.doc,.docx"
@@ -104,6 +121,7 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
               </Button>
             </div>
             <input
+              ref={fileInputRef}
               id="pitchDeck"
               type="file"
               accept=".pdf,.ppt,.pptx,.doc,.docx"
