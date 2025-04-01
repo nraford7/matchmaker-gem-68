@@ -1,6 +1,6 @@
 
 import React from "react";
-import { FileText, FileType, UploadCloud } from "lucide-react";
+import { FileText, FileType, UploadCloud, Replace } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form";
 import { FileUploadProgress } from "./FileUploadProgress";
@@ -90,7 +90,8 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
               <Button type="button" onClick={onStartAnalysis}>
                 Analyze with AI
               </Button>
-              <Button type="button" onClick={() => document.getElementById("pitchDeck")?.click()}>
+              <Button type="button" variant="secondary" onClick={() => document.getElementById("pitchDeck")?.click()}>
+                <Replace className="mr-1" size={16} />
                 Replace File
               </Button>
               <Button type="button" variant="outline" onClick={onCancelUpload}>

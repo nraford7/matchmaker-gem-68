@@ -2,7 +2,7 @@
 import React from "react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Loader2, FileText, CheckCircle2, XCircle } from "lucide-react";
+import { Loader2, FileText, CheckCircle2, XCircle, Replace } from "lucide-react";
 
 interface FileUploadProgressProps {
   fileName: string;
@@ -71,8 +71,25 @@ export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({
         </div>
         <div className="flex gap-3 mt-4">
           <Button onClick={onStartAnalysis}>Analyze with AI</Button>
+          <Button variant="secondary" onClick={() => document.getElementById("pitchDeck")?.click()}>
+            <Replace className="mr-1" size={16} />
+            Replace File
+          </Button>
           <Button variant="outline" onClick={onCancel}>Cancel</Button>
         </div>
+        <input
+          id="pitchDeck"
+          type="file"
+          accept=".pdf,.ppt,.pptx,.doc,.docx"
+          className="hidden"
+          onChange={(e) => {
+            if (e.target.files && e.target.files.length > 0) {
+              // This will trigger the parent component's onFileChange
+              const changeEvent = new Event('change', { bubbles: true });
+              e.target.dispatchEvent(changeEvent);
+            }
+          }}
+        />
       </div>
     );
   }
