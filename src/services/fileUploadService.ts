@@ -8,7 +8,7 @@ import { toast } from "sonner";
  */
 export const uploadFile = async (
   file: File,
-  bucket: string = "public"
+  bucket: string = "pitch-documents"
 ): Promise<string | null> => {
   try {
     console.log(`Attempting to upload file to bucket: ${bucket}`);
@@ -28,7 +28,7 @@ export const uploadFile = async (
     if (uploadError) {
       console.error(`Error uploading to bucket ${bucket}:`, uploadError);
       
-      // If there's an error with the specified bucket, try the "public" bucket if it's not already the one we tried
+      // If there's an error with the specified bucket, try the "public" bucket as fallback
       if (bucket !== "public") {
         console.log("Trying fallback to 'public' bucket...");
         return uploadFile(file, "public");

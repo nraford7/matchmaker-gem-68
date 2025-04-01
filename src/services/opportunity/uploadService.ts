@@ -19,10 +19,10 @@ export const uploadOpportunityWithDocument = async (
       return null;
     }
 
-    // If document is provided, upload it first (using 'public' bucket)
+    // If document is provided, upload it to the pitch-documents bucket
     let documentUrl = null;
     if (document) {
-      documentUrl = await uploadFile(document);
+      documentUrl = await uploadFile(document, "pitch-documents");
     }
 
     // Add the document URL to the opportunity
