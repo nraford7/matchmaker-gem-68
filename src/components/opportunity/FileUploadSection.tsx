@@ -1,7 +1,8 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { FileText, FileType, Loader2, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FormLabel } from "@/components/ui/form";
 
 interface FileUploadSectionProps {
   selectedFile: File | null;
@@ -17,15 +18,15 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
   onFileChange,
 }) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <div className="flex items-center gap-2">
         <FileText className="h-5 w-5 text-primary" />
         <FormLabel htmlFor="pitchDeck" className="text-lg font-medium">Upload Pitch Document</FormLabel>
       </div>
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
         <div className="flex flex-col items-center">
-          <UploadCloud className="h-10 w-10 text-muted-foreground mb-2" />
-          <p className="mb-2 text-sm text-muted-foreground">
+          <UploadCloud className="h-12 w-12 text-muted-foreground mb-3" />
+          <p className="mb-3 text-muted-foreground">
             Drag and drop your pitch document (PDF, PPT, or Word), or
           </p>
           <Button type="button" variant="outline" onClick={() => document.getElementById("pitchDeck")?.click()}>
@@ -52,13 +53,14 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
           )}
           {hasProcessed && (
             <div className="mt-4 text-sm text-green-600">
-              <span>✓ Document processed. Please review the information below.</span>
+              <span>✓ Document processed successfully. Click "Upload Opportunity" to continue.</span>
             </div>
           )}
         </div>
       </div>
+      <p className="text-sm text-muted-foreground text-center">
+        Supported formats: PDF, PowerPoint, Word documents
+      </p>
     </div>
   );
 };
-
-import { FormLabel } from "@/components/ui/form";
