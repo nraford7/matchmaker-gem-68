@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
@@ -24,13 +25,11 @@ export const uploadFile = async (
     
     const fileExt = file.name.split(".").pop();
     const fileName = `${uuidv4()}.${fileExt}`;
-    
-    // Upload directly to the bucket root instead of a user-specific folder
     const filePath = fileName;
     
     console.log(`Uploading file directly to bucket: ${bucket}`);
 
-    // Upload to the specified bucket
+    // Try upload to the specified bucket
     const { error: uploadError, data } = await supabase.storage
       .from(bucket)
       .upload(filePath, file, {
@@ -41,10 +40,31 @@ export const uploadFile = async (
     if (uploadError) {
       console.error(`Error uploading to bucket ${bucket}:`, uploadError);
       
-      // If there's an error with permissions, try the "public" bucket as fallback
-      if (bucket !== "public") {
-        console.log("Trying fallback to 'public' bucket...");
-        return uploadFile(file, "public");
+      // Create a new bucket if it doesn't exist
+      if (uploadError.message.includes("Bucket not found") || uploadError.message.includes("row-level security policy")) {
+        console.log("Bucket error detected, attempting to create public bucket files...");
+        
+        // Try uploading to a "files" bucket instead
+        const { error: filesError, data: filesData } = await supabase.storage
+          .from("files")
+          .upload(`${userId}/${fileName}`, file, {
+            cacheControl: "3600",
+            upsert: true,
+          });
+        
+        if (filesError) {
+          console.error("Error uploading to files bucket:", filesError);
+          toast.error("Failed to upload document");
+          return null;
+        }
+        
+        // Get the public URL for the uploaded file
+        const { data: publicUrlData } = supabase.storage
+          .from("files")
+          .getPublicUrl(`${userId}/${fileName}`);
+        
+        console.log("File uploaded successfully to files bucket:", publicUrlData.publicUrl);
+        return publicUrlData.publicUrl;
       }
       
       toast.error("Failed to upload document");
@@ -79,12 +99,14 @@ export const deleteFile = async (
     
     // Get the filename from the path
     // The structure should now be: /object/public/bucket-name/filename
-    // The filename should be at the last index
+    // or /object/public/bucket-name/user-id/filename
     const fileName = pathSegments[pathSegments.length - 1];
+    const possibleUserId = pathSegments[pathSegments.length - 2];
+    const possibleBucketName = pathSegments[pathSegments.length - 3] || bucket;
     
-    console.log(`Attempting to delete file from bucket ${bucket}: ${fileName}`);
+    console.log(`Attempting to delete file: ${fileName} from possible bucket: ${possibleBucketName}`);
     
-    // Check if user has permission to delete from this bucket
+    // Check if user has permission to delete
     const { data: { session } } = await supabase.auth.getSession();
     const userId = session?.user?.id;
     
@@ -93,23 +115,27 @@ export const deleteFile = async (
       return false;
     }
 
-    // Delete from the specified bucket
+    // Try to delete from the original bucket first
     let { error } = await supabase.storage
       .from(bucket)
       .remove([fileName]);
 
-    // If there's an error, try the public bucket as fallback
+    // If there's an error, try with a user path
     if (error) {
-      console.error(`Error deleting file from bucket ${bucket}:`, error);
-      console.log("Trying fallback to 'public' bucket for deletion...");
+      console.error(`Error deleting from bucket ${bucket}:`, error);
       
-      const { error: publicBucketError } = await supabase.storage
-        .from("public")
-        .remove([fileName]);
-      
-      if (publicBucketError) {
-        console.error("Error deleting file from public bucket:", publicBucketError);
-        return false;
+      // If URL indicates a file in files bucket with user subfolder
+      if (fileUrl.includes('/files/') && possibleUserId) {
+        console.log("Trying to delete from files bucket with user path...");
+        const { error: filesError } = await supabase.storage
+          .from("files")
+          .remove([`${possibleUserId}/${fileName}`]);
+          
+        if (filesError) {
+          console.error("Error deleting file from files bucket:", filesError);
+          return false;
+        }
+        return true;
       }
     }
 
