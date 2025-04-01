@@ -4,10 +4,12 @@ import { toast } from "sonner";
 import { uploadFile, triggerMakeAutomation } from "@/services/fileUploadService";
 import { UseFormReturn } from "react-hook-form";
 import { MAKE_WEBHOOK_URL, OpportunityFormValues } from "@/components/opportunity/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const useDocumentProcessor = (
   form: UseFormReturn<OpportunityFormValues>,
 ) => {
+  const { user } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [hasProcessed, setHasProcessed] = useState(false);
@@ -68,6 +70,13 @@ export const useDocumentProcessor = (
         setIsUploading(false);
         setIsUploaded(true);
         console.log("Document uploaded successfully:", fileUrl);
+        
+        // Log user info for debugging
+        if (user) {
+          console.log("File uploaded by user:", user.id);
+        } else {
+          console.log("File uploaded by anonymous user");
+        }
         
         toast.success("Document uploaded successfully", {
           description: "You can now analyze it with AI"

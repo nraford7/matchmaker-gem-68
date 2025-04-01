@@ -4,6 +4,35 @@ import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 
 /**
+ * Ensures that a bucket exists in Supabase storage
+ */
+const ensureBucketExists = async (bucketName: string): Promise<boolean> => {
+  try {
+    // Check if the bucket exists
+    const { data: buckets } = await supabase.storage.listBuckets();
+    const bucketExists = buckets?.some(bucket => bucket.name === bucketName);
+    
+    // If bucket doesn't exist, create it
+    if (!bucketExists) {
+      const { error } = await supabase.storage.createBucket(bucketName, {
+        public: false, // Set to true if files should be publicly accessible
+      });
+      
+      if (error) {
+        console.error("Error creating bucket:", error);
+        return false;
+      }
+      console.log(`Bucket ${bucketName} created successfully`);
+    }
+    
+    return true;
+  } catch (error) {
+    console.error("Error ensuring bucket exists:", error);
+    return false;
+  }
+};
+
+/**
  * Uploads a file to Supabase storage and returns the URL
  */
 export const uploadFile = async (
@@ -11,6 +40,12 @@ export const uploadFile = async (
   bucket: string = "pitch-documents"
 ): Promise<string | null> => {
   try {
+    // Ensure the bucket exists before uploading
+    const bucketExists = await ensureBucketExists(bucket);
+    if (!bucketExists) {
+      throw new Error("Failed to create storage bucket");
+    }
+    
     const fileExt = file.name.split(".").pop();
     const fileName = `${uuidv4()}.${fileExt}`;
     const filePath = `${fileName}`;
@@ -33,6 +68,7 @@ export const uploadFile = async (
       .from(bucket)
       .getPublicUrl(filePath);
 
+    console.log("File uploaded successfully:", publicUrlData.publicUrl);
     return publicUrlData.publicUrl;
   } catch (error) {
     console.error("Error in uploadFile:", error);

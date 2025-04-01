@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { FileText, FileType, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form";
@@ -87,11 +87,8 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
               <span className="font-medium">{selectedFile.name}</span>
             </div>
             <div className="flex gap-3">
-              <Button onClick={() => document.getElementById("pitchDeck")?.click()} variant="outline">
+              <Button type="button" onClick={() => document.getElementById("pitchDeck")?.click()} variant="outline">
                 Browse files
-              </Button>
-              <Button type="submit">
-                Upload Opportunity
               </Button>
             </div>
             <input
