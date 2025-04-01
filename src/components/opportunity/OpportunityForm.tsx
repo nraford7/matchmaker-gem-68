@@ -91,7 +91,7 @@ export const OpportunityForm = () => {
           onStartAnalysis={startAnalysis}
         />
 
-        {selectedFile && !isUploading && !isProcessing && (
+        {hasProcessed && (
           <div className="flex justify-end gap-4 pt-4 border-t">
             <Button 
               type="button" 

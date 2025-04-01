@@ -87,8 +87,14 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
               <span className="font-medium">{selectedFile.name}</span>
             </div>
             <div className="flex gap-3">
-              <Button type="button" onClick={() => document.getElementById("pitchDeck")?.click()} variant="outline">
-                Browse files
+              <Button type="button" onClick={onStartAnalysis}>
+                Analyze with AI
+              </Button>
+              <Button type="button" variant="outline" onClick={() => document.getElementById("pitchDeck")?.click()}>
+                Choose a Different File
+              </Button>
+              <Button type="button" variant="outline" onClick={onCancelUpload}>
+                Cancel
               </Button>
             </div>
             <input
