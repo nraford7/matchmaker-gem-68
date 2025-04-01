@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -27,6 +26,7 @@ import {
   Loader2,
   FileText
 } from "lucide-react";
+import { uploadFile, triggerMakeAutomation } from "@/services/fileUploadService";
 
 const stakeholderSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -59,6 +59,8 @@ const sectors = [
   { id: "other", label: "Other" },
 ];
 
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/your-webhook-id";
+
 const UploadOpportunity = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,6 +70,7 @@ const UploadOpportunity = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [hasProcessed, setHasProcessed] = useState(false);
   const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
+  const [documentUrl, setDocumentUrl] = useState<string | null>(null);
 
   const form = useForm<OpportunityFormValues>({
     resolver: zodResolver(opportunitySchema),
@@ -89,9 +92,13 @@ const UploadOpportunity = () => {
     data.stakeholders = stakeholders;
     
     try {
+      // Add the document URL to the data if available
+      if (documentUrl) {
+        console.log("Including document URL in submission:", documentUrl);
+      }
+      
       // In a real app, you would upload the data to your backend here
       console.log("Form data:", data);
-      console.log("Selected file:", selectedFile);
       
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -115,10 +122,11 @@ const UploadOpportunity = () => {
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      setSelectedFile(files[0]);
+      const file = files[0];
+      setSelectedFile(file);
       
       // Start processing the document
-      await processDocument(files[0]);
+      await processDocument(file);
     }
   };
 
@@ -126,37 +134,45 @@ const UploadOpportunity = () => {
     setIsProcessing(true);
     
     try {
-      // Simulate AI processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // 1. Upload the file to Supabase
+      const fileUrl = await uploadFile(file);
+      if (!fileUrl) {
+        throw new Error("Failed to upload file to storage");
+      }
       
-      // Mock AI-extracted data
-      const extractedData = {
-        name: "TechSolutions AI Platform",
-        description: "An advanced AI platform that helps enterprises automate document processing and extract valuable insights. The solution leverages cutting-edge natural language processing and computer vision to transform unstructured data into actionable intelligence.",
-        sectors: ["ai", "software"],
-        stage: "Series A",
-        fundingAmount: 5000000,
-        location: "San Francisco, CA",
-        stakeholders: [
-          { name: "Jane Smith", role: "CEO", organization: "TechSolutions Inc." },
-          { name: "John Davis", role: "CTO", organization: "TechSolutions Inc." },
-          { name: "Venture Capital Partners", role: "Lead Investor", organization: "" }
-        ]
-      };
+      setDocumentUrl(fileUrl);
+      console.log("Document uploaded successfully:", fileUrl);
       
-      // Fill the form with extracted data
+      // 2. Trigger Make.com automation with the file URL
+      const extractedData = await triggerMakeAutomation(fileUrl, MAKE_WEBHOOK_URL);
+      
+      if (!extractedData) {
+        toast.error("Failed to extract data from document", {
+          description: "Please fill out the form manually"
+        });
+        setIsProcessing(false);
+        return;
+      }
+      
+      // 3. Fill the form with extracted data
       form.reset({
-        name: extractedData.name,
-        description: extractedData.description,
-        sectors: extractedData.sectors,
-        stage: extractedData.stage,
-        fundingAmount: extractedData.fundingAmount,
-        location: extractedData.location,
+        name: extractedData.name || "",
+        description: extractedData.description || "",
+        sectors: extractedData.sectors || [],
+        stage: extractedData.stage || "",
+        fundingAmount: extractedData.fundingAmount || 0,
+        location: extractedData.location || "",
       });
       
-      // Set stakeholders
-      setStakeholders(extractedData.stakeholders);
-      setSelectedSectors(extractedData.sectors);
+      // Set stakeholders if available
+      if (extractedData.stakeholders && Array.isArray(extractedData.stakeholders)) {
+        setStakeholders(extractedData.stakeholders);
+      }
+      
+      // Set sectors if available
+      if (extractedData.sectors && Array.isArray(extractedData.sectors)) {
+        setSelectedSectors(extractedData.sectors);
+      }
       
       // Show success message
       toast.success("Document processed successfully", {
