@@ -27,11 +27,20 @@ export const OpportunityForm = () => {
     },
   });
 
-  const { selectedFile, isProcessing, hasProcessed, documentUrl, handleFileChange } = useDocumentProcessor(
-    form, 
-    () => {}, // Empty function for stakeholders as we're not using them
-    () => {}  // Empty function for sectors as we're not using them
-  );
+  const { 
+    selectedFile, 
+    isProcessing, 
+    hasProcessed, 
+    documentUrl,
+    uploadProgress,
+    isUploading,
+    isUploaded,
+    processingProgress,
+    error,
+    handleFileChange,
+    startAnalysis,
+    cancelProcess
+  } = useDocumentProcessor(form);
 
   const onSubmit = async (data: OpportunityFormValues) => {
     setIsSubmitting(true);
@@ -68,6 +77,13 @@ export const OpportunityForm = () => {
           isProcessing={isProcessing}
           hasProcessed={hasProcessed}
           onFileChange={handleFileChange}
+          uploadProgress={uploadProgress}
+          isUploading={isUploading}
+          isUploaded={isUploaded}
+          processingProgress={processingProgress}
+          error={error}
+          onCancelUpload={cancelProcess}
+          onStartAnalysis={startAnalysis}
         />
 
         <div className="flex justify-end gap-4 pt-4 border-t">
@@ -81,7 +97,7 @@ export const OpportunityForm = () => {
           </Button>
           <Button 
             type="submit" 
-            disabled={isSubmitting}
+            disabled={isSubmitting || isUploading || isProcessing}
           >
             {isSubmitting ? "Uploading..." : "Upload Opportunity"}
           </Button>

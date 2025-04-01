@@ -1,14 +1,22 @@
 
-import React from "react";
-import { FileText, FileType, Loader2, UploadCloud } from "lucide-react";
+import React, { useState } from "react";
+import { FileText, FileType, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form";
+import { FileUploadProgress } from "./FileUploadProgress";
 
 interface FileUploadSectionProps {
   selectedFile: File | null;
   isProcessing: boolean;
   hasProcessed: boolean;
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  uploadProgress: number;
+  isUploading: boolean;
+  isUploaded: boolean;
+  processingProgress: number;
+  error?: string;
+  onCancelUpload: () => void;
+  onStartAnalysis: () => void;
 }
 
 export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
@@ -16,7 +24,38 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
   isProcessing,
   hasProcessed,
   onFileChange,
+  uploadProgress,
+  isUploading,
+  isUploaded,
+  processingProgress,
+  error,
+  onCancelUpload,
+  onStartAnalysis
 }) => {
+  if (selectedFile && (isUploading || isUploaded || isProcessing)) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <FileText className="h-5 w-5 text-primary" />
+          <FormLabel htmlFor="pitchDeck" className="text-lg font-medium">Upload Pitch Document</FormLabel>
+        </div>
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8">
+          <FileUploadProgress
+            fileName={selectedFile.name}
+            uploadProgress={uploadProgress}
+            isUploading={isUploading}
+            isUploaded={isUploaded}
+            isProcessing={isProcessing}
+            processingProgress={processingProgress}
+            onCancel={onCancelUpload}
+            onStartAnalysis={onStartAnalysis}
+            error={error}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
@@ -39,18 +78,6 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
             className="hidden"
             onChange={onFileChange}
           />
-          {selectedFile && (
-            <div className="mt-4 text-sm flex items-center gap-2">
-              <FileType className="h-4 w-4 text-primary" />
-              <span>Selected file: {selectedFile.name}</span>
-            </div>
-          )}
-          {isProcessing && (
-            <div className="mt-4 flex items-center gap-2 text-primary">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Processing document...</span>
-            </div>
-          )}
           {hasProcessed && (
             <div className="mt-4 text-sm text-green-600">
               <span>✓ Document processed successfully. Click "Upload Opportunity" to continue.</span>
