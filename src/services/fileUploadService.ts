@@ -13,11 +13,7 @@ export const uploadFile = async (
   try {
     console.log(`Attempting to upload file to bucket: ${bucket}`);
     
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${uuidv4()}.${fileExt}`;
-    const filePath = `${fileName}`;
-
-    // Check if user has permission to upload to this bucket
+    // Get the authenticated user before proceeding
     const { data: { session } } = await supabase.auth.getSession();
     const userId = session?.user?.id;
     
@@ -26,19 +22,29 @@ export const uploadFile = async (
       toast.error("Authentication required to upload files");
       return null;
     }
+    
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${uuidv4()}.${fileExt}`;
+    
+    // Create a user-specific folder path for security isolation
+    const userFolderPath = `user-${userId}`;
+    const filePath = `${userFolderPath}/${fileName}`;
+    
+    console.log(`Uploading file to user folder: ${userFolderPath}`);
 
-    // Try to upload to the specified bucket with authenticated user
+    // Upload to the specified bucket with authenticated user's folder
     const { error: uploadError, data } = await supabase.storage
       .from(bucket)
       .upload(filePath, file, {
         cacheControl: "3600",
-        upsert: true, // Changed to true to allow overwriting if needed
+        upsert: true,
       });
 
     if (uploadError) {
       console.error(`Error uploading to bucket ${bucket}:`, uploadError);
       
       // If there's an error with permissions, try the "public" bucket as fallback
+      // but still maintain user folder structure
       if (bucket !== "public") {
         console.log("Trying fallback to 'public' bucket...");
         return uploadFile(file, "public");
@@ -108,10 +114,17 @@ export const deleteFile = async (
     // Extract the file path from the URL
     const url = new URL(fileUrl);
     const pathSegments = url.pathname.split('/');
-    // The file name should be the last segment of the path
-    const fileName = pathSegments[pathSegments.length - 1];
     
-    console.log(`Attempting to delete file from bucket ${bucket}: ${fileName}`);
+    // Get the user folder and filename from the path
+    // The structure should be: /object/public/bucket-name/user-folder/filename
+    // The user folder should be at index pathSegments.length - 2
+    // The filename should be at the last index
+    
+    const fileName = pathSegments[pathSegments.length - 1];
+    const userFolder = pathSegments[pathSegments.length - 2];
+    const filePath = `${userFolder}/${fileName}`;
+    
+    console.log(`Attempting to delete file from bucket ${bucket}: ${filePath}`);
     
     // Check if user has permission to delete from this bucket
     const { data: { session } } = await supabase.auth.getSession();
@@ -121,11 +134,18 @@ export const deleteFile = async (
       console.error("User not authenticated for file deletion");
       return false;
     }
+    
+    // Verify that the file belongs to the current user
+    if (!userFolder.includes(`user-${userId}`)) {
+      console.error("User attempted to delete a file that doesn't belong to them");
+      toast.error("You don't have permission to delete this file");
+      return false;
+    }
 
     // First try to delete from the specified bucket
     let { error } = await supabase.storage
       .from(bucket)
-      .remove([fileName]);
+      .remove([filePath]);
 
     // If there's an error, try the public bucket as fallback
     if (error) {
@@ -134,7 +154,7 @@ export const deleteFile = async (
       
       const { error: publicBucketError } = await supabase.storage
         .from("public")
-        .remove([fileName]);
+        .remove([filePath]);
       
       if (publicBucketError) {
         console.error("Error deleting file from public bucket:", publicBucketError);
