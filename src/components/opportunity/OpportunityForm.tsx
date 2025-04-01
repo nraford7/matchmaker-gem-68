@@ -43,6 +43,11 @@ export const OpportunityForm = () => {
   } = useDocumentProcessor(form);
 
   const onSubmit = async (data: OpportunityFormValues) => {
+    if (!selectedFile) {
+      toast.error("Please select a file to upload");
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
@@ -86,22 +91,24 @@ export const OpportunityForm = () => {
           onStartAnalysis={startAnalysis}
         />
 
-        <div className="flex justify-end gap-4 pt-4 border-t">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => navigate("/dashboard")}
-            disabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button 
-            type="submit" 
-            disabled={isSubmitting || isUploading || isProcessing}
-          >
-            {isSubmitting ? "Uploading..." : "Upload Opportunity"}
-          </Button>
-        </div>
+        {selectedFile && !isUploading && !isProcessing && (
+          <div className="flex justify-end gap-4 pt-4 border-t">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => navigate("/dashboard")}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Uploading..." : "Upload Opportunity"}
+            </Button>
+          </div>
+        )}
       </form>
     </Form>
   );
