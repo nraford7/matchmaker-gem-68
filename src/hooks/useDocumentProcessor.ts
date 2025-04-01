@@ -57,21 +57,29 @@ export const useDocumentProcessor = (
       const stopSimulation = simulateProgress(setUploadProgress, undefined, 0, 1500);
       
       try {
+        // Log user info for debugging
+        if (user) {
+          console.log("File upload initiated by user:", user.id);
+        } else {
+          console.log("File upload initiated by anonymous user");
+        }
+        
         // Simulate additional progress while actually uploading
         const fileUrl = await uploadFile(file);
         stopSimulation();
-        setUploadProgress(100);
         
         if (!fileUrl) {
+          setUploadProgress(0);
           throw new Error("Failed to upload file to storage");
         }
         
+        setUploadProgress(100);
         setDocumentUrl(fileUrl);
         setIsUploading(false);
         setIsUploaded(true);
         console.log("Document uploaded successfully:", fileUrl);
         
-        // Log user info for debugging
+        // Log user info after successful upload
         if (user) {
           console.log("File uploaded by user:", user.id);
         } else {
@@ -85,10 +93,10 @@ export const useDocumentProcessor = (
       } catch (error) {
         console.error("Error uploading document:", error);
         stopSimulation();
-        setError("Failed to upload document. Please try again.");
+        setError("Failed to upload document. Please check your connection and try again.");
         setIsUploading(false);
         toast.error("Failed to upload document", {
-          description: "Please try again later"
+          description: "There might be an issue with storage permissions"
         });
       }
     }

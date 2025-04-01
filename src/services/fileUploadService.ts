@@ -1,33 +1,17 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 
 /**
- * Ensures that a bucket exists in Supabase storage
+ * Checks if a bucket exists in Supabase storage
  */
-const ensureBucketExists = async (bucketName: string): Promise<boolean> => {
+const checkBucketExists = async (bucketName: string): Promise<boolean> => {
   try {
     // Check if the bucket exists
     const { data: buckets } = await supabase.storage.listBuckets();
-    const bucketExists = buckets?.some(bucket => bucket.name === bucketName);
-    
-    // If bucket doesn't exist, create it
-    if (!bucketExists) {
-      const { error } = await supabase.storage.createBucket(bucketName, {
-        public: false, // Set to true if files should be publicly accessible
-      });
-      
-      if (error) {
-        console.error("Error creating bucket:", error);
-        return false;
-      }
-      console.log(`Bucket ${bucketName} created successfully`);
-    }
-    
-    return true;
+    return buckets?.some(bucket => bucket.name === bucketName) || false;
   } catch (error) {
-    console.error("Error ensuring bucket exists:", error);
+    console.error("Error checking bucket exists:", error);
     return false;
   }
 };
@@ -40,10 +24,12 @@ export const uploadFile = async (
   bucket: string = "pitch-documents"
 ): Promise<string | null> => {
   try {
-    // Ensure the bucket exists before uploading
-    const bucketExists = await ensureBucketExists(bucket);
+    // Check if the bucket exists before uploading
+    const bucketExists = await checkBucketExists(bucket);
     if (!bucketExists) {
-      throw new Error("Failed to create storage bucket");
+      console.log(`Bucket ${bucket} doesn't exist. Using default bucket.`);
+      // Fall back to a public bucket or create a more user-friendly message
+      bucket = "uploads"; // Try a default bucket that might already exist
     }
     
     const fileExt = file.name.split(".").pop();
