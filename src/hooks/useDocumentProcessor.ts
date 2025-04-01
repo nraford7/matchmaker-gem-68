@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { toast } from "sonner";
 import { uploadFile, triggerMakeAutomation } from "@/services/fileUploadService";
@@ -53,18 +52,15 @@ export const useDocumentProcessor = (
       setUploadProgress(0);
       setError(undefined);
       
-      // Simulate initial upload progress
       const stopSimulation = simulateProgress(setUploadProgress, undefined, 0, 1500);
       
       try {
-        // Log user info for debugging
         if (user) {
           console.log("File upload initiated by user:", user.id);
         } else {
           console.log("File upload initiated by anonymous user");
         }
         
-        // Simulate additional progress while actually uploading
         const fileUrl = await uploadFile(file);
         stopSimulation();
         
@@ -79,7 +75,6 @@ export const useDocumentProcessor = (
         setIsUploaded(true);
         console.log("Document uploaded successfully:", fileUrl);
         
-        // Log user info after successful upload
         if (user) {
           console.log("File uploaded by user:", user.id);
         } else {
@@ -108,7 +103,6 @@ export const useDocumentProcessor = (
     setIsProcessing(true);
     setProcessingProgress(0);
     
-    // Simulate processing progress
     const stopSimulation = simulateProgress(setProcessingProgress, undefined, 0, 5000);
     
     try {

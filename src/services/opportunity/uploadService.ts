@@ -19,7 +19,7 @@ export const uploadOpportunityWithDocument = async (
       return null;
     }
 
-    // If document is provided, upload it first
+    // If document is provided, upload it first (using 'public' bucket)
     let documentUrl = null;
     if (document) {
       documentUrl = await uploadFile(document);

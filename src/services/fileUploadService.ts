@@ -4,56 +4,20 @@ import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 
 /**
- * Creates a bucket in Supabase storage if it doesn't exist
- */
-const ensureBucketExists = async (bucketName: string): Promise<boolean> => {
-  try {
-    // Check if the bucket exists
-    const { data: buckets } = await supabase.storage.listBuckets();
-    const bucketExists = buckets?.some(bucket => bucket.name === bucketName);
-    
-    if (!bucketExists) {
-      console.log(`Bucket ${bucketName} doesn't exist. Creating it...`);
-      // Create the bucket if it doesn't exist
-      const { error } = await supabase.storage.createBucket(bucketName, {
-        public: true, // Make bucket public to ensure files can be accessed
-      });
-      
-      if (error) {
-        console.error("Error creating bucket:", error);
-        return false;
-      }
-      console.log(`Bucket ${bucketName} created successfully`);
-      return true;
-    }
-    
-    return true;
-  } catch (error) {
-    console.error("Error ensuring bucket exists:", error);
-    return false;
-  }
-};
-
-/**
  * Uploads a file to Supabase storage and returns the URL
  */
 export const uploadFile = async (
   file: File,
-  bucket: string = "pitch-documents"
+  bucket: string = "public"
 ): Promise<string | null> => {
   try {
-    // Create the bucket if it doesn't exist
-    const bucketExists = await ensureBucketExists(bucket);
-    if (!bucketExists) {
-      console.error(`Failed to create or access bucket ${bucket}`);
-      toast.error("Failed to access storage");
-      return null;
-    }
+    console.log(`Attempting to upload file to bucket: ${bucket}`);
     
     const fileExt = file.name.split(".").pop();
     const fileName = `${uuidv4()}.${fileExt}`;
     const filePath = `${fileName}`;
 
+    // Try to upload to the specified bucket
     const { error: uploadError, data } = await supabase.storage
       .from(bucket)
       .upload(filePath, file, {
@@ -62,7 +26,14 @@ export const uploadFile = async (
       });
 
     if (uploadError) {
-      console.error("Error uploading file:", uploadError);
+      console.error(`Error uploading to bucket ${bucket}:`, uploadError);
+      
+      // If there's an error with the specified bucket, try the "public" bucket if it's not already the one we tried
+      if (bucket !== "public") {
+        console.log("Trying fallback to 'public' bucket...");
+        return uploadFile(file, "public");
+      }
+      
       toast.error("Failed to upload document");
       return null;
     }
