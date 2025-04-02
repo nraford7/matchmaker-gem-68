@@ -8,7 +8,9 @@ import {
   CheckCircle2, 
   AlertCircle, 
   XCircle,
-  FileText
+  FileText,
+  Plus,
+  ListTodo
 } from "lucide-react";
 
 interface DealStatusProps {
@@ -100,8 +102,14 @@ const DealStatus = ({ deal }: DealStatusProps) => {
           <Separator className="my-6" />
           
           <div className="flex gap-3">
-            <Button variant="outline">Update Status</Button>
-            <Button variant="outline">Add Note</Button>
+            <Button variant="outline" className="gap-1">
+              <Plus className="h-4 w-4" />
+              Add Update
+            </Button>
+            <Button variant="outline" className="gap-1">
+              <ListTodo className="h-4 w-4" />
+              Add To Do
+            </Button>
           </div>
         </div>
       </CardContent>
