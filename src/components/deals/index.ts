@@ -16,4 +16,4 @@ export * from "./card";
 export * from "./DealComments";
 export * from "./DealStatus";
 export * from "./DealDeck";
-export * from "./DealRecommendations";
+export * from "./DealRecommendation";
