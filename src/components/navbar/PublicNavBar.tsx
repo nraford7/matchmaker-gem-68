@@ -38,7 +38,7 @@ export const PublicNavBar = () => {
           </nav>
         </div>
         <Link to="/auth">
-          <Button className="bg-crimson hover:bg-crimson/90 text-ivory">Sign In</Button>
+          <Button className="bg-midnight hover:bg-midnight/90 text-ivory">Sign In</Button>
         </Link>
       </div>
     </div>
