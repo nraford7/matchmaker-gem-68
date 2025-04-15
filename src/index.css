@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Prata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -65,14 +65,6 @@
     --border: 240 10% 12%; /* Midnight Blue #191970 */
     --input: 240 10% 12%; /* Midnight Blue #191970 */
     --ring: 240 10% 12%; /* Midnight Blue #191970 */
-  }
-
-  html {
-    font-family: 'Prata', serif;
-  }
-
-  .font-numeric {
-    font-family: system-ui, sans-serif;
   }
 }
  
