@@ -37,33 +37,33 @@
   }
  
   .dark {
-    --background: 240 10% 4%;
-    --foreground: 39 69% 84%;
+    --background: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
+    --foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --card: 240 10% 12%;
-    --card-foreground: 39 69% 84%;
+    --card: 240 10% 12%; /* Midnight Blue #191970 */
+    --card-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --popover: 240 10% 12%;
-    --popover-foreground: 39 69% 84%;
+    --popover: 240 10% 12%; /* Midnight Blue #191970 */
+    --popover-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --primary: 240 10% 12%;
-    --primary-foreground: 39 69% 84%;
+    --primary: 240 10% 12%; /* Midnight Blue #191970 */
+    --primary-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --secondary: 0 100% 30%;
-    --secondary-foreground: 39 69% 84%;
+    --secondary: 0 100% 30%; /* Crimson Red #990000 */
+    --secondary-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --muted: 240 10% 12%;
-    --muted-foreground: 39 69% 84%;
+    --muted: 240 10% 12%; /* Midnight Blue #191970 */
+    --muted-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --accent: 240 10% 12%;
-    --accent-foreground: 39 69% 84%;
+    --accent: 240 10% 12%; /* Midnight Blue #191970 */
+    --accent-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 39 69% 84%;
+    --destructive: 0 62.8% 30.6%; /* Crimson Red */
+    --destructive-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --border: 240 10% 12%;
-    --input: 240 10% 12%;
-    --ring: 240 10% 12%;
+    --border: 240 10% 12%; /* Midnight Blue #191970 */
+    --input: 240 10% 12%; /* Midnight Blue #191970 */
+    --ring: 240 10% 12%; /* Midnight Blue #191970 */
   }
 }
  
