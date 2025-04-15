@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, ArrowUpRight, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+
 const Index = () => {
   return <div className="relative overflow-x-hidden">
       {/* Hero Section with Background Gradient */}
@@ -49,25 +50,25 @@ const Index = () => {
               <div className="rounded-2xl border bg-card/50 backdrop-blur-sm p-10 shadow-sm transition-all duration-300 hover:shadow-md">
                 <div className="flex items-center gap-5 mb-6">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/90 to-primary flex items-center justify-center text-primary-foreground">
-                    <Trophy className="h-7 w-7" />
+                    <Shield className="h-7 w-7" />
                   </div>
-                  <h3 className="text-2xl font-semibold">Smart Matching</h3>
+                  <h3 className="text-2xl font-semibold">Confidential, Invite-Only</h3>
                 </div>
                 <p className="text-muted-foreground mb-6 text-lg">
-                  Our AI-powered algorithm analyzes your investment preferences and matches you with the most relevant opportunities.
+                  Our exclusive platform ensures that sensitive investment opportunities remain private and are only shared with qualified investors.
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3">
                     <ChevronRight className="h-5 w-5 text-primary" />
-                    <span className="text-base">Multi-factor analysis of investment criteria</span>
+                    <span className="text-base">Invitation-only access to top-tier deals</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <ChevronRight className="h-5 w-5 text-primary" />
-                    <span className="text-base">Personalized match scores for each opportunity</span>
+                    <span className="text-base">End-to-end encryption for sensitive materials</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <ChevronRight className="h-5 w-5 text-primary" />
-                    <span className="text-base">Plain-language explanations for matches</span>
+                    <span className="text-base">Verified investor network with NDA protection</span>
                   </li>
                 </ul>
               </div>
@@ -101,25 +102,25 @@ const Index = () => {
               <div className="rounded-2xl border bg-card/50 backdrop-blur-sm p-10 shadow-sm transition-all duration-300 hover:shadow-md">
                 <div className="flex items-center gap-5 mb-6">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/90 to-primary flex items-center justify-center text-primary-foreground">
-                    <Shield className="h-7 w-7" />
+                    <Trophy className="h-7 w-7" />
                   </div>
-                  <h3 className="text-2xl font-semibold">Confidential, Invite-Only</h3>
+                  <h3 className="text-2xl font-semibold">Smart Matching</h3>
                 </div>
                 <p className="text-muted-foreground mb-6 text-lg">
-                  Our exclusive platform ensures that sensitive investment opportunities remain private and are only shared with qualified investors.
+                  Our AI-powered algorithm analyzes your investment preferences and matches you with the most relevant opportunities.
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3">
                     <ChevronRight className="h-5 w-5 text-primary" />
-                    <span className="text-base">Invitation-only access to top-tier deals</span>
+                    <span className="text-base">Multi-factor analysis of investment criteria</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <ChevronRight className="h-5 w-5 text-primary" />
-                    <span className="text-base">End-to-end encryption for sensitive materials</span>
+                    <span className="text-base">Personalized match scores for each opportunity</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <ChevronRight className="h-5 w-5 text-primary" />
-                    <span className="text-base">Verified investor network with NDA protection</span>
+                    <span className="text-base">Plain-language explanations for matches</span>
                   </li>
                 </ul>
               </div>
