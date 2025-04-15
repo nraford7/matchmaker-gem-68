@@ -15,12 +15,12 @@ export const NavBar = () => {
   const currentPath = location.pathname;
   const isMobile = useIsMobile();
   
-  // If user is not authenticated and not on home page, show minimal navbar
-  if (!user && currentPath !== "/") {
+  // If user is not authenticated, show public navbar
+  if (!user) {
     return <PublicNavBar />;
   }
   
-  // Full navbar for authenticated users or home page
+  // Full navbar for authenticated users
   return (
     <div className="border-b">
       <div className="container mx-auto flex h-16 items-center justify-between">
@@ -30,20 +30,14 @@ export const NavBar = () => {
           </Link>
           
           {/* Only show NavLinks if user is authenticated */}
-          {user && <NavLinks />}
+          <NavLinks />
         </div>
         
         <div className="flex items-center gap-4">
           {/* Mobile navigation only for authenticated users */}
-          {isMobile && user && <MobileNavigation />}
+          {isMobile && <MobileNavigation />}
           
-          {user ? (
-            <UserMenu user={user} signOut={signOut} />
-          ) : (
-            <Link to="/auth">
-              <Button>Sign In</Button>
-            </Link>
-          )}
+          <UserMenu user={user} signOut={signOut} />
         </div>
       </div>
     </div>
