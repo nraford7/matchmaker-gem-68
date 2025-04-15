@@ -4,7 +4,7 @@ import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, Sparkles, Zap, Shie
 const Index = () => {
   return (
     <div className="relative overflow-x-hidden">
-      <div className="relative bg-obsidian min-h-screen">
+      <div className="relative bg-[#0B0B0B] min-h-screen">
         {/* Stars background */}
         <div className="absolute inset-0 overflow-hidden">
           {Array.from({ length: 50 }).map((_, i) => (
@@ -54,7 +54,7 @@ const Index = () => {
               />
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-12 bg-midnight/30 border border-champagne/10 rounded-2xl backdrop-blur-sm w-full mt-16">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-12 bg-[#0B0B0B] border border-champagne/10 rounded-2xl backdrop-blur-sm w-full mt-16">
               {[{
               value: "500+",
               label: "Active Deals"
@@ -76,107 +76,97 @@ const Index = () => {
           
           <div className="container mx-auto py-32">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="rounded-2xl border border-champagne/10 bg-midnight/20 backdrop-blur-sm p-10 shadow-sm transition-all duration-300 hover:shadow-md">
-                <div className="flex items-center gap-5 mb-6">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-crimson/90 to-crimson flex items-center justify-center text-ivory">
-                    <Shield className="h-7 w-7" />
+              {[
+                {
+                  icon: <Shield className="h-7 w-7" />,
+                  title: "Confidential, Invite-Only",
+                  description: "Our exclusive platform ensures that sensitive investment opportunities remain private and are only shared with qualified investors.",
+                  features: [
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Invitation-only access to top-tier deals</span>
+                    </li>,
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">End-to-end encryption for sensitive materials</span>
+                    </li>,
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Verified investor network with NDA protection</span>
+                    </li>
+                  ]
+                },
+                {
+                  icon: <BarChart4 className="h-7 w-7" />,
+                  title: "Deep Understanding",
+                  description: "The Guild's AI builds a comprehensive model of your investment strategy and preferences to find exactly what you're looking for.",
+                  features: [
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Intuitive preference profile building</span>
+                    </li>,
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Contextual understanding of investment goals</span>
+                    </li>,
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Continuous learning from your feedback</span>
+                    </li>
+                  ]
+                },
+                {
+                  icon: <Trophy className="h-7 w-7" />,
+                  title: "Smart Matching",
+                  description: "Our AI-powered algorithm analyzes your investment preferences and matches you with the most relevant opportunities.",
+                  features: [
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Multi-factor analysis of investment criteria</span>
+                    </li>,
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Personalized match scores for each opportunity</span>
+                    </li>,
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Plain-language explanations for matches</span>
+                    </li>
+                  ]
+                },
+                {
+                  icon: <UserRound className="h-7 w-7" />,
+                  title: "Bespoke Service, AI Empowered",
+                  description: "Combining personal service with cutting-edge AI technology to deliver a custom investment experience tailored to your exact needs.",
+                  features: [
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Personal investment concierge backed by AI</span>
+                    </li>,
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Custom deal flow curated to your requirements</span>
+                    </li>,
+                    <li className="flex items-center gap-3">
+                      <ChevronRight className="h-5 w-5 text-crimson" />
+                      <span className="text-base text-ivory/90">Proactive opportunity identification</span>
+                    </li>
+                  ]
+                }
+              ].map((section, index) => (
+                <div key={index} className="rounded-2xl border border-champagne/10 bg-[#0B0B0B] backdrop-blur-sm p-10 shadow-sm transition-all duration-300 hover:shadow-md">
+                  <div className="flex items-center gap-5 mb-6">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-crimson/90 to-crimson flex items-center justify-center text-ivory">
+                      {section.icon}
+                    </div>
+                    <h3 className="text-2xl font-semibold text-ivory font-serif">{section.title}</h3>
                   </div>
-                  <h3 className="text-2xl font-semibold text-ivory font-serif">Confidential, Invite-Only</h3>
+                  <p className="text-champagne/80 mb-6 text-lg font-serif">{section.description}</p>
+                  <ul className="space-y-3 font-serif">
+                    {section.features}
+                  </ul>
                 </div>
-                <p className="text-champagne/80 mb-6 text-lg font-serif">
-                  Our exclusive platform ensures that sensitive investment opportunities remain private and are only shared with qualified investors.
-                </p>
-                <ul className="space-y-3 font-serif">
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Invitation-only access to top-tier deals</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">End-to-end encryption for sensitive materials</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Verified investor network with NDA protection</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="rounded-2xl border border-champagne/10 bg-midnight/20 backdrop-blur-sm p-10 shadow-sm transition-all duration-300 hover:shadow-md">
-                <div className="flex items-center gap-5 mb-6">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-crimson/90 to-crimson flex items-center justify-center text-ivory">
-                    <BarChart4 className="h-7 w-7" />
-                  </div>
-                  <h3 className="text-2xl font-semibold text-ivory font-serif">Deep Understanding</h3>
-                </div>
-                <p className="text-champagne/80 mb-6 text-lg font-serif">The Guild's AI builds a comprehensive model of your investment strategy and preferences to find exactly what you're looking for.</p>
-                <ul className="space-y-3 font-serif">
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Intuitive preference profile building</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Contextual understanding of investment goals</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Continuous learning from your feedback</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <div className="rounded-2xl border border-champagne/10 bg-midnight/20 backdrop-blur-sm p-10 shadow-sm transition-all duration-300 hover:shadow-md">
-                <div className="flex items-center gap-5 mb-6">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-crimson/90 to-crimson flex items-center justify-center text-ivory">
-                    <Trophy className="h-7 w-7" />
-                  </div>
-                  <h3 className="text-2xl font-semibold text-ivory font-serif">Smart Matching</h3>
-                </div>
-                <p className="text-champagne/80 mb-6 text-lg font-serif">
-                  Our AI-powered algorithm analyzes your investment preferences and matches you with the most relevant opportunities.
-                </p>
-                <ul className="space-y-3 font-serif">
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Multi-factor analysis of investment criteria</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Personalized match scores for each opportunity</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Plain-language explanations for matches</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <div className="rounded-2xl border border-champagne/10 bg-midnight/20 backdrop-blur-sm p-10 shadow-sm transition-all duration-300 hover:shadow-md">
-                <div className="flex items-center gap-5 mb-6">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-crimson/90 to-crimson flex items-center justify-center text-ivory">
-                    <UserRound className="h-7 w-7" />
-                  </div>
-                  <h3 className="text-2xl font-semibold text-ivory font-serif">Bespoke Service, AI Empowered</h3>
-                </div>
-                <p className="text-champagne/80 mb-6 text-lg font-serif">
-                  Combining personal service with cutting-edge AI technology to deliver a custom investment experience tailored to your exact needs.
-                </p>
-                <ul className="space-y-3 font-serif">
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Personal investment concierge backed by AI</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Custom deal flow curated to your requirements</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ChevronRight className="h-5 w-5 text-crimson" />
-                    <span className="text-base text-ivory/90">Proactive opportunity identification</span>
-                  </li>
-                </ul>
-              </div>
+              ))}
             </div>
           </div>
         </div>

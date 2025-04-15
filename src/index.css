@@ -14,16 +14,16 @@
     --card: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
     --card-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --popover: 240 10% 12%; /* Midnight Blue #191970 */
+    --popover: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
     --popover-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --primary: 240 10% 12%; /* Midnight Blue #191970 */
+    --primary: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
     --primary-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
     --secondary: 0 100% 30%; /* Crimson Red #990000 */
     --secondary-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --muted: 240 10% 12%; /* Midnight Blue #191970 */
+    --muted: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
     --muted-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
     --accent: 0 100% 30%; /* Crimson Red #990000 */
@@ -32,9 +32,9 @@
     --destructive: 0 100% 30%; /* Crimson Red #990000 */
     --destructive-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
-    --border: 240 10% 12%; /* Midnight Blue #191970 */
-    --input: 240 10% 12%; /* Midnight Blue #191970 */
-    --ring: 240 10% 12%; /* Midnight Blue #191970 */
+    --border: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
+    --input: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
+    --ring: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
  
     --radius: 0.5rem;
   }
