@@ -30,11 +30,31 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row gap-5">
               {/* Removed dashboard and upload buttons */}
             </div>
+            
+            {/* Stats Section - Moved here */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-12 bg-gradient-to-r from-indigo-50/80 to-blue-50/80 rounded-2xl backdrop-blur-sm w-full mt-16">
+              {[{
+                value: "500+",
+                label: "Active Deals"
+              }, {
+                value: "98%",
+                label: "Match Accuracy"
+              }, {
+                value: "$2.4B",
+                label: "Total Invested"
+              }, {
+                value: "3,200+",
+                label: "Investors"
+              }].map((stat, index) => <div key={index} className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold text-primary mb-3">{stat.value}</div>
+                    <div className="text-base text-muted-foreground">{stat.label}</div>
+                  </div>)}
+            </div>
           </div>
           
           {/* Features Section */}
           <div className="container mx-auto py-32">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="rounded-2xl border bg-card/50 backdrop-blur-sm p-10 shadow-sm transition-all duration-300 hover:shadow-md">
                 <div className="flex items-center gap-5 mb-6">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/90 to-primary flex items-center justify-center text-primary-foreground">
@@ -139,24 +159,7 @@ const Index = () => {
             </div>
 
             {/* Stats Section */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-12 bg-gradient-to-r from-indigo-50/80 to-blue-50/80 rounded-2xl backdrop-blur-sm">
-              {[{
-              value: "500+",
-              label: "Active Deals"
-            }, {
-              value: "98%",
-              label: "Match Accuracy"
-            }, {
-              value: "$2.4B",
-              label: "Total Invested"
-            }, {
-              value: "3,200+",
-              label: "Investors"
-            }].map((stat, index) => <div key={index} className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-primary mb-3">{stat.value}</div>
-                  <div className="text-base text-muted-foreground">{stat.label}</div>
-                </div>)}
-            </div>
+            
           </div>
         </div>
       </div>
