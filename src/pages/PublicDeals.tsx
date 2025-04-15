@@ -1,5 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const PublicDeals = () => {
   return (
@@ -32,7 +34,7 @@ const PublicDeals = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array(6).fill(0).map((_, i) => (
-            <Card key={i} className="border border-champagne/10 bg-[#0B0B0B] backdrop-blur-sm">
+            <Card key={i} className="border border-champagne/10 bg-[#0B0B0B] backdrop-blur-sm hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30 transition-all duration-200">
               <CardHeader className="bg-gradient-to-r from-midnight to-midnight/80 border-b border-champagne/10">
                 <CardTitle>Premium Opportunity {i + 1}</CardTitle>
               </CardHeader>
@@ -49,6 +51,14 @@ const PublicDeals = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+        
+        <div className="text-center mt-12">
+          <Link to="/apply">
+            <Button size="lg" className="px-8">
+              Apply for Membership
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

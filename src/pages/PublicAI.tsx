@@ -1,3 +1,4 @@
+
 import { Shield, Brain, Zap, Lock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ const PublicAI = () => {
                 description: "Members gain privileged access to AI insights and recommendations not available anywhere else."
               }
             ].map((feature, index) => (
-              <Card key={index} className="border border-champagne/10 bg-midnight/20">
+              <Card key={index} className="border border-champagne/10 bg-midnight/20 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30 transition-all duration-200">
                 <CardContent className="p-8">
                   <div className="flex flex-col items-center text-center">
                     <div className="mb-4 p-3 rounded-full bg-obsidian border border-crimson/20">
