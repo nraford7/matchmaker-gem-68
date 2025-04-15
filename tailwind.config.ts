@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -50,8 +49,8 @@ export default {
           foreground: 'hsl(var(--popover-foreground))'
         },
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))'
+          DEFAULT: 'hsl(var(--obsidian))',
+          foreground: 'hsl(var(--foreground))'
         },
         obsidian: '#0B0B0B',
         midnight: '#191970',
@@ -97,4 +96,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-
