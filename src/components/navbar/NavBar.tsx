@@ -15,7 +15,7 @@ export const NavBar = () => {
   const currentPath = location.pathname;
   const isMobile = useIsMobile();
   
-  // If user is not authenticated, show minimal navbar
+  // If user is not authenticated and not on home page, show minimal navbar
   if (!user && currentPath !== "/") {
     return <PublicNavBar />;
   }
@@ -26,16 +26,16 @@ export const NavBar = () => {
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="font-bold text-xl">
-            OpportunityMatcher
+            The Guild
           </Link>
           
-          {/* Desktop navigation */}
-          <NavLinks />
+          {/* Only show NavLinks if user is authenticated */}
+          {user && <NavLinks />}
         </div>
         
         <div className="flex items-center gap-4">
-          {/* Mobile navigation */}
-          {isMobile && <MobileNavigation />}
+          {/* Mobile navigation only for authenticated users */}
+          {isMobile && user && <MobileNavigation />}
           
           {user ? (
             <UserMenu user={user} signOut={signOut} />

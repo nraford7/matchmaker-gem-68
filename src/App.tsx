@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +7,8 @@ import { NavBar } from "@/components/navbar";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
+import About from "./pages/About";
+import ApplyForMembership from "./pages/ApplyForMembership";
 import Dashboard from "./pages/Dashboard";
 import Preferences from "./pages/Preferences";
 import UploadOpportunity from "./pages/UploadOpportunity";
@@ -31,6 +32,8 @@ const App = () => (
           <NavBar />
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/apply" element={<ApplyForMembership />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={
               <ProtectedRoute>
@@ -72,7 +75,6 @@ const App = () => (
                 <InvestorProfile />
               </ProtectedRoute>
             } />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
