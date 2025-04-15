@@ -2,10 +2,29 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
 
 const Index = () => {
-  return <div className="relative overflow-x-hidden">
-      <div className="relative bg-obsidian">
+  return (
+    <div className="relative overflow-x-hidden">
+      <div className="relative bg-obsidian min-h-screen">
+        {/* Stars background */}
+        <div className="absolute inset-0 overflow-hidden">
+          {Array.from({ length: 50 }).map((_, i) => (
+            <div
+              key={i}
+              className="star absolute rounded-full bg-ivory/80"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${Math.random() * 3 + 1}px`,
+                height: `${Math.random() * 3 + 1}px`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${Math.random() * 3 + 2}s`
+              }}
+            />
+          ))}
+        </div>
+        
         <div className="absolute inset-0 bg-grid-black/[0.05] -z-10" />
-        <div className="container mx-auto px-6 py-24 md:py-32">
+        <div className="container mx-auto px-6 py-24 md:py-32 relative z-10">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
             
             
@@ -162,7 +181,8 @@ const Index = () => {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default Index;
