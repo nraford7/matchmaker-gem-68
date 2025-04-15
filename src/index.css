@@ -5,33 +5,33 @@
  
 @layer base {
   :root {
-    --background: 60 100% 4%; // Obsidian Black
-    --foreground: 49 67% 89%; // Champagne Gold
+    --background: 60 100% 4%; /* Obsidian Black */
+    --foreground: 49 67% 89%; /* Champagne Gold */
  
-    --card: 240 75% 27%; // Midnight Blue
-    --card-foreground: 49 67% 89%; // Champagne Gold
+    --card: 240 75% 27%; /* Midnight Blue */
+    --card-foreground: 49 67% 89%; /* Champagne Gold */
  
-    --popover: 240 75% 27%; // Midnight Blue
-    --popover-foreground: 49 67% 89%; // Champagne Gold
+    --popover: 240 75% 27%; /* Midnight Blue */
+    --popover-foreground: 49 67% 89%; /* Champagne Gold */
  
-    --primary: 0 100% 30%; // Crimson Red
-    --primary-foreground: 49 67% 89%; // Champagne Gold
+    --primary: 0 100% 30%; /* Crimson Red */
+    --primary-foreground: 49 67% 89%; /* Champagne Gold */
  
-    --secondary: 240 75% 27%; // Midnight Blue
-    --secondary-foreground: 49 67% 89%; // Champagne Gold
+    --secondary: 240 75% 27%; /* Midnight Blue */
+    --secondary-foreground: 49 67% 89%; /* Champagne Gold */
  
-    --muted: 240 75% 27%; // Midnight Blue
-    --muted-foreground: 49 67% 89%; // Champagne Gold
+    --muted: 240 75% 27%; /* Midnight Blue */
+    --muted-foreground: 49 67% 89%; /* Champagne Gold */
  
-    --accent: 0 100% 30%; // Crimson Red
-    --accent-foreground: 49 67% 89%; // Champagne Gold
+    --accent: 0 100% 30%; /* Crimson Red */
+    --accent-foreground: 49 67% 89%; /* Champagne Gold */
  
-    --destructive: 0 100% 30%; // Crimson Red
-    --destructive-foreground: 49 67% 89%; // Champagne Gold
+    --destructive: 0 100% 30%; /* Crimson Red */
+    --destructive-foreground: 49 67% 89%; /* Champagne Gold */
  
-    --border: 240 75% 27%; // Midnight Blue
-    --input: 240 75% 27%; // Midnight Blue
-    --ring: 240 75% 27%; // Midnight Blue
+    --border: 240 75% 27%; /* Midnight Blue */
+    --input: 240 75% 27%; /* Midnight Blue */
+    --ring: 240 75% 27%; /* Midnight Blue */
  
     --radius: 0.5rem;
   }
