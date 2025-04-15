@@ -62,8 +62,8 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
           state={{ from: location.pathname }}
           className="block hover:no-underline focus:outline-none"
         >
-          <Card className="transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
-            <CardContent className="p-4">
+          <Card className="border border-champagne/10 bg-[#0B0B0B] backdrop-blur-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
+            <CardContent className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2">
                   <div className="flex justify-between items-start mb-2">
