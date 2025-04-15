@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +5,7 @@ import { Shield } from "lucide-react";
 
 const ApplyForMembership = () => {
   return (
-    <div className="relative bg-[#0B0B0B] min-h-screen">
+    <div className="relative bg-[#0B0B0B] min-h-screen px-4 md:px-8 lg:px-16">
       {/* Stars background */}
       <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 50 }).map((_, i) => (
@@ -25,7 +24,7 @@ const ApplyForMembership = () => {
         ))}
       </div>
 
-      <div className="container mx-auto py-16 relative z-10">
+      <div className="container mx-auto py-16 relative z-10 max-w-6xl">
         <div className="max-w-2xl mx-auto">
           <Card className="border border-champagne/20 bg-[#0B0B0B] backdrop-blur-sm">
             <CardHeader className="text-center">

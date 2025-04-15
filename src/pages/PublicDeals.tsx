@@ -1,9 +1,8 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const PublicDeals = () => {
   return (
-    <div className="relative bg-[#0B0B0B] min-h-screen">
+    <div className="relative bg-[#0B0B0B] min-h-screen px-4 md:px-8 lg:px-16">
       {/* Stars background */}
       <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 50 }).map((_, i) => (
@@ -22,7 +21,7 @@ const PublicDeals = () => {
         ))}
       </div>
 
-      <div className="container mx-auto py-16 relative z-10">
+      <div className="container mx-auto py-16 relative z-10 max-w-6xl">
         <h1 className="font-serif text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-champagne via-champagne to-ivory">
           Investment Opportunities
         </h1>
