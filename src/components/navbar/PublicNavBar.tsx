@@ -21,7 +21,7 @@ export const PublicNavBar = () => {
               to="/apply" 
               className="text-sm font-medium text-muted-foreground hover:text-foreground"
             >
-              Apply for Membership
+              Apply
             </Link>
           </nav>
         </div>
