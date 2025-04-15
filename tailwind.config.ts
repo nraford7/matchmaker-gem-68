@@ -91,7 +91,6 @@ export default {
       fontFamily: {
         serif: ['Prata', 'serif'],
         sans: ['system-ui', 'sans-serif'],
-        'unicase': ['Cormorant Unicase', 'serif'],
       }
     }
   },

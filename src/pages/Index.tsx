@@ -26,7 +26,9 @@ const Index = () => {
         <div className="absolute inset-0 bg-grid-black/[0.05] -z-10" />
         <div className="container mx-auto px-6 py-24 md:py-32 relative z-10">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-            <h1 className="font-unicase text-6xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-champagne via-champagne to-ivory">
+            
+            
+            <h1 className="font-serif text-6xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-champagne via-champagne to-ivory">
               The Guild
             </h1>
             
