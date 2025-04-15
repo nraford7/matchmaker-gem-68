@@ -15,17 +15,10 @@ const Index = () => {
               <span>AI-Powered Investment Matching</span>
             </div>
             
-            <h1 className="text-5xl font-bold tracking-tight mb-2 bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 text-slate-950 md:text-6xl">
-              OpportunityMatcher
-            </h1>
-            <h2 className="text-2xl font-medium text-muted-foreground mb-10">
-              by EMIR
-            </h2>
+            <h1 className="text-5xl font-bold tracking-tight mb-2 bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 text-slate-950 md:text-6xl">The Guild</h1>
+            <h2 className="text-2xl font-medium text-muted-foreground mb-10">brought to you by</h2>
             
-            <p className="text-xl text-muted-foreground max-w-2xl mb-10">
-              Find your next investment opportunity with precision AI matching that understands 
-              your preferences and highlights deals that matter most to you.
-            </p>
+            <p className="text-xl text-muted-foreground max-w-2xl mb-10">The region's most exclusive investment club, by invitation-only.</p>
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/dashboard">
