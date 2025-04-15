@@ -4,8 +4,8 @@ import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, Sparkles, Zap, Shie
 
 const Index = () => {
   return <div className="relative overflow-x-hidden">
-      {/* Hero Section with Background Gradient */}
-      <div className="relative bg-gradient-to-br from-obsidian via-midnight to-obsidian">
+      {/* Hero Section with Background */}
+      <div className="relative bg-obsidian">
         <div className="absolute inset-0 bg-grid-black/[0.05] -z-10" />
         <div className="container mx-auto px-6 py-24 md:py-32">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
@@ -33,7 +33,7 @@ const Index = () => {
             </div>
             
             {/* Stats Section - Moved here */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-12 bg-gradient-to-r from-midnight/30 to-obsidian/50 border border-champagne/10 rounded-2xl backdrop-blur-sm w-full mt-16">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-12 bg-midnight/30 border border-champagne/10 rounded-2xl backdrop-blur-sm w-full mt-16">
               {[{
                 value: "500+",
                 label: "Active Deals"
