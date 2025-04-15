@@ -1,10 +1,8 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, ArrowUpRight, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-
 const Index = () => {
   return <div className="relative overflow-x-hidden">
       {/* Hero Section with Background Gradient */}
@@ -18,27 +16,15 @@ const Index = () => {
             </div>
             
             <h1 className="text-5xl font-bold tracking-tight mb-2 bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 text-slate-950 md:text-6xl">The Guild</h1>
-            <h2 className="text-2xl font-medium text-muted-foreground mb-10">The UAE's most exclusive investment club for the region's most successful investors, family offices & funds</h2>
+            <h2 className="text-2xl font-medium text-muted-foreground mb-10">The UAE's most exclusive investment club for the region's most successful investors</h2>
             
             <p className="text-xl text-muted-foreground max-w-2xl mb-10">Brought to you by:</p>
             
             {/* Added logos section */}
             <div className="flex gap-12 mb-10">
-              <img 
-                src="/lovable-uploads/e33a00a9-24d5-4673-ab73-5b76d5d26d3d.png" 
-                alt="Emirates Family Office Association" 
-                className="h-12 w-auto grayscale opacity-80 hover:opacity-100 transition-opacity"
-              />
-              <img 
-                src="/lovable-uploads/bc7f0867-82b2-4c0c-acb3-f2093e96736f.png" 
-                alt="Abu Dhabi Investment Office" 
-                className="h-12 w-auto grayscale opacity-80 hover:opacity-100 transition-opacity"
-              />
-              <img 
-                src="/lovable-uploads/1c565d4e-6fdd-4731-bb38-e49923afff82.png" 
-                alt="EMIR" 
-                className="h-12 w-auto grayscale opacity-80 hover:opacity-100 transition-opacity"
-              />
+              <img src="/lovable-uploads/e33a00a9-24d5-4673-ab73-5b76d5d26d3d.png" alt="Emirates Family Office Association" className="h-12 w-auto grayscale opacity-80 hover:opacity-100 transition-opacity" />
+              <img src="/lovable-uploads/bc7f0867-82b2-4c0c-acb3-f2093e96736f.png" alt="Abu Dhabi Investment Office" className="h-12 w-auto grayscale opacity-80 hover:opacity-100 transition-opacity" />
+              <img src="/lovable-uploads/1c565d4e-6fdd-4731-bb38-e49923afff82.png" alt="EMIR" className="h-12 w-auto grayscale opacity-80 hover:opacity-100 transition-opacity" />
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
