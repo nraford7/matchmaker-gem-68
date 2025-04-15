@@ -54,13 +54,13 @@ export const NavLinks = ({ mobile = false }: NavLinksProps) => {
         <Link 
           key={link.path}
           to={link.path} 
-          className={`flex items-center gap-1 text-sm ${
+          className={`flex items-center gap-2 text-base font-serif ${
             currentPath === link.path 
               ? "font-bold text-foreground" 
               : "font-medium text-muted-foreground hover:text-foreground"
           }`}
         >
-          <link.icon className="h-4 w-4" />
+          <link.icon className="h-5 w-5 mr-1" />
           {link.label}
         </Link>
       ))}
