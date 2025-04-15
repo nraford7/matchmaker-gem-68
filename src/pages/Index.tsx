@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, ArrowUpRight, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-
 const Index = () => {
   return <div className="relative overflow-x-hidden">
       {/* Hero Section with Background Gradient */}
@@ -80,9 +79,7 @@ const Index = () => {
                   </div>
                   <h3 className="text-2xl font-semibold">Deep Understanding</h3>
                 </div>
-                <p className="text-muted-foreground mb-6 text-lg">
-                  Our platform builds a comprehensive model of your investment strategy and preferences to find exactly what you're looking for.
-                </p>
+                <p className="text-muted-foreground mb-6 text-lg">The Guild's AI builds a comprehensive model of your investment strategy and preferences to find exactly what you're looking for.</p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3">
                     <ChevronRight className="h-5 w-5 text-primary" />
