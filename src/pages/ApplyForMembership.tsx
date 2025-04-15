@@ -1,4 +1,9 @@
 
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Shield } from "lucide-react";
+
 const ApplyForMembership = () => {
   return (
     <div className="relative bg-[#0B0B0B] min-h-screen px-4 md:px-8 lg:px-16">

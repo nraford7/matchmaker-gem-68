@@ -1,4 +1,6 @@
 
+import { Card, CardContent } from "@/components/ui/card";
+
 const About = () => {
   return (
     <div className="relative bg-[#0B0B0B] min-h-screen px-4 md:px-8 lg:px-16">
