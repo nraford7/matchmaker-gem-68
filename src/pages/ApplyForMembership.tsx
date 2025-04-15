@@ -6,16 +6,34 @@ import { Shield } from "lucide-react";
 
 const ApplyForMembership = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-obsidian via-midnight to-obsidian">
-      <div className="container mx-auto py-16">
+    <div className="relative bg-[#0B0B0B] min-h-screen">
+      {/* Stars background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {Array.from({ length: 50 }).map((_, i) => (
+          <div
+            key={i}
+            className="star absolute rounded-full bg-ivory/80"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${Math.random() * 3 + 1}px`,
+              height: `${Math.random() * 3 + 1}px`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${Math.random() * 3 + 2}s`
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="container mx-auto py-16 relative z-10">
         <div className="max-w-2xl mx-auto">
-          <Card className="border border-champagne/20">
+          <Card className="border border-champagne/20 bg-[#0B0B0B] backdrop-blur-sm">
             <CardHeader className="text-center">
               <div className="mx-auto w-12 h-12 rounded-full bg-crimson flex items-center justify-center mb-4">
                 <Shield className="w-6 h-6 text-ivory" />
               </div>
-              <CardTitle className="text-2xl">Apply for Membership</CardTitle>
-              <CardDescription>
+              <CardTitle className="font-serif text-4xl">Apply for Membership</CardTitle>
+              <CardDescription className="font-serif text-lg text-ivory/80">
                 The Guild is an invitation-only network. Please provide your information to be considered for membership.
               </CardDescription>
             </CardHeader>
@@ -54,11 +72,11 @@ const ApplyForMembership = () => {
               </form>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Submit Application</Button>
+              <Button className="w-full bg-[#0B0B0B] hover:bg-[#0B0B0B]/90">Submit Application</Button>
             </CardFooter>
           </Card>
           
-          <div className="mt-8 text-center text-ivory/60 text-sm">
+          <div className="mt-8 text-center text-ivory/60 text-sm font-serif">
             <p>All applications are reviewed by our membership committee. We typically respond within 5 business days.</p>
           </div>
         </div>
