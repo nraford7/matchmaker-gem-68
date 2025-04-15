@@ -62,7 +62,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// New color palette
+				obsidian: '#0B0B0B',
+				midnight: '#191970',
+				crimson: '#990000',
+				champagne: '#F7E7CE',
+				ivory: '#FFFFF0',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
