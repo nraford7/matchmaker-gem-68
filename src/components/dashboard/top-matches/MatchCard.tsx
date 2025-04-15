@@ -1,10 +1,11 @@
 
-import { Link } from "react-router-dom";
-import { MapPin, DollarSign, TrendingUp } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Deal } from "@/types";
-import { formatCurrency } from "@/lib/utils";
+import { MatchScore } from "./MatchScore";
+import { MatchIntroducer } from "./MatchIntroducer";
+import { MatchMetrics } from "./MatchMetrics";
 import { useEffect, useState } from "react";
 import { fetchInvestorProfile } from "@/services/investor/recommendations/utils/investorUtils";
 
@@ -13,6 +14,7 @@ interface MatchCardProps {
 }
 
 export const MatchCard = ({ deal }: MatchCardProps) => {
+  const location = useLocation();
   const [introducer, setIntroducer] = useState<{ id: string; name: string | null } | null>(null);
   
   useEffect(() => {
@@ -38,32 +40,27 @@ export const MatchCard = ({ deal }: MatchCardProps) => {
   return (
     <Link 
       to={`/deals/${deal.id}`}
+      state={{ from: location.pathname }}
       className="block group"
     >
       <Card className="h-full flex flex-col transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
         <CardContent className="p-4 flex flex-col h-full relative">
-          {deal.matchScore && (
-            <div className="absolute right-3 top-4 flex flex-col items-center bg-primary/10 rounded-md px-2 py-1 border border-primary/20">
-              <span className="text-sm font-bold text-primary leading-tight">
-                {Math.round(deal.matchScore * 100)}%
-              </span>
-              <span className="text-xs text-primary/80 font-medium leading-tight">Match</span>
-            </div>
-          )}
+          {deal.matchScore && <MatchScore score={deal.matchScore} />}
           
           <div className="mb-2">
             <h3 className="font-semibold line-clamp-1 group-hover:text-primary transition-colors text-base pr-14">
               {deal.name}
             </h3>
             {introducer && (
-              <div className="text-xs text-muted-foreground mt-0.5">
-                Introduced by: <Link to={`/investor/${introducer.id}`} className="font-medium hover:text-primary transition-colors">{introducer.name || "Unknown Investor"}</Link>
-              </div>
+              <MatchIntroducer 
+                introducerId={introducer.id} 
+                name={introducer.name} 
+              />
             )}
           </div>
           
           <div className="flex flex-wrap gap-1.5 mb-3">
-            {deal.sectorTags && deal.sectorTags.slice(0, 2).map((tag, idx) => (
+            {deal.sectorTags?.slice(0, 2).map((tag, idx) => (
               <Badge key={idx} variant="secondary" className="text-xs">
                 {tag}
               </Badge>
@@ -79,28 +76,12 @@ export const MatchCard = ({ deal }: MatchCardProps) => {
             {deal.description || "No description available"}
           </p>
           
-          <div className="grid grid-cols-2 gap-1 text-xs mt-auto">
-            {deal.location && (
-              <div className="flex items-center text-muted-foreground">
-                <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
-                <span className="truncate">{deal.location}</span>
-              </div>
-            )}
-            
-            {(deal.checkSizeRequired || deal.fundingAmount) && (
-              <div className="flex items-center text-muted-foreground">
-                <DollarSign className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
-                <span>${formatCurrency(deal.checkSizeRequired || deal.fundingAmount || 0)}</span>
-              </div>
-            )}
-            
-            {deal.IRR !== undefined && (
-              <div className="flex items-center text-muted-foreground">
-                <TrendingUp className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
-                <span>{deal.IRR}% IRR</span>
-              </div>
-            )}
-          </div>
+          <MatchMetrics 
+            location={deal.location}
+            checkSizeRequired={deal.checkSizeRequired}
+            fundingAmount={deal.fundingAmount}
+            IRR={deal.IRR}
+          />
           
           {deal.matchScore && deal.matchExplanation && (
             <div className="mt-3 pt-3 border-t border-border">

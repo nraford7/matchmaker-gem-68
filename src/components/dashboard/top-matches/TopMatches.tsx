@@ -1,10 +1,9 @@
 
-import { Link } from "react-router-dom";
-import { ArrowRight, TrendingUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { TrendingUp } from "lucide-react";
 import { Deal } from "@/types";
 import { MatchCard } from "./MatchCard";
+import { ViewAllButton } from "./ViewAllButton";
 import { TopMatchesEmptyState } from "./EmptyState";
 import { TopMatchesLoadingState } from "./LoadingState";
 
@@ -42,23 +41,11 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
           ))}
         </div>
         
-        {topMatches.length > 0 && topMatches.length <= 6 && (
-          <Link to="/deals" className="w-full">
-            <Button variant="outline" className="w-full group">
-              <span>View All Matches</span>
-              <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
-        )}
+        {topMatches.length > 0 && topMatches.length <= 6 && <ViewAllButton />}
       </CardContent>
       {topMatches.length > 6 && (
         <CardFooter className="p-3">
-          <Link to="/deals" className="w-full">
-            <Button variant="outline" className="w-full group">
-              <span>View All Matches</span>
-              <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <ViewAllButton />
         </CardFooter>
       )}
     </Card>
