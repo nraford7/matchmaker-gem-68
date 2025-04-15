@@ -1,9 +1,4 @@
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Shield } from "lucide-react";
-
 const ApplyForMembership = () => {
   return (
     <div className="relative bg-[#0B0B0B] min-h-screen px-4 md:px-8 lg:px-16">
@@ -27,12 +22,12 @@ const ApplyForMembership = () => {
 
       <div className="container mx-auto py-16 relative z-10 max-w-6xl">
         <div className="max-w-2xl mx-auto">
-          <Card className="border border-champagne/10 bg-[#0B0B0B] backdrop-blur-sm">
-            <CardHeader className="text-center bg-gradient-to-r from-midnight to-midnight/80 border-b border-champagne/10">
+          <Card className="border border-champagne/10 bg-midnight/20 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30 transition-all duration-200">
+            <CardHeader className="text-center border-b border-champagne/10">
               <div className="mx-auto w-12 h-12 rounded-full bg-crimson flex items-center justify-center mb-4">
                 <Shield className="w-6 h-6 text-ivory" />
               </div>
-              <CardTitle className="font-serif text-4xl">Apply for Membership</CardTitle>
+              <CardTitle className="font-serif text-4xl bg-clip-text text-transparent bg-gradient-to-r from-champagne via-champagne to-ivory">Apply for Membership</CardTitle>
               <CardDescription className="font-serif text-lg text-ivory/80">
                 The Guild is an invitation-only network. Please provide your information to be considered for membership.
               </CardDescription>
@@ -72,7 +67,7 @@ const ApplyForMembership = () => {
               </form>
             </CardContent>
             <CardFooter>
-              <Button className="w-full bg-[#0B0B0B] hover:bg-[#0B0B0B]/90">Submit Application</Button>
+              <Button className="w-full">Submit Application</Button>
             </CardFooter>
           </Card>
           
