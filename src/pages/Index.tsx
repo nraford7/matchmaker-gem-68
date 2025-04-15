@@ -16,10 +16,9 @@ const Index = () => {
             </div>
             
             <h1 className="text-5xl font-bold tracking-tight mb-2 bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 text-slate-950 md:text-6xl">The Guild</h1>
-            <h2 className="text-2xl font-medium text-muted-foreground mb-10">The UAE's most exclusive investment club for the region's 
-most successful investors, family offices & funds</h2>
+            <h2 className="text-2xl font-medium text-muted-foreground mb-10">The UAE's most exclusive investment club for the region's most successful investors, family offices & funds</h2>
             
-            <p className="text-xl text-muted-foreground max-w-2xl mb-10">By invitation only, brought to you by:</p>
+            <p className="text-xl text-muted-foreground max-w-2xl mb-10">Brought to you by:</p>
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/dashboard">
