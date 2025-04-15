@@ -12,7 +12,7 @@ const Index = () => {
               The Guild
             </h1>
             
-            <h2 className="font-serif text-2xl md:text-3xl font-medium text-ivory/90 mb-16 max-w-2xl">The UAE's most exclusive investment club, by invitation, for the world's most successful investors</h2>
+            <h2 className="font-serif text-2xl md:text-3xl font-medium text-ivory/90 mb-16 max-w-2xl">The UAE's most exclusive investment club, by invitation only, for the world's most successful investors</h2>
             
             <p className="font-serif text-xl text-champagne/80 mb-12">Brought to you by:</p>
             
