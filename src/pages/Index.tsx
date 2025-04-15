@@ -1,22 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
-
 const Index = () => {
   return <div className="relative overflow-x-hidden">
       <div className="relative bg-obsidian">
         <div className="absolute inset-0 bg-grid-black/[0.05] -z-10" />
         <div className="container mx-auto px-6 py-24 md:py-32">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-crimson/30 bg-obsidian/80 text-crimson text-sm font-medium mb-8 backdrop-blur-sm font-serif">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>AI-Powered Investment Matching</span>
-            </div>
+            
             
             <h1 className="font-serif text-6xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-champagne via-champagne to-ivory">
               The Guild
             </h1>
             
-            <h2 className="font-serif text-2xl md:text-3xl font-medium text-ivory/90 mb-16 max-w-2xl">The UAE's most exclusive investment club, by invitation-only, for the most successful investors</h2>
+            <h2 className="font-serif text-2xl md:text-3xl font-medium text-ivory/90 mb-16 max-w-2xl">The UAE's most exclusive investment club, by invitation, for the world's most successful investors</h2>
             
             <p className="font-serif text-xl text-champagne/80 mb-12">Brought to you by:</p>
             
@@ -28,23 +24,21 @@ const Index = () => {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-12 bg-midnight/30 border border-champagne/10 rounded-2xl backdrop-blur-sm w-full mt-16">
               {[{
-                value: "500+",
-                label: "Active Deals"
-              }, {
-                value: "98%",
-                label: "Match Accuracy"
-              }, {
-                value: "$2.4B",
-                label: "Total Invested"
-              }, {
-                value: "3,200+",
-                label: "Investors"
-              }].map((stat, index) => (
-                <div key={index} className="text-center">
+              value: "500+",
+              label: "Active Deals"
+            }, {
+              value: "98%",
+              label: "Match Accuracy"
+            }, {
+              value: "$2.4B",
+              label: "Total Invested"
+            }, {
+              value: "3,200+",
+              label: "Investors"
+            }].map((stat, index) => <div key={index} className="text-center">
                   <div className="text-4xl md:text-5xl font-bold text-champagne mb-3 font-sans">{stat.value}</div>
                   <div className="text-base text-ivory/80 font-serif">{stat.label}</div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
           
@@ -157,5 +151,4 @@ const Index = () => {
       </div>
     </div>;
 };
-
 export default Index;
