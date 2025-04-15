@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
+
 const Index = () => {
   return <div className="relative overflow-x-hidden">
       <div className="relative bg-obsidian">
@@ -17,9 +18,21 @@ const Index = () => {
             <p className="font-serif text-xl text-champagne/80 mb-12">Brought to you by:</p>
             
             <div className="flex flex-wrap justify-center gap-16 mb-16 max-w-3xl">
-              <img src="/lovable-uploads/e33a00a9-24d5-4673-ab73-5b76d5d26d3d.png" alt="Emirates Family Office Association" className="h-14 w-auto opacity-70 hover:opacity-100 transition-all duration-300" />
-              <img src="/lovable-uploads/bc7f0867-82b2-4c0c-acb3-f2093e96736f.png" alt="Abu Dhabi Investment Office" className="h-14 w-auto opacity-70 hover:opacity-100 transition-all duration-300" />
-              <img src="/lovable-uploads/1c565d4e-6fdd-4731-bb38-e49923afff82.png" alt="EMIR" className="h-14 w-auto opacity-70 hover:opacity-100 transition-all duration-300" />
+              <img 
+                src="/lovable-uploads/e33a00a9-24d5-4673-ab73-5b76d5d26d3d.png" 
+                alt="Emirates Family Office Association" 
+                className="h-14 w-auto opacity-70 hover:opacity-100 transition-all duration-300 invert brightness-0" 
+              />
+              <img 
+                src="/lovable-uploads/bc7f0867-82b2-4c0c-acb3-f2093e96736f.png" 
+                alt="Abu Dhabi Investment Office" 
+                className="h-14 w-auto opacity-70 hover:opacity-100 transition-all duration-300 invert brightness-0" 
+              />
+              <img 
+                src="/lovable-uploads/1c565d4e-6fdd-4731-bb38-e49923afff82.png" 
+                alt="EMIR" 
+                className="h-14 w-auto opacity-70 hover:opacity-100 transition-all duration-300 invert brightness-0" 
+              />
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-12 bg-midnight/30 border border-champagne/10 rounded-2xl backdrop-blur-sm w-full mt-16">
@@ -151,4 +164,5 @@ const Index = () => {
       </div>
     </div>;
 };
+
 export default Index;
