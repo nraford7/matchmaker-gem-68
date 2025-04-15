@@ -18,6 +18,18 @@ export const PublicNavBar = () => {
               About
             </Link>
             <Link 
+              to="/public-deals" 
+              className="text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              Deals
+            </Link>
+            <Link 
+              to="/public-ai" 
+              className="text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              AI
+            </Link>
+            <Link 
               to="/apply" 
               className="text-sm font-medium text-muted-foreground hover:text-foreground"
             >

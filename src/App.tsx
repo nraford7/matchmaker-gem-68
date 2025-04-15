@@ -19,6 +19,8 @@ import Network from "./pages/Network";
 import InvestorProfile from "./pages/InvestorProfile";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
+import PublicDeals from "./pages/PublicDeals";
+import PublicAI from "./pages/PublicAI";
 
 const queryClient = new QueryClient();
 
@@ -75,6 +77,8 @@ const App = () => (
                 <InvestorProfile />
               </ProtectedRoute>
             } />
+            <Route path="/public-deals" element={<PublicDeals />} />
+            <Route path="/public-ai" element={<PublicAI />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
