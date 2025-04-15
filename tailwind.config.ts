@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -89,10 +90,11 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out'
       },
       fontFamily: {
-        serif: ['Cormorant Garamond', 'serif'],
+        serif: ['Prata', 'serif'],
         sans: ['system-ui', 'sans-serif'],
       }
     }
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
