@@ -1,4 +1,6 @@
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 const PublicDeals = () => {
   return (
     <div className="relative bg-[#0B0B0B] min-h-screen">
