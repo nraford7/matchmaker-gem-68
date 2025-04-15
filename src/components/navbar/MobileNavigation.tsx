@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { navigationLinks } from "./NavLinks";
+import { navigationLinks } from "@/config/navigation";
 
 export const MobileNavigation = () => {
   return (
