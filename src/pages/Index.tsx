@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, ArrowRight, ArrowUpRight, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
+
 const Index = () => {
   return <div className="relative overflow-x-hidden">
       {/* Hero Section with Background Gradient */}
@@ -30,16 +28,7 @@ const Index = () => {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-5">
-              <Link to="/dashboard">
-                <Button size="lg" className="gap-2 px-8 py-6 text-base">
-                  Go to Dashboard <ArrowRight className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/upload">
-                <Button size="lg" variant="outline" className="gap-2 px-8 py-6 text-base">
-                  Upload Opportunity <ArrowUpRight className="h-5 w-5" />
-                </Button>
-              </Link>
+              {/* Removed dashboard and upload buttons */}
             </div>
           </div>
           
