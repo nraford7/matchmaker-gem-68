@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,8 +27,8 @@ const ApplyForMembership = () => {
 
       <div className="container mx-auto py-16 relative z-10 max-w-6xl">
         <div className="max-w-2xl mx-auto">
-          <Card className="border border-champagne/20 bg-[#0B0B0B] backdrop-blur-sm">
-            <CardHeader className="text-center">
+          <Card className="border border-champagne/10 bg-[#0B0B0B] backdrop-blur-sm">
+            <CardHeader className="text-center bg-gradient-to-r from-midnight to-midnight/80 border-b border-champagne/10">
               <div className="mx-auto w-12 h-12 rounded-full bg-crimson flex items-center justify-center mb-4">
                 <Shield className="w-6 h-6 text-ivory" />
               </div>
@@ -36,7 +37,7 @@ const ApplyForMembership = () => {
                 The Guild is an invitation-only network. Please provide your information to be considered for membership.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <form className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">

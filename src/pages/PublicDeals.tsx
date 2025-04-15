@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const PublicDeals = () => {
@@ -31,11 +32,11 @@ const PublicDeals = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array(6).fill(0).map((_, i) => (
-            <Card key={i} className="overflow-hidden transition-all duration-300 hover:shadow-md hover:border-champagne/30">
+            <Card key={i} className="border border-champagne/10 bg-[#0B0B0B] backdrop-blur-sm">
               <CardHeader className="bg-gradient-to-r from-midnight to-midnight/80 border-b border-champagne/10">
                 <CardTitle>Premium Opportunity {i + 1}</CardTitle>
               </CardHeader>
-              <CardContent className="pt-6">
+              <CardContent className="p-6">
                 <p className="text-ivory/80 mb-4">
                   Access exclusive investment deals with vetted companies showing exceptional growth potential.
                 </p>
