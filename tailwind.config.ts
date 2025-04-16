@@ -89,7 +89,7 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out'
       },
       fontFamily: {
-        serif: ['Coldiac', 'serif'],
+        serif: ['Prata', 'serif'],
         sans: ['system-ui', 'sans-serif'],
       }
     }
