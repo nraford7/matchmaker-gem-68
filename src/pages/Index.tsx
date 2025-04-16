@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChevronRight } from "lucide-react";
 
@@ -15,28 +14,28 @@ const Index = () => {
             The UAE's most successful investment club, for the world's most exclusive investors
           </h2>
 
-          <div className="flex items-center justify-end border-t border-border pt-12 mb-16">
-            <div className="space-y-6">
-              <p className="font-serif text-sm text-muted-foreground tracking-wider">Brought to you by:</p>
-              <div className="flex gap-8 items-center">
-                <img 
-                  src="/lovable-uploads/e33a00a9-24d5-4673-ab73-5b76d5d26d3d.png" 
-                  alt="Emirates Family Office Association" 
-                  className="h-8 opacity-75 transition-opacity hover:opacity-100" 
-                />
-                <img 
-                  src="/lovable-uploads/bc7f0867-82b2-4c0c-acb3-f2093e96736f.png" 
-                  alt="Abu Dhabi Investment Office" 
-                  className="h-8 opacity-75 transition-opacity hover:opacity-100" 
-                />
-                <img 
-                  src="/lovable-uploads/1c565d4e-6fdd-4731-bb38-e49923afff82.png" 
-                  alt="EMIR" 
-                  className="h-8 opacity-75 transition-opacity hover:opacity-100" 
-                />
-              </div>
+          <div className="space-y-6 mb-16">
+            <p className="font-serif text-sm text-muted-foreground tracking-wider">Brought to you by:</p>
+            <div className="flex gap-8 items-center">
+              <img 
+                src="/lovable-uploads/e33a00a9-24d5-4673-ab73-5b76d5d26d3d.png" 
+                alt="Emirates Family Office Association" 
+                className="h-8 opacity-75 transition-opacity hover:opacity-100" 
+              />
+              <img 
+                src="/lovable-uploads/bc7f0867-82b2-4c0c-acb3-f2093e96736f.png" 
+                alt="Abu Dhabi Investment Office" 
+                className="h-8 opacity-75 transition-opacity hover:opacity-100" 
+              />
+              <img 
+                src="/lovable-uploads/1c565d4e-6fdd-4731-bb38-e49923afff82.png" 
+                alt="EMIR" 
+                className="h-8 opacity-75 transition-opacity hover:opacity-100" 
+              />
             </div>
           </div>
+
+          <div className="border-t border-border pt-12 mb-16"></div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             {[
