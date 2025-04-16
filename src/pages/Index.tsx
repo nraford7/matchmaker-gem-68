@@ -1,20 +1,28 @@
-import { Button } from "@/components/ui/button";
+
+import React from 'react';
 import { ChevronRight, Rocket, Trophy, BarChart4, Briefcase, Sparkles, Zap, Shield, Key, Handshake, UserRound } from "lucide-react";
+
 const Index = () => {
+  console.log('Current font family:', window.getComputedStyle(document.body).fontFamily);
+  
   return <div className="relative overflow-x-hidden">
       <div className="relative bg-[#0B0B0B] min-h-screen">
         {/* Stars background */}
         <div className="absolute inset-0 overflow-hidden">
           {Array.from({
           length: 50
-        }).map((_, i) => <div key={i} className="star absolute rounded-full bg-ivory/80" style={{
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-          width: `${Math.random() * 3 + 1}px`,
-          height: `${Math.random() * 3 + 1}px`,
-          animationDelay: `${Math.random() * 3}s`,
-          animationDuration: `${Math.random() * 3 + 2}s`
-        }} />)}
+        }).map((_, i) => <div 
+          key={`star-${i}`} 
+          className="star absolute rounded-full bg-ivory/80" 
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            width: `${Math.random() * 3 + 1}px`,
+            height: `${Math.random() * 3 + 1}px`,
+            animationDelay: `${Math.random() * 3}s`,
+            animationDuration: `${Math.random() * 3 + 2}s`
+          }} 
+        />)}
         </div>
         
         <div className="absolute inset-0 bg-grid-black/[0.05] -z-10" />
@@ -133,3 +141,4 @@ const Index = () => {
     </div>;
 };
 export default Index;
+
