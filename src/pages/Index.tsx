@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,43 +6,47 @@ import { Link } from "react-router-dom";
 const Index = () => {
   return (
     <div className="relative bg-background min-h-screen">
-      <div className="container mx-auto px-6 py-24 md:py-32 relative z-10">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto animate-fade-in">
-          <h1 className="font-serif text-7xl md:text-8xl tracking-wider mb-8 text-foreground">
-            The Guild
-          </h1>
-          
-          <h2 className="font-serif text-2xl md:text-3xl text-muted-foreground mb-20 max-w-2xl font-thin tracking-wide leading-relaxed">
-            The UAE's most successful investment club, for the world's most exclusive investors
-          </h2>
-          
-          <p className="font-serif text-xl text-muted-foreground mb-16 tracking-wider">Brought to you by:</p>
-          
-          <div className="flex flex-wrap justify-center gap-20 mb-20 max-w-3xl transition-all duration-300 hover:gap-24">
-            <img src="/lovable-uploads/e33a00a9-24d5-4673-ab73-5b76d5d26d3d.png" alt="Emirates Family Office Association" className="h-24 w-auto bg-white/95 p-3 rounded-lg transition-all duration-300 hover:bg-white" />
-            <img src="/lovable-uploads/bc7f0867-82b2-4c0c-acb3-f2093e96736f.png" alt="Abu Dhabi Investment Office" className="h-24 w-auto bg-white/95 p-3 rounded-lg transition-all duration-300 hover:bg-white" />
-            <img src="/lovable-uploads/1c565d4e-6fdd-4731-bb38-e49923afff82.png" alt="EMIR" className="h-24 w-auto bg-white/95 p-3 rounded-lg transition-all duration-300 hover:bg-white" />
+      <div className="container mx-auto px-6 py-32 md:py-40 relative z-10">
+        <div className="flex flex-col items-center text-center max-w-4xl mx-auto animate-fade-in space-y-20">
+          <div className="space-y-12">
+            <h1 className="font-serif text-7xl md:text-8xl tracking-wider text-foreground">
+              The Guild
+            </h1>
+            
+            <h2 className="font-serif text-2xl md:text-3xl text-muted-foreground max-w-2xl mx-auto font-thin tracking-wide leading-relaxed">
+              The UAE's most successful investment club, for the world's most exclusive investors
+            </h2>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-16 bg-card border border-border rounded-3xl w-full mt-16 transition-all duration-300 hover:border-primary/30">
+          <div className="space-y-8">
+            <p className="font-serif text-xl text-muted-foreground tracking-wider">Brought to you by:</p>
+            
+            <div className="flex flex-wrap justify-center gap-24 max-w-3xl transition-all duration-500">
+              <img src="/lovable-uploads/e33a00a9-24d5-4673-ab73-5b76d5d26d3d.png" alt="Emirates Family Office Association" className="h-24 w-auto bg-white/95 p-4 rounded-xl shadow-sm transition-all duration-300 hover:bg-white hover:scale-105" />
+              <img src="/lovable-uploads/bc7f0867-82b2-4c0c-acb3-f2093e96736f.png" alt="Abu Dhabi Investment Office" className="h-24 w-auto bg-white/95 p-4 rounded-xl shadow-sm transition-all duration-300 hover:bg-white hover:scale-105" />
+              <img src="/lovable-uploads/1c565d4e-6fdd-4731-bb38-e49923afff82.png" alt="EMIR" className="h-24 w-auto bg-white/95 p-4 rounded-xl shadow-sm transition-all duration-300 hover:bg-white hover:scale-105" />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 px-16 py-20 bg-card border border-border rounded-3xl w-full transition-all duration-300 hover:border-primary/30 hover:shadow-lg">
             {[
               { value: "500+", label: "Active Deals" },
               { value: "98%", label: "Match Accuracy" },
               { value: "$2.4B", label: "Total Invested" },
               { value: "3,200+", label: "Investors" }
             ].map((stat, index) => (
-              <div key={index} className="text-center transform transition-all duration-300 hover:scale-105">
-                <div className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-numeric tracking-tight">
+              <div key={index} className="text-center transform transition-all duration-500 hover:scale-105">
+                <div className="text-4xl md:text-6xl font-bold text-foreground mb-6 font-numeric tracking-tight">
                   {stat.value}
                 </div>
-                <div className="text-base text-muted-foreground font-serif tracking-wider">{stat.label}</div>
+                <div className="text-base md:text-lg text-muted-foreground font-serif tracking-wider">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
         
-        <div className="container mx-auto py-32">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="container mx-auto py-40">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {[
               {
                 title: "Confidential, Invite-Only",
@@ -120,15 +123,15 @@ const Index = () => {
             ].map((section, index) => (
               <div 
                 key={index} 
-                className="rounded-3xl border border-border bg-card p-12 transition-all duration-300 hover:border-primary/30 hover:shadow-hover"
+                className="rounded-3xl border border-border bg-card p-16 transition-all duration-300 hover:border-primary/30 hover:shadow-lg"
               >
-                <div className="flex items-center gap-6 mb-8">
-                  <h3 className="text-2xl font-semibold text-foreground font-serif tracking-wide">{section.title}</h3>
+                <div className="mb-12">
+                  <h3 className="text-3xl font-semibold text-foreground font-serif tracking-wide">{section.title}</h3>
                 </div>
-                <p className="text-muted-foreground mb-8 text-lg font-serif leading-relaxed">
+                <p className="text-muted-foreground mb-12 text-lg font-serif leading-relaxed">
                   {section.description}
                 </p>
-                <ul className="space-y-4 font-serif">
+                <ul className="space-y-6 font-serif">
                   {section.features}
                 </ul>
               </div>
@@ -136,9 +139,9 @@ const Index = () => {
           </div>
         </div>
         
-        <div className="text-center">
+        <div className="text-center mt-20">
           <Link to="/apply">
-            <Button variant="default" size="lg" className="px-8">
+            <Button variant="default" size="lg" className="px-12 py-6 text-lg">
               Apply for Membership
             </Button>
           </Link>
