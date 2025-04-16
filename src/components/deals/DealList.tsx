@@ -1,57 +1,20 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MapPin, TrendingUp } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Deal } from "@/types";
-import { formatCurrency } from "@/lib/utils";
 import DealActions from "./DealActions";
-import { useEffect, useState } from "react";
-import { fetchInvestorProfile } from "@/services/investor/recommendations/utils/investorUtils";
+import { DealIntroducer } from "./DealIntroducer";
+import { DealTags } from "./DealTags";
+import { DealMetrics } from "./DealMetrics";
 
 interface DealListProps {
   deals: Deal[];
   showMatchScore?: boolean;
 }
 
-interface IntroducerInfo {
-  id: string;
-  name: string | null;
-}
-
 export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
   const location = useLocation();
-  const [introducers, setIntroducers] = useState<Record<string, IntroducerInfo>>({});
-  
-  useEffect(() => {
-    // Fetch introducer information for all deals
-    const fetchIntroducers = async () => {
-      const introducerData: Record<string, IntroducerInfo> = {};
-      
-      for (const deal of deals) {
-        if (deal.introducedById) {
-          try {
-            const profileData = await fetchInvestorProfile(deal.introducedById);
-            
-            if (profileData) {
-              introducerData[deal.id] = {
-                id: deal.introducedById,
-                name: profileData.name
-              };
-            }
-          } catch (error) {
-            console.error("Error fetching introducer profile:", error);
-          }
-        }
-      }
-      
-      setIntroducers(introducerData);
-    };
-    
-    if (deals.length > 0) {
-      fetchIntroducers();
-    }
-  }, [deals]);
   
   return (
     <div className="space-y-4">
@@ -68,28 +31,16 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
                 <div className="md:col-span-2">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="font-semibold text-lg text-foreground hover:text-primary transition-colors">{deal.name}</h3>
-                      {introducers[deal.id] && (
-                        <div className="text-xs text-muted-foreground">
-                          Introduced by: <Link to={`/investor/${introducers[deal.id].id}`} className="font-medium hover:text-primary transition-colors">{introducers[deal.id].name || "Unknown Investor"}</Link>
-                        </div>
+                      <h3 className="font-semibold text-lg text-foreground hover:text-primary transition-colors">
+                        {deal.name}
+                      </h3>
+                      {deal.introducedById && (
+                        <DealIntroducer introducerId={deal.introducedById} />
                       )}
                     </div>
                   </div>
                   
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {deal.sectorTags && deal.sectorTags.map((sector, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
-                        {sector}
-                      </Badge>
-                    ))}
-                    
-                    {deal.stage && (
-                      <Badge variant="outline" className="text-xs">
-                        {deal.stage}
-                      </Badge>
-                    )}
-                  </div>
+                  <DealTags sectorTags={deal.sectorTags} stage={deal.stage} />
                   
                   <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
                     {deal.description || "No description available"}
@@ -106,35 +57,11 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
                     <DealActions dealId={deal.id} dealName={deal.name} />
                   </div>
                   
-                  {deal.checkSizeRequired && (
-                    <div className="mb-2 mt-6 md:mt-0">
-                      <p className="text-sm text-muted-foreground">Investment Ask</p>
-                      <p className="font-medium text-foreground">${formatCurrency(deal.checkSizeRequired)}</p>
-                    </div>
-                  )}
-                  
-                  {typeof deal.IRR !== 'undefined' && deal.IRR !== null && (
-                    <div className="mb-2">
-                      <p className="text-sm text-muted-foreground flex items-center">
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        Estimated IRR
-                      </p>
-                      <p className="font-medium text-foreground">{deal.IRR}%</p>
-                    </div>
-                  )}
-                  
-                  {showMatchScore && deal.matchScore && (
-                    <div>
-                      <p className="text-sm text-muted-foreground">Match Score</p>
-                      <div className="w-full bg-muted rounded-full h-2.5 mt-1">
-                        <div 
-                          className="bg-primary h-2.5 rounded-full" 
-                          style={{ width: `${Math.round(deal.matchScore * 100)}%` }}
-                        ></div>
-                      </div>
-                      <p className="text-xs text-right mt-1 text-foreground">{Math.round(deal.matchScore * 100)}%</p>
-                    </div>
-                  )}
+                  <DealMetrics 
+                    checkSizeRequired={deal.checkSizeRequired}
+                    IRR={deal.IRR}
+                    matchScore={showMatchScore ? deal.matchScore : undefined}
+                  />
                 </div>
               </div>
             </CardContent>
@@ -144,4 +71,3 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
     </div>
   );
 };
-
