@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -5,19 +6,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 font-sans", // Ensure font-sans is used
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-midnight text-ivory hover:bg-midnight/80 font-sans",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 font-sans",
-        outline:
-          "border border-champagne/20 bg-transparent text-champagne hover:bg-midnight hover:text-ivory font-sans",
-        secondary:
-          "bg-crimson text-ivory hover:bg-crimson/90 font-sans",
-        ghost: "hover:bg-midnight hover:text-ivory font-sans",
-        link: "text-champagne underline-offset-4 hover:underline font-sans",
+        default: "bg-crimson text-ivory hover:bg-crimson/90",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "border border-input bg-background text-foreground hover:bg-crimson hover:text-ivory hover:border-crimson",
+        secondary: "bg-crimson text-ivory hover:bg-crimson/90",
+        ghost: "text-foreground hover:bg-crimson hover:text-ivory",
+        link: "text-foreground underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -44,7 +42,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }), "font-sans")}
+        className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
       />
