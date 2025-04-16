@@ -62,13 +62,13 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
           state={{ from: location.pathname }}
           className="block hover:no-underline focus:outline-none"
         >
-          <Card className="border border-champagne/10 bg-[#0B0B0B] backdrop-blur-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
+          <Card className="border border-border transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
             <CardContent className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="font-semibold text-lg hover:text-primary transition-colors">{deal.name}</h3>
+                      <h3 className="font-semibold text-lg text-foreground hover:text-primary transition-colors">{deal.name}</h3>
                       {introducers[deal.id] && (
                         <div className="text-xs text-muted-foreground">
                           Introduced by: <Link to={`/investor/${introducers[deal.id].id}`} className="font-medium hover:text-primary transition-colors">{introducers[deal.id].name || "Unknown Investor"}</Link>
@@ -109,7 +109,7 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
                   {deal.checkSizeRequired && (
                     <div className="mb-2 mt-6 md:mt-0">
                       <p className="text-sm text-muted-foreground">Investment Ask</p>
-                      <p className="font-medium">${formatCurrency(deal.checkSizeRequired)}</p>
+                      <p className="font-medium text-foreground">${formatCurrency(deal.checkSizeRequired)}</p>
                     </div>
                   )}
                   
@@ -119,7 +119,7 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
                         <TrendingUp className="h-3 w-3 mr-1" />
                         Estimated IRR
                       </p>
-                      <p className="font-medium">{deal.IRR}%</p>
+                      <p className="font-medium text-foreground">{deal.IRR}%</p>
                     </div>
                   )}
                   
@@ -144,3 +144,4 @@ export const DealList = ({ deals, showMatchScore = false }: DealListProps) => {
     </div>
   );
 };
+
