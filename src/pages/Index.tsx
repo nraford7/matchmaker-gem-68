@@ -1,7 +1,6 @@
+
 import React from 'react';
 import { ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -16,13 +15,7 @@ const Index = () => {
             The UAE's most successful investment club, for the world's most exclusive investors
           </h2>
 
-          <div className="flex items-center justify-between border-t border-border pt-12 mb-16">
-            <Link to="/apply">
-              <Button variant="default" size="lg" className="px-8 py-6 text-base">
-                Apply for Membership
-              </Button>
-            </Link>
-
+          <div className="flex items-center justify-end border-t border-border pt-12 mb-16">
             <div className="space-y-6">
               <p className="font-serif text-sm text-muted-foreground tracking-wider">Brought to you by:</p>
               <div className="flex gap-8 items-center">
@@ -43,22 +36,6 @@ const Index = () => {
                 />
               </div>
             </div>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 bg-card border border-border rounded-xl p-8 w-full transition-all duration-300 hover:border-primary/30 hover:shadow-lg">
-            {[
-              { value: "500+", label: "Active Deals" },
-              { value: "98%", label: "Match Accuracy" },
-              { value: "$2.4B", label: "Total Invested" },
-              { value: "3,200+", label: "Investors" }
-            ].map((stat, index) => (
-              <div key={index} className="transform transition-all duration-500 hover:scale-105">
-                <div className="text-3xl md:text-4xl font-bold text-foreground mb-2 font-numeric tracking-tight">
-                  {stat.value}
-                </div>
-                <div className="text-sm md:text-base text-muted-foreground font-serif tracking-wider">{stat.label}</div>
-              </div>
-            ))}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
@@ -98,6 +75,22 @@ const Index = () => {
                     </li>
                   ))}
                 </ul>
+              </div>
+            ))}
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 bg-card border border-border rounded-xl p-8 w-full transition-all duration-300 hover:border-primary/30 hover:shadow-lg">
+            {[
+              { value: "500+", label: "Active Deals" },
+              { value: "98%", label: "Match Accuracy" },
+              { value: "$2.4B", label: "Total Invested" },
+              { value: "3,200+", label: "Investors" }
+            ].map((stat, index) => (
+              <div key={index} className="transform transition-all duration-500 hover:scale-105">
+                <div className="text-3xl md:text-4xl font-bold text-foreground mb-2 font-numeric tracking-tight">
+                  {stat.value}
+                </div>
+                <div className="text-sm md:text-base text-muted-foreground font-serif tracking-wider">{stat.label}</div>
               </div>
             ))}
           </div>
