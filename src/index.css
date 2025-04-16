@@ -4,6 +4,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Gamgote:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fonde:wght@400;600;700&display=swap');
 
+@font-face {
+  font-family: 'Coldiac Free';
+  src: url('/fonts/ColdiacFree.woff2') format('woff2'),
+       url('/fonts/ColdiacFree.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
