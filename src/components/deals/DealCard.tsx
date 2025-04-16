@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { Deal } from "@/types";
 import { DealCardHeader } from "./card/DealCardHeader";
@@ -34,7 +33,7 @@ export const DealCard = ({
   };
   
   return (
-    <Card className="h-full flex flex-col border border-champagne/10 bg-[#0B0B0B] backdrop-blur-sm transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
+    <Card className="h-full flex flex-col overflow-hidden transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30">
       <DealCardHeader deal={deal} />
       <DealCardContent deal={deal} />
       <DealCardFooter 

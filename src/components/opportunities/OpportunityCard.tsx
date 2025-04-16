@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Deal } from "@/types";
 import { Card } from "@/components/ui/card";
@@ -43,3 +42,4 @@ export const OpportunityCard = ({ opportunity, showMatchScore = false }: Opportu
     </Card>
   );
 };
+

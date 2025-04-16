@@ -1,4 +1,3 @@
-
 import { NetworkSharedDeal } from "@/types";
 import { Handshake, MessageSquare, Tag } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
@@ -52,7 +51,7 @@ export const SharedDealItem = ({ deal }: SharedDealItemProps) => {
   };
   
   return (
-    <div className="border rounded-md p-4 hover:shadow-md transition-shadow h-full flex flex-col gap-3">
+    <div className="border rounded-md p-4 hover:shadow-md transition-shadow h-full flex flex-col gap-3 bg-card text-card-foreground">
       <div className="flex justify-between items-start">
         <h4 
           className="font-semibold text-base line-clamp-1 cursor-pointer hover:text-primary hover:underline"
