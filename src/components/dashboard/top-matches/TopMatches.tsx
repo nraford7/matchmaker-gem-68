@@ -27,7 +27,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
         <div>
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
-            <CardTitle>Top Matches</CardTitle>
+            <CardTitle className="text-foreground">Top Matches</CardTitle>
           </div>
           <CardDescription className="mt-1">
             Investment opportunities that match your preferences

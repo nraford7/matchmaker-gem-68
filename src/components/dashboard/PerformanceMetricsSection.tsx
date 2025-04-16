@@ -29,10 +29,10 @@ export const PerformanceMetricsSection = () => {
     <Card>
       <CardContent className="p-6">
         <div className="flex items-center justify-between space-y-0 pb-2">
-          <h3 className="text-sm font-medium tracking-tight">{title}</h3>
+          <h3 className="text-sm font-medium tracking-tight text-foreground">{title}</h3>
           <div className="text-muted-foreground">{icon}</div>
         </div>
-        <div className="text-2xl font-bold">{value}</div>
+        <div className="text-2xl font-bold text-foreground">{value}</div>
         <p className="text-xs text-muted-foreground">{description}</p>
       </CardContent>
     </Card>

@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, ArrowRight } from "lucide-react";
+import { Users } from "lucide-react";
 import { NetworkSharedDeal } from "@/types";
 import { useNavigate } from "react-router-dom";
 import { SharedDealItem } from "./SharedDealItem";
@@ -57,7 +56,7 @@ export const NetworkHighlights = () => {
         <div>
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-primary" />
-            <CardTitle>Network Highlights</CardTitle>
+            <CardTitle className="text-foreground">Network Highlights</CardTitle>
           </div>
           <CardDescription className="mt-1">
             Deals shared with you by investors in your network
