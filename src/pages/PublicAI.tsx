@@ -1,4 +1,3 @@
-
 import { Shield, Brain, Zap, Lock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,31 +5,13 @@ import { Link } from "react-router-dom";
 
 const PublicAI = () => {
   return (
-    <div className="relative bg-[#0B0B0B] min-h-screen px-4 md:px-8 lg:px-16">
-      {/* Stars background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <div
-            key={i}
-            className="star absolute rounded-full bg-ivory/80"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${Math.random() * 3 + 2}s`
-            }}
-          />
-        ))}
-      </div>
-
+    <div className="relative bg-background min-h-screen px-4 md:px-8 lg:px-16">
       <div className="container mx-auto py-16 relative z-10 max-w-6xl">
         <div className="max-w-4xl mx-auto">
-          <h1 className="font-serif text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-champagne via-champagne to-ivory">
+          <h1 className="font-serif text-6xl font-bold mb-6 text-foreground">
             AI-Powered Investing
           </h1>
-          <p className="font-serif text-xl text-ivory/80 mb-10">
+          <p className="font-serif text-xl text-muted-foreground mb-10">
             Learn how The Guild uses artificial intelligence to optimize investment matching and portfolio management.
           </p>
           
@@ -57,14 +38,14 @@ const PublicAI = () => {
                 description: "Members gain privileged access to AI insights and recommendations not available anywhere else."
               }
             ].map((feature, index) => (
-              <Card key={index} className="border border-champagne/10 bg-midnight/20 hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30 transition-all duration-200">
+              <Card key={index} className="border border-border bg-card hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30 transition-all duration-200">
                 <CardContent className="p-8">
                   <div className="flex flex-col items-center text-center">
-                    <div className="mb-4 p-3 rounded-full bg-obsidian border border-crimson/20">
+                    <div className="mb-4 p-3 rounded-full bg-crimson/10 border border-crimson/20">
                       {feature.icon}
                     </div>
-                    <h3 className="text-xl font-semibold mb-3 text-champagne">{feature.title}</h3>
-                    <p className="text-ivory/70">{feature.description}</p>
+                    <h3 className="text-xl font-semibold mb-3 text-foreground">{feature.title}</h3>
+                    <p className="text-muted-foreground">{feature.description}</p>
                   </div>
                 </CardContent>
               </Card>
