@@ -22,11 +22,11 @@ const Index = () => {
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
             
             
-            <h1 className="font-serif text-6xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-champagne via-champagne to-ivory">
+            <h1 className="font-serif text-6xl md:text-7xl tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-champagne via-champagne to-ivory font-semibold">
               The Guild
             </h1>
             
-            <h2 className="font-serif text-2xl md:text-3xl font-medium text-ivory/90 mb-16 max-w-2xl">The UAE's most successful investment club, by invitation only, for the world's most exclusive investors</h2>
+            <h2 className="font-serif text-2xl text-ivory/90 mb-16 max-w-2xl font-thin md:text-3xl">The UAE's most successful investment club, for the world's most exclusive investors</h2>
             
             <p className="font-serif text-xl text-champagne/80 mb-12">Brought to you by:</p>
             
