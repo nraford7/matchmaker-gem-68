@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ChevronRight } from "lucide-react";
 
@@ -35,7 +36,7 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="border-t border-border pt-12 mb-16"></div>
+          <div className="border-t border-border pt-6 mb-8"></div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             {[
@@ -78,7 +79,7 @@ const Index = () => {
             ))}
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 bg-card border border-border rounded-xl p-8 w-full transition-all duration-300 hover:border-primary/30 hover:shadow-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 bg-card border border-border rounded-xl p-8 w-full transition-all duration-300 hover:border-primary/30 hover:shadow-lg">
             {[
               { value: "500+", label: "Active Deals" },
               { value: "98%", label: "Match Accuracy" },
