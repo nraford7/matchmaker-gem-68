@@ -89,7 +89,7 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out'
       },
       fontFamily: {
-        serif: ['Gamgote', 'serif'],
+        serif: ['Fonde', 'serif'],
         sans: ['system-ui', 'sans-serif'],
       }
     }
