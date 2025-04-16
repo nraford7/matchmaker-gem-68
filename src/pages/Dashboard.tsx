@@ -9,13 +9,13 @@ const Dashboard = () => {
   const { topMatches, loading } = useTopDeals();
   
   return (
-    <div className="relative bg-[#0B0B0B] min-h-screen">
-      {/* Stars background */}
-      <div className="absolute inset-0 overflow-hidden">
+    <div className="relative bg-background min-h-screen">
+      {/* Light theme version of the dashboard */}
+      <div className="absolute inset-0 overflow-hidden opacity-30">
         {Array.from({ length: 50 }).map((_, i) => (
           <div
             key={i}
-            className="star absolute rounded-full bg-ivory/80"
+            className="star absolute rounded-full bg-foreground/20"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,

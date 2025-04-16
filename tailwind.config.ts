@@ -49,8 +49,8 @@ export default {
           foreground: 'hsl(var(--popover-foreground))'
         },
         card: {
-          DEFAULT: '#0B0B0B',
-          foreground: '#F7E7CE'
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))'
         },
         obsidian: '#0B0B0B',
         midnight: '#191970',

@@ -1,4 +1,3 @@
-
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,26 +14,24 @@ export const NavBar = () => {
   const currentPath = location.pathname;
   const isMobile = useIsMobile();
   
-  // If user is not authenticated, show public navbar
+  // If user is not authenticated, show public navbar with dark theme
   if (!user) {
     return <PublicNavBar />;
   }
   
-  // Full navbar for authenticated users
+  // Full navbar for authenticated users with light theme
   return (
-    <div className="border-b">
+    <div className="border-b bg-background">
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link to="/" className="font-bold text-xl">
+          <Link to="/" className="font-bold text-xl text-foreground">
             The Guild
           </Link>
           
-          {/* Only show NavLinks if user is authenticated */}
           <NavLinks />
         </div>
         
         <div className="flex items-center gap-4">
-          {/* Mobile navigation only for authenticated users */}
           {isMobile && <MobileNavigation />}
           
           <UserMenu user={user} signOut={signOut} />

@@ -10,38 +10,38 @@
  
 @layer base {
   :root {
-    --background: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
-    --foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
+    --background: 40 33% 95%; /* Light beige #F5F2EA */
+    --foreground: 240 10% 15%; /* Dark gray text #2A2A2D */
  
-    --card: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
-    --card-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
+    --card: 40 33% 98%; /* Lighter beige for cards #FAF8F3 */
+    --card-foreground: 240 10% 15%;
  
-    --popover: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
-    --popover-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
+    --popover: 40 33% 98%;
+    --popover-foreground: 240 10% 15%;
  
-    --primary: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
-    --primary-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
+    --primary: 240 10% 15%;
+    --primary-foreground: 40 33% 98%;
  
-    --secondary: 0 100% 30%; /* Crimson Red #990000 */
-    --secondary-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
+    --secondary: 0 100% 30%;
+    --secondary-foreground: 40 33% 98%;
  
-    --muted: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
-    --muted-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
+    --muted: 40 20% 90%;
+    --muted-foreground: 240 10% 40%;
  
-    --accent: 0 100% 30%; /* Crimson Red #990000 */
-    --accent-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
+    --accent: 0 100% 30%;
+    --accent-foreground: 40 33% 98%;
  
-    --destructive: 0 100% 30%; /* Crimson Red #990000 */
-    --destructive-foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 40 33% 98%;
  
-    --border: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
-    --input: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
-    --ring: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
+    --border: 40 20% 85%;
+    --input: 40 20% 85%;
+    --ring: 40 20% 85%;
  
     --radius: 0.5rem;
   }
  
-  .dark {
+  .public-page {
     --background: 0 0% 4.7%; /* Obsidian Black #0B0B0B */
     --foreground: 39 69% 84%; /* Champagne Gold #F7E7CE */
  
@@ -79,6 +79,10 @@
   
   body {
     @apply bg-background text-foreground font-serif;
+  }
+  
+  .public-page {
+    @apply bg-[#0B0B0B] text-champagne;
   }
   
   h1, h2, h3, h4, h5, h6 {
