@@ -51,14 +51,14 @@ export const InvestorMetrics = () => {
   
   if (loading) {
     return (
-      <Card className="col-span-2 bg-background">
-        <CardHeader>
+      <Card className="col-span-2 border-none bg-background shadow-none px-0">
+        <CardHeader className="px-0">
           <CardTitle>Network Sector Focus</CardTitle>
           <CardDescription>
             Most common sectors in your investor network
           </CardDescription>
         </CardHeader>
-        <CardContent className="h-80 flex items-center justify-center">
+        <CardContent className="h-80 flex items-center justify-center px-0">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </CardContent>
       </Card>
@@ -68,14 +68,14 @@ export const InvestorMetrics = () => {
   const sectorData = getSectorDistribution();
   
   return (
-    <Card className="col-span-2 bg-background">
-      <CardHeader>
+    <Card className="col-span-2 border-none bg-background shadow-none px-0">
+      <CardHeader className="px-0">
         <CardTitle>Network Sector Focus</CardTitle>
         <CardDescription>
           Most common sectors in your investor network
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0">
         {investors.length > 0 ? (
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">

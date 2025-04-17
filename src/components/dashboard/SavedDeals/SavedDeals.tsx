@@ -53,8 +53,8 @@ export const SavedDeals = ({ savedDeals, isLoading = false }: SavedDealsProps) =
   
   if (isLoading) {
     return (
-      <Card className="bg-background">
-        <CardHeader>
+      <Card className="border-none bg-background shadow-none px-0">
+        <CardHeader className="px-0">
           <CardTitle>Saved Deals</CardTitle>
           <CardDescription>Track your saved investment opportunities</CardDescription>
         </CardHeader>
@@ -72,12 +72,12 @@ export const SavedDeals = ({ savedDeals, isLoading = false }: SavedDealsProps) =
   }
   
   return (
-    <Card className="bg-background">
-      <CardHeader>
+    <Card className="border-none bg-background shadow-none px-0">
+      <CardHeader className="px-0">
         <CardTitle>Saved Deals</CardTitle>
         <CardDescription>Track your saved investment opportunities</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0">
         <div className="space-y-4">
           {savedDeals.slice(0, 5).map((deal) => (
             <DealItem 
@@ -89,7 +89,7 @@ export const SavedDeals = ({ savedDeals, isLoading = false }: SavedDealsProps) =
           ))}
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="px-0">
         <Link to="/deals" className="w-full">
           <Button variant="outline" className="w-full">
             View All Deals

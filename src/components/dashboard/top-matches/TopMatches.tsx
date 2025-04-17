@@ -22,8 +22,8 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   }
   
   return (
-    <Card className="shadow-sm bg-background">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <Card className="border-none bg-background shadow-none px-0">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 px-0">
         <div>
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
@@ -34,7 +34,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
           </CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="pt-4">
+      <CardContent className="pt-4 px-0">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           {topMatches.slice(0, 6).map((deal) => (
             <MatchCard key={deal.id} deal={deal} />
@@ -44,7 +44,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
         {topMatches.length > 0 && topMatches.length <= 6 && <ViewAllButton />}
       </CardContent>
       {topMatches.length > 6 && (
-        <CardFooter className="p-3">
+        <CardFooter className="p-3 px-0">
           <ViewAllButton />
         </CardFooter>
       )}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
@@ -46,14 +45,13 @@ export const NetworkHighlights = () => {
   if (loading) return <NetworkHighlightsLoading />;
   if (sharedDeals.length === 0) return <NetworkHighlightsEmpty />;
 
-  // Calculate pagination
   const totalPages = Math.ceil(sharedDeals.length / DEALS_PER_PAGE);
   const startIndex = (currentPage - 1) * DEALS_PER_PAGE;
   const paginatedDeals = sharedDeals.slice(startIndex, startIndex + DEALS_PER_PAGE);
   
   return (
-    <Card className="shadow-sm bg-background">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <Card className="border-none bg-background shadow-none px-0">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 px-0">
         <div>
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-primary" />
@@ -64,7 +62,7 @@ export const NetworkHighlights = () => {
           </CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="pt-4">
+      <CardContent className="pt-4 px-0">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {paginatedDeals.map((deal) => (
             <SharedDealItem key={deal.id} deal={deal} />
