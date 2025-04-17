@@ -35,7 +35,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
         </div>
       </CardHeader>
       <CardContent className="pt-4 px-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 gap-6 mb-6">
           {topMatches.slice(0, 6).map((deal) => (
             <MatchCard key={deal.id} deal={deal} />
           ))}

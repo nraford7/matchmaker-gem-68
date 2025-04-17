@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
@@ -63,7 +64,7 @@ export const NetworkHighlights = () => {
         </div>
       </CardHeader>
       <CardContent className="pt-4 px-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 gap-6 mb-6">
           {paginatedDeals.map((deal) => (
             <SharedDealItem key={deal.id} deal={deal} />
           ))}
