@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Tag } from "lucide-react";
 
 const Index = () => {
   return (
@@ -38,7 +38,7 @@ const Index = () => {
 
           <div className="border-t border-border pt-6 mb-8"></div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {[
               {
                 title: "Confidential, Invite-Only",
@@ -57,6 +57,16 @@ const Index = () => {
                   "Contextual understanding of investment goals",
                   "Continuous learning from your feedback"
                 ]
+              },
+              {
+                title: "Exclusive Deals",
+                description: "Access proprietary investment opportunities not available anywhere else, carefully curated for our elite membership.",
+                features: [
+                  "Pre-market access to high-value opportunities",
+                  "Exclusive founder meetings and deal terms",
+                  "Priority allocation in oversubscribed rounds"
+                ],
+                icon: <Tag />
               }
             ].map((section, index) => (
               <div 
