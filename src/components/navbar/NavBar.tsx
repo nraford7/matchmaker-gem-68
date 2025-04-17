@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -10,8 +10,6 @@ import { UserMenu } from "./UserMenu";
 
 export const NavBar = () => {
   const { user, signOut } = useAuth();
-  const location = useLocation();
-  const currentPath = location.pathname;
   const isMobile = useIsMobile();
   
   // If user is not authenticated, show public navbar with dark theme
@@ -24,7 +22,7 @@ export const NavBar = () => {
     <div className="border-b bg-background">
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link to="/" className="font-bold text-xl text-foreground">
+          <Link to="/" className="font-bold text-xl text-crimson">
             The Guild
           </Link>
           
