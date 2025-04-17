@@ -7,7 +7,7 @@ const Index = () => {
     <div className="relative bg-background min-h-screen">
       <div className="container mx-auto px-6 py-20 relative z-10">
         <div className="max-w-4xl animate-fade-in">
-          <h1 className="font-serif text-6xl md:text-7xl tracking-tighter text-foreground mb-8">
+          <h1 className="font-serif text-6xl md:text-7xl tracking-tighter text-crimson mb-8">
             The Guild
           </h1>
           
