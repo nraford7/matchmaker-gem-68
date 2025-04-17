@@ -51,7 +51,7 @@ export const InvestorMetrics = () => {
   
   if (loading) {
     return (
-      <Card className="col-span-2">
+      <Card className="col-span-2 bg-background">
         <CardHeader>
           <CardTitle>Network Sector Focus</CardTitle>
           <CardDescription>
@@ -68,7 +68,7 @@ export const InvestorMetrics = () => {
   const sectorData = getSectorDistribution();
   
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-2 bg-background">
       <CardHeader>
         <CardTitle>Network Sector Focus</CardTitle>
         <CardDescription>

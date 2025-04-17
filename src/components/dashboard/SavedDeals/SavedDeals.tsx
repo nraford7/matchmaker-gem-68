@@ -53,7 +53,7 @@ export const SavedDeals = ({ savedDeals, isLoading = false }: SavedDealsProps) =
   
   if (isLoading) {
     return (
-      <Card>
+      <Card className="bg-background">
         <CardHeader>
           <CardTitle>Saved Deals</CardTitle>
           <CardDescription>Track your saved investment opportunities</CardDescription>
@@ -72,7 +72,7 @@ export const SavedDeals = ({ savedDeals, isLoading = false }: SavedDealsProps) =
   }
   
   return (
-    <Card>
+    <Card className="bg-background">
       <CardHeader>
         <CardTitle>Saved Deals</CardTitle>
         <CardDescription>Track your saved investment opportunities</CardDescription>

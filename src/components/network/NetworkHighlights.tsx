@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
@@ -51,7 +52,7 @@ export const NetworkHighlights = () => {
   const paginatedDeals = sharedDeals.slice(startIndex, startIndex + DEALS_PER_PAGE);
   
   return (
-    <Card className="shadow-sm">
+    <Card className="shadow-sm bg-background">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <div className="flex items-center gap-2">

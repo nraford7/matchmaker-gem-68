@@ -22,7 +22,7 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   }
   
   return (
-    <Card className="shadow-sm">
+    <Card className="shadow-sm bg-background">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <div className="flex items-center gap-2">
