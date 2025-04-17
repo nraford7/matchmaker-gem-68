@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { 
   NetworkHeader,
@@ -103,7 +104,7 @@ const Network = () => {
     .slice(0, 3);
   
   return (
-    <div className="container mx-auto pt-20 py-6">
+    <div className="container mx-auto pt-24 py-6">
       <div className="mb-6">
         <NetworkHeader />
         <NetworkHighlights />

@@ -52,7 +52,7 @@ const DealDetails = () => {
   }
 
   return (
-    <div className="container mx-auto pt-20 py-6 max-w-6xl">
+    <div className="container mx-auto pt-24 py-6 max-w-6xl">
       <DealDetailsHeader deal={dealData} onGoBack={handleGoBack} />
       <DealDetailsContent deal={dealData} />
     </div>

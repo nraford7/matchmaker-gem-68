@@ -69,7 +69,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#9BD0F5'
 
 const Insights = () => {
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto pt-24 py-6">
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
           <ChartPie className="h-6 w-6 text-primary" />
