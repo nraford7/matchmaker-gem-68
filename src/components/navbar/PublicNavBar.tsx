@@ -1,10 +1,9 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export const PublicNavBar = () => {
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 bg-white">
+    <div className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 bg-white shadow-md">
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="font-serif font-bold text-xl text-crimson">
@@ -44,4 +43,3 @@ export const PublicNavBar = () => {
     </div>
   );
 };
-
