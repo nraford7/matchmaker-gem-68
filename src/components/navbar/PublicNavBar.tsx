@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 
 export const PublicNavBar = () => {
   return (
-    <div className="border-b border-gray-200 bg-white">
+    <div className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-sm shadow-sm">
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link to="/" className="font-serif font-bold text-xl text-gray-900">
+          <Link to="/" className="font-serif font-bold text-xl text-crimson">
             The Guild
           </Link>
           <nav className="flex items-center gap-6">
