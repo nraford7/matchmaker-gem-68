@@ -1,10 +1,11 @@
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Deal } from "@/types";
-import { MatchCard } from "./MatchCard";
-import { ViewAllButton } from "./ViewAllButton";
 import { TopMatchesEmptyState } from "./EmptyState";
 import { TopMatchesLoadingState } from "./LoadingState";
+import { MatchCardGrid } from "./MatchCardGrid";
+import { MatchesFooter } from "./MatchesFooter";
+import { InlineViewAllButton } from "./InlineViewAllButton";
 
 interface TopMatchesProps {
   topMatches: Deal[];
@@ -23,19 +24,10 @@ export const TopMatches = ({ topMatches, loading }: TopMatchesProps) => {
   return (
     <Card className="border-none bg-background shadow-none px-0">
       <CardContent className="pt-0 px-0">
-        <div className="grid grid-cols-1 gap-6 mb-6">
-          {topMatches.slice(0, 6).map((deal) => (
-            <MatchCard key={deal.id} deal={deal} />
-          ))}
-        </div>
-        
-        {topMatches.length > 0 && topMatches.length <= 6 && <ViewAllButton />}
+        <MatchCardGrid deals={topMatches} />
+        <InlineViewAllButton topMatches={topMatches} />
       </CardContent>
-      {topMatches.length > 6 && (
-        <CardFooter className="p-3 px-0">
-          <ViewAllButton />
-        </CardFooter>
-      )}
+      <MatchesFooter topMatches={topMatches} />
     </Card>
   );
 };
