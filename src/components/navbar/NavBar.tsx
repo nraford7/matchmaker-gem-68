@@ -19,7 +19,7 @@ export const NavBar = () => {
   
   // Full navbar for authenticated users with light theme
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 border-b bg-champagne/10 backdrop-blur-sm shadow-sm">
+    <div className="fixed top-0 left-0 right-0 z-50 border-b bg-background">
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="font-bold text-xl text-crimson">
@@ -38,3 +38,4 @@ export const NavBar = () => {
     </div>
   );
 };
+
