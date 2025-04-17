@@ -17,7 +17,7 @@ export const UserAvatar = ({ user }: UserAvatarProps) => {
   
   return (
     <Avatar>
-      <AvatarFallback className="bg-crimson text-ivory">
+      <AvatarFallback className="bg-muted text-foreground">
         {user.user_metadata.full_name 
           ? getInitials(user.user_metadata.full_name) 
           : user.email?.charAt(0).toUpperCase() || "U"}
