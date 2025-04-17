@@ -3,7 +3,7 @@ import { OpportunityFormContainer } from "@/components/opportunity/OpportunityFo
 
 const UploadOpportunity = () => {
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="container mx-auto pt-20 py-10 px-4">
       <div className="max-w-3xl mx-auto">
         <OpportunityFormContainer />
       </div>

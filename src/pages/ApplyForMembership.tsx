@@ -6,7 +6,7 @@ import { Shield } from "lucide-react";
 
 const ApplyForMembership = () => {
   return (
-    <div className="relative bg-background min-h-screen px-4 md:px-8 lg:px-16">
+    <div className="relative bg-background min-h-screen pt-20 px-4 md:px-8 lg:px-16">
       <div className="container mx-auto py-16 relative z-10 max-w-6xl">
         <div className="max-w-2xl mx-auto">
           <Card className="border border-border bg-card hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:border-primary/30 transition-all duration-200">

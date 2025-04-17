@@ -9,7 +9,7 @@ const Dashboard = () => {
   const { topMatches, loading } = useTopDeals();
   
   return (
-    <div className="relative bg-background min-h-screen">
+    <div className="relative bg-background min-h-screen pt-20">
       {/* Light theme version of the dashboard */}
       <div className="absolute inset-0 overflow-hidden opacity-30">
         {Array.from({ length: 50 }).map((_, i) => (

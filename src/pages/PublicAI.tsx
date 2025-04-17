@@ -1,3 +1,4 @@
+
 import { Shield, Brain, Zap, Lock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const PublicAI = () => {
   return (
-    <div className="relative bg-background min-h-screen px-4 md:px-8 lg:px-16">
+    <div className="relative bg-background min-h-screen pt-20 px-4 md:px-8 lg:px-16">
       <div className="container mx-auto py-16 relative z-10 max-w-6xl">
         <div className="max-w-4xl mx-auto">
           <h1 className="font-serif text-6xl font-bold mb-6 text-foreground">

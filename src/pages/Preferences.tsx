@@ -48,7 +48,7 @@ const PreferencesPage = () => {
   });
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto pt-20 py-8">
       <PageTitle
         title="Investor Preferences"
         subtitle="Customize your investment preferences and profile"

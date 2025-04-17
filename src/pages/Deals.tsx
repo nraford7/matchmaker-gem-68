@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Loader2, Briefcase, FilePlus } from "lucide-react";
@@ -108,7 +107,7 @@ const Deals = () => {
   
   if (!user) {
     return (
-      <div className="container mx-auto py-12 text-center">
+      <div className="container mx-auto pt-20 py-12 text-center">
         <h1 className="text-2xl font-bold mb-4">Please sign in to access the Deals Dashboard</h1>
         <Link to="/auth">
           <Button>Sign In</Button>
@@ -118,7 +117,7 @@ const Deals = () => {
   }
   
   return (
-    <div className="container mx-auto py-6 px-4 md:px-8 lg:px-16 max-w-7xl">
+    <div className="container mx-auto pt-20 py-6 px-4 md:px-8 lg:px-16 max-w-7xl">
       <div className="mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">

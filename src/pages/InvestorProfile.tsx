@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Building } from "lucide-react";
@@ -33,13 +32,10 @@ const InvestorProfile = () => {
       try {
         if (id) {
           const investorData = await fetchInvestorById(id);
-          // Normalize psychological profile data to make sure it's on a 0-100 scale
           if (investorData && investorData.psychological_profile_raw) {
-            // Convert fractional values (0-1) to 0-100 scale if needed
             Object.entries(investorData.psychological_profile_raw).forEach(([key, value]) => {
               if (typeof value === 'number' && value <= 1) {
                 investorData.psychological_profile_raw[key] = Math.round(value * 100);
-                // Also update the alias
                 if (investorData.psychologicalProfileRaw) {
                   investorData.psychologicalProfileRaw[key] = Math.round(value * 100);
                 }
@@ -48,7 +44,6 @@ const InvestorProfile = () => {
           }
           setInvestor(investorData);
           
-          // Check if user is following this investor
           const following = await checkFollowingStatus(id);
           setIsFollowing(following);
         }
@@ -91,7 +86,6 @@ const InvestorProfile = () => {
     return <NotFoundState navigateBack={navigateBack} />;
   }
   
-  // Convert NetworkInvestor to Investor for PreferenceVisualizer
   const investorForVisualizer: Investor = {
     id: investor.id,
     name: investor.name,
@@ -108,7 +102,7 @@ const InvestorProfile = () => {
   };
   
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto pt-20 py-6">
       <ProfileHeader navigateBack={navigateBack} />
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

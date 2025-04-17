@@ -1,3 +1,4 @@
+
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import NotFoundState from "@/components/deals/NotFoundState";
@@ -51,7 +52,7 @@ const DealDetails = () => {
   }
 
   return (
-    <div className="container mx-auto py-6 max-w-6xl">
+    <div className="container mx-auto pt-20 py-6 max-w-6xl">
       <DealDetailsHeader deal={dealData} onGoBack={handleGoBack} />
       <DealDetailsContent deal={dealData} />
     </div>
