@@ -4,7 +4,7 @@ import { ChevronRight, Tag } from "lucide-react";
 
 const Index = () => {
   return (
-    <div className="relative bg-background min-h-screen pt-16"> {/* Added pt-16 for navbar space */}
+    <div className="relative bg-background min-h-screen pt-20"> {/* Increased top padding from pt-16 to pt-20 */}
       <div className="container mx-auto px-6 py-20 relative z-10">
         <div className="max-w-4xl animate-fade-in">
           <h1 className="font-serif text-6xl md:text-7xl tracking-tighter text-crimson mb-8">
