@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -34,30 +33,22 @@ export const OpportunityForm = () => {
 
   const { 
     selectedFile, 
-    isProcessing, 
-    hasProcessed, 
     documentUrl,
     uploadProgress,
     isUploading,
     isUploaded,
-    processingProgress,
     error,
     handleFileChange,
     cancelProcess
   } = useDocumentProcessor(form);
 
-  // Handle analysis completion
-  const onAnalysisComplete = () => {
-    setIsAnalyzingDeck(false);
-    setIsDeckAnalysisComplete(true);
-    setDeckAnalysisProgress(100);
-  };
-
-  // Start analysis simulation only when upload completes and analysis hasn't started yet
   useEffect(() => {
     if (isUploaded && !isAnalyzingDeck && !isDeckAnalysisComplete) {
       setIsAnalyzingDeck(true);
-      simulateProgress(setDeckAnalysisProgress, onAnalysisComplete, 0, 3000);
+      simulateProgress(setDeckAnalysisProgress, () => {
+        setIsAnalyzingDeck(false);
+        setIsDeckAnalysisComplete(true);
+      }, 0, 3000);
     }
   }, [isUploaded, isAnalyzingDeck, isDeckAnalysisComplete]);
 
@@ -99,23 +90,25 @@ export const OpportunityForm = () => {
         {!isDeckAnalysisComplete && (
           <FileUploadSection
             selectedFile={selectedFile}
-            isProcessing={isProcessing}
-            hasProcessed={hasProcessed}
+            isProcessing={isAnalyzingDeck}
+            hasProcessed={isDeckAnalysisComplete}
             onFileChange={handleFileChange}
             uploadProgress={uploadProgress}
             isUploading={isUploading}
-            isUploaded={isUploaded}
-            processingProgress={processingProgress}
+            isAnalyzing={isAnalyzingDeck}
+            analysisProgress={deckAnalysisProgress}
             error={error}
             onCancelUpload={cancelProcess}
             onStartAnalysis={() => {}}
           />
         )}
 
-        {(isAnalyzingDeck || isDeckAnalysisComplete) && (
+        {(isUploading || isAnalyzingDeck || isDeckAnalysisComplete) && (
           <DeckViewer 
-            originalDeckUrl={documentUrl} 
+            originalDeckUrl={documentUrl}
             isAnalyzing={isAnalyzingDeck}
+            isUploading={isUploading}
+            uploadProgress={uploadProgress}
             analysisProgress={deckAnalysisProgress}
           />
         )}

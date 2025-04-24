@@ -1,17 +1,35 @@
 
 import React from "react";
-import { FileSearch } from "lucide-react";
+import { FileSearch, Upload } from "lucide-react";
 
 interface AnalysisProgressProps {
-  progress: number;
+  isUploading: boolean;
+  uploadProgress: number;
+  isAnalyzing: boolean;
+  analysisProgress: number;
 }
 
-export const AnalysisProgress: React.FC<AnalysisProgressProps> = ({ progress }) => {
+export const AnalysisProgress: React.FC<AnalysisProgressProps> = ({ 
+  isUploading, 
+  uploadProgress, 
+  isAnalyzing,
+  analysisProgress 
+}) => {
+  const progress = isUploading ? uploadProgress : analysisProgress;
+  const status = isUploading ? "Uploading Document" : "Analysing and Creating Summary Deck with AI";
+  const description = isUploading 
+    ? "Uploading your pitch document securely..."
+    : "Our AI is analyzing your pitch deck and creating detailed and anonymous summaries.";
+
   return (
     <div className="space-y-4 mt-6 border rounded-lg p-6">
       <div className="flex items-center gap-2">
-        <FileSearch className="h-5 w-5 animate-pulse text-primary" />
-        <h3 className="text-lg font-medium">Analysing and Creating Summary Deck with AI</h3>
+        {isUploading ? (
+          <Upload className="h-5 w-5 animate-pulse text-primary" />
+        ) : (
+          <FileSearch className="h-5 w-5 animate-pulse text-primary" />
+        )}
+        <h3 className="text-lg font-medium">{status}</h3>
       </div>
       <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
         <div 
@@ -20,9 +38,9 @@ export const AnalysisProgress: React.FC<AnalysisProgressProps> = ({ progress }) 
         />
       </div>
       <p className="text-sm text-muted-foreground">
-        Our AI is analyzing your pitch deck and creating detailed and anonymous summaries.
-        This may take a few minutes.
+        {description}
       </p>
     </div>
   );
 };
+

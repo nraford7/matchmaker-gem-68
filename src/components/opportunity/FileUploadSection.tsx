@@ -1,8 +1,8 @@
+
 import React, { useRef, useEffect } from "react";
 import { FileText, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form";
-import { FileUploadProgress } from "./FileUploadProgress";
 
 interface FileUploadSectionProps {
   selectedFile: File | null;
@@ -11,8 +11,8 @@ interface FileUploadSectionProps {
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   uploadProgress: number;
   isUploading: boolean;
-  isUploaded: boolean;
-  processingProgress: number;
+  isAnalyzing: boolean;
+  analysisProgress: number;
   error?: string;
   onCancelUpload: () => void;
   onStartAnalysis: () => void;
@@ -25,8 +25,8 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
   onFileChange,
   uploadProgress,
   isUploading,
-  isUploaded,
-  processingProgress,
+  isAnalyzing,
+  analysisProgress,
   error,
   onCancelUpload,
   onStartAnalysis
@@ -34,10 +34,10 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isUploaded && !isProcessing && !hasProcessed) {
+    if (!isUploading && selectedFile && !isProcessing && !hasProcessed) {
       onStartAnalysis();
     }
-  }, [isUploaded, isProcessing, hasProcessed, onStartAnalysis]);
+  }, [isUploading, selectedFile, isProcessing, hasProcessed, onStartAnalysis]);
 
   const handleReplaceFile = () => {
     if (fileInputRef.current) {
@@ -46,45 +46,15 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
     }
   };
 
-  if (selectedFile && (isUploading || isUploaded || isProcessing)) {
+  // Show initial upload UI if no file selected or if there's an error
+  if (!selectedFile || error) {
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-primary" />
           <FormLabel htmlFor="pitchDeck" className="text-lg font-medium">Upload Pitch Document</FormLabel>
         </div>
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8">
-          <FileUploadProgress
-            fileName={selectedFile.name}
-            uploadProgress={uploadProgress}
-            isUploading={isUploading}
-            isUploaded={isUploaded}
-            isProcessing={isProcessing}
-            processingProgress={processingProgress}
-            onCancel={onCancelUpload}
-            error={error}
-          />
-          <input
-            ref={fileInputRef}
-            id="pitchDeck"
-            type="file"
-            accept=".pdf,.ppt,.pptx,.doc,.docx"
-            className="hidden"
-            onChange={onFileChange}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <FileText className="h-5 w-5 text-primary" />
-        <FormLabel htmlFor="pitchDeck" className="text-lg font-medium">Upload Pitch Document</FormLabel>
-      </div>
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-        {!selectedFile ? (
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
           <div className="flex flex-col items-center">
             <UploadCloud className="h-12 w-12 text-muted-foreground mb-3" />
             <p className="mb-3 text-muted-foreground">
@@ -102,42 +72,19 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
               onChange={onFileChange}
             />
           </div>
-        ) : (
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2 mb-4">
-              <FileText className="h-5 w-5 text-primary" />
-              <span className="font-medium">{selectedFile.name}</span>
-            </div>
-            <div className="flex gap-3">
-              <Button type="button" onClick={onStartAnalysis}>
-                Analyze with AI
-              </Button>
-              <Button type="button" variant="secondary" onClick={handleReplaceFile}>
-                Replace File
-              </Button>
-              <Button type="button" variant="outline" onClick={onCancelUpload}>
-                Cancel
-              </Button>
-            </div>
-            <input
-              ref={fileInputRef}
-              id="pitchDeck"
-              type="file"
-              accept=".pdf,.ppt,.pptx,.doc,.docx"
-              className="hidden"
-              onChange={onFileChange}
-            />
-          </div>
-        )}
-      </div>
-      <p className="text-sm text-muted-foreground text-center">
-        Supported formats: PDF, PowerPoint, Word documents
-      </p>
-      {hasProcessed && (
-        <div className="mt-2 text-sm text-green-600 text-center">
-          <span>✓ Document processed successfully. Click "Upload Opportunity" to continue.</span>
+          {error && (
+            <p className="mt-4 text-sm text-destructive">
+              {error}
+            </p>
+          )}
         </div>
-      )}
-    </div>
-  );
+        <p className="text-sm text-muted-foreground text-center">
+          Supported formats: PDF, PowerPoint, Word documents
+        </p>
+      </div>
+    );
+  }
+
+  return null;
 };
+

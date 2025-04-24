@@ -1,95 +1,78 @@
 
 import React, { useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { FileText, FileSearch, Shield } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
 import { OriginalDeckView } from "./deck-viewer/OriginalDeckView";
 import { DetailedSummary } from "./deck-viewer/DetailedSummary";
 import { AnonymousSummary } from "./deck-viewer/AnonymousSummary";
-import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
 
 interface DeckViewerProps {
   originalDeckUrl: string | null;
   isAnalyzing: boolean;
+  isUploading: boolean;
+  uploadProgress: number;
   analysisProgress: number;
 }
 
 export const DeckViewer: React.FC<DeckViewerProps> = ({
   originalDeckUrl,
   isAnalyzing,
+  isUploading,
+  uploadProgress,
   analysisProgress,
 }) => {
-  const [selectedTab, setSelectedTab] = useState("original");
-  
-  const handleDownload = (version: string) => {
-    let fileUrl = "";
-    let fileName = "";
-    
-    switch (version) {
-      case "original":
-        fileUrl = originalDeckUrl || "";
-        fileName = "original-pitch-deck.pdf";
-        break;
-      case "detailed":
-        fileUrl = originalDeckUrl || ""; // In a real app, this would be the detailed summary URL
-        fileName = "detailed-summary-deck.pdf";
-        break;
-      case "anonymous":
-        fileUrl = originalDeckUrl || ""; // In a real app, this would be the anonymous summary URL
-        fileName = "anonymous-summary-deck.pdf";
-        break;
-      default:
-        return;
-    }
-    
-    if (fileUrl) {
-      const a = document.createElement("a");
-      a.href = fileUrl;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+  const [activeTab, setActiveTab] = useState("original");
+
+  const handleDownloadOriginal = () => {
+    if (originalDeckUrl) {
+      window.open(originalDeckUrl, '_blank');
     }
   };
 
-  if (isAnalyzing) {
-    return <AnalysisProgress progress={analysisProgress} />;
+  const handleDownloadDetailed = () => {
+    // Implement detailed summary download
+    console.log("Download detailed summary");
+  };
+
+  const handleDownloadAnonymous = () => {
+    // Implement anonymous summary download
+    console.log("Download anonymous summary");
+  };
+
+  if (isUploading || isAnalyzing) {
+    return (
+      <AnalysisProgress 
+        isUploading={isUploading}
+        uploadProgress={uploadProgress}
+        isAnalyzing={isAnalyzing}
+        analysisProgress={analysisProgress}
+      />
+    );
   }
 
   return (
-    <div className="space-y-4 mt-6 border rounded-lg p-6">
-      <h3 className="text-xl font-medium mb-4">Pitch Deck Versions</h3>
-      
-      <Tabs defaultValue="original" className="w-full" value={selectedTab} onValueChange={setSelectedTab}>
-        <TabsList className="mb-4 w-full justify-start">
-          <TabsTrigger value="original" className="flex items-center gap-1">
-            <FileText className="h-4 w-4" />
-            Original Deck
-          </TabsTrigger>
-          <TabsTrigger value="detailed" className="flex items-center gap-1">
-            <FileSearch className="h-4 w-4" />
-            Detailed Summary
-          </TabsTrigger>
-          <TabsTrigger value="anonymous" className="flex items-center gap-1">
-            <Shield className="h-4 w-4" />
-            Anonymous Summary
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="original">
-          <OriginalDeckView 
-            originalDeckUrl={originalDeckUrl} 
-            onDownload={() => handleDownload("original")} 
-          />
-        </TabsContent>
-        
-        <TabsContent value="detailed">
-          <DetailedSummary onDownload={() => handleDownload("detailed")} />
-        </TabsContent>
-        
-        <TabsContent value="anonymous">
-          <AnonymousSummary onDownload={() => handleDownload("anonymous")} />
-        </TabsContent>
-      </Tabs>
-    </div>
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <TabsList className="grid w-full grid-cols-3">
+        <TabsTrigger value="original">Original Deck</TabsTrigger>
+        <TabsTrigger value="detailed">Detailed Summary</TabsTrigger>
+        <TabsTrigger value="anonymous">Anonymous Summary</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="original">
+        <OriginalDeckView 
+          originalDeckUrl={originalDeckUrl} 
+          onDownload={handleDownloadOriginal} 
+        />
+      </TabsContent>
+
+      <TabsContent value="detailed">
+        <DetailedSummary onDownload={handleDownloadDetailed} />
+      </TabsContent>
+
+      <TabsContent value="anonymous">
+        <AnonymousSummary onDownload={handleDownloadAnonymous} />
+      </TabsContent>
+    </Tabs>
   );
 };
+
