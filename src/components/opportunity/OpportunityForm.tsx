@@ -42,7 +42,6 @@ export const OpportunityForm = () => {
     processingProgress,
     error,
     handleFileChange,
-    startAnalysis,
     cancelProcess
   } = useDocumentProcessor(form);
 
@@ -53,12 +52,11 @@ export const OpportunityForm = () => {
     setDeckAnalysisProgress(100);
   };
 
-  // Start analysis simulation when document is processed
-  const startDeckAnalysis = () => {
+  // Start analysis simulation automatically when upload completes
+  if (isUploaded && !isAnalyzingDeck && !isDeckAnalysisComplete) {
     setIsAnalyzingDeck(true);
-    setDeckAnalysisProgress(0);
     simulateProgress(setDeckAnalysisProgress, onAnalysisComplete, 0, 3000);
-  };
+  }
 
   const onSubmit = async (data: OpportunityFormValues) => {
     if (!selectedFile) {
@@ -106,7 +104,7 @@ export const OpportunityForm = () => {
           processingProgress={processingProgress}
           error={error}
           onCancelUpload={cancelProcess}
-          onStartAnalysis={startDeckAnalysis}
+          onStartAnalysis={() => {}}
         />
 
         {(isAnalyzingDeck || isDeckAnalysisComplete) && (

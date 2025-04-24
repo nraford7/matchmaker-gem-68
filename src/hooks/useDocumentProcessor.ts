@@ -2,12 +2,16 @@
 import { UseFormReturn } from "react-hook-form";
 import { OpportunityFormValues } from "@/components/opportunity/types";
 import { useFileUpload } from "@/hooks/useFileUpload";
-import { useDocumentAnalysis } from "@/hooks/useDocumentAnalysis";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export const useDocumentProcessor = (
   form: UseFormReturn<OpportunityFormValues>,
 ) => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [hasProcessed, setHasProcessed] = useState(false);
+  const [processingProgress, setProcessingProgress] = useState(0);
+
   const { 
     selectedFile,
     documentUrl,
@@ -18,23 +22,12 @@ export const useDocumentProcessor = (
     handleFileChange,
     clearUpload,
   } = useFileUpload();
-  
-  const {
-    isProcessing,
-    hasProcessed,
-    processingProgress,
-    startAnalysis,
-    resetAnalysisState,
-  } = useDocumentAnalysis(form);
 
-  const onStartAnalysis = () => {
-    startAnalysis(documentUrl);
+  const resetAnalysisState = () => {
+    setIsProcessing(false);
+    setHasProcessed(false);
+    setProcessingProgress(0);
   };
-
-  // Start analysis automatically when upload completes
-  if (isUploaded && !isProcessing && !hasProcessed) {
-    onStartAnalysis();
-  }
 
   const cancelProcess = async () => {
     await clearUpload();
@@ -56,7 +49,7 @@ export const useDocumentProcessor = (
     processingProgress,
     error,
     handleFileChange,
-    startAnalysis: onStartAnalysis,
-    cancelProcess
+    cancelProcess,
+    resetAnalysisState
   };
 };
