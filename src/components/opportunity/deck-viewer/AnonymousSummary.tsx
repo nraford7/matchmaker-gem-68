@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Shield } from "lucide-react";
+import { Download, FileSearch } from "lucide-react";
 
 interface AnonymousSummaryProps {
   onDownload: () => void;
@@ -11,7 +11,7 @@ export const AnonymousSummary: React.FC<AnonymousSummaryProps> = ({ onDownload }
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h4 className="text-lg font-medium">Anonymous Summary</h4>
+        <h4 className="text-lg font-medium">Anonymous AI Summary</h4>
         <Button 
           size="sm" 
           variant="outline" 

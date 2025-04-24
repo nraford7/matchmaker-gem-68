@@ -11,7 +11,7 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({ onDownload }) 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h4 className="text-lg font-medium">Detailed Summary</h4>
+        <h4 className="text-lg font-medium">AI Summary</h4>
         <Button 
           size="sm" 
           variant="outline" 

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
@@ -54,8 +53,8 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="original">Original Deck</TabsTrigger>
-        <TabsTrigger value="detailed">Detailed Summary</TabsTrigger>
-        <TabsTrigger value="anonymous">Anonymous Summary</TabsTrigger>
+        <TabsTrigger value="detailed">AI Summary</TabsTrigger>
+        <TabsTrigger value="anonymous">Anonymous AI Summary</TabsTrigger>
       </TabsList>
 
       <TabsContent value="original">
@@ -75,4 +74,3 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
     </Tabs>
   );
 };
-
