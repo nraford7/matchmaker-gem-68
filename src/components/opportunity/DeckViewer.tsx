@@ -43,15 +43,23 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
       </TabsList>
 
       <TabsContent value="original">
-        <OriginalDeckView originalDeckUrl={originalDeckUrl} />
+        <OriginalDeckView 
+          originalDeckUrl={originalDeckUrl} 
+          onNext={() => setActiveTab("detailed")}
+        />
       </TabsContent>
 
       <TabsContent value="detailed">
-        <DetailedSummary />
+        <DetailedSummary 
+          onBack={() => setActiveTab("original")}
+          onNext={() => setActiveTab("anonymous")}
+        />
       </TabsContent>
 
       <TabsContent value="anonymous">
-        <AnonymousSummary />
+        <AnonymousSummary 
+          onBack={() => setActiveTab("detailed")}
+        />
       </TabsContent>
     </Tabs>
   );
