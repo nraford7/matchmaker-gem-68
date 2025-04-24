@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -93,19 +94,21 @@ export const OpportunityForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FileUploadSection
-          selectedFile={selectedFile}
-          isProcessing={isProcessing}
-          hasProcessed={hasProcessed}
-          onFileChange={handleFileChange}
-          uploadProgress={uploadProgress}
-          isUploading={isUploading}
-          isUploaded={isUploaded}
-          processingProgress={processingProgress}
-          error={error}
-          onCancelUpload={cancelProcess}
-          onStartAnalysis={() => {}}
-        />
+        {!isDeckAnalysisComplete && (
+          <FileUploadSection
+            selectedFile={selectedFile}
+            isProcessing={isProcessing}
+            hasProcessed={hasProcessed}
+            onFileChange={handleFileChange}
+            uploadProgress={uploadProgress}
+            isUploading={isUploading}
+            isUploaded={isUploaded}
+            processingProgress={processingProgress}
+            error={error}
+            onCancelUpload={cancelProcess}
+            onStartAnalysis={() => {}}
+          />
+        )}
 
         {(isAnalyzingDeck || isDeckAnalysisComplete) && (
           <DeckViewer 
@@ -115,7 +118,7 @@ export const OpportunityForm = () => {
           />
         )}
 
-        {hasProcessed && (
+        {isDeckAnalysisComplete && (
           <div className="flex justify-end gap-4 pt-4 border-t">
             <Button 
               type="button" 
