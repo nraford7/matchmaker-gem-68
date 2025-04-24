@@ -127,7 +127,7 @@ export const OpportunityForm = () => {
               type="submit" 
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Uploading..." : "Upload Opportunity"}
+              {isSubmitting ? "Processing..." : "Next"}
             </Button>
           </div>
         )}

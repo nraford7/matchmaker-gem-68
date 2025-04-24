@@ -1,18 +1,23 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { FileText, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Upload } from "lucide-react";
 
 interface OriginalDeckViewProps {
   originalDeckUrl: string | null;
-  onDownload: () => void;
 }
 
 export const OriginalDeckView: React.FC<OriginalDeckViewProps> = ({
   originalDeckUrl,
-  onDownload,
 }) => {
+  const handleReupload = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf,.ppt,.pptx,.doc,.docx';
+    fileInput.click();
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -21,11 +26,10 @@ export const OriginalDeckView: React.FC<OriginalDeckViewProps> = ({
           size="sm" 
           variant="outline" 
           className="flex items-center gap-1"
-          onClick={onDownload}
-          disabled={!originalDeckUrl}
+          onClick={handleReupload}
         >
-          <Download className="h-4 w-4" />
-          Download
+          <Upload className="h-4 w-4" />
+          Reupload File
         </Button>
       </div>
       

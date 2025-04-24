@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
@@ -22,22 +23,6 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState("original");
 
-  const handleDownloadOriginal = () => {
-    if (originalDeckUrl) {
-      window.open(originalDeckUrl, '_blank');
-    }
-  };
-
-  const handleDownloadDetailed = () => {
-    // Implement detailed summary download
-    console.log("Download detailed summary");
-  };
-
-  const handleDownloadAnonymous = () => {
-    // Implement anonymous summary download
-    console.log("Download anonymous summary");
-  };
-
   if (isUploading || isAnalyzing) {
     return (
       <AnalysisProgress 
@@ -58,18 +43,15 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
       </TabsList>
 
       <TabsContent value="original">
-        <OriginalDeckView 
-          originalDeckUrl={originalDeckUrl} 
-          onDownload={handleDownloadOriginal} 
-        />
+        <OriginalDeckView originalDeckUrl={originalDeckUrl} />
       </TabsContent>
 
       <TabsContent value="detailed">
-        <DetailedSummary onDownload={handleDownloadDetailed} />
+        <DetailedSummary />
       </TabsContent>
 
       <TabsContent value="anonymous">
-        <AnonymousSummary onDownload={handleDownloadAnonymous} />
+        <AnonymousSummary />
       </TabsContent>
     </Tabs>
   );

@@ -1,26 +1,11 @@
-
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Download, FileSearch } from "lucide-react";
+import { FileSearch } from "lucide-react";
 
-interface DetailedSummaryProps {
-  onDownload: () => void;
-}
-
-export const DetailedSummary: React.FC<DetailedSummaryProps> = ({ onDownload }) => {
+export const DetailedSummary: React.FC = () => {
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center gap-2">
         <h4 className="text-lg font-medium">AI Summary</h4>
-        <Button 
-          size="sm" 
-          variant="outline" 
-          className="flex items-center gap-1"
-          onClick={onDownload}
-        >
-          <Download className="h-4 w-4" />
-          Download
-        </Button>
       </div>
       
       <div className="border rounded-md p-6 bg-muted/20 h-[500px] overflow-auto">
