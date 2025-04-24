@@ -1,5 +1,4 @@
-
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { FileText, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormLabel } from "@/components/ui/form";
@@ -32,13 +31,16 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
   onCancelUpload,
   onStartAnalysis
 }) => {
-  // Create a ref to the file input
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (isUploaded && !isProcessing && !hasProcessed) {
+      onStartAnalysis();
+    }
+  }, [isUploaded, isProcessing, hasProcessed, onStartAnalysis]);
+
   const handleReplaceFile = () => {
-    // Using the ref to access the file input element directly
     if (fileInputRef.current) {
-      // Reset the value to ensure onChange triggers even if selecting the same file again
       fileInputRef.current.value = "";
       fileInputRef.current.click();
     }
@@ -60,11 +62,8 @@ export const FileUploadSection: React.FC<FileUploadSectionProps> = ({
             isProcessing={isProcessing}
             processingProgress={processingProgress}
             onCancel={onCancelUpload}
-            onStartAnalysis={onStartAnalysis}
-            onReplaceFile={handleReplaceFile}
             error={error}
           />
-          {/* Hidden file input accessible via ref */}
           <input
             ref={fileInputRef}
             id="pitchDeck"
