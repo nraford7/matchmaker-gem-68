@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,11 +53,13 @@ export const OpportunityForm = () => {
     setDeckAnalysisProgress(100);
   };
 
-  // Start analysis simulation automatically when upload completes
-  if (isUploaded && !isAnalyzingDeck && !isDeckAnalysisComplete) {
-    setIsAnalyzingDeck(true);
-    simulateProgress(setDeckAnalysisProgress, onAnalysisComplete, 0, 3000);
-  }
+  // Start analysis simulation only when upload completes and analysis hasn't started yet
+  useEffect(() => {
+    if (isUploaded && !isAnalyzingDeck && !isDeckAnalysisComplete) {
+      setIsAnalyzingDeck(true);
+      simulateProgress(setDeckAnalysisProgress, onAnalysisComplete, 0, 3000);
+    }
+  }, [isUploaded, isAnalyzingDeck, isDeckAnalysisComplete]);
 
   const onSubmit = async (data: OpportunityFormValues) => {
     if (!selectedFile) {
