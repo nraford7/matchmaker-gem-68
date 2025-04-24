@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -60,8 +59,8 @@ export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({
     return (
       <div className="space-y-4 animate-fade-in">
         <div className="flex items-center gap-2">
-          <FileText className="h-4 w-4 text-primary" />
-          <span className="font-medium">{fileName}</span>
+          <FileText className="h-4 w-4 text-green-600" />
+          <span className="font-medium text-green-600">{fileName}</span>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
