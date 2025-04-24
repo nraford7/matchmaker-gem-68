@@ -1,8 +1,7 @@
-
 import React from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Edit, Download } from "lucide-react";
+import { Edit } from "lucide-react";
 
 interface OriginalDeckViewProps {
   originalDeckUrl: string | null;
@@ -32,15 +31,7 @@ export const OriginalDeckView: React.FC<OriginalDeckViewProps> = ({
             onClick={handleReupload}
           >
             <Edit className="h-4 w-4" />
-            Edit
-          </Button>
-          <Button 
-            size="sm" 
-            variant="outline" 
-            className="flex items-center gap-1"
-          >
-            <Download className="h-4 w-4" />
-            Download PPT
+            Reupload File
           </Button>
         </div>
       </div>
