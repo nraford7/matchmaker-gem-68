@@ -31,6 +31,11 @@ export const useDocumentProcessor = (
     startAnalysis(documentUrl);
   };
 
+  // Start analysis automatically when upload completes
+  if (isUploaded && !isProcessing && !hasProcessed) {
+    onStartAnalysis();
+  }
+
   const cancelProcess = async () => {
     await clearUpload();
     resetAnalysisState();
