@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Briefcase, Upload, Save, Archive } from "lucide-react";
@@ -36,13 +35,9 @@ export const DealsTabs = ({
   const sortedUploadedDeals = sortDeals(uploadedDeals, sortOption);
   
   return (
-    <Tabs defaultValue="uploaded" className="w-full mb-12">
+    <Tabs defaultValue="active" className="w-full mb-12">
       <div className="flex justify-between items-center mb-4">
         <TabsList>
-          <TabsTrigger value="uploaded" className="flex items-center gap-1">
-            <Upload className="h-4 w-4" />
-            Your Deals
-          </TabsTrigger>
           <TabsTrigger value="active" className="flex items-center gap-1">
             <Briefcase className="h-4 w-4" />
             Active Deals
@@ -50,6 +45,10 @@ export const DealsTabs = ({
           <TabsTrigger value="saved" className="flex items-center gap-1">
             <Save className="h-4 w-4" />
             Saved Deals
+          </TabsTrigger>
+          <TabsTrigger value="uploaded" className="flex items-center gap-1">
+            <Upload className="h-4 w-4" />
+            Your Deals
           </TabsTrigger>
           <TabsTrigger value="past" className="flex items-center gap-1">
             <Archive className="h-4 w-4" />
@@ -60,15 +59,6 @@ export const DealsTabs = ({
         <SortDropdown sortOption={sortOption} setSortOption={setSortOption} />
       </div>
       
-      <TabsContent value="uploaded" className="space-y-6">
-        <TabContent 
-          deals={sortedUploadedDeals} 
-          sortOption={sortOption} 
-          emptyStateText="You haven't uploaded any deals yet"
-          emptyStateButtonText="Upload a Deal"
-        />
-      </TabsContent>
-
       <TabsContent value="active" className="space-y-6">
         <TabContent 
           deals={sortedActiveDeals} 
@@ -88,6 +78,15 @@ export const DealsTabs = ({
           emptyStateButtonText="Browse Opportunities"
         />
       </TabsContent>
+
+      <TabsContent value="uploaded" className="space-y-6">
+        <TabContent 
+          deals={sortedUploadedDeals} 
+          sortOption={sortOption} 
+          emptyStateText="You haven't uploaded any deals yet"
+          emptyStateButtonText="Upload a Deal"
+        />
+      </TabsContent>
       
       <TabsContent value="past" className="space-y-6">
         <TabContent 
@@ -99,4 +98,3 @@ export const DealsTabs = ({
     </Tabs>
   );
 };
-
