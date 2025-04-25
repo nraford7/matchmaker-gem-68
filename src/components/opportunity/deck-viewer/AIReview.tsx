@@ -18,7 +18,6 @@ export const AIReview: React.FC<AIReviewProps> = ({
 }) => {
   const {
     isAnalyzing,
-    analysisProgress,
     reviewMode,
     currentQuestionIndex,
     currentResponse,
@@ -31,8 +30,12 @@ export const AIReview: React.FC<AIReviewProps> = ({
     handleComplete,
   } = useAIReview(onComplete);
 
+  const handleCancel = () => {
+    onNext(); // Assume this moves to the next tab or closes the review
+  };
+
   if (isAnalyzing) {
-    return <AnalyzingState analysisProgress={analysisProgress} />;
+    return <AnalyzingState analysisProgress={0} />;
   }
 
   if (reviewMode === "questions") {
@@ -45,6 +48,7 @@ export const AIReview: React.FC<AIReviewProps> = ({
         onResponseChange={(value) => setCurrentResponse(value)}
         onSave={handleSaveResponse}
         onSkip={handleSkip}
+        onCancel={handleCancel}
         currentIndex={currentQuestionIndex}
         totalQuestions={unansweredQuestions.length}
       />

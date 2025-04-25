@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Save, SkipForward } from "lucide-react";
+import { Save, X } from "lucide-react";
 import type { mockQuestions } from "../hooks/useAIReview";
 
 interface QuestionsViewProps {
@@ -12,6 +12,7 @@ interface QuestionsViewProps {
   onResponseChange: (value: string) => void;
   onSave: () => void;
   onSkip: () => void;
+  onCancel: () => void;
   currentIndex: number;
   totalQuestions: number;
 }
@@ -22,6 +23,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
   onResponseChange,
   onSave,
   onSkip,
+  onCancel,
   currentIndex,
   totalQuestions,
 }) => {
@@ -67,14 +69,30 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
         />
 
         <div className="flex justify-between pt-2">
-          <Button variant="outline" onClick={onSkip} className="flex items-center gap-1">
-            <SkipForward className="h-4 w-4" />
-            Skip
+          <Button 
+            variant="outline" 
+            onClick={onCancel} 
+            className="flex items-center gap-1"
+          >
+            <X className="h-4 w-4" />
+            Cancel
           </Button>
-          <Button onClick={onSave} className="flex items-center gap-1">
-            <Save className="h-4 w-4" />
-            Save & Continue
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline"
+              onClick={onSkip} 
+              className="flex items-center gap-1"
+            >
+              Skip
+            </Button>
+            <Button 
+              onClick={onSave} 
+              className="flex items-center gap-1"
+            >
+              <Save className="h-4 w-4" />
+              Next
+            </Button>
+          </div>
         </div>
       </Card>
     </div>
