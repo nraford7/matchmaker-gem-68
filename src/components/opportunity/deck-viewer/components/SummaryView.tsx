@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, CheckCircle } from "lucide-react";
 import type { mockQuestions } from "../hooks/useAIReview";
 
 interface SummaryViewProps {

@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 import { Save, SkipForward } from "lucide-react";
 import type { mockQuestions } from "../hooks/useAIReview";
 
