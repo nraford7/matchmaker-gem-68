@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { uploadFile, deleteFile } from "@/services/fileUploadService";
@@ -31,19 +32,39 @@ export const useFileUpload = () => {
       setError(undefined);
       setDocumentUrl(null);
       
+      // Start with a small progress animation before actual upload
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          // Only automatically go up to 20% to show activity
+          if (prev < 20) return prev + 1;
+          return prev;
+        });
+      }, 100);
+      
       try {
-        const fileUrl = await uploadFile(file);
+        const fileUrl = await uploadFile(file, (progress) => {
+          // Once we start getting real progress, use that instead
+          if (progress > 20) {
+            setUploadProgress(progress);
+          }
+        });
+        
+        // Clear the interval once we get a response
+        clearInterval(progressInterval);
         
         if (!fileUrl) {
           throw new Error("Failed to upload file to storage");
         }
         
+        // Ensure we show 100% at the end
         setUploadProgress(100);
         setDocumentUrl(fileUrl);
         setIsUploading(false);
         setIsUploaded(true);
         
       } catch (error) {
+        // Clear the interval if there's an error
+        clearInterval(progressInterval);
         console.error("Error uploading document:", error);
         setError("Failed to upload document. Please check your connection and try again.");
         setIsUploading(false);

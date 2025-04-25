@@ -8,6 +8,7 @@ import { toast } from "sonner";
  */
 export const uploadFile = async (
   file: File,
+  onProgress?: (progress: number) => void,
   bucket: string = "pitch-documents"
 ): Promise<string | null> => {
   try {
@@ -28,6 +29,34 @@ export const uploadFile = async (
     const filePath = fileName;
     
     console.log(`Uploading file directly to bucket: ${bucket}`);
+
+    // Calculate file size for progress tracking
+    const totalBytes = file.size;
+    let loadedBytes = 0;
+    
+    // Create a readable stream from the file with progress reporting
+    const fileStream = new ReadableStream({
+      start(controller) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (event.target?.result instanceof ArrayBuffer) {
+            controller.enqueue(new Uint8Array(event.target.result));
+            loadedBytes += event.target.result.byteLength;
+            
+            // Report progress
+            if (onProgress) {
+              const progressPercentage = Math.round((loadedBytes / totalBytes) * 100);
+              onProgress(Math.min(progressPercentage, 99)); // Cap at 99% until fully complete
+            }
+          }
+          controller.close();
+        };
+        reader.onerror = (error) => {
+          controller.error(error);
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    });
 
     // Try upload to the specified bucket
     const { error: uploadError, data } = await supabase.storage
@@ -64,6 +93,10 @@ export const uploadFile = async (
           .getPublicUrl(`${userId}/${fileName}`);
         
         console.log("File uploaded successfully to files bucket:", publicUrlData.publicUrl);
+        
+        // Report 100% completion
+        if (onProgress) onProgress(100);
+        
         return publicUrlData.publicUrl;
       }
       
@@ -77,6 +110,10 @@ export const uploadFile = async (
       .getPublicUrl(filePath);
 
     console.log("File uploaded successfully:", publicUrlData.publicUrl);
+    
+    // Report 100% completion
+    if (onProgress) onProgress(100);
+    
     return publicUrlData.publicUrl;
   } catch (error) {
     console.error("Error in uploadFile:", error);
