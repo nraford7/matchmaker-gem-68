@@ -27,72 +27,86 @@ export const uploadFile = async (
     const fileName = `${uuidv4()}.${fileExt}`;
     const filePath = fileName;
 
-    // Track progress manually
-    let lastReportedProgress = 0;
-    
-    // Create and set up XMLHttpRequest for tracking upload progress
-    const xhr = new XMLHttpRequest();
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable && onProgress) {
-        const progressPercentage = Math.round((event.loaded / event.total) * 100);
-        if (progressPercentage > lastReportedProgress) {
-          lastReportedProgress = progressPercentage;
-          onProgress(Math.min(progressPercentage, 99)); // Cap at 99% until complete
-        }
-      }
-    };
+    // Create a FormData instance to track progress manually
+    const formData = new FormData();
+    formData.append('file', file);
 
-    // Convert file to ArrayBuffer for manual upload
-    const arrayBuffer = await file.arrayBuffer();
-    const fileData = new Uint8Array(arrayBuffer);
-
-    // Upload the file directly without streaming
-    const { error: uploadError, data } = await supabase.storage
-      .from(bucket)
-      .upload(filePath, file, {
-        cacheControl: "3600",
-        upsert: true
-      });
-
-    if (uploadError) {
-      console.error(`Error uploading to bucket ${bucket}:`, uploadError);
+    // Use XHR for tracking upload progress
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
       
-      // Try uploading to files bucket if original bucket fails
-      if (uploadError.message.includes("Bucket not found") || uploadError.message.includes("row-level security policy")) {
-        console.log("Bucket error detected, attempting to create public bucket files...");
-        
-        const { error: filesError, data: filesData } = await supabase.storage
-          .from("files")
-          .upload(`${userId}/${fileName}`, file, {
-            cacheControl: "3600",
-            upsert: true
-          });
-        
-        if (filesError) {
-          console.error("Error uploading to files bucket:", filesError);
-          toast.error("Failed to upload document");
-          return null;
+      // Setup progress tracking
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable && onProgress) {
+          const progressPercentage = Math.round((event.loaded / event.total) * 100);
+          // Don't cap at 99%, allow it to reach 100% naturally
+          onProgress(progressPercentage);
         }
-        
-        const { data: publicUrlData } = supabase.storage
-          .from("files")
-          .getPublicUrl(`${userId}/${fileName}`);
-        
-        if (onProgress) onProgress(100);
-        return publicUrlData.publicUrl;
-      }
+      };
       
-      toast.error("Failed to upload document");
-      return null;
-    }
+      // Continue with Supabase upload method, but use our tracking
+      const upload = async () => {
+        try {
+          const { error: uploadError, data } = await supabase.storage
+            .from(bucket)
+            .upload(filePath, file, {
+              cacheControl: "3600",
+              upsert: true
+            });
 
-    // Get the public URL for the uploaded file
-    const { data: publicUrlData } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(filePath);
-    
-    if (onProgress) onProgress(100);
-    return publicUrlData.publicUrl;
+          if (uploadError) {
+            console.error(`Error uploading to bucket ${bucket}:`, uploadError);
+            
+            // Try uploading to files bucket if original bucket fails
+            if (uploadError.message.includes("Bucket not found") || uploadError.message.includes("row-level security policy")) {
+              console.log("Bucket error detected, attempting to create public bucket files...");
+              
+              const { error: filesError, data: filesData } = await supabase.storage
+                .from("files")
+                .upload(`${userId}/${fileName}`, file, {
+                  cacheControl: "3600",
+                  upsert: true
+                });
+              
+              if (filesError) {
+                console.error("Error uploading to files bucket:", filesError);
+                if (onProgress) onProgress(0); // Reset progress on error
+                reject("Failed to upload document");
+                return;
+              }
+              
+              const { data: publicUrlData } = supabase.storage
+                .from("files")
+                .getPublicUrl(`${userId}/${fileName}`);
+              
+              // Ensure progress reaches 100% on success
+              if (onProgress) onProgress(100);
+              resolve(publicUrlData.publicUrl);
+              return;
+            }
+            
+            if (onProgress) onProgress(0); // Reset progress on error
+            reject("Failed to upload document");
+            return;
+          }
+
+          // Get the public URL for the uploaded file
+          const { data: publicUrlData } = supabase.storage
+            .from(bucket)
+            .getPublicUrl(filePath);
+          
+          // Ensure progress reaches 100% on success
+          if (onProgress) onProgress(100);
+          resolve(publicUrlData.publicUrl);
+        } catch (error) {
+          if (onProgress) onProgress(0); // Reset progress on error
+          reject(error);
+        }
+      };
+      
+      // Start the upload process
+      upload();
+    });
     
   } catch (error) {
     console.error("Error in uploadFile:", error);

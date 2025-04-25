@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { uploadFile, deleteFile } from "@/services/fileUploadService";
@@ -31,8 +32,10 @@ export const useFileUpload = () => {
       setError(undefined);
       setDocumentUrl(null);
       
+      let progressInterval: NodeJS.Timeout | null = null;
+      
       // Start with a small progress animation before actual upload
-      const progressInterval = setInterval(() => {
+      progressInterval = setInterval(() => {
         setUploadProgress(prev => {
           // Only automatically go up to 20% to show activity
           if (prev < 20) return prev + 1;
@@ -43,12 +46,18 @@ export const useFileUpload = () => {
       try {
         const fileUrl = await uploadFile(file, "pitch-documents", (progress) => {
           // Once we start getting real progress, use that instead
-          clearInterval(progressInterval);
+          if (progressInterval) {
+            clearInterval(progressInterval);
+            progressInterval = null;
+          }
           setUploadProgress(progress);
         });
         
-        // Clear the interval once we get a response
-        clearInterval(progressInterval);
+        // Clear the interval if it's still running
+        if (progressInterval) {
+          clearInterval(progressInterval);
+          progressInterval = null;
+        }
         
         if (!fileUrl) {
           throw new Error("Failed to upload file to storage");
@@ -56,13 +65,18 @@ export const useFileUpload = () => {
         
         // Ensure we show 100% at the end
         setUploadProgress(100);
-        setDocumentUrl(fileUrl);
-        setIsUploading(false);
-        setIsUploaded(true);
+        setTimeout(() => {
+          setDocumentUrl(fileUrl);
+          setIsUploading(false);
+          setIsUploaded(true);
+        }, 500); // Brief delay to show the 100% state before proceeding
         
       } catch (error) {
         // Clear the interval if there's an error
-        clearInterval(progressInterval);
+        if (progressInterval) {
+          clearInterval(progressInterval);
+          progressInterval = null;
+        }
         console.error("Error uploading document:", error);
         setError("Failed to upload document. Please check your connection and try again.");
         setIsUploading(false);
