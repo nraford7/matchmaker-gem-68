@@ -26,8 +26,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Use a more direct approach to avoid deep type instantiation
-    const mappedDeals: Deal[] = data.map(item => {
+    // Use a simpler approach to avoid deep type instantiation
+    const mappedDeals = data.map(item => {
       // Parse JSON fields directly if they're strings
       const strategyProfile = typeof item.strategy_profile === 'string' 
         ? JSON.parse(item.strategy_profile) 
@@ -56,7 +56,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         strategyProfile,
         psychologicalFit
       };
-    });
+    }) as Deal[];
 
     console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;
