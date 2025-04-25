@@ -24,7 +24,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       throw error;
     }
 
-    // Map the data to Deal objects without recursive type instantiation
+    // Map the data to Deal objects
     return data.map(item => ({
       id: item.id,
       name: item.name,
@@ -40,8 +40,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       createdAt: item.created_at || new Date().toISOString(),
       IRR: item.IRR,
       introducedById: item.introduced_by_id,
-      strategyProfile: item.strategy_profile || {},
-      psychologicalFit: item.psychological_fit || {}
+      strategyProfile: item.strategy_profile ? { ...item.strategy_profile } : {},
+      psychologicalFit: item.psychological_fit ? { ...item.psychological_fit } : {}
     }));
   } catch (error) {
     console.error("Error fetching uploaded deals:", error);

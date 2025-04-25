@@ -46,7 +46,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-      <TabNavigation />
+      <TabNavigation activeTab={activeTab} onChange={setActiveTab} />
 
       <TabsContent value="original">
         <OriginalDocumentView 
