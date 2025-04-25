@@ -1,18 +1,16 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Loader2, Briefcase, FilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Deal } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
-import { fetchDeals, fetchActiveDeals, fetchSavedDeals, fetchPastDeals } from "@/services/deal";
+import { fetchDeals, fetchActiveDeals, fetchSavedDeals, fetchPastDeals, fetchUploadedDeals } from "@/services/deal";
 import { 
   DealsTabs, 
   AllOpportunities, 
   PortfolioInsights 
 } from "@/components/deals";
 
-// Define the StatsSummary type to share with components
 export type StatsSummary = {
   totalCount: number;
   totalAmount: number;
@@ -51,6 +49,7 @@ const Deals = () => {
   const [activeDeals, setActiveDeals] = useState<Deal[]>([]);
   const [savedDeals, setSavedDeals] = useState<Deal[]>([]);
   const [pastDeals, setPastDeals] = useState<Deal[]>([]);
+  const [uploadedDeals, setUploadedDeals] = useState<Deal[]>([]);
   const [allDeals, setAllDeals] = useState<Deal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,21 +67,24 @@ const Deals = () => {
       try {
         console.log("Fetching deals data for user:", user.id);
         
-        const [active, saved, past, all] = await Promise.all([
+        const [active, saved, past, uploaded, all] = await Promise.all([
           fetchActiveDeals(),
           fetchSavedDeals(),
           fetchPastDeals(),
+          fetchUploadedDeals(),
           fetchDeals()
         ]);
         
         console.log("Fetched active deals:", active);
         console.log("Fetched saved deals:", saved);
         console.log("Fetched past deals:", past);
+        console.log("Fetched uploaded deals:", uploaded);
         console.log("Fetched all deals:", all);
         
         setActiveDeals(active);
         setSavedDeals(saved);
         setPastDeals(past);
+        setUploadedDeals(uploaded);
         setAllDeals(all);
         
         setActiveStats(calculateStats(active));
@@ -126,7 +128,7 @@ const Deals = () => {
             Deals Dashboard
           </h1>
           <p className="text-muted-foreground">
-            Manage your active, saved, and past investment opportunities
+            Manage your active, saved, past, and uploaded investment opportunities
           </p>
         </div>
         
@@ -149,6 +151,7 @@ const Deals = () => {
             activeDeals={activeDeals} 
             savedDeals={savedDeals}
             pastDeals={pastDeals}
+            uploadedDeals={uploadedDeals}
           />
 
           <AllOpportunities 

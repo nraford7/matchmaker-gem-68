@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Briefcase, Save, Archive } from "lucide-react";
+import { Briefcase, Save, Archive, Upload } from "lucide-react";
 import { Deal } from "@/types";
 import { SortDropdown } from "./SortDropdown";
 import { TabContent } from "./TabContent";
@@ -12,21 +12,28 @@ interface DealsTabsProps {
   activeDeals: Deal[];
   savedDeals: Deal[];
   pastDeals: Deal[];
+  uploadedDeals: Deal[];
 }
 
-export const DealsTabs = ({ activeDeals, savedDeals, pastDeals }: DealsTabsProps) => {
+export const DealsTabs = ({ 
+  activeDeals, 
+  savedDeals, 
+  pastDeals,
+  uploadedDeals 
+}: DealsTabsProps) => {
   const [sortOption, setSortOption] = useState<SortOption | null>(null);
   
-  // Add logging to track the incoming data
   useEffect(() => {
     console.log('DealsTabs - Active Deals:', activeDeals);
     console.log('DealsTabs - Saved Deals:', savedDeals);
     console.log('DealsTabs - Past Deals:', pastDeals);
-  }, [activeDeals, savedDeals, pastDeals]);
+    console.log('DealsTabs - Uploaded Deals:', uploadedDeals);
+  }, [activeDeals, savedDeals, pastDeals, uploadedDeals]);
   
   const sortedActiveDeals = sortDeals(activeDeals, sortOption);
   const sortedSavedDeals = sortDeals(savedDeals, sortOption);
   const sortedPastDeals = sortDeals(pastDeals, sortOption);
+  const sortedUploadedDeals = sortDeals(uploadedDeals, sortOption);
   
   return (
     <Tabs defaultValue="active" className="w-full mb-12">
@@ -35,6 +42,10 @@ export const DealsTabs = ({ activeDeals, savedDeals, pastDeals }: DealsTabsProps
           <TabsTrigger value="active" className="flex items-center gap-1">
             <Briefcase className="h-4 w-4" />
             Active Deals
+          </TabsTrigger>
+          <TabsTrigger value="uploaded" className="flex items-center gap-1">
+            <Upload className="h-4 w-4" />
+            Your Deals
           </TabsTrigger>
           <TabsTrigger value="saved" className="flex items-center gap-1">
             <Save className="h-4 w-4" />
@@ -56,6 +67,15 @@ export const DealsTabs = ({ activeDeals, savedDeals, pastDeals }: DealsTabsProps
           showMatchScore={true}
           emptyStateText="No active deals"
           emptyStateButtonText="Find Opportunities"
+        />
+      </TabsContent>
+
+      <TabsContent value="uploaded" className="space-y-6">
+        <TabContent 
+          deals={sortedUploadedDeals} 
+          sortOption={sortOption} 
+          emptyStateText="You haven't uploaded any deals yet"
+          emptyStateButtonText="Upload a Deal"
         />
       </TabsContent>
       
