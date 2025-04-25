@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Check } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 
 interface AnalysisChecklistProps {
   onComplete: () => void;
@@ -46,23 +46,32 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
         <p className="text-muted-foreground mb-6">
           Our AI is reviewing your pitch deck against key investment criteria...
         </p>
-        <div className="space-y-3 animate-fade-in">
+        <div className="space-y-4 animate-fade-in">
           {analysisSteps.map((step, index) => (
             <div 
               key={step}
-              className={`flex items-center gap-3 transition-all duration-300 ${
+              className={`flex items-center gap-4 transition-all duration-300 ${
                 completedSteps.includes(index) ? 'opacity-100' : 'opacity-40'
               }`}
             >
               <div className={`
-                h-5 w-5 rounded-full flex items-center justify-center border
-                ${completedSteps.includes(index) ? 'bg-crimson border-crimson' : 'border-gray-300'}
+                w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300
+                ${completedSteps.includes(index) ? 'bg-crimson text-white' : 'border border-gray-300'}
               `}>
-                {completedSteps.includes(index) && (
-                  <Check className="h-3 w-3 text-white" />
+                {completedSteps.includes(index) ? (
+                  <CircleCheck 
+                    className="h-6 w-6 animate-pulse transform scale-110 transition-transform" 
+                  />
+                ) : (
+                  <span className="text-xs text-gray-400">{index + 1}</span>
                 )}
               </div>
-              <span className="text-sm">{step}</span>
+              <span className={`
+                text-base font-medium transition-colors duration-300
+                ${completedSteps.includes(index) ? 'text-foreground' : 'text-muted-foreground'}
+              `}>
+                {step}
+              </span>
             </div>
           ))}
         </div>
