@@ -20,10 +20,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       throw new Error(error.message);
     }
     
-    // Cast the data to the Deal type
-    const dealsData = data as unknown as Deal[];
-    
-    return dealsData || [];
+    // Fix the type casting to avoid excessive depth error
+    return (data || []) as Deal[];
   } catch (error) {
     console.error("Error fetching uploaded deals:", error);
     return [];

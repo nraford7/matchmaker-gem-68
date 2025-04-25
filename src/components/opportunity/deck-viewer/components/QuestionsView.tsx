@@ -27,16 +27,6 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
 }) => {
   if (!currentQuestion) return null;
   
-  const handleNextClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent default form submission
-    onSave();
-  };
-
-  const handleSkipClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    onSkip();
-  };
-  
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -79,7 +69,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
 
       <div className="flex justify-end gap-2">
         <Button 
-          onClick={handleSkipClick}
+          onClick={() => onSkip()}
           className="flex items-center gap-2"
           type="button"
           variant="outline"
@@ -88,7 +78,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
           <SkipForward className="h-4 w-4" />
         </Button>
         <Button 
-          onClick={handleNextClick}
+          onClick={() => onSave()}
           className="flex items-center gap-2"
           type="button"
         >

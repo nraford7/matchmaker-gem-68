@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { simulateProgress } from "@/utils/progressSimulation";
 
@@ -33,9 +34,6 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
   const [reviewMode, setReviewMode] = useState<ReviewMode>("analyzing");
   const [unansweredQuestions, setUnansweredQuestions] = useState<Question[]>([]);
   
-  // Use a ref to track navigation state to prevent multiple rapid navigation attempts
-  const isNavigatingRef = useRef(false);
-
   // Initialize the analysis process
   useEffect(() => {
     if (isAnalyzing) {
@@ -65,101 +63,99 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
   }, [isAnalyzing, questions]);
 
   // Get unanswered questions or those with low confidence
-  const getUnansweredQuestions = (): Question[] => {
+  const getUnansweredQuestions = useCallback((): Question[] => {
     return questions.filter(q => !q.answered || q.confidence < 0.7);
-  };
+  }, [questions]);
 
-  // Modify the handleSaveResponse to skip questions with empty responses
-  const handleSaveResponse = () => {
-    // Prevent multiple rapid calls while navigation is happening
-    if (isNavigatingRef.current) return;
-    isNavigatingRef.current = true;
-    
+  // Fix handleSaveResponse to use useCallback and actually save the response
+  const handleSaveResponse = useCallback(() => {
     const unanswered = getUnansweredQuestions();
     
     if (!unanswered.length) {
-      isNavigatingRef.current = false;
       return;
     }
     
     const currentQuestion = unanswered[currentQuestionIndex];
     
     if (!currentQuestion) {
-      isNavigatingRef.current = false;
       return;
     }
     
-    // If response is empty, automatically skip to next question
+    // If response is empty, automatically skip
     if (currentResponse.trim() === "") {
       handleSkip();
       return;
     }
     
-    // Save the response
-    setResponses(prev => ({
-      ...prev,
-      [currentQuestion.id]: currentResponse
-    }));
-    
-    // Move to the next question or complete
-    if (currentQuestionIndex < unanswered.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setCurrentResponse("");
-      toast.success("Answer saved");
+    // Save the current response
+    setResponses(prev => {
+      const updated = {
+        ...prev,
+        [currentQuestion.id]: currentResponse
+      };
       
-      // Reset navigation flag after state updates
-      setTimeout(() => {
-        isNavigatingRef.current = false;
-      }, 100);
-    } else {
-      // Directly move to complete when all questions are answered
-      handleComplete();
-      onComplete(responses);
-      toast.success("All questions answered");
-      isNavigatingRef.current = false;
-    }
-  };
+      // Move to the next question or complete
+      if (currentQuestionIndex < unanswered.length - 1) {
+        setCurrentQuestionIndex(prev => prev + 1);
+        setCurrentResponse("");
+        toast.success("Answer saved");
+      } else {
+        // Complete when all questions are answered
+        const allResponses = { ...updated };
+        
+        // Add high-confidence extracted answers if not already present
+        questions.forEach(q => {
+          if (q.answered && q.confidence > 0.7 && !allResponses[q.id]) {
+            allResponses[q.id] = q.extractedAnswer;
+          }
+        });
+        
+        onComplete(allResponses);
+        toast.success("All questions answered");
+      }
+      
+      return updated;
+    });
+  }, [currentQuestionIndex, currentResponse, getUnansweredQuestions, onComplete, questions]);
 
-  // Skip the current question and move to the next
-  const handleSkip = () => {
-    if (isNavigatingRef.current) return;
-    isNavigatingRef.current = true;
-    
+  // Fix handleSkip to use useCallback and properly handle the navigation
+  const handleSkip = useCallback(() => {
     const unanswered = getUnansweredQuestions();
     
     if (currentQuestionIndex < unanswered.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setCurrentResponse("");
       toast.info("Question skipped");
-      
-      setTimeout(() => {
-        isNavigatingRef.current = false;
-      }, 100);
     } else {
-      handleComplete();
-      toast.info("No more questions to answer");
-      isNavigatingRef.current = false;
+      // All questions have been seen, complete the process
+      const allResponses = { ...responses };
+      
+      // Add high-confidence extracted answers
+      questions.forEach(q => {
+        if (q.answered && q.confidence > 0.7 && !allResponses[q.id]) {
+          allResponses[q.id] = q.extractedAnswer;
+        }
+      });
+      
+      onComplete(allResponses);
+      toast.info("Review completed");
     }
-  };
+  }, [currentQuestionIndex, getUnansweredQuestions, onComplete, questions, responses]);
 
-  // Modify handleComplete to remove the separate summary phase
-  const handleComplete = () => {
-    const allResponses: Record<string, string> = {};
+  // Simplified handleComplete function
+  const handleComplete = useCallback(() => {
+    const allResponses: Record<string, string> = { ...responses };
     
-    // Combine extracted answers with user responses
+    // Add any missing high-confidence answers
     questions.forEach(q => {
-      if (q.answered && q.confidence > 0.7) {
+      if (q.answered && q.confidence > 0.7 && !allResponses[q.id]) {
         allResponses[q.id] = q.extractedAnswer;
       }
     });
     
-    Object.keys(responses).forEach(id => {
-      allResponses[id] = responses[id];
-    });
-    
     onComplete(allResponses);
     toast.success("AI review completed");
-  };
+  }, [onComplete, questions, responses]);
 
   return {
     isAnalyzing,
