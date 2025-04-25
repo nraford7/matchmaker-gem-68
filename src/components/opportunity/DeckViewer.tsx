@@ -5,9 +5,8 @@ import { toast } from "sonner";
 import { TabNavigation } from "./deck-viewer/components/TabNavigation";
 import { OriginalDocumentView } from "./deck-viewer/components/OriginalDocumentView";
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
-import { DetailedSummary } from "./deck-viewer/DetailedSummary";
-import { AnonymousSummary } from "./deck-viewer/AnonymousSummary";
-import { AIReview } from "./deck-viewer/AIReview";
+import { ReviewSection } from "./deck-viewer/components/ReviewSection";
+import { SummarySection } from "./deck-viewer/components/SummarySection";
 
 interface DeckViewerProps {
   originalDeckUrl: string | null;
@@ -27,7 +26,6 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
   const [clarificationResponses, setClarificationResponses] = useState<Record<string, string>>({});
   const [savedForLater, setSavedForLater] = useState(false);
 
-  // Show upload progress while uploading
   if (isUploading) {
     return (
       <AnalysisProgress 
@@ -37,14 +35,12 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
     );
   }
 
-  // Handle review completion
   const handleReviewComplete = (responses: Record<string, string>) => {
     setClarificationResponses(responses);
     setReviewCompleted(true);
     toast.success("AI review completed successfully");
   };
 
-  // Handle save for later
   const handleSaveForLater = () => {
     setSavedForLater(true);
     toast.success("Saved for later");
@@ -68,35 +64,34 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
       </TabsContent>
 
       <TabsContent value="review">
-        <div className="space-y-4">
-          <div className="bg-card rounded-lg border shadow-sm p-6">
-            <AIReview
-              onNext={() => {
-                setActiveTab("detailed");
-                toast.info("Review complete. Viewing AI Summary.");
-              }}
-              onComplete={handleReviewComplete}
-              isCompleted={reviewCompleted}
-            />
-          </div>
-        </div>
+        <ReviewSection 
+          onNext={() => {
+            setActiveTab("detailed");
+            toast.info("Review complete. Viewing AI Summary.");
+          }}
+          onComplete={handleReviewComplete}
+          isCompleted={reviewCompleted}
+        />
       </TabsContent>
 
       <TabsContent value="detailed">
-        <DetailedSummary 
+        <SummarySection 
+          activeTab="detailed"
+          clarificationResponses={clarificationResponses}
           onBack={() => setActiveTab("review")}
           onNext={() => {
             setActiveTab("anonymous");
             toast.info("Viewing Anonymous Summary");
           }}
-          clarificationResponses={clarificationResponses}
         />
       </TabsContent>
 
       <TabsContent value="anonymous">
-        <AnonymousSummary 
-          onBack={() => setActiveTab("detailed")}
+        <SummarySection 
+          activeTab="anonymous"
           clarificationResponses={clarificationResponses}
+          onBack={() => setActiveTab("detailed")}
+          onNext={() => {}}
         />
       </TabsContent>
     </Tabs>

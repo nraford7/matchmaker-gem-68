@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,12 +50,12 @@ export const OpportunityForm = () => {
         {processingState === 'idle' && (
           <FileUploadSection
             selectedFile={selectedFile}
-            isProcessing={processingState === 'analyzing'}
-            hasProcessed={processingState === 'completed'}
+            isProcessing={false}
+            hasProcessed={analysisCompleted}
             onFileChange={handleFileChange}
             uploadProgress={uploadProgress}
-            isUploading={processingState === 'uploading'}
-            isAnalyzing={processingState === 'analyzing'}
+            isUploading={false}
+            isAnalyzing={false}
             analysisProgress={0}
             error={uploadError}
             onCancelUpload={handleCancelUpload}
@@ -64,10 +63,9 @@ export const OpportunityForm = () => {
           />
         )}
 
-        {(processingState === 'uploading' || processingState !== 'idle') && (
+        {processingState !== 'idle' && (
           <DeckViewer 
             originalDeckUrl={documentUrl}
-            isAnalyzing={processingState === 'analyzing'}
             isUploading={processingState === 'uploading'}
             uploadProgress={uploadProgress}
             onCancel={handleCancelUpload}

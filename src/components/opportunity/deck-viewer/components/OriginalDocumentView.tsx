@@ -1,6 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { BookmarkPlus, X } from "lucide-react";
+import { BookmarkPlus, X, FileSearch } from "lucide-react";
 
 interface OriginalDocumentViewProps {
   documentUrl: string | null;
