@@ -33,6 +33,7 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
   const [currentResponse, setCurrentResponse] = useState("");
   const [reviewMode, setReviewMode] = useState<ReviewMode>("analyzing");
   const [unansweredQuestions, setUnansweredQuestions] = useState<Question[]>([]);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   // Initialize the analysis process
   useEffect(() => {
@@ -69,16 +70,27 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
 
   // Save the current response and move to the next question
   const handleSaveResponse = () => {
+    // Prevent multiple rapid calls while navigation is happening
+    if (isNavigating) return;
+    setIsNavigating(true);
+    
     const unanswered = getUnansweredQuestions();
     
-    if (!unanswered.length) return;
+    if (!unanswered.length) {
+      setIsNavigating(false);
+      return;
+    }
     
     const currentQuestion = unanswered[currentQuestionIndex];
     
-    if (!currentQuestion) return;
+    if (!currentQuestion) {
+      setIsNavigating(false);
+      return;
+    }
     
     if (currentResponse.trim() === "") {
       toast.error("Please provide an answer or skip this question");
+      setIsNavigating(false);
       return;
     }
     
@@ -93,23 +105,37 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
       setCurrentQuestionIndex(prev => prev + 1);
       setCurrentResponse("");
       toast.success("Answer saved");
+      
+      // Reset navigation flag after state updates
+      setTimeout(() => {
+        setIsNavigating(false);
+      }, 50);
     } else {
       setReviewMode("summary");
       toast.success("All questions answered");
+      setIsNavigating(false);
     }
   };
 
   // Skip the current question and move to the next
   const handleSkip = () => {
+    if (isNavigating) return;
+    setIsNavigating(true);
+    
     const unanswered = getUnansweredQuestions();
     
     if (currentQuestionIndex < unanswered.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setCurrentResponse("");
       toast.info("Question skipped");
+      
+      setTimeout(() => {
+        setIsNavigating(false);
+      }, 50);
     } else {
       setReviewMode("summary");
       toast.info("No more questions to answer");
+      setIsNavigating(false);
     }
   };
 
