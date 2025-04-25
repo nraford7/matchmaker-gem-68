@@ -115,7 +115,7 @@ export const OpportunityForm = () => {
         )}
 
         {isDeckAnalysisComplete && (
-          <div className="flex justify-end gap-4 pt-4 border-t">
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 z-50 flex justify-end gap-4">
             <Button 
               type="button" 
               variant="outline" 
@@ -136,3 +136,4 @@ export const OpportunityForm = () => {
     </Form>
   );
 };
+
