@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
@@ -16,22 +15,18 @@ interface DeckViewerProps {
 
 export const DeckViewer: React.FC<DeckViewerProps> = ({
   originalDeckUrl,
-  isAnalyzing,
   isUploading,
   uploadProgress,
-  analysisProgress,
 }) => {
   const [activeTab, setActiveTab] = useState("review");
   const [reviewCompleted, setReviewCompleted] = useState(false);
   const [clarificationResponses, setClarificationResponses] = useState<Record<string, string>>({});
 
-  if (isUploading || isAnalyzing) {
+  if (isUploading) {
     return (
       <AnalysisProgress 
-        isUploading={isUploading}
+        isUploading={true}
         uploadProgress={uploadProgress}
-        isAnalyzing={isAnalyzing}
-        analysisProgress={analysisProgress}
       />
     );
   }
