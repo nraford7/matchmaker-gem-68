@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -57,19 +56,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
 
       <TabsContent value="original">
         <div className="border rounded-lg p-6 space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">Original Document</h3>
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={onCancel}>
-                <X className="h-4 w-4 mr-2" />
-                Cancel
-              </Button>
-              <Button onClick={() => setActiveTab("review")}>
-                <FileSearch className="h-4 w-4 mr-2" />
-                Analyse with AI
-              </Button>
-            </div>
-          </div>
+          <h3 className="text-lg font-medium">Original Document</h3>
           
           {originalDeckUrl && (
             <iframe
@@ -78,6 +65,17 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
               title="Original Document"
             />
           )}
+          
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={onCancel}>
+              <X className="h-4 w-4 mr-2" />
+              Cancel
+            </Button>
+            <Button onClick={() => setActiveTab("review")}>
+              <FileSearch className="h-4 w-4 mr-2" />
+              Analyse with AI
+            </Button>
+          </div>
         </div>
       </TabsContent>
 
