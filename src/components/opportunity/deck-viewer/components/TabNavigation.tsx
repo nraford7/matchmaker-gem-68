@@ -38,7 +38,7 @@ export const TabNavigation = ({ activeTab, onChange }: TabNavigationProps) => {
         onClick={() => onChange("sharing")}
       >
         <Share className="h-4 w-4" />
-        Sharing Settings
+        Share
       </TabsTrigger>
     </TabsList>
   );

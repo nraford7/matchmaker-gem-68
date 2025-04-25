@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Share, Users, UserPlus, Settings } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 interface SharingSettingsProps {
   onBack: () => void;
@@ -15,9 +15,9 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sharingOption, setSharingOption] = useState("selected");
   const [selectedInvestors, setSelectedInvestors] = useState<string[]>([]);
+  const [recommendation, setRecommendation] = useState("");
 
   const toggleInvestorSelection = (investorId: string, e: React.MouseEvent) => {
-    // Prevent default to avoid navigation
     e.preventDefault();
     
     setSelectedInvestors(prev => 
@@ -63,7 +63,7 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
   return (
     <div className="space-y-6">
       <div className="space-y-4">
-        <h4 className="text-lg font-medium">Sharing Settings</h4>
+        <h4 className="text-lg font-medium">Who would you like to share this deal with?</h4>
         
         {/* Recommended Investors */}
         <Card className="p-4">
@@ -129,6 +129,19 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
           </div>
         </Card>
 
+        {/* Recommendation */}
+        <Card className="p-4">
+          <div className="space-y-4">
+            <h5 className="font-medium">Your Recommendation</h5>
+            <Textarea
+              value={recommendation}
+              onChange={(e) => setRecommendation(e.target.value)}
+              placeholder="Share your reflections on this deal here. It will be shared with each investor you share this deal with."
+              className="min-h-[100px]"
+            />
+          </div>
+        </Card>
+
         {/* Visibility Settings */}
         <Card className="p-4">
           <div className="space-y-4">
@@ -163,11 +176,7 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
       </div>
 
       <div className="flex justify-between gap-2 pt-4 border-t">
-        <Button 
-          variant="outline"
-        >
-          Save for later
-        </Button>
+        <Button variant="outline">Save for later</Button>
         <Button>
           <Share className="h-4 w-4 mr-2" />
           Share Deal
