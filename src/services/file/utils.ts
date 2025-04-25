@@ -7,8 +7,7 @@ export const handleBucketError = async (
   originalBucket: string,
   userId: string,
   fileName: string,
-  file: File,
-  onProgress?: (event: ProgressEvent) => void
+  file: File
 ): Promise<string | null> => {
   console.error(`Error uploading to bucket ${originalBucket}:`, error);
   
@@ -19,8 +18,7 @@ export const handleBucketError = async (
       .from("files")
       .upload(`${userId}/${fileName}`, file, {
         cacheControl: "3600",
-        upsert: true,
-        onUploadProgress: onProgress
+        upsert: true
       });
     
     if (filesError) {

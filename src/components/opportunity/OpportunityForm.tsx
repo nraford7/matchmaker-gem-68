@@ -29,9 +29,8 @@ export const OpportunityForm = () => {
     selectedFile, 
     documentUrl,
     uploadProgress,
-    isUploading,
-    isUploaded,
-    error,
+    processingState,
+    uploadError,
     handleFileChange,
     cancelProcess
   } = useDocumentProcessor(form);
@@ -49,33 +48,32 @@ export const OpportunityForm = () => {
   return (
     <Form {...form}>
       <form className="space-y-6">
-        {!isUploaded && (
+        {processingState === 'idle' && (
           <FileUploadSection
             selectedFile={selectedFile}
-            isProcessing={false}
-            hasProcessed={isUploaded}
+            isProcessing={processingState === 'analyzing'}
+            hasProcessed={processingState === 'completed'}
             onFileChange={handleFileChange}
             uploadProgress={uploadProgress}
-            isUploading={isUploading}
-            isAnalyzing={false}
+            isUploading={processingState === 'uploading'}
+            isAnalyzing={processingState === 'analyzing'}
             analysisProgress={0}
-            error={error}
+            error={uploadError}
             onCancelUpload={handleCancelUpload}
             onStartAnalysis={() => {}}
           />
         )}
 
-        {(isUploading || isUploaded) && (
+        {(processingState === 'uploading' || processingState !== 'idle') && (
           <DeckViewer 
             originalDeckUrl={documentUrl}
-            isAnalyzing={false}
-            isUploading={isUploading}
+            isAnalyzing={processingState === 'analyzing'}
+            isUploading={processingState === 'uploading'}
             uploadProgress={uploadProgress}
             onCancel={handleCancelUpload}
           />
         )}
 
-        {/* We'll show form fields here after analysis if needed */}
         {analysisCompleted && (
           <div className="mt-8 text-center text-sm text-muted-foreground">
             Analysis complete. You can now create your opportunity.

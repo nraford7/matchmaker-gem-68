@@ -1,9 +1,8 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Deal } from "@/types/deal";
 import { toast } from "sonner";
 import { getCurrentUserId, validateUserAuth } from "./baseService";
-import { uploadFile } from "../fileUploadService";
+import { uploadFile } from "../file";
 
 /**
  * Upload an opportunity with document processing

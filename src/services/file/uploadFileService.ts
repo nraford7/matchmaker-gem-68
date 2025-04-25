@@ -12,7 +12,6 @@ export const uploadFile = async (
   try {
     console.log(`Attempting to upload file to bucket: ${bucket}`);
     
-    // Get the authenticated user before proceeding
     const { data: { session } } = await supabase.auth.getSession();
     const userId = session?.user?.id;
     
@@ -26,15 +25,13 @@ export const uploadFile = async (
     const fileName = `${uuidv4()}.${fileExt}`;
     const filePath = fileName;
 
-    // Create a FormData instance to track progress manually
     const formData = new FormData();
     formData.append('file', file);
 
     return new Promise((resolve, reject) => {
-      // Setup progress tracking
-      const trackProgress = (event: ProgressEvent) => {
-        if (event.lengthComputable && onProgress) {
-          const progressPercentage = Math.round((event.loaded / event.total) * 100);
+      const trackProgress = (progress: { loaded: number; total: number }) => {
+        if (onProgress) {
+          const progressPercentage = Math.round((progress.loaded / progress.total) * 100);
           onProgress(progressPercentage);
         }
       };
@@ -46,11 +43,10 @@ export const uploadFile = async (
             .upload(filePath, file, {
               cacheControl: "3600",
               upsert: true,
-              onUploadProgress: trackProgress
             });
 
           if (uploadError) {
-            const result = await handleBucketError(uploadError, bucket, userId, fileName, file, trackProgress);
+            const result = await handleBucketError(uploadError, bucket, userId, fileName, file);
             if (!result) {
               if (onProgress) onProgress(0);
               reject("Failed to upload document");
@@ -60,7 +56,6 @@ export const uploadFile = async (
             return;
           }
 
-          // Get the public URL for the uploaded file
           const { data: publicUrlData } = supabase.storage
             .from(bucket)
             .getPublicUrl(filePath);
