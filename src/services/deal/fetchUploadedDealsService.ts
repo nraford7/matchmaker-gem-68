@@ -55,7 +55,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         introducedById: item.introduced_by_id,
         strategyProfile,
         psychologicalFit
-      } as Deal; // Use 'as Deal' for type assertion instead of complex type instantiation
+      } as Deal; // Use 'as Deal' type assertion
     });
 
     console.log("Processed uploaded deals:", mappedDeals);

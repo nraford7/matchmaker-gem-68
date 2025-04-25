@@ -42,6 +42,7 @@ export const AIReview: React.FC<AIReviewProps> = ({
   const handleNextQuestion = () => {
     // Save the current response before moving to the next question
     handleSaveResponse();
+    // The navigation flow is now handled inside handleSaveResponse in useAIReview
   };
 
   // If we're still in the analysis phase
