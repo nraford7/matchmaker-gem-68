@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Save, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import type { mockQuestions } from "../hooks/useAIReview";
 
 interface QuestionsViewProps {
@@ -23,7 +23,6 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
   onResponseChange,
   onSave,
   onSkip,
-  onCancel,
   currentIndex,
   totalQuestions,
 }) => {
@@ -67,34 +66,32 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
           onChange={(e) => onResponseChange(e.target.value)}
           className="min-h-[100px]"
         />
-
-        <div className="flex justify-between pt-2">
-          <Button 
-            variant="outline" 
-            onClick={onCancel} 
-            className="flex items-center gap-1"
-          >
-            <X className="h-4 w-4" />
-            Cancel
-          </Button>
-          <div className="flex gap-2">
-            <Button 
-              variant="outline"
-              onClick={onSkip} 
-              className="flex items-center gap-1"
-            >
-              Skip
-            </Button>
-            <Button 
-              onClick={onSave} 
-              className="flex items-center gap-1"
-            >
-              <Save className="h-4 w-4" />
-              Next
-            </Button>
-          </div>
-        </div>
       </Card>
+
+      <div className="flex justify-end gap-2 pt-4 border-t">
+        <Button 
+          variant="outline"
+          onClick={onSave} 
+          className="flex items-center gap-1"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+        <Button 
+          variant="outline"
+          onClick={onSkip} 
+          className="flex items-center gap-1"
+        >
+          Skip
+        </Button>
+        <Button 
+          onClick={onSave} 
+          className="flex items-center gap-1"
+        >
+          Next
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 };

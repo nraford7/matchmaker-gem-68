@@ -11,6 +11,7 @@ import { FileText, FileSearch, X, BookmarkPlus, ArrowLeft, ArrowRight } from "lu
 interface DeckViewerProps {
   originalDeckUrl: string | null;
   isUploading: boolean;
+  isAnalyzing: boolean;
   uploadProgress: number;
   onCancel: () => void;
 }
