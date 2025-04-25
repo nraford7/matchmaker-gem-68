@@ -1,54 +1,133 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Share, Settings, Users } from "lucide-react";
+import { Share, Users, UserPlus, Settings } from "lucide-react";
+import { SearchBar } from "@/components/SearchBar";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 interface SharingSettingsProps {
   onBack: () => void;
 }
 
 export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sharingOption, setSharingOption] = useState("selected");
+
+  // Mock data - in real app, this would come from your investor service
+  const recommendedInvestors = [
+    { id: "1", name: "John Smith", company: "Venture Capital Inc.", match: "95%" },
+    { id: "2", name: "Sarah Johnson", company: "Growth Fund Partners", match: "87%" },
+    { id: "3", name: "Mike Wilson", company: "Tech Investments LLC", match: "82%" },
+  ];
+
+  const networkInvestors = [
+    { id: "4", name: "Alice Brown", company: "Innovation Capital" },
+    { id: "5", name: "David Lee", company: "Future Ventures" },
+  ];
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="space-y-4">
         <h4 className="text-lg font-medium">Sharing Settings</h4>
-      </div>
-      
-      <div className="grid gap-4">
+        
+        {/* Recommended Investors */}
         <Card className="p-4">
-          <div className="flex items-center justify-between">
+          <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <h5 className="font-medium">Visibility</h5>
-                <p className="text-sm text-muted-foreground">Control who can see this opportunity</p>
-              </div>
+              <UserPlus className="h-5 w-5 text-muted-foreground" />
+              <h5 className="font-medium">Recommended Investors</h5>
             </div>
-            <Button variant="outline" size="sm">
-              <Settings className="h-4 w-4 mr-2" />
-              Configure
-            </Button>
+            <div className="space-y-3">
+              {recommendedInvestors.map(investor => (
+                <div key={investor.id} className="flex items-center justify-between p-2 hover:bg-muted/50 rounded-lg">
+                  <div>
+                    <p className="font-medium">{investor.name}</p>
+                    <p className="text-sm text-muted-foreground">{investor.company}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-green-600">{investor.match} match</span>
+                    <Button size="sm" variant="outline">Select</Button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </Card>
 
+        {/* Other Investors */}
         <Card className="p-4">
-          <div className="flex items-center justify-between">
+          <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Share className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <h5 className="font-medium">Share with Investors</h5>
-                <p className="text-sm text-muted-foreground">Share this opportunity with specific investors</p>
-              </div>
+              <Users className="h-5 w-5 text-muted-foreground" />
+              <h5 className="font-medium">Other Investors</h5>
             </div>
-            <Button variant="outline" size="sm">Share</Button>
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search investors in your network..."
+              className="w-full"
+            />
+            <div className="space-y-3">
+              {networkInvestors.map(investor => (
+                <div key={investor.id} className="flex items-center justify-between p-2 hover:bg-muted/50 rounded-lg">
+                  <div>
+                    <p className="font-medium">{investor.name}</p>
+                    <p className="text-sm text-muted-foreground">{investor.company}</p>
+                  </div>
+                  <Button size="sm" variant="outline">Select</Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        {/* Visibility Settings */}
+        <Card className="p-4">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Settings className="h-5 w-5 text-muted-foreground" />
+              <h5 className="font-medium">Visibility Settings</h5>
+            </div>
+            <RadioGroup 
+              value={sharingOption} 
+              onValueChange={setSharingOption}
+              className="space-y-2"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="selected" id="selected" />
+                <Label htmlFor="selected">Selected investors only</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="followers" id="followers" />
+                <Label htmlFor="followers">My network (investors I follow)</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="region" id="region" />
+                <Label htmlFor="region">Investors in specific regions</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="public" id="public" />
+                <Label htmlFor="public">All investors on the platform</Label>
+              </div>
+            </RadioGroup>
           </div>
         </Card>
       </div>
 
       <div className="flex justify-between gap-2 pt-4 border-t">
-        <Button variant="outline" onClick={onBack}>Back</Button>
-        <Button>Save Changes</Button>
+        <Button 
+          variant="outline" 
+          className="bg-[#FDE1D3] hover:bg-[#FDE1D3]/90 border-none"
+        >
+          Save for later
+        </Button>
+        <Button 
+          className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white"
+        >
+          <Share className="h-4 w-4 mr-2" />
+          Share Deal
+        </Button>
       </div>
     </div>
   );
