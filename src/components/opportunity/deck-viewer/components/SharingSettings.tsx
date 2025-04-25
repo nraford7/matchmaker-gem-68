@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -14,16 +15,33 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sharingOption, setSharingOption] = useState("selected");
 
-  // Mock data - in real app, this would come from your investor service
   const recommendedInvestors = [
-    { id: "1", name: "John Smith", company: "Venture Capital Inc.", match: "95%" },
-    { id: "2", name: "Sarah Johnson", company: "Growth Fund Partners", match: "87%" },
-    { id: "3", name: "Mike Wilson", company: "Tech Investments LLC", match: "82%" },
+    { 
+      id: "1", 
+      name: "John Smith", 
+      company: "Venture Capital Inc.", 
+      match: "95%",
+      rationale: "Strong track record in tech startups with similar market positioning."
+    },
+    { 
+      id: "2", 
+      name: "Sarah Johnson", 
+      company: "Growth Fund Partners", 
+      match: "87%",
+      rationale: "Expertise in scaling enterprise SaaS companies in your sector."
+    },
+    { 
+      id: "3", 
+      name: "Mike Wilson", 
+      company: "Tech Investments LLC", 
+      match: "82%",
+      rationale: "Proven investment history in emerging technologies with high growth potential."
+    }
   ];
 
   const networkInvestors = [
     { id: "4", name: "Alice Brown", company: "Innovation Capital" },
-    { id: "5", name: "David Lee", company: "Future Ventures" },
+    { id: "5", name: "David Lee", company: "Future Ventures" }
   ];
 
   return (
@@ -44,10 +62,11 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
                   <div>
                     <p className="font-medium">{investor.name}</p>
                     <p className="text-sm text-muted-foreground">{investor.company}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{investor.rationale}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-green-600">{investor.match} match</span>
-                    <Button size="sm" variant="outline">Select</Button>
+                    <Button size="sm">Select</Button>
                   </div>
                 </div>
               ))}
@@ -75,7 +94,7 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
                     <p className="font-medium">{investor.name}</p>
                     <p className="text-sm text-muted-foreground">{investor.company}</p>
                   </div>
-                  <Button size="sm" variant="outline">Select</Button>
+                  <Button size="sm">Select</Button>
                 </div>
               ))}
             </div>
@@ -117,14 +136,11 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
 
       <div className="flex justify-between gap-2 pt-4 border-t">
         <Button 
-          variant="outline" 
-          className="bg-[#FDE1D3] hover:bg-[#FDE1D3]/90 border-none"
+          variant="outline"
         >
           Save for later
         </Button>
-        <Button 
-          className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white"
-        >
+        <Button>
           <Share className="h-4 w-4 mr-2" />
           Share Deal
         </Button>
