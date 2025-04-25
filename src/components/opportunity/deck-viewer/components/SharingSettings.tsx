@@ -12,9 +12,10 @@ import { shareDealWithInvestor } from "@/services/investor/recommendations/creat
 
 interface SharingSettingsProps {
   onBack: () => void;
+  dealId: string;
 }
 
-export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
+export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack, dealId }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [sharingOption, setSharingOption] = useState("selected");
@@ -89,7 +90,6 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
       <div className="space-y-4">
         <h4 className="text-lg font-medium">Who would you like to share this deal with?</h4>
         
-        {/* Recommended Investors */}
         <Card className="p-4">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -120,7 +120,6 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
           </div>
         </Card>
 
-        {/* Other Investors */}
         <Card className="p-4">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -153,7 +152,6 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
           </div>
         </Card>
 
-        {/* Recommendation */}
         <Card className="p-4">
           <div className="space-y-4">
             <h5 className="font-medium">Your Recommendation</h5>
@@ -166,7 +164,6 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
           </div>
         </Card>
 
-        {/* Visibility Settings */}
         <Card className="p-4">
           <div className="space-y-4">
             <div className="flex items-center gap-2">

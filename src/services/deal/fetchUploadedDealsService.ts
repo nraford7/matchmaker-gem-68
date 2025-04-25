@@ -21,8 +21,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       throw new Error(error.message);
     }
     
-    // Map database columns to our Deal type properties
-    return (data || []).map(item => ({
+    // Map database columns to our Deal type properties with explicit typing
+    return (data || []).map((item: any) => ({
       id: item.id,
       name: item.name,
       description: item.description || "",
