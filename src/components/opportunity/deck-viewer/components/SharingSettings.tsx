@@ -160,11 +160,7 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="followers" id="followers" />
-                <Label htmlFor="followers">My network (investors I follow)</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="region" id="region" />
-                <Label htmlFor="region">Investors in specific regions</Label>
+                <Label htmlFor="followers">My network (investors who follow me)</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="public" id="public" />
