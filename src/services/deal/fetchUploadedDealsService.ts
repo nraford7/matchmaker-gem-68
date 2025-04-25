@@ -4,7 +4,7 @@ import { Deal } from "@/types";
 import { toast } from "sonner";
 import { getCurrentUserId } from "./baseService";
 
-// Separate interface for database response to avoid circular type references
+// Simple interface for database records to avoid circular references
 interface DealDatabaseRecord {
   id: string;
   name: string;
@@ -45,11 +45,11 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Map the data to Deal objects safely
+    // Map the data to Deal objects, converting snake_case to camelCase
     const mappedDeals: Deal[] = [];
     
     if (Array.isArray(data)) {
-      data.forEach((item: DealDatabaseRecord) => {
+      data.forEach((item: any) => {
         mappedDeals.push({
           id: item.id,
           name: item.name,
