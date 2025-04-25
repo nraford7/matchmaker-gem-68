@@ -1,29 +1,21 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Edit, Download, ArrowLeft } from "lucide-react";
-
 interface DetailedSummaryProps {
   onBack: () => void;
   onNext: () => void;
   clarificationResponses?: Record<string, string>;
 }
-
 export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
   onBack,
   onNext,
   clarificationResponses = {}
 }) => {
   console.log("Using clarification responses for summary:", clarificationResponses);
-
-  return (
-    <div className="space-y-4">
+  return <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h4 className="text-lg font-medium">AI Summary</h4>
-        <Button 
-          size="sm" 
-          variant="outline" 
-          className="flex items-center gap-1"
-        >
+        <Button size="sm" variant="outline" className="flex items-center gap-1">
           <Download className="h-4 w-4" />
           Download PPT
         </Button>
@@ -34,9 +26,7 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
           <div>
             <h5 className="text-lg font-semibold mb-2">Executive Summary</h5>
             <p className="text-sm text-muted-foreground">
-              {Object.keys(clarificationResponses).length > 0 
-                ? "Enhanced AI-generated summary incorporating your clarifications."
-                : "AI-generated detailed summary of the pitch deck, highlighting key business metrics, market analysis, team composition, and financial projections."}
+              {Object.keys(clarificationResponses).length > 0 ? "Enhanced AI-generated summary incorporating your clarifications." : "AI-generated detailed summary of the pitch deck, highlighting key business metrics, market analysis, team composition, and financial projections."}
             </p>
           </div>
           
@@ -76,32 +66,15 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
             </p>
           </div>
           
-          {clarificationResponses.q6 && (
-            <div className="space-y-2">
+          {clarificationResponses.q6 && <div className="space-y-2">
               <h5 className="text-md font-semibold">Use of Funds</h5>
               <p className="text-sm text-muted-foreground">
                 {clarificationResponses.q6}
               </p>
-            </div>
-          )}
+            </div>}
         </div>
       </div>
       
-      <div className="flex justify-between gap-2 pt-4 border-t">
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => {}}>
-            <Edit className="h-4 w-4 mr-1" />
-            Edit Summary
-          </Button>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={onBack}>
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Back
-          </Button>
-          <Button onClick={onNext}>Next</Button>
-        </div>
-      </div>
-    </div>
-  );
+      
+    </div>;
 };
