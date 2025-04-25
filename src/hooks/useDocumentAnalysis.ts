@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { toast } from "sonner";
 import { triggerMakeAutomation } from "@/services/file";
 import { UseFormReturn } from "react-hook-form";
 import { MAKE_WEBHOOK_URL, OpportunityFormValues } from "@/components/opportunity/types";
 
-// Type for document analysis results
 interface AnalysisResult {
   name?: string;
   description?: string;
@@ -23,7 +21,6 @@ export const useDocumentAnalysis = (
   const [processingProgress, setProcessingProgress] = useState(0);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
   
-  // Track progress incrementally to give visual feedback
   const updateProgress = (targetProgress: number, duration: number = 2000) => {
     const startTime = Date.now();
     const startProgress = processingProgress;
@@ -53,7 +50,6 @@ export const useDocumentAnalysis = (
     setProcessingProgress(0);
     setAnalysisError(null);
     
-    // Start progress animation
     const stopProgress = updateProgress(80);
     
     try {
@@ -62,15 +58,11 @@ export const useDocumentAnalysis = (
       setProcessingProgress(100);
       
       if (!extractedData) {
-        toast.error("Failed to extract data from document", {
-          description: "Please fill out the form manually"
-        });
         setAnalysisError("Failed to extract data from document");
         setIsProcessing(false);
         return;
       }
       
-      // Update form with extracted data
       form.reset({
         name: extractedData.name || "",
         description: extractedData.description || "",
@@ -81,10 +73,6 @@ export const useDocumentAnalysis = (
         stakeholders: extractedData.stakeholders || [],
       });
       
-      toast.success("Document processed successfully", {
-        description: "We've analyzed your document and filled out the form."
-      });
-      
       setHasProcessed(true);
       setIsProcessing(false);
       
@@ -93,9 +81,6 @@ export const useDocumentAnalysis = (
       stopProgress();
       setProcessingProgress(0);
       setAnalysisError("Failed to process document");
-      toast.error("Failed to process document", {
-        description: "Please fill out the form manually"
-      });
       setIsProcessing(false);
     }
   };

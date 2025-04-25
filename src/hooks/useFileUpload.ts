@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { toast } from "sonner";
+// Removed toast import
 import { uploadFile, deleteFile } from "@/services/file";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -18,7 +19,6 @@ export const useFileUpload = () => {
     
     const file = files[0];
     
-    // Clean up previous file if exists
     if (documentUrl) {
       try {
         await deleteFile(documentUrl);
@@ -27,7 +27,6 @@ export const useFileUpload = () => {
       }
     }
     
-    // Reset states
     setSelectedFile(file);
     setIsUploading(true);
     setUploadProgress(0);
@@ -35,7 +34,6 @@ export const useFileUpload = () => {
     setDocumentUrl(null);
     
     try {
-      // Upload file with progress tracking
       const fileUrl = await uploadFile(file, "pitch-documents", (progress) => {
         setUploadProgress(progress);
       });
@@ -44,23 +42,20 @@ export const useFileUpload = () => {
         throw new Error("Failed to upload file to storage");
       }
       
-      // Mark as complete
       setUploadProgress(100);
       setTimeout(() => {
         setDocumentUrl(fileUrl);
         setIsUploading(false);
         setIsUploaded(true);
-        toast.success("Document uploaded successfully");
-      }, 500); // Brief delay to show 100% state
+        // Removed success toast
+      }, 500);
       
     } catch (error) {
       console.error("Error uploading document:", error);
       setError("Failed to upload document. Please check your connection and try again.");
       setIsUploading(false);
       setUploadProgress(0);
-      toast.error("Failed to upload document", {
-        description: "There might be an issue with storage permissions"
-      });
+      // Removed error toast
     }
   };
 
@@ -79,7 +74,6 @@ export const useFileUpload = () => {
       }
     }
     
-    // Reset all states
     setSelectedFile(null);
     setDocumentUrl(null);
     setUploadProgress(0);
@@ -87,7 +81,7 @@ export const useFileUpload = () => {
     setIsUploaded(false);
     setError(undefined);
     
-    toast.info("Upload cleared");
+    // Removed info toast
   };
 
   return {

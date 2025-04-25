@@ -1,33 +1,25 @@
 
-import { toast } from "sonner";
+import { MAKE_AUTOMATION_WEBHOOK_TOKEN } from "@/config/constants";
 
-export const triggerMakeAutomation = async (
-  documentUrl: string,
-  makeWebhookUrl: string
-): Promise<any | null> => {
+export const triggerMakeAutomation = async (documentUrl: string, webhookUrl: string) => {
   try {
-    const response = await fetch(makeWebhookUrl, {
-      method: "POST",
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${MAKE_AUTOMATION_WEBHOOK_TOKEN}`
       },
-      body: JSON.stringify({
-        documentUrl,
-        timestamp: new Date().toISOString(),
-      }),
+      body: JSON.stringify({ documentUrl })
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    } else {
-      console.error("Make.com webhook error:", response.statusText);
-      toast.error("Failed to process document");
-      return null;
+    if (!response.ok) {
+      throw new Error('Webhook request failed');
     }
+
+    return await response.json();
   } catch (error) {
-    console.error("Error triggering Make.com automation:", error);
-    toast.error("Failed to process document");
+    console.error("Make.com webhook error:", error);
+    // Removed toast
     return null;
   }
 };
