@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
@@ -27,58 +26,39 @@ export const uploadFile = async (
     const fileExt = file.name.split(".").pop();
     const fileName = `${uuidv4()}.${fileExt}`;
     const filePath = fileName;
-    
-    console.log(`Uploading file directly to bucket: ${bucket}`);
 
-    // Calculate file size for progress tracking
-    const totalBytes = file.size;
-    let loadedBytes = 0;
-    
-    // Create a readable stream from the file with progress reporting
-    const fileStream = new ReadableStream({
-      start(controller) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          if (event.target?.result instanceof ArrayBuffer) {
-            controller.enqueue(new Uint8Array(event.target.result));
-            loadedBytes += event.target.result.byteLength;
-            
-            // Report progress
-            if (onProgress) {
-              const progressPercentage = Math.round((loadedBytes / totalBytes) * 100);
-              onProgress(Math.min(progressPercentage, 99)); // Cap at 99% until fully complete
-            }
-          }
-          controller.close();
-        };
-        reader.onerror = (error) => {
-          controller.error(error);
-        };
-        reader.readAsArrayBuffer(file);
-      }
-    });
-
-    // Try upload to the specified bucket
+    // Upload the file directly without streaming
     const { error: uploadError, data } = await supabase.storage
       .from(bucket)
       .upload(filePath, file, {
         cacheControl: "3600",
         upsert: true,
+        onUploadProgress: (progress) => {
+          if (onProgress) {
+            const progressPercentage = Math.round((progress.loaded / progress.total) * 100);
+            onProgress(Math.min(progressPercentage, 99));
+          }
+        },
       });
 
     if (uploadError) {
       console.error(`Error uploading to bucket ${bucket}:`, uploadError);
       
-      // Create a new bucket if it doesn't exist
+      // Try uploading to files bucket if original bucket fails
       if (uploadError.message.includes("Bucket not found") || uploadError.message.includes("row-level security policy")) {
         console.log("Bucket error detected, attempting to create public bucket files...");
         
-        // Try uploading to a "files" bucket instead
         const { error: filesError, data: filesData } = await supabase.storage
           .from("files")
           .upload(`${userId}/${fileName}`, file, {
             cacheControl: "3600",
             upsert: true,
+            onUploadProgress: (progress) => {
+              if (onProgress) {
+                const progressPercentage = Math.round((progress.loaded / progress.total) * 100);
+                onProgress(Math.min(progressPercentage, 99));
+              }
+            },
           });
         
         if (filesError) {
@@ -87,16 +67,11 @@ export const uploadFile = async (
           return null;
         }
         
-        // Get the public URL for the uploaded file
         const { data: publicUrlData } = supabase.storage
           .from("files")
           .getPublicUrl(`${userId}/${fileName}`);
         
-        console.log("File uploaded successfully to files bucket:", publicUrlData.publicUrl);
-        
-        // Report 100% completion
         if (onProgress) onProgress(100);
-        
         return publicUrlData.publicUrl;
       }
       
@@ -108,13 +83,10 @@ export const uploadFile = async (
     const { data: publicUrlData } = supabase.storage
       .from(bucket)
       .getPublicUrl(filePath);
-
-    console.log("File uploaded successfully:", publicUrlData.publicUrl);
     
-    // Report 100% completion
     if (onProgress) onProgress(100);
-    
     return publicUrlData.publicUrl;
+    
   } catch (error) {
     console.error("Error in uploadFile:", error);
     toast.error("Failed to upload document");

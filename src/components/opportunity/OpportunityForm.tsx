@@ -58,10 +58,10 @@ export const OpportunityForm = () => {
             isAnalyzing={false}
             isUploading={isUploading}
             uploadProgress={uploadProgress}
+            onCancel={cancelProcess}
           />
         )}
       </form>
     </Form>
   );
 };
-
