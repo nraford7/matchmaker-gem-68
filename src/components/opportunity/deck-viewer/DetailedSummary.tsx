@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Edit, Download, ArrowLeft } from "lucide-react";
@@ -14,35 +13,23 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
   onNext,
   clarificationResponses = {}
 }) => {
-  // Here we would use the clarificationResponses to enhance the summary
-  // For now we'll just log them and use static content
   console.log("Using clarification responses for summary:", clarificationResponses);
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h4 className="text-lg font-medium">AI Summary</h4>
-        <div className="flex gap-2">
-          <Button 
-            size="sm" 
-            variant="outline" 
-            className="flex items-center gap-1"
-          >
-            <Edit className="h-4 w-4" />
-            Edit
-          </Button>
-          <Button 
-            size="sm" 
-            variant="outline" 
-            className="flex items-center gap-1"
-          >
-            <Download className="h-4 w-4" />
-            Download PPT
-          </Button>
-        </div>
+        <Button 
+          size="sm" 
+          variant="outline" 
+          className="flex items-center gap-1"
+        >
+          <Download className="h-4 w-4" />
+          Download PPT
+        </Button>
       </div>
       
-      <div className="border rounded-md p-6 bg-muted/20 h-[500px] overflow-auto">
+      <div className="border rounded-md p-6 bg-muted/20 h-[450px] overflow-auto">
         <div className="space-y-6">
           <div>
             <h5 className="text-lg font-semibold mb-2">Executive Summary</h5>
@@ -100,12 +87,20 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
         </div>
       </div>
       
-      <div className="flex justify-end gap-2 pt-4 border-t">
-        <Button variant="outline" onClick={onBack}>
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Back
-        </Button>
-        <Button onClick={onNext}>Next</Button>
+      <div className="flex justify-between gap-2 pt-4 border-t">
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => {}}>
+            <Edit className="h-4 w-4 mr-1" />
+            Edit Summary
+          </Button>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            Back
+          </Button>
+          <Button onClick={onNext}>Next</Button>
+        </div>
       </div>
     </div>
   );
