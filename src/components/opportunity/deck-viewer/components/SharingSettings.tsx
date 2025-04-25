@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Share, Users, UserPlus, Settings } from "lucide-react";
@@ -6,12 +7,15 @@ import { SearchBar } from "@/components/SearchBar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { shareDealWithInvestor } from "@/services/investor/recommendations/createRecommendation";
 
 interface SharingSettingsProps {
   onBack: () => void;
 }
 
 export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [sharingOption, setSharingOption] = useState("selected");
   const [selectedInvestors, setSelectedInvestors] = useState<string[]>([]);
@@ -59,6 +63,26 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
     { id: "4", name: "Alice Brown", company: "Innovation Capital" },
     { id: "5", name: "David Lee", company: "Future Ventures" }
   ];
+
+  const handleShareDeal = async () => {
+    if (selectedInvestors.length === 0 && sharingOption === "selected") {
+      toast.error("Please select at least one investor");
+      return;
+    }
+
+    try {
+      const sharePromises = selectedInvestors.map(investorId => 
+        shareDealWithInvestor(dealId, investorId, recommendation)
+      );
+
+      await Promise.all(sharePromises);
+      toast.success("Deal shared successfully");
+      navigate("/deals", { state: { activeTab: "active" } });
+    } catch (error) {
+      console.error("Error sharing deal:", error);
+      toast.error("Failed to share deal");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -172,8 +196,8 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
       </div>
 
       <div className="flex justify-between gap-2 pt-4 border-t">
-        <Button variant="outline">Save for later</Button>
-        <Button>
+        <Button variant="outline" onClick={onBack}>Save for later</Button>
+        <Button onClick={handleShareDeal}>
           <Share className="h-4 w-4 mr-2" />
           Share Deal
         </Button>

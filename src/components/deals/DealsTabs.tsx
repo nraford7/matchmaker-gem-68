@@ -6,6 +6,7 @@ import { SortDropdown } from "./SortDropdown";
 import { TabContent } from "./TabContent";
 import { SortOption } from "./types";
 import { sortDeals } from "./utils/SortUtils";
+import { useLocation } from "react-router-dom";
 
 interface DealsTabsProps {
   activeDeals: Deal[];
@@ -20,7 +21,15 @@ export const DealsTabs = ({
   pastDeals,
   uploadedDeals 
 }: DealsTabsProps) => {
+  const location = useLocation();
   const [sortOption, setSortOption] = useState<SortOption | null>(null);
+  const [activeTab, setActiveTab] = useState("active");
+  
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+    }
+  }, [location.state]);
   
   useEffect(() => {
     console.log('DealsTabs - Active Deals:', activeDeals);
@@ -35,7 +44,7 @@ export const DealsTabs = ({
   const sortedUploadedDeals = sortDeals(uploadedDeals, sortOption);
   
   return (
-    <Tabs defaultValue="active" className="w-full mb-12">
+    <Tabs value={activeTab} defaultValue="active" onValueChange={setActiveTab} className="w-full mb-12">
       <div className="flex justify-between items-center mb-4">
         <TabsList>
           <TabsTrigger value="active" className="flex items-center gap-1">
