@@ -1,7 +1,5 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { toast } from "sonner";
 import { TabNavigation } from "./deck-viewer/components/TabNavigation";
 import { OriginalDocumentView } from "./deck-viewer/components/OriginalDocumentView";
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
@@ -38,12 +36,10 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
   const handleReviewComplete = (responses: Record<string, string>) => {
     setClarificationResponses(responses);
     setReviewCompleted(true);
-    toast.success("AI review completed successfully");
   };
 
   const handleSaveForLater = () => {
     setSavedForLater(true);
-    toast.success("Saved for later");
   };
 
   return (
@@ -54,10 +50,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
         <OriginalDocumentView 
           documentUrl={originalDeckUrl}
           onCancel={onCancel}
-          onAnalyze={() => {
-            setActiveTab("review");
-            toast.info("Starting AI analysis");
-          }}
+          onAnalyze={() => setActiveTab("review")}
           savedForLater={savedForLater}
           onSaveForLater={handleSaveForLater}
         />
@@ -65,10 +58,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
 
       <TabsContent value="review">
         <ReviewSection 
-          onNext={() => {
-            setActiveTab("detailed");
-            toast.info("Review complete. Viewing AI Summary.");
-          }}
+          onNext={() => setActiveTab("detailed")}
           onComplete={handleReviewComplete}
           isCompleted={reviewCompleted}
         />
@@ -79,10 +69,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
           activeTab="detailed"
           clarificationResponses={clarificationResponses}
           onBack={() => setActiveTab("review")}
-          onNext={() => {
-            setActiveTab("anonymous");
-            toast.info("Viewing Anonymous Summary");
-          }}
+          onNext={() => setActiveTab("anonymous")}
         />
       </TabsContent>
 

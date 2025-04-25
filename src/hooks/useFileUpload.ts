@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-// Removed toast import
 import { uploadFile, deleteFile } from "@/services/file";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -32,11 +30,26 @@ export const useFileUpload = () => {
     setUploadProgress(0);
     setError(undefined);
     setDocumentUrl(null);
+
+    let progressInterval: NodeJS.Timeout;
     
     try {
+      // Start smooth progress animation
+      let simulatedProgress = 0;
+      progressInterval = setInterval(() => {
+        simulatedProgress += 2;
+        if (simulatedProgress < 90) {
+          setUploadProgress(simulatedProgress);
+        }
+      }, 100);
+
       const fileUrl = await uploadFile(file, "pitch-documents", (progress) => {
-        setUploadProgress(progress);
+        if (progress > 90) {
+          setUploadProgress(progress);
+        }
       });
+      
+      clearInterval(progressInterval);
       
       if (!fileUrl) {
         throw new Error("Failed to upload file to storage");
@@ -47,15 +60,14 @@ export const useFileUpload = () => {
         setDocumentUrl(fileUrl);
         setIsUploading(false);
         setIsUploaded(true);
-        // Removed success toast
       }, 500);
       
     } catch (error) {
+      clearInterval(progressInterval);
       console.error("Error uploading document:", error);
       setError("Failed to upload document. Please check your connection and try again.");
       setIsUploading(false);
       setUploadProgress(0);
-      // Removed error toast
     }
   };
 
@@ -80,8 +92,6 @@ export const useFileUpload = () => {
     setIsUploading(false);
     setIsUploaded(false);
     setError(undefined);
-    
-    // Removed info toast
   };
 
   return {
