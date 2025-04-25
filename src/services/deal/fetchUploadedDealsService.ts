@@ -4,24 +4,6 @@ import { Deal } from "@/types";
 import { toast } from "sonner";
 import { getCurrentUserId } from "./baseService";
 
-// Simple interface for database records to avoid circular references
-interface DealDatabaseRecord {
-  id: string;
-  name: string;
-  description: string | null;
-  deal_type: string | null;
-  check_size_required: number | null;
-  sector_tags: string[] | null;
-  geographies: string[] | null;
-  location: string | null;
-  stage: string | null;
-  time_horizon: string | null;
-  esg_tags: string[] | null;
-  created_at: string | null;
-  IRR: number | null;
-  introduced_by_id: string | null;
-}
-
 export const fetchUploadedDeals = async (): Promise<Deal[]> => {
   try {
     const userId = await getCurrentUserId();
@@ -50,6 +32,19 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     
     if (Array.isArray(data)) {
       data.forEach((item: any) => {
+        // Handle JSON fields properly
+        const strategyProfile = item.strategy_profile ? 
+          (typeof item.strategy_profile === 'string' 
+            ? JSON.parse(item.strategy_profile) 
+            : item.strategy_profile) 
+          : {};
+        
+        const psychologicalFit = item.psychological_fit ? 
+          (typeof item.psychological_fit === 'string' 
+            ? JSON.parse(item.psychological_fit) 
+            : item.psychological_fit) 
+          : {};
+        
         mappedDeals.push({
           id: item.id,
           name: item.name,
@@ -64,7 +59,10 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
           esgTags: item.esg_tags || [],
           createdAt: item.created_at || new Date().toISOString(),
           IRR: item.IRR,
-          introducedById: item.introduced_by_id
+          introducedById: item.introduced_by_id,
+          // Properly handle JSON fields
+          strategyProfile: strategyProfile,
+          psychologicalFit: psychologicalFit,
         });
       });
     }

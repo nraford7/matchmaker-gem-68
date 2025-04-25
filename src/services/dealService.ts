@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Deal } from "@/types/deal";
 import { uploadFile, deleteFile } from "./file";
@@ -13,32 +12,47 @@ export const getDeals = async (): Promise<Deal[]> => {
       throw new Error("Failed to fetch deals");
     }
 
-    // Convert snake_case to camelCase
-    return data.map(item => ({
-      id: item.id,
-      name: item.name,
-      description: item.description,
-      dealType: item.deal_type,
-      checkSizeRequired: item.check_size_required,
-      sectorTags: item.sector_tags,
-      geographies: item.geographies,
-      location: item.location,
-      stage: item.stage,
-      timeHorizon: item.time_horizon,
-      esgTags: item.esg_tags,
-      involvementModel: item.involvement_model,
-      exitStyle: item.exit_style,
-      dueDiligenceLevel: item.due_diligence_level,
-      decisionConvictionRequired: item.decision_conviction_required,
-      investorSpeedRequired: item.investor_speed_required,
-      strategyProfile: item.strategy_profile,
-      psychologicalFit: item.psychological_fit,
-      createdAt: item.created_at,
-      updatedAt: item.updated_at,
-      IRR: item.IRR,
-      recommendation: item.recommendation,
-      introducedById: item.introduced_by_id
-    }));
+    // Convert snake_case to camelCase and handle JSON fields properly
+    return data.map(item => {
+      // Handle JSON fields correctly
+      const strategyProfile = item.strategy_profile ? 
+        (typeof item.strategy_profile === 'string' 
+          ? JSON.parse(item.strategy_profile) 
+          : item.strategy_profile) 
+        : {};
+      
+      const psychologicalFit = item.psychological_fit ? 
+        (typeof item.psychological_fit === 'string' 
+          ? JSON.parse(item.psychological_fit) 
+          : item.psychological_fit) 
+        : {};
+      
+      return {
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        dealType: item.deal_type,
+        checkSizeRequired: item.check_size_required,
+        sectorTags: item.sector_tags,
+        geographies: item.geographies,
+        location: item.location,
+        stage: item.stage,
+        timeHorizon: item.time_horizon,
+        esgTags: item.esg_tags,
+        involvementModel: item.involvement_model,
+        exitStyle: item.exit_style,
+        dueDiligenceLevel: item.due_diligence_level,
+        decisionConvictionRequired: item.decision_conviction_required,
+        investorSpeedRequired: item.investor_speed_required,
+        strategyProfile: strategyProfile,
+        psychologicalFit: psychologicalFit,
+        createdAt: item.created_at,
+        updatedAt: item.updated_at,
+        IRR: item.IRR,
+        recommendation: item.recommendation,
+        introducedById: item.introduced_by_id
+      };
+    });
   } catch (error: any) {
     console.error("Error in getDeals:", error.message);
     throw error;
@@ -60,6 +74,19 @@ export const getDealById = async (id: string): Promise<Deal | null> => {
 
     if (!data) return null;
 
+    // Handle JSON fields correctly
+    const strategyProfile = data.strategy_profile ? 
+      (typeof data.strategy_profile === 'string' 
+        ? JSON.parse(data.strategy_profile) 
+        : data.strategy_profile) 
+      : {};
+    
+    const psychologicalFit = data.psychological_fit ? 
+      (typeof data.psychological_fit === 'string' 
+        ? JSON.parse(data.psychological_fit) 
+        : data.psychological_fit) 
+      : {};
+
     // Convert snake_case to camelCase
     return {
       id: data.id,
@@ -78,8 +105,8 @@ export const getDealById = async (id: string): Promise<Deal | null> => {
       dueDiligenceLevel: data.due_diligence_level,
       decisionConvictionRequired: data.decision_conviction_required,
       investorSpeedRequired: data.investor_speed_required,
-      strategyProfile: data.strategy_profile,
-      psychologicalFit: data.psychological_fit,
+      strategyProfile: strategyProfile,
+      psychologicalFit: psychologicalFit,
       createdAt: data.created_at,
       updatedAt: data.updated_at,
       IRR: data.IRR,
@@ -150,7 +177,7 @@ export const createDeal = async (deal: Omit<Deal, "id" | "createdAt">): Promise<
       decisionConvictionRequired: data.decision_conviction_required,
       investorSpeedRequired: data.investor_speed_required,
       strategyProfile: data.strategy_profile,
-      psychologicalFit: data.psychological_profile,
+      psychologicalFit: data.psychological_fit,
       createdAt: data.created_at,
       updatedAt: data.updated_at,
       IRR: data.IRR,
