@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { QuestionsView } from "./components/QuestionsView";
 import { SummaryView } from "./components/SummaryView";
@@ -36,13 +35,11 @@ export const AIReview: React.FC<AIReviewProps> = ({
     onNext();
   };
 
-  // Handle completion of analysis animation
   const handleAnalysisComplete = () => {
     setShowAnalysis(false);
     handleComplete();
   };
 
-  // Show the analysis checklist first
   if (showAnalysis) {
     return <AnalysisChecklist onComplete={handleAnalysisComplete} />;
   }

@@ -32,9 +32,9 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
         currentIndex++;
       } else {
         clearInterval(interval);
-        setTimeout(onComplete, 1000); // Increased delay to allow animation to complete
+        setTimeout(onComplete, 500); // Reduced delay to 500ms
       }
-    }, 400); // Check off a new item every 400ms
+    }, 200); // Sped up the check interval from 400ms to 200ms
     
     return () => clearInterval(interval);
   }, [onComplete]);
@@ -50,26 +50,26 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
           {analysisSteps.map((step, index) => (
             <div 
               key={step}
-              className={`flex items-center gap-4 transition-all duration-300 ${
+              className={`flex items-center gap-4 transition-all duration-150 ${
                 completedSteps.includes(index) ? 'opacity-100' : 'opacity-60'
               }`}
             >
               <div className={`
-                w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500
+                w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150
                 ${completedSteps.includes(index) 
                   ? 'bg-crimson text-white scale-110' 
                   : 'border border-gray-300 bg-gray-50'}
               `}>
                 {completedSteps.includes(index) ? (
                   <CircleCheck 
-                    className="h-6 w-6 animate-pulse" 
+                    className="h-6 w-6 animate-[pulse_0.3s_ease-in-out]" 
                   />
                 ) : (
                   <span className="text-sm font-medium text-gray-500">{index + 1}</span>
                 )}
               </div>
               <span className={`
-                text-base font-medium transition-colors duration-300
+                text-base font-medium transition-colors duration-150
                 ${completedSteps.includes(index) ? 'text-foreground' : 'text-muted-foreground'}
               `}>
                 {step}
@@ -81,3 +81,4 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
     </div>
   );
 };
+
