@@ -2,7 +2,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Deal } from "@/types";
 import { getCurrentUserId } from "./baseService";
-import { parseJsonField } from "./utils/jsonUtils";
 
 export const fetchUploadedDeals = async (): Promise<Deal[]> => {
   try {
@@ -27,8 +26,18 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Explicitly type the mapped deals and use a simpler approach to avoid deep instantiation
+    // Use a more direct approach to avoid deep type instantiation
     const mappedDeals: Deal[] = data.map(item => {
+      // Parse JSON fields directly if they're strings
+      const strategyProfile = typeof item.strategy_profile === 'string' 
+        ? JSON.parse(item.strategy_profile) 
+        : (item.strategy_profile || {});
+        
+      const psychologicalFit = typeof item.psychological_fit === 'string'
+        ? JSON.parse(item.psychological_fit)
+        : (item.psychological_fit || {});
+
+      // Return Deal object with parsed fields
       return {
         id: item.id,
         name: item.name,
@@ -44,10 +53,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         createdAt: item.created_at || new Date().toISOString(),
         IRR: item.IRR,
         introducedById: item.introduced_by_id,
-        strategyProfile: typeof item.strategy_profile === 'string' ? 
-          JSON.parse(item.strategy_profile) : item.strategy_profile || {},
-        psychologicalFit: typeof item.psychological_fit === 'string' ? 
-          JSON.parse(item.psychological_fit) : item.psychological_fit || {}
+        strategyProfile,
+        psychologicalFit
       };
     });
 
