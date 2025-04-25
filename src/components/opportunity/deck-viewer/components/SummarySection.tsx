@@ -1,7 +1,6 @@
 
 import React from "react";
 import { DetailedSummary } from "../DetailedSummary";
-import { AnonymousSummary } from "../AnonymousSummary";
 
 interface SummarySectionProps {
   activeTab: string;
@@ -21,15 +20,6 @@ export const SummarySection: React.FC<SummarySectionProps> = ({
       <DetailedSummary 
         onBack={onBack}
         onNext={onNext}
-        clarificationResponses={clarificationResponses}
-      />
-    );
-  }
-  
-  if (activeTab === "anonymous") {
-    return (
-      <AnonymousSummary 
-        onBack={onBack}
         clarificationResponses={clarificationResponses}
       />
     );
