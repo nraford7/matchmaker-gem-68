@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -5,12 +6,10 @@ import { Edit } from "lucide-react";
 
 interface OriginalDeckViewProps {
   originalDeckUrl: string | null;
-  onNext: () => void;
 }
 
 export const OriginalDeckView: React.FC<OriginalDeckViewProps> = ({
   originalDeckUrl,
-  onNext,
 }) => {
   const handleReupload = () => {
     const fileInput = document.createElement('input');
@@ -51,10 +50,6 @@ export const OriginalDeckView: React.FC<OriginalDeckViewProps> = ({
           </AlertDescription>
         </Alert>
       )}
-
-      <div className="flex justify-end">
-        <Button onClick={onNext}>Next</Button>
-      </div>
     </div>
   );
 };

@@ -43,10 +43,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
       </TabsList>
 
       <TabsContent value="original">
-        <OriginalDeckView 
-          originalDeckUrl={originalDeckUrl} 
-          onNext={() => setActiveTab("detailed")}
-        />
+        <OriginalDeckView originalDeckUrl={originalDeckUrl} />
       </TabsContent>
 
       <TabsContent value="detailed">
