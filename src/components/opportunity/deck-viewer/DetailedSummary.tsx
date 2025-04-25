@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Edit, Download, ArrowRight } from "lucide-react";
+import { Edit, Download, ArrowRight, Upload } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 interface DetailedSummaryProps {
   onBack: () => void;
@@ -13,18 +14,18 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
   onNext,
   clarificationResponses = {}
 }) => {
-  console.log("Using clarification responses for summary:", clarificationResponses);
-  
+  const handleReplacePPT = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      console.log("Replacing PPT with:", file);
+      // Handle file upload logic here
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h4 className="text-lg font-medium">AI Summary</h4>
-          <Button size="sm" variant="outline" className="flex items-center gap-1">
-            <Edit className="h-4 w-4" />
-            Edit Summary
-          </Button>
-        </div>
+        <h4 className="text-lg font-medium">AI Summary</h4>
         
         <div className="border rounded-md p-6 bg-muted/20">
           <div className="space-y-6">
@@ -92,7 +93,25 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
             </div>
           </div>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
+          <div className="relative">
+            <Input
+              type="file"
+              accept=".ppt,.pptx"
+              onChange={handleReplacePPT}
+              className="hidden"
+              id="ppt-upload"
+            />
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="flex items-center gap-1"
+              onClick={() => document.getElementById('ppt-upload')?.click()}
+            >
+              <Upload className="h-4 w-4" />
+              Replace PPT
+            </Button>
+          </div>
           <Button size="sm" variant="outline" className="flex items-center gap-1">
             <Download className="h-4 w-4" />
             Download PPT

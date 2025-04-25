@@ -26,7 +26,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Map the data to Deal objects
+    // Map the data to Deal objects without recursive type instantiation
     const mappedDeals: Deal[] = data.map(item => ({
       id: item.id,
       name: item.name,
@@ -50,7 +50,6 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         : (item.psychological_fit || {})
     }));
 
-    console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;
   } catch (error) {
     console.error("Error fetching uploaded deals:", error);
