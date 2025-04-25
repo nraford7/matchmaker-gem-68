@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,9 +8,11 @@ import { DeckViewer } from "@/components/opportunity/DeckViewer";
 import { opportunitySchema, OpportunityFormValues } from "@/components/opportunity/types";
 import { useDocumentProcessor } from "@/hooks/useDocumentProcessor";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid"; // Add UUID for temporary deal IDs
 
 export const OpportunityForm = () => {
   const [analysisCompleted, setAnalysisCompleted] = useState(false);
+  const [tempDealId] = useState(() => uuidv4()); // Generate temporary deal ID
   
   const form = useForm<OpportunityFormValues>({
     resolver: zodResolver(opportunitySchema),
@@ -39,11 +42,6 @@ export const OpportunityForm = () => {
     toast.info("Process cancelled");
   };
 
-  const handleAnalysisComplete = () => {
-    setAnalysisCompleted(true);
-    toast.success("Analysis completed");
-  };
-
   return (
     <Form {...form}>
       <form className="space-y-6">
@@ -69,6 +67,7 @@ export const OpportunityForm = () => {
             isUploading={processingState === 'uploading'}
             uploadProgress={uploadProgress}
             onCancel={handleCancelUpload}
+            dealId={tempDealId} // Pass the temporary deal ID
           />
         )}
 

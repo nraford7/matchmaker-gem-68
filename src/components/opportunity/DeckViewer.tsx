@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { TabNavigation } from "./deck-viewer/components/TabNavigation";
@@ -5,13 +6,14 @@ import { OriginalDocumentView } from "./deck-viewer/components/OriginalDocumentV
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
 import { ReviewSection } from "./deck-viewer/components/ReviewSection";
 import { SummarySection } from "./deck-viewer/components/SummarySection";
-import { SharingSettings } from "./deck-viewer/components/SharingSettings";
+import { SharingSettings } from "./deck-viewer/components/sharing/SharingSettings";
 
 interface DeckViewerProps {
   originalDeckUrl: string | null;
   isUploading: boolean;
   uploadProgress: number;
   onCancel: () => void;
+  dealId?: string; // Make optional to maintain backward compatibility
 }
 
 export const DeckViewer: React.FC<DeckViewerProps> = ({
@@ -19,6 +21,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
   isUploading,
   uploadProgress,
   onCancel,
+  dealId,
 }) => {
   const [activeTab, setActiveTab] = useState("original");
   const [reviewCompleted, setReviewCompleted] = useState(false);
@@ -77,7 +80,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
       <TabsContent value="sharing">
         <SharingSettings 
           onBack={() => setActiveTab("detailed")}
-          dealId="temp-deal-id"
+          dealId={dealId || "temp-deal-id"} // Provide fallback for backward compatibility
         />
       </TabsContent>
     </Tabs>
