@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { simulateProgress } from "@/utils/progressSimulation";
@@ -93,7 +94,6 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
     });
     
     onComplete(allResponses);
-    toast.success("AI review completed");
   };
 
   return {
@@ -101,6 +101,7 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
     analysisProgress,
     reviewMode,
     currentQuestionIndex,
+    setCurrentQuestionIndex, // Expose this setter function
     currentResponse,
     responses,
     questions,

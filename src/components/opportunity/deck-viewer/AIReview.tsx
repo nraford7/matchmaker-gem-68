@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { QuestionsView } from "./components/QuestionsView";
 import { SummaryView } from "./components/SummaryView";
@@ -26,6 +27,7 @@ export const AIReview: React.FC<AIReviewProps> = ({
     questions,
     getUnansweredQuestions,
     setCurrentResponse,
+    setCurrentQuestionIndex, // Added this line to destructure from the hook
     handleSaveResponse,
     handleSkip,
     handleComplete,

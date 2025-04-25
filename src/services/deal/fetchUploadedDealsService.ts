@@ -14,7 +14,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Fetching uploaded deals for user:", userId);
 
-    // Fix the type instantiation by adding explicit type for the query result
+    // Fix the type issue by explicitly typing the result
     const { data, error } = await supabase
       .from("deals")
       .select("*")
