@@ -14,18 +14,25 @@ export const getDeals = async (): Promise<Deal[]> => {
 
     // Convert snake_case to camelCase and handle JSON fields properly
     return data.map(item => {
-      // Handle JSON fields correctly
-      const strategyProfile = item.strategy_profile ? 
-        (typeof item.strategy_profile === 'string' 
-          ? JSON.parse(item.strategy_profile) 
-          : item.strategy_profile) 
-        : {};
+      // Handle JSON fields safely
+      let strategyProfile = {};
+      let psychologicalFit = {};
       
-      const psychologicalFit = item.psychological_fit ? 
-        (typeof item.psychological_fit === 'string' 
-          ? JSON.parse(item.psychological_fit) 
-          : item.psychological_fit) 
-        : {};
+      try {
+        if (item.strategy_profile) {
+          strategyProfile = typeof item.strategy_profile === 'string' 
+            ? JSON.parse(item.strategy_profile) 
+            : item.strategy_profile;
+        }
+        
+        if (item.psychological_fit) {
+          psychologicalFit = typeof item.psychological_fit === 'string'
+            ? JSON.parse(item.psychological_fit)
+            : item.psychological_fit;
+        }
+      } catch (e) {
+        console.error("Error parsing JSON fields:", e);
+      }
       
       return {
         id: item.id,
@@ -44,8 +51,8 @@ export const getDeals = async (): Promise<Deal[]> => {
         dueDiligenceLevel: item.due_diligence_level,
         decisionConvictionRequired: item.decision_conviction_required,
         investorSpeedRequired: item.investor_speed_required,
-        strategyProfile: strategyProfile,
-        psychologicalFit: psychologicalFit,
+        strategyProfile,
+        psychologicalFit,
         createdAt: item.created_at,
         updatedAt: item.updated_at,
         IRR: item.IRR,
@@ -74,18 +81,25 @@ export const getDealById = async (id: string): Promise<Deal | null> => {
 
     if (!data) return null;
 
-    // Handle JSON fields correctly
-    const strategyProfile = data.strategy_profile ? 
-      (typeof data.strategy_profile === 'string' 
-        ? JSON.parse(data.strategy_profile) 
-        : data.strategy_profile) 
-      : {};
+    // Handle JSON fields safely
+    let strategyProfile = {};
+    let psychologicalFit = {};
     
-    const psychologicalFit = data.psychological_fit ? 
-      (typeof data.psychological_fit === 'string' 
-        ? JSON.parse(data.psychological_fit) 
-        : data.psychological_fit) 
-      : {};
+    try {
+      if (data.strategy_profile) {
+        strategyProfile = typeof data.strategy_profile === 'string' 
+          ? JSON.parse(data.strategy_profile) 
+          : data.strategy_profile;
+      }
+      
+      if (data.psychological_fit) {
+        psychologicalFit = typeof data.psychological_fit === 'string'
+          ? JSON.parse(data.psychological_fit)
+          : data.psychological_fit;
+      }
+    } catch (e) {
+      console.error("Error parsing JSON fields:", e);
+    }
 
     // Convert snake_case to camelCase
     return {
@@ -105,8 +119,8 @@ export const getDealById = async (id: string): Promise<Deal | null> => {
       dueDiligenceLevel: data.due_diligence_level,
       decisionConvictionRequired: data.decision_conviction_required,
       investorSpeedRequired: data.investor_speed_required,
-      strategyProfile: strategyProfile,
-      psychologicalFit: psychologicalFit,
+      strategyProfile,
+      psychologicalFit,
       createdAt: data.created_at,
       updatedAt: data.updated_at,
       IRR: data.IRR,
@@ -230,6 +244,26 @@ export const updateDeal = async (id: string, updates: Partial<Deal>): Promise<De
 
     if (!data) return null;
 
+    // Handle JSON fields safely
+    let strategyProfile = {};
+    let psychologicalFit = {};
+    
+    try {
+      if (data.strategy_profile) {
+        strategyProfile = typeof data.strategy_profile === 'string' 
+          ? JSON.parse(data.strategy_profile) 
+          : data.strategy_profile;
+      }
+      
+      if (data.psychological_fit) {
+        psychologicalFit = typeof data.psychological_fit === 'string'
+          ? JSON.parse(data.psychological_fit)
+          : data.psychological_fit;
+      }
+    } catch (e) {
+      console.error("Error parsing JSON fields:", e);
+    }
+
     // Convert snake_case back to camelCase
     return {
       id: data.id,
@@ -248,8 +282,8 @@ export const updateDeal = async (id: string, updates: Partial<Deal>): Promise<De
       dueDiligenceLevel: data.due_diligence_level,
       decisionConvictionRequired: data.decision_conviction_required,
       investorSpeedRequired: data.investor_speed_required,
-      strategyProfile: data.strategy_profile,
-      psychologicalFit: data.psychological_fit,
+      strategyProfile,
+      psychologicalFit,
       createdAt: data.created_at,
       updatedAt: data.updated_at,
       IRR: data.IRR,

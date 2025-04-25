@@ -32,18 +32,18 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     
     if (Array.isArray(data)) {
       data.forEach((item: any) => {
-        // Handle JSON fields properly
-        const strategyProfile = item.strategy_profile ? 
-          (typeof item.strategy_profile === 'string' 
-            ? JSON.parse(item.strategy_profile) 
-            : item.strategy_profile) 
-          : {};
+        // Safely handle JSON fields without causing circular type issues
+        const strategyProfileData = item.strategy_profile || {};
+        const psychFitData = item.psychological_fit || {};
         
-        const psychologicalFit = item.psychological_fit ? 
-          (typeof item.psychological_fit === 'string' 
-            ? JSON.parse(item.psychological_fit) 
-            : item.psychological_fit) 
-          : {};
+        // Make sure we handle the JSON fields correctly regardless of if they're strings or objects
+        const strategyProfile = typeof strategyProfileData === 'string' 
+          ? JSON.parse(strategyProfileData) 
+          : strategyProfileData;
+        
+        const psychologicalFit = typeof psychFitData === 'string' 
+          ? JSON.parse(psychFitData) 
+          : psychFitData;
         
         mappedDeals.push({
           id: item.id,
@@ -60,9 +60,9 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
           createdAt: item.created_at || new Date().toISOString(),
           IRR: item.IRR,
           introducedById: item.introduced_by_id,
-          // Properly handle JSON fields
-          strategyProfile: strategyProfile,
-          psychologicalFit: psychologicalFit,
+          // Assign processed JSON fields
+          strategyProfile,
+          psychologicalFit,
         });
       });
     }

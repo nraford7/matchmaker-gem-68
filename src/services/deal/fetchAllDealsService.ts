@@ -16,18 +16,25 @@ export const fetchAllDeals = async (): Promise<Deal[]> => {
     }
 
     return data.map((item) => {
-      // Handle JSON fields properly
-      const strategyProfile = item.strategy_profile ? 
-        (typeof item.strategy_profile === 'string' 
-          ? JSON.parse(item.strategy_profile) 
-          : item.strategy_profile) 
-        : {};
+      // Handle JSON fields safely
+      let strategyProfile = {};
+      let psychologicalFit = {};
       
-      const psychologicalFit = item.psychological_fit ? 
-        (typeof item.psychological_fit === 'string' 
-          ? JSON.parse(item.psychological_fit) 
-          : item.psychological_fit) 
-        : {};
+      try {
+        if (item.strategy_profile) {
+          strategyProfile = typeof item.strategy_profile === 'string' 
+            ? JSON.parse(item.strategy_profile) 
+            : item.strategy_profile;
+        }
+        
+        if (item.psychological_fit) {
+          psychologicalFit = typeof item.psychological_fit === 'string'
+            ? JSON.parse(item.psychological_fit)
+            : item.psychological_fit;
+        }
+      } catch (e) {
+        console.error("Error parsing JSON fields:", e);
+      }
 
       return {
         id: item.id,
@@ -46,8 +53,8 @@ export const fetchAllDeals = async (): Promise<Deal[]> => {
         dueDiligenceLevel: item.due_diligence_level,
         decisionConvictionRequired: item.decision_conviction_required,
         investorSpeedRequired: item.investor_speed_required,
-        strategyProfile: strategyProfile,
-        psychologicalFit: psychologicalFit,
+        strategyProfile,
+        psychologicalFit,
         createdAt: item.created_at,
         IRR: item.IRR,
         introducedById: item.introduced_by_id
