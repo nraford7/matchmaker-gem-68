@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { toast } from "sonner";
 import { uploadFile, deleteFile } from "@/services/fileUploadService";
@@ -42,11 +41,10 @@ export const useFileUpload = () => {
       }, 100);
       
       try {
-        const fileUrl = await uploadFile(file, (progress) => {
+        const fileUrl = await uploadFile(file, "pitch-documents", (progress) => {
           // Once we start getting real progress, use that instead
-          if (progress > 20) {
-            setUploadProgress(progress);
-          }
+          clearInterval(progressInterval);
+          setUploadProgress(progress);
         });
         
         // Clear the interval once we get a response

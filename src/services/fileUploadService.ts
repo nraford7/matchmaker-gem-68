@@ -7,8 +7,8 @@ import { toast } from "sonner";
  */
 export const uploadFile = async (
   file: File,
-  onProgress?: (progress: number) => void,
-  bucket: string = "pitch-documents"
+  bucket: string = "pitch-documents",
+  onProgress?: (progress: number) => void
 ): Promise<string | null> => {
   try {
     console.log(`Attempting to upload file to bucket: ${bucket}`);
@@ -27,18 +27,31 @@ export const uploadFile = async (
     const fileName = `${uuidv4()}.${fileExt}`;
     const filePath = fileName;
 
+    // Track progress manually
+    let lastReportedProgress = 0;
+    
+    // Create and set up XMLHttpRequest for tracking upload progress
+    const xhr = new XMLHttpRequest();
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && onProgress) {
+        const progressPercentage = Math.round((event.loaded / event.total) * 100);
+        if (progressPercentage > lastReportedProgress) {
+          lastReportedProgress = progressPercentage;
+          onProgress(Math.min(progressPercentage, 99)); // Cap at 99% until complete
+        }
+      }
+    };
+
+    // Convert file to ArrayBuffer for manual upload
+    const arrayBuffer = await file.arrayBuffer();
+    const fileData = new Uint8Array(arrayBuffer);
+
     // Upload the file directly without streaming
     const { error: uploadError, data } = await supabase.storage
       .from(bucket)
       .upload(filePath, file, {
         cacheControl: "3600",
-        upsert: true,
-        onUploadProgress: (progress) => {
-          if (onProgress) {
-            const progressPercentage = Math.round((progress.loaded / progress.total) * 100);
-            onProgress(Math.min(progressPercentage, 99));
-          }
-        },
+        upsert: true
       });
 
     if (uploadError) {
@@ -52,13 +65,7 @@ export const uploadFile = async (
           .from("files")
           .upload(`${userId}/${fileName}`, file, {
             cacheControl: "3600",
-            upsert: true,
-            onUploadProgress: (progress) => {
-              if (onProgress) {
-                const progressPercentage = Math.round((progress.loaded / progress.total) * 100);
-                onProgress(Math.min(progressPercentage, 99));
-              }
-            },
+            upsert: true
           });
         
         if (filesError) {
