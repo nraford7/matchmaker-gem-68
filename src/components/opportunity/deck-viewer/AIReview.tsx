@@ -40,7 +40,6 @@ export const AIReview: React.FC<AIReviewProps> = ({
 
   // Handle the next button click in questions view
   const handleNextQuestion = () => {
-    // Save the current response before moving to the next question
     handleSaveResponse();
   };
 
@@ -54,9 +53,18 @@ export const AIReview: React.FC<AIReviewProps> = ({
     const unansweredQuestions = getUnansweredQuestions();
     
     if (unansweredQuestions.length === 0) {
-      // If there are no unanswered questions, move to summary
-      setTimeout(() => handleComplete(), 0);
-      return null;
+      // Move to summary view immediately when no questions remain
+      handleComplete();
+      return (
+        <SummaryView
+          questions={questions}
+          responses={responses}
+          onComplete={() => {
+            handleComplete();
+            onNext();
+          }}
+        />
+      );
     }
 
     return (
@@ -79,7 +87,6 @@ export const AIReview: React.FC<AIReviewProps> = ({
       responses={responses}
       onComplete={() => {
         handleComplete();
-        // Only move to the next tab when explicitly requested from the summary view
         onNext();
       }}
     />

@@ -26,37 +26,29 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Map the data to Deal objects with explicit type casting
-    const mappedDeals = data.map(item => {
-      // Parse JSON fields safely
-      const strategyProfile = typeof item.strategy_profile === 'string' 
+    // Map the data to Deal objects
+    const mappedDeals: Deal[] = data.map(item => ({
+      id: item.id,
+      name: item.name,
+      description: item.description || "",
+      dealType: item.deal_type || "",
+      checkSizeRequired: item.check_size_required,
+      sectorTags: item.sector_tags || [],
+      geographies: item.geographies || [],
+      location: item.location || "",
+      stage: item.stage || "",
+      timeHorizon: item.time_horizon || "",
+      esgTags: item.esg_tags || [],
+      createdAt: item.created_at || new Date().toISOString(),
+      IRR: item.IRR,
+      introducedById: item.introduced_by_id,
+      strategyProfile: typeof item.strategy_profile === 'string' 
         ? JSON.parse(item.strategy_profile) 
-        : (item.strategy_profile || {});
-        
-      const psychologicalFit = typeof item.psychological_fit === 'string'
+        : (item.strategy_profile || {}),
+      psychologicalFit: typeof item.psychological_fit === 'string'
         ? JSON.parse(item.psychological_fit)
-        : (item.psychological_fit || {});
-
-      // Return a properly structured Deal object
-      return {
-        id: item.id,
-        name: item.name,
-        description: item.description || "",
-        dealType: item.deal_type || "",
-        checkSizeRequired: item.check_size_required,
-        sectorTags: item.sector_tags || [],
-        geographies: item.geographies || [],
-        location: item.location || "",
-        stage: item.stage || "",
-        timeHorizon: item.time_horizon || "",
-        esgTags: item.esg_tags || [],
-        createdAt: item.created_at || new Date().toISOString(),
-        IRR: item.IRR,
-        introducedById: item.introduced_by_id,
-        strategyProfile,
-        psychologicalFit
-      };
-    });
+        : (item.psychological_fit || {})
+    }));
 
     console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;
