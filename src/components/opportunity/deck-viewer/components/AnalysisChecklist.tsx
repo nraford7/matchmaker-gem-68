@@ -21,26 +21,37 @@ const analysisSteps = [
 ];
 
 export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete }) => {
-  const [completedSteps, setCompletedSteps] = useState<number[]>([0, 1]); // Start with first two steps complete
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   
   useEffect(() => {
-    // Start from step 2 since 0 and 1 are already complete
-    let stepCounter = 2;
+    let stepCounter = 0;
     
-    const interval = setInterval(() => {
+    // Function to add steps sequentially
+    const addStepWithAnimation = () => {
       if (stepCounter < analysisSteps.length) {
         setCompletedSteps(prev => [...prev, stepCounter]);
         stepCounter++;
-      } else {
-        // All steps are completed
+        return true;
+      }
+      return false;
+    };
+    
+    // Immediately check the first step
+    addStepWithAnimation();
+    
+    // Schedule the rest of the steps with a consistent timing
+    const interval = setInterval(() => {
+      const hasMoreSteps = addStepWithAnimation();
+      
+      if (!hasMoreSteps) {
         clearInterval(interval);
         
-        // Short delay before transition
+        // Small delay before transition
         setTimeout(() => {
           onComplete();
-        }, 500);
+        }, 300);
       }
-    }, 300); // Keep timing consistent for smooth transitions
+    }, 250); // Slightly faster timing for a more natural flow
     
     return () => clearInterval(interval);
   }, [onComplete]);
