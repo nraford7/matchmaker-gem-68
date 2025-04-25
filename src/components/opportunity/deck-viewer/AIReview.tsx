@@ -1,8 +1,8 @@
 
 import React from "react";
-import { AnalyzingState } from "./components/AnalyzingState";
 import { QuestionsView } from "./components/QuestionsView";
 import { SummaryView } from "./components/SummaryView";
+import { AnalysisChecklist } from "./components/AnalysisChecklist";
 import { useAIReview } from "./hooks/useAIReview";
 
 interface AIReviewProps {
@@ -31,11 +31,11 @@ export const AIReview: React.FC<AIReviewProps> = ({
   } = useAIReview(onComplete);
 
   const handleCancel = () => {
-    onNext(); // Assume this moves to the next tab or closes the review
+    onNext();
   };
 
   if (isAnalyzing) {
-    return <AnalyzingState analysisProgress={0} />;
+    return <AnalysisChecklist onComplete={() => handleComplete()} />;
   }
 
   if (reviewMode === "questions") {
