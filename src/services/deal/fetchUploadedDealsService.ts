@@ -1,7 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { Deal } from "@/types";
-import { toast } from "sonner";
 import { getCurrentUserId } from "./baseService";
 import { parseJsonField } from "./utils/jsonUtils";
 
@@ -28,8 +27,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Map the data to Deal objects
-    const mappedDeals = data.map((item) => ({
+    // Map the data to Deal objects with explicit type
+    const mappedDeals: Deal[] = data.map((item: any) => ({
       id: item.id,
       name: item.name,
       description: item.description || "",
@@ -52,7 +51,6 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     return mappedDeals;
   } catch (error) {
     console.error("Error fetching uploaded deals:", error);
-    toast.error("Failed to load uploaded deals");
     return [];
   }
 };
