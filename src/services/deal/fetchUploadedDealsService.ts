@@ -1,48 +1,29 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { Deal } from "@/types";
-import { getCurrentUserId } from "./baseService";
+import { Deal } from "@/types/deal";
 
 export const fetchUploadedDeals = async (): Promise<Deal[]> => {
   try {
-    const userId = await getCurrentUserId();
-    if (!userId) {
-      console.log("No authenticated user found");
+    // Fetch deals uploaded by the current user
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !userData?.user) {
       throw new Error("User not authenticated");
     }
-
-    console.log("Fetching uploaded deals for user:", userId);
-
+    
     const { data, error } = await supabase
       .from("deals")
       .select("*")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
-
+      .eq("uploaderId", userData.user.id);
+      
     if (error) {
-      console.error("Supabase error fetching uploaded deals:", error);
-      throw error;
+      throw new Error(error.message);
     }
-
-    // Map the data to Deal objects
-    return data.map(item => ({
-      id: item.id,
-      name: item.name,
-      description: item.description || "",
-      dealType: item.deal_type || "",
-      checkSizeRequired: item.check_size_required,
-      sectorTags: item.sector_tags || [],
-      geographies: item.geographies || [],
-      location: item.location || "",
-      stage: item.stage || "",
-      timeHorizon: item.time_horizon || "",
-      esgTags: item.esg_tags || [],
-      createdAt: item.created_at || new Date().toISOString(),
-      IRR: item.IRR,
-      introducedById: item.introduced_by_id,
-      strategyProfile: item.strategy_profile || {},
-      psychologicalFit: item.psychological_fit || {}
-    }));
+    
+    // Cast the data to the Deal type
+    const dealsData = data as unknown as Deal[];
+    
+    return dealsData || [];
   } catch (error) {
     console.error("Error fetching uploaded deals:", error);
     return [];

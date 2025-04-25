@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { QuestionsView } from "./components/QuestionsView";
 import { useAIReview } from "./hooks/useAIReview";
+import { AnalysisChecklist } from "./components/AnalysisChecklist";
 
 interface AIReviewProps {
   onNext: () => void;
