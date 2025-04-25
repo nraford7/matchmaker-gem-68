@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { TabNavigation } from "./deck-viewer/components/TabNavigation";
@@ -78,6 +77,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
       <TabsContent value="sharing">
         <SharingSettings 
           onBack={() => setActiveTab("detailed")}
+          dealId="temp-deal-id"
         />
       </TabsContent>
     </Tabs>
