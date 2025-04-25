@@ -55,9 +55,8 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
       </TabsList>
 
       <TabsContent value="original">
+        <h3 className="text-lg font-medium mb-4">Original Document</h3>
         <div className="border rounded-lg p-6 space-y-6">
-          <h3 className="text-lg font-medium">Original Document</h3>
-          
           {originalDeckUrl && (
             <iframe
               src={originalDeckUrl}
