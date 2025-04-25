@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Deal } from "@/types";
 import { DealList } from "./DealList";
 import { SortOption } from "./types";
+import { Link } from "react-router-dom";
 
 interface TabContentProps {
   deals: Deal[];
@@ -24,7 +25,11 @@ export const TabContent = ({
       <div className="text-center py-12">
         <p className="text-lg text-muted-foreground">{emptyStateText}</p>
         {emptyStateButtonText && (
-          <Button variant="default" className="mt-4">{emptyStateButtonText}</Button>
+          <Link to={emptyStateButtonText === "Upload a Deal" ? "/upload" : "/"}>
+            <Button variant="default" className="mt-4">
+              {emptyStateButtonText}
+            </Button>
+          </Link>
         )}
       </div>
     );
