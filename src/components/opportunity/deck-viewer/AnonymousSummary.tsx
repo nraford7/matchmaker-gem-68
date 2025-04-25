@@ -1,14 +1,21 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Edit, Download, ArrowLeft } from "lucide-react";
 
 interface AnonymousSummaryProps {
   onBack: () => void;
+  clarificationResponses?: Record<string, string>;
 }
 
 export const AnonymousSummary: React.FC<AnonymousSummaryProps> = ({
   onBack,
+  clarificationResponses = {}
 }) => {
+  // Here we would use the clarificationResponses to create an anonymous summary
+  // For now we'll just log them and use static content
+  console.log("Using clarification responses for anonymous summary:", clarificationResponses);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -38,8 +45,9 @@ export const AnonymousSummary: React.FC<AnonymousSummaryProps> = ({
           <div>
             <h5 className="text-lg font-semibold mb-2">Confidential Investment Opportunity</h5>
             <p className="text-sm text-muted-foreground">
-              AI-generated anonymous summary of the pitch deck, removing specific company and founder
-              details while preserving key investment information.
+              {Object.keys(clarificationResponses).length > 0 
+                ? "Enhanced anonymous summary incorporating your clarifications, with all identifying information removed."
+                : "AI-generated anonymous summary of the pitch deck, removing specific company and founder details while preserving key investment information."}
             </p>
           </div>
           
@@ -49,13 +57,16 @@ export const AnonymousSummary: React.FC<AnonymousSummaryProps> = ({
               Technology company operating in the B2B SaaS space, providing cloud-based 
               solutions for enterprise customers. The company has demonstrated product-market 
               fit with positive customer feedback and steady growth metrics.
+              {clarificationResponses.q1 && <span> Business model: {clarificationResponses.q1.replace(/company name|specific company|brand names/gi, "[Company]")}</span>}
             </p>
           </div>
           
           <div className="space-y-2">
             <h5 className="text-md font-semibold">Market Opportunity</h5>
             <p className="text-sm text-muted-foreground">
-              Addressing a multi-billion dollar market with a differentiated technology 
+              Addressing a {clarificationResponses.q2 
+                ? clarificationResponses.q2.replace(/\$\d+\.?\d*[BbMm]/g, "multi-billion dollar") 
+                : "multi-billion dollar"} market with a differentiated technology 
               approach that solves critical pain points for enterprise customers.
               Current solutions in the market are outdated and inefficient.
             </p>
@@ -65,8 +76,8 @@ export const AnonymousSummary: React.FC<AnonymousSummaryProps> = ({
             <h5 className="text-md font-semibold">Team Background</h5>
             <p className="text-sm text-muted-foreground">
               Founded by experienced entrepreneurs with relevant industry expertise.
-              Technical team includes specialists in artificial intelligence and 
-              enterprise software development.
+              {clarificationResponses.q7 && 
+                <span> Technical team includes specialists in artificial intelligence and enterprise software development.</span>}
             </p>
           </div>
           
@@ -77,16 +88,19 @@ export const AnonymousSummary: React.FC<AnonymousSummaryProps> = ({
               <li>Strong unit economics with 80% gross margins</li>
               <li>Proven sales model with repeatable customer acquisition</li>
               <li>Proprietary technology with pending patents</li>
+              {clarificationResponses.q6 && 
+                <li>Use of funds: {clarificationResponses.q6.replace(/company name|specific company|brand names/gi, "[Company]")}</li>}
             </ul>
           </div>
         </div>
       </div>
       
-      <div className="flex justify-end gap-2 pt-4 border-t">
+      <div className="flex justify-between gap-2 pt-4 border-t">
         <Button variant="outline" onClick={onBack}>
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back
         </Button>
+        <Button>Save & Continue to Sharing</Button>
       </div>
     </div>
   );

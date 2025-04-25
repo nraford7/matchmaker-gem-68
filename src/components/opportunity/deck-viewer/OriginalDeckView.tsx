@@ -6,10 +6,12 @@ import { Edit } from "lucide-react";
 
 interface OriginalDeckViewProps {
   originalDeckUrl: string | null;
+  onNext?: () => void;
 }
 
 export const OriginalDeckView: React.FC<OriginalDeckViewProps> = ({
   originalDeckUrl,
+  onNext,
 }) => {
   const handleReupload = () => {
     const fileInput = document.createElement('input');
@@ -49,6 +51,12 @@ export const OriginalDeckView: React.FC<OriginalDeckViewProps> = ({
             The original deck is not available for preview. Please upload a deck first.
           </AlertDescription>
         </Alert>
+      )}
+
+      {onNext && (
+        <div className="flex justify-end pt-4 border-t">
+          <Button onClick={onNext}>Next: AI Review</Button>
+        </div>
       )}
     </div>
   );

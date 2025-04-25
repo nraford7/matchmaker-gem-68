@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Edit, Download, ArrowLeft } from "lucide-react";
@@ -5,12 +6,18 @@ import { Edit, Download, ArrowLeft } from "lucide-react";
 interface DetailedSummaryProps {
   onBack: () => void;
   onNext: () => void;
+  clarificationResponses?: Record<string, string>;
 }
 
 export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
   onBack,
   onNext,
+  clarificationResponses = {}
 }) => {
+  // Here we would use the clarificationResponses to enhance the summary
+  // For now we'll just log them and use static content
+  console.log("Using clarification responses for summary:", clarificationResponses);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -40,8 +47,9 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
           <div>
             <h5 className="text-lg font-semibold mb-2">Executive Summary</h5>
             <p className="text-sm text-muted-foreground">
-              AI-generated detailed summary of the pitch deck, highlighting key business metrics,
-              market analysis, team composition, and financial projections.
+              {Object.keys(clarificationResponses).length > 0 
+                ? "Enhanced AI-generated summary incorporating your clarifications."
+                : "AI-generated detailed summary of the pitch deck, highlighting key business metrics, market analysis, team composition, and financial projections."}
             </p>
           </div>
           
@@ -49,7 +57,7 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
             <h5 className="text-md font-semibold">Key Metrics</h5>
             <ul className="list-disc pl-5 text-sm space-y-1">
               <li>Current valuation: $12M</li>
-              <li>Monthly recurring revenue: $85K</li>
+              <li>Monthly recurring revenue: {clarificationResponses.q4 || "$85K"}</li>
               <li>Growth rate: 22% month-over-month</li>
               <li>Customer acquisition cost: $450</li>
               <li>Lifetime value: $5,200</li>
@@ -59,8 +67,8 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
           <div className="space-y-2">
             <h5 className="text-md font-semibold">Market Analysis</h5>
             <p className="text-sm text-muted-foreground">
-              The target market is valued at $4.5B with an annual growth rate of 15%.
-              Main competitors include established players with 60% market share collectively,
+              The target market is valued at {clarificationResponses.q2 || "$4.5B with an annual growth rate of 15%"}.
+              Main competitors include {clarificationResponses.q3 || "established players with 60% market share collectively"},
               leaving significant opportunity for disruption through superior technology.
             </p>
           </div>
@@ -68,8 +76,7 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
           <div className="space-y-2">
             <h5 className="text-md font-semibold">Team</h5>
             <p className="text-sm text-muted-foreground">
-              Founded by serial entrepreneurs with 2 previous successful exits.
-              15-person team with expertise spanning AI, product development, and enterprise sales.
+              {clarificationResponses.q7 || "Founded by serial entrepreneurs with 2 previous successful exits. 15-person team with expertise spanning AI, product development, and enterprise sales."}
             </p>
           </div>
           
@@ -78,8 +85,18 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
             <p className="text-sm text-muted-foreground">
               Projecting $1.2M ARR by end of year, with profitability expected in 18 months.
               Current runway is 14 months at current burn rate of $180K/month.
+              {clarificationResponses.q5 && <span> {clarificationResponses.q5}</span>}
             </p>
           </div>
+          
+          {clarificationResponses.q6 && (
+            <div className="space-y-2">
+              <h5 className="text-md font-semibold">Use of Funds</h5>
+              <p className="text-sm text-muted-foreground">
+                {clarificationResponses.q6}
+              </p>
+            </div>
+          )}
         </div>
       </div>
       

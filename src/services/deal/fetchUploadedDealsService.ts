@@ -14,7 +14,6 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Fetching uploaded deals for user:", userId);
 
-    // Add explicit typing for the query response
     const { data, error } = await supabase
       .from("deals")
       .select("*")
@@ -28,23 +27,29 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Add explicit typing to avoid excessive type instantiation depth
-    const mappedDeals: Deal[] = (data || []).map((item: any) => ({
-      id: item.id,
-      name: item.name,
-      description: item.description,
-      dealType: item.deal_type,
-      checkSizeRequired: item.check_size_required,
-      sectorTags: item.sector_tags,
-      geographies: item.geographies,
-      location: item.location,
-      stage: item.stage,
-      timeHorizon: item.time_horizon,
-      esgTags: item.esg_tags,
-      createdAt: item.created_at,
-      IRR: item.IRR,
-      introducedById: item.introduced_by_id
-    }));
+    // Map the data to Deal objects
+    const mappedDeals: Deal[] = [];
+    
+    if (data) {
+      for (const item of data) {
+        mappedDeals.push({
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          dealType: item.deal_type,
+          checkSizeRequired: item.check_size_required,
+          sectorTags: item.sector_tags,
+          geographies: item.geographies,
+          location: item.location,
+          stage: item.stage,
+          timeHorizon: item.time_horizon,
+          esgTags: item.esg_tags,
+          createdAt: item.created_at,
+          IRR: item.IRR,
+          introducedById: item.introduced_by_id
+        });
+      }
+    }
 
     console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;
