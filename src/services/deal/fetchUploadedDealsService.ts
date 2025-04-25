@@ -27,25 +27,28 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Map the data to Deal objects with explicit type
-    const mappedDeals: Deal[] = data.map((item: any) => ({
-      id: item.id,
-      name: item.name,
-      description: item.description || "",
-      dealType: item.deal_type || "",
-      checkSizeRequired: item.check_size_required,
-      sectorTags: item.sector_tags || [],
-      geographies: item.geographies || [],
-      location: item.location || "",
-      stage: item.stage || "",
-      timeHorizon: item.time_horizon || "",
-      esgTags: item.esg_tags || [],
-      createdAt: item.created_at || new Date().toISOString(),
-      IRR: item.IRR,
-      introducedById: item.introduced_by_id,
-      strategyProfile: parseJsonField(item.strategy_profile),
-      psychologicalFit: parseJsonField(item.psychological_fit),
-    }));
+    // Map the data to Deal objects with explicit type casting
+    const mappedDeals: Deal[] = data.map((item) => {
+      const deal: Deal = {
+        id: item.id,
+        name: item.name,
+        description: item.description || "",
+        dealType: item.deal_type || "",
+        checkSizeRequired: item.check_size_required,
+        sectorTags: item.sector_tags || [],
+        geographies: item.geographies || [],
+        location: item.location || "",
+        stage: item.stage || "",
+        timeHorizon: item.time_horizon || "",
+        esgTags: item.esg_tags || [],
+        createdAt: item.created_at || new Date().toISOString(),
+        IRR: item.IRR,
+        introducedById: item.introduced_by_id,
+        strategyProfile: parseJsonField(item.strategy_profile),
+        psychologicalFit: parseJsonField(item.psychological_fit),
+      };
+      return deal;
+    });
 
     console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;

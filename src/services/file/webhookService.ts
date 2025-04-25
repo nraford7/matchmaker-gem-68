@@ -19,7 +19,6 @@ export const triggerMakeAutomation = async (documentUrl: string, webhookUrl: str
     return await response.json();
   } catch (error) {
     console.error("Make.com webhook error:", error);
-    // Removed toast
     return null;
   }
 };

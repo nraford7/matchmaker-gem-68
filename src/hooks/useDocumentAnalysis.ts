@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 import { triggerMakeAutomation } from "@/services/file";
 import { UseFormReturn } from "react-hook-form";
-import { MAKE_WEBHOOK_URL, OpportunityFormValues } from "@/components/opportunity/types";
+import { MAKE_WEBHOOK_URL } from "@/config/constants";
+import { OpportunityFormValues } from "@/components/opportunity/types";
 
 interface AnalysisResult {
   name?: string;
