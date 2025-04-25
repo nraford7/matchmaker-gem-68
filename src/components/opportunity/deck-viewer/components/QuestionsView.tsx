@@ -3,7 +3,6 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Progress } from "@/components/ui/progress";
 import { Save, SkipForward } from "lucide-react";
 import type { mockQuestions } from "../hooks/useAIReview";
 
@@ -13,7 +12,6 @@ interface QuestionsViewProps {
   onResponseChange: (value: string) => void;
   onSave: () => void;
   onSkip: () => void;
-  progress: number;
   currentIndex: number;
   totalQuestions: number;
 }
@@ -24,7 +22,6 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
   onResponseChange,
   onSave,
   onSkip,
-  progress,
   currentIndex,
   totalQuestions,
 }) => {
@@ -41,8 +38,6 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
         </div>
       </div>
 
-      <Progress value={progress} className="w-full h-2" />
-      
       <p className="text-sm text-muted-foreground">
         This deck is great but there's a few questions we have which will help us pitch this. Could you clarify a few questions below, please?
       </p>
