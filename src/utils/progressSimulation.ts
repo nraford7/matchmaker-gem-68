@@ -1,20 +1,12 @@
 
-/**
- * Utility function to simulate progress for visual feedback
- * @param setProgressFn - Function to update progress state
- * @param onComplete - Optional callback when progress completes
- * @param startAt - Optional starting percentage (default: 0)
- * @param duration - Optional total duration in ms (default: 3000)
- * @returns Function to stop the simulation
- */
 export const simulateProgress = (
   setProgressFn: React.Dispatch<React.SetStateAction<number>>, 
   onComplete?: () => void,
   startAt: number = 0,
-  duration: number = 3000
+  duration: number = 2000 // Reduced from 3000 to 2000 ms
 ): () => void => {
   let start = startAt;
-  const interval = 100;
+  const interval = 50; // Reduced interval for faster progression
   const increment = (100 - startAt) / (duration / interval);
   
   const timer = setInterval(() => {

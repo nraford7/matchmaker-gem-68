@@ -30,8 +30,8 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
     // Start with an empty array of completed steps
     setCompletedSteps([]);
     
-    // Define a fixed delay between steps
-    const stepDelay = 180;
+    // Reduced delay between steps
+    const stepDelay = 100; // Reduced from 180 to 100
     
     // Add each step one by one with precise timing
     analysisSteps.forEach((_, index) => {
@@ -40,7 +40,7 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
         
         // When we've completed the last step, trigger onComplete after a small delay
         if (index === analysisSteps.length - 1) {
-          setTimeout(onComplete, 200);
+          setTimeout(onComplete, 100); // Reduced from 200 to 100
         }
       }, index * stepDelay);
       
