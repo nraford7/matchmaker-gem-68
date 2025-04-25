@@ -14,6 +14,22 @@ interface SharingSettingsProps {
 export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sharingOption, setSharingOption] = useState("selected");
+  const [selectedInvestors, setSelectedInvestors] = useState<string[]>([]);
+
+  const toggleInvestorSelection = (investorId: string, e: React.MouseEvent) => {
+    // Prevent default to avoid navigation
+    e.preventDefault();
+    
+    setSelectedInvestors(prev => 
+      prev.includes(investorId) 
+        ? prev.filter(id => id !== investorId) 
+        : [...prev, investorId]
+    );
+  };
+
+  const isInvestorSelected = (investorId: string): boolean => {
+    return selectedInvestors.includes(investorId);
+  };
 
   const recommendedInvestors = [
     { 
@@ -66,7 +82,13 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-green-600">{investor.match} match</span>
-                    <Button size="sm" variant="outline">Select</Button>
+                    <Button 
+                      size="sm" 
+                      variant={isInvestorSelected(investor.id) ? "default" : "outline"}
+                      onClick={(e) => toggleInvestorSelection(investor.id, e)}
+                    >
+                      {isInvestorSelected(investor.id) ? "Selected" : "Select"}
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -94,7 +116,13 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
                     <p className="font-medium">{investor.name}</p>
                     <p className="text-sm text-muted-foreground">{investor.company}</p>
                   </div>
-                  <Button size="sm" variant="outline">Select</Button>
+                  <Button 
+                    size="sm" 
+                    variant={isInvestorSelected(investor.id) ? "default" : "outline"}
+                    onClick={(e) => toggleInvestorSelection(investor.id, e)}
+                  >
+                    {isInvestorSelected(investor.id) ? "Selected" : "Select"}
+                  </Button>
                 </div>
               ))}
             </div>
