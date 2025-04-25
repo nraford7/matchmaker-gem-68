@@ -66,7 +66,7 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-green-600">{investor.match} match</span>
-                    <Button size="sm">Select</Button>
+                    <Button size="sm" variant="outline">Select</Button>
                   </div>
                 </div>
               ))}
@@ -94,7 +94,7 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack }) => {
                     <p className="font-medium">{investor.name}</p>
                     <p className="text-sm text-muted-foreground">{investor.company}</p>
                   </div>
-                  <Button size="sm">Select</Button>
+                  <Button size="sm" variant="outline">Select</Button>
                 </div>
               ))}
             </div>
