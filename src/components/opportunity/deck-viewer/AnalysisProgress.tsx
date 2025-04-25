@@ -1,6 +1,6 @@
 
 import React from "react";
-import { FileText, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 
 interface AnalysisProgressProps {
   isUploading: boolean;
@@ -29,3 +29,4 @@ export const AnalysisProgress: React.FC<AnalysisProgressProps> = ({
     </div>
   );
 };
+

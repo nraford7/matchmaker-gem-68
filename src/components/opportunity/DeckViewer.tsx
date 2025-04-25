@@ -10,7 +10,6 @@ interface DeckViewerProps {
   isAnalyzing: boolean;
   isUploading: boolean;
   uploadProgress: number;
-  analysisProgress: number;
 }
 
 export const DeckViewer: React.FC<DeckViewerProps> = ({
