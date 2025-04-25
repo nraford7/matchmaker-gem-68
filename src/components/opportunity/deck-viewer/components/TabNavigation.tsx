@@ -1,6 +1,6 @@
 
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, FileSearch } from "lucide-react";
+import { FileText, FileSearch, Share } from "lucide-react";
 
 export const TabNavigation = () => {
   return (
@@ -14,7 +14,10 @@ export const TabNavigation = () => {
         AI Review
       </TabsTrigger>
       <TabsTrigger value="detailed">AI Summary</TabsTrigger>
-      <TabsTrigger value="anonymous">Anonymous AI Summary</TabsTrigger>
+      <TabsTrigger value="sharing" className="flex items-center gap-2">
+        <Share className="h-4 w-4" />
+        Sharing Settings
+      </TabsTrigger>
     </TabsList>
   );
 };

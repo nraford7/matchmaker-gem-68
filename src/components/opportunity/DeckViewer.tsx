@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { TabNavigation } from "./deck-viewer/components/TabNavigation";
@@ -5,6 +6,7 @@ import { OriginalDocumentView } from "./deck-viewer/components/OriginalDocumentV
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
 import { ReviewSection } from "./deck-viewer/components/ReviewSection";
 import { SummarySection } from "./deck-viewer/components/SummarySection";
+import { SharingSettings } from "./deck-viewer/components/SharingSettings";
 
 interface DeckViewerProps {
   originalDeckUrl: string | null;
@@ -69,16 +71,13 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
           activeTab="detailed"
           clarificationResponses={clarificationResponses}
           onBack={() => setActiveTab("review")}
-          onNext={() => setActiveTab("anonymous")}
+          onNext={() => setActiveTab("sharing")}
         />
       </TabsContent>
 
-      <TabsContent value="anonymous">
-        <SummarySection 
-          activeTab="anonymous"
-          clarificationResponses={clarificationResponses}
+      <TabsContent value="sharing">
+        <SharingSettings 
           onBack={() => setActiveTab("detailed")}
-          onNext={() => {}}
         />
       </TabsContent>
     </Tabs>
