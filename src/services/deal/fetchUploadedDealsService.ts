@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Deal } from "@/types";
 import { toast } from "sonner";
 import { getCurrentUserId } from "./baseService";
+import { parseJsonField } from "./utils/jsonUtils";
 
 export const fetchUploadedDeals = async (): Promise<Deal[]> => {
   try {
@@ -27,52 +28,25 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Map the data to Deal objects, converting snake_case to camelCase
-    const mappedDeals: Deal[] = [];
-    
-    if (Array.isArray(data)) {
-      for (const item of data) {
-        // Handle JSON fields safely
-        let strategyProfile: Record<string, any> = {};
-        let psychologicalFit: Record<string, any> = {};
-        
-        try {
-          if (item.strategy_profile) {
-            strategyProfile = typeof item.strategy_profile === 'string' 
-              ? JSON.parse(item.strategy_profile) 
-              : item.strategy_profile;
-          }
-          
-          if (item.psychological_fit) {
-            psychologicalFit = typeof item.psychological_fit === 'string' 
-              ? JSON.parse(item.psychological_fit) 
-              : item.psychological_fit;
-          }
-        } catch (e) {
-          console.error("Error parsing JSON fields:", e);
-        }
-        
-        mappedDeals.push({
-          id: item.id,
-          name: item.name,
-          description: item.description || "",
-          dealType: item.deal_type || "",
-          checkSizeRequired: item.check_size_required,
-          sectorTags: item.sector_tags || [],
-          geographies: item.geographies || [],
-          location: item.location || "",
-          stage: item.stage || "",
-          timeHorizon: item.time_horizon || "",
-          esgTags: item.esg_tags || [],
-          createdAt: item.created_at || new Date().toISOString(),
-          IRR: item.IRR,
-          introducedById: item.introduced_by_id,
-          // Assign processed JSON fields
-          strategyProfile,
-          psychologicalFit,
-        });
-      }
-    }
+    // Map the data to Deal objects
+    const mappedDeals = data.map((item) => ({
+      id: item.id,
+      name: item.name,
+      description: item.description || "",
+      dealType: item.deal_type || "",
+      checkSizeRequired: item.check_size_required,
+      sectorTags: item.sector_tags || [],
+      geographies: item.geographies || [],
+      location: item.location || "",
+      stage: item.stage || "",
+      timeHorizon: item.time_horizon || "",
+      esgTags: item.esg_tags || [],
+      createdAt: item.created_at || new Date().toISOString(),
+      IRR: item.IRR,
+      introducedById: item.introduced_by_id,
+      strategyProfile: parseJsonField(item.strategy_profile),
+      psychologicalFit: parseJsonField(item.psychological_fit),
+    }));
 
     console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;
