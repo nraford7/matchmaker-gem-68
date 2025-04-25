@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { toast } from "sonner";
-import { uploadFile, deleteFile } from "@/services/fileUploadService";
+import { uploadFile, deleteFile } from "@/services/file";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const useFileUpload = () => {

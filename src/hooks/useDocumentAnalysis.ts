@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { toast } from "sonner";
-import { triggerMakeAutomation } from "@/services/fileUploadService";
+import { triggerMakeAutomation } from "@/services/file";
 import { UseFormReturn } from "react-hook-form";
 import { MAKE_WEBHOOK_URL, OpportunityFormValues } from "@/components/opportunity/types";
 
