@@ -6,7 +6,6 @@ interface AnalysisChecklistProps {
   onComplete: () => void;
 }
 
-// Define the analysis steps with Market Size included
 const analysisSteps = [
   "Customer Problem",
   "Market Size", 
@@ -22,34 +21,32 @@ const analysisSteps = [
 ];
 
 export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete }) => {
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([0, 1]); // Start with first two steps complete
   
   useEffect(() => {
-    // Process all steps in sequence
-    let stepCounter = 0;
+    // Start from step 2 since 0 and 1 are already complete
+    let stepCounter = 2;
     
     const interval = setInterval(() => {
       if (stepCounter < analysisSteps.length) {
-        // Add the current step to completed steps
         setCompletedSteps(prev => [...prev, stepCounter]);
         stepCounter++;
       } else {
-        // All steps have been processed
+        // All steps are completed
         clearInterval(interval);
         
-        // Allow time to see the completed state before proceeding
+        // Short delay before transition
         setTimeout(() => {
           onComplete();
-        }, 800);
+        }, 500);
       }
-    }, 300); // Slow enough to be visible but not too slow
+    }, 300); // Keep timing consistent for smooth transitions
     
-    // Clean up on unmount
     return () => clearInterval(interval);
   }, [onComplete]);
 
   return (
-    <div className="space-y-8 py-4">
+    <div className="space-y-8 py-4 animate-fade-in">
       <div>
         <h4 className="text-xl font-medium mb-2">Analyzing Pitch Deck</h4>
         <p className="text-muted-foreground mb-6">

@@ -27,8 +27,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Simple mapping without nested type instantiation
-    const mappedDeals = data.map(item => ({
+    // Explicitly type the mapped deals to avoid deep instantiation
+    const mappedDeals: Deal[] = data.map(item => ({
       id: item.id,
       name: item.name,
       description: item.description || "",
@@ -45,7 +45,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       introducedById: item.introduced_by_id,
       strategyProfile: parseJsonField(item.strategy_profile),
       psychologicalFit: parseJsonField(item.psychological_fit),
-    })) as Deal[];
+    }));
 
     console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;
