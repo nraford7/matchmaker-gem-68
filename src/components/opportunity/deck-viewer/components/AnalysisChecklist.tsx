@@ -32,7 +32,7 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
         currentIndex++;
       } else {
         clearInterval(interval);
-        setTimeout(onComplete, 500); // Small delay before transition
+        setTimeout(onComplete, 1000); // Increased delay to allow animation to complete
       }
     }, 400); // Check off a new item every 400ms
     
@@ -42,28 +42,30 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
   return (
     <div className="space-y-8 py-4">
       <div>
-        <h4 className="text-lg font-medium mb-2">Analyzing Pitch Deck</h4>
+        <h4 className="text-xl font-medium mb-2">Analyzing Pitch Deck</h4>
         <p className="text-muted-foreground mb-6">
           Our AI is reviewing your pitch deck against key investment criteria...
         </p>
-        <div className="space-y-4 animate-fade-in">
+        <div className="space-y-4">
           {analysisSteps.map((step, index) => (
             <div 
               key={step}
               className={`flex items-center gap-4 transition-all duration-300 ${
-                completedSteps.includes(index) ? 'opacity-100' : 'opacity-40'
+                completedSteps.includes(index) ? 'opacity-100' : 'opacity-60'
               }`}
             >
               <div className={`
-                w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300
-                ${completedSteps.includes(index) ? 'bg-crimson text-white' : 'border border-gray-300'}
+                w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500
+                ${completedSteps.includes(index) 
+                  ? 'bg-crimson text-white scale-110' 
+                  : 'border border-gray-300 bg-gray-50'}
               `}>
                 {completedSteps.includes(index) ? (
                   <CircleCheck 
-                    className="h-6 w-6 animate-pulse transform scale-110 transition-transform" 
+                    className="h-6 w-6 animate-pulse" 
                   />
                 ) : (
-                  <span className="text-xs text-gray-400">{index + 1}</span>
+                  <span className="text-sm font-medium text-gray-500">{index + 1}</span>
                 )}
               </div>
               <span className={`
