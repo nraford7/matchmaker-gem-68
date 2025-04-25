@@ -26,7 +26,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Use a simpler approach to avoid deep type instantiation
+    // Map the data to Deal objects with explicit type casting
     const mappedDeals = data.map(item => {
       // Parse JSON fields directly if they're strings
       const strategyProfile = typeof item.strategy_profile === 'string' 
