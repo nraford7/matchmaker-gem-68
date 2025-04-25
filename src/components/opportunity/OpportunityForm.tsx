@@ -7,8 +7,11 @@ import { FileUploadSection } from "@/components/opportunity/FileUploadSection";
 import { DeckViewer } from "@/components/opportunity/DeckViewer";
 import { opportunitySchema, OpportunityFormValues } from "@/components/opportunity/types";
 import { useDocumentProcessor } from "@/hooks/useDocumentProcessor";
+import { toast } from "sonner";
 
 export const OpportunityForm = () => {
+  const [analysisCompleted, setAnalysisCompleted] = useState(false);
+  
   const form = useForm<OpportunityFormValues>({
     resolver: zodResolver(opportunitySchema),
     defaultValues: {
@@ -33,6 +36,16 @@ export const OpportunityForm = () => {
     cancelProcess
   } = useDocumentProcessor(form);
 
+  const handleCancelUpload = () => {
+    cancelProcess();
+    toast.info("Process cancelled");
+  };
+
+  const handleAnalysisComplete = () => {
+    setAnalysisCompleted(true);
+    toast.success("Analysis completed");
+  };
+
   return (
     <Form {...form}>
       <form className="space-y-6">
@@ -47,7 +60,7 @@ export const OpportunityForm = () => {
             isAnalyzing={false}
             analysisProgress={0}
             error={error}
-            onCancelUpload={cancelProcess}
+            onCancelUpload={handleCancelUpload}
             onStartAnalysis={() => {}}
           />
         )}
@@ -58,8 +71,15 @@ export const OpportunityForm = () => {
             isAnalyzing={false}
             isUploading={isUploading}
             uploadProgress={uploadProgress}
-            onCancel={cancelProcess}
+            onCancel={handleCancelUpload}
           />
+        )}
+
+        {/* We'll show form fields here after analysis if needed */}
+        {analysisCompleted && (
+          <div className="mt-8 text-center text-sm text-muted-foreground">
+            Analysis complete. You can now create your opportunity.
+          </div>
         )}
       </form>
     </Form>

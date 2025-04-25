@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { QuestionsView } from "./components/QuestionsView";
 import { SummaryView } from "./components/SummaryView";
 import { AnalysisChecklist } from "./components/AnalysisChecklist";
@@ -27,33 +27,43 @@ export const AIReview: React.FC<AIReviewProps> = ({
     questions,
     getUnansweredQuestions,
     setCurrentResponse,
-    setCurrentQuestionIndex, // Added this line to destructure from the hook
+    setCurrentQuestionIndex,
     handleSaveResponse,
     handleSkip,
     handleComplete,
   } = useAIReview(onComplete);
 
+  // Navigate to the next tab
   const handleCancel = () => {
     onNext();
   };
 
+  // Handle completion of the analysis phase
   const handleAnalysisComplete = () => {
     setShowAnalysis(false);
-    handleComplete();
   };
 
+  // Navigate to the previous question
   const handleBack = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
 
+  // If we're still in the analysis phase
   if (showAnalysis) {
     return <AnalysisChecklist onComplete={handleAnalysisComplete} />;
   }
 
+  // If we're in the questions phase
   if (reviewMode === "questions") {
     const unansweredQuestions = getUnansweredQuestions();
+    
+    if (unansweredQuestions.length === 0) {
+      // If there are no unanswered questions, move to summary
+      setTimeout(() => handleComplete(), 0);
+      return null;
+    }
 
     return (
       <QuestionsView
@@ -69,6 +79,7 @@ export const AIReview: React.FC<AIReviewProps> = ({
     );
   }
 
+  // If we're in the summary phase
   return (
     <SummaryView
       questions={questions}

@@ -4,6 +4,24 @@ import { Deal } from "@/types";
 import { toast } from "sonner";
 import { getCurrentUserId } from "./baseService";
 
+// Define a type for the database response format
+type DealDatabaseResponse = {
+  id: string;
+  name: string;
+  description: string | null;
+  deal_type: string | null;
+  check_size_required: number | null;
+  sector_tags: string[] | null;
+  geographies: string[] | null;
+  location: string | null;
+  stage: string | null;
+  time_horizon: string | null;
+  esg_tags: string[] | null;
+  created_at: string | null;
+  IRR: number | null;
+  introduced_by_id: string | null;
+}
+
 export const fetchUploadedDeals = async (): Promise<Deal[]> => {
   try {
     const userId = await getCurrentUserId();
@@ -14,7 +32,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Fetching uploaded deals for user:", userId);
 
-    // Fix the type issue by explicitly typing the result
+    // Use the explicit type for the query result
     const { data, error } = await supabase
       .from("deals")
       .select("*")
@@ -32,20 +50,20 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     const mappedDeals: Deal[] = [];
     
     if (data) {
-      for (const item of data) {
+      for (const item of data as DealDatabaseResponse[]) {
         mappedDeals.push({
           id: item.id,
           name: item.name,
-          description: item.description,
-          dealType: item.deal_type,
+          description: item.description || "",
+          dealType: item.deal_type || "",
           checkSizeRequired: item.check_size_required,
-          sectorTags: item.sector_tags,
-          geographies: item.geographies,
-          location: item.location,
-          stage: item.stage,
-          timeHorizon: item.time_horizon,
-          esgTags: item.esg_tags,
-          createdAt: item.created_at,
+          sectorTags: item.sector_tags || [],
+          geographies: item.geographies || [],
+          location: item.location || "",
+          stage: item.stage || "",
+          timeHorizon: item.time_horizon || "",
+          esgTags: item.esg_tags || [],
+          createdAt: item.created_at || new Date().toISOString(),
           IRR: item.IRR,
           introducedById: item.introduced_by_id
         });

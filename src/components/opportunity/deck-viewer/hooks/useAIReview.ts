@@ -3,7 +3,15 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { simulateProgress } from "@/utils/progressSimulation";
 
-export const mockQuestions = [
+export interface Question {
+  id: string;
+  question: string;
+  answered: boolean;
+  confidence: number;
+  extractedAnswer: string;
+}
+
+export const mockQuestions: Question[] = [
   { id: "q1", question: "What is the company's business model?", answered: true, confidence: 0.9, extractedAnswer: "SaaS subscription model with tiered pricing" },
   { id: "q2", question: "What is the target market size?", answered: true, confidence: 0.85, extractedAnswer: "$4.5B with 15% annual growth" },
   { id: "q3", question: "Who are the key competitors?", answered: false, confidence: 0.3, extractedAnswer: "" },
@@ -14,28 +22,39 @@ export const mockQuestions = [
   { id: "q8", question: "What is the valuation expectation?", answered: false, confidence: 0.1, extractedAnswer: "" }
 ];
 
+export type ReviewMode = "analyzing" | "questions" | "summary";
+
 export const useAIReview = (onComplete: (responses: Record<string, string>) => void) => {
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [analysisProgress, setAnalysisProgress] = useState(0);
-  const [questions] = useState(mockQuestions);
+  const [questions] = useState<Question[]>(mockQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [currentResponse, setCurrentResponse] = useState("");
-  const [reviewMode, setReviewMode] = useState<"analyzing" | "questions" | "summary">("analyzing");
+  const [reviewMode, setReviewMode] = useState<ReviewMode>("analyzing");
+  const [unansweredQuestions, setUnansweredQuestions] = useState<Question[]>([]);
 
+  // Initialize the analysis process
   useEffect(() => {
     if (isAnalyzing) {
       const stopProgress = simulateProgress(setAnalysisProgress, () => {
         setIsAnalyzing(false);
         setReviewMode("questions");
         
+        // Pre-populate responses with high-confidence extracted answers
         const initialResponses: Record<string, string> = {};
+        const unanswered: Question[] = [];
+        
         questions.forEach(q => {
           if (q.answered && q.confidence > 0.7) {
             initialResponses[q.id] = q.extractedAnswer;
+          } else {
+            unanswered.push(q);
           }
         });
+        
         setResponses(initialResponses);
+        setUnansweredQuestions(unanswered);
         
       }, 0, 2500);
       
@@ -43,12 +62,16 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
     }
   }, [isAnalyzing, questions]);
 
-  const getUnansweredQuestions = () => {
+  // Get unanswered questions or those with low confidence
+  const getUnansweredQuestions = (): Question[] => {
     return questions.filter(q => !q.answered || q.confidence < 0.7);
   };
 
+  // Save the current response and move to the next question
   const handleSaveResponse = () => {
-    const currentQuestion = getUnansweredQuestions()[currentQuestionIndex];
+    const unanswered = getUnansweredQuestions();
+    const currentQuestion = unanswered[currentQuestionIndex];
+    
     if (!currentQuestion) return;
     
     if (currentResponse.trim() === "") {
@@ -56,33 +79,42 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
       return;
     }
     
+    // Save the response
     setResponses(prev => ({
       ...prev,
       [currentQuestion.id]: currentResponse
     }));
     
-    if (currentQuestionIndex < getUnansweredQuestions().length - 1) {
+    // Move to the next question or summary
+    if (currentQuestionIndex < unanswered.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setCurrentResponse("");
+      toast.success("Answer saved");
     } else {
       setReviewMode("summary");
+      toast.success("All questions answered");
     }
   };
 
+  // Skip the current question and move to the next
   const handleSkip = () => {
-    if (currentQuestionIndex < getUnansweredQuestions().length - 1) {
+    const unanswered = getUnansweredQuestions();
+    
+    if (currentQuestionIndex < unanswered.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setCurrentResponse("");
+      toast.info("Question skipped");
     } else {
       setReviewMode("summary");
+      toast.info("No more questions to answer");
     }
-    
-    toast.info("Question skipped");
   };
 
+  // Complete the review process
   const handleComplete = () => {
     const allResponses: Record<string, string> = {};
     
+    // Combine extracted answers with user responses
     questions.forEach(q => {
       if (q.answered && q.confidence > 0.7) {
         allResponses[q.id] = q.extractedAnswer;
@@ -94,6 +126,7 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
     });
     
     onComplete(allResponses);
+    toast.success("AI review completed");
   };
 
   return {
@@ -101,10 +134,11 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
     analysisProgress,
     reviewMode,
     currentQuestionIndex,
-    setCurrentQuestionIndex, // Expose this setter function
+    setCurrentQuestionIndex,
     currentResponse,
     responses,
     questions,
+    unansweredQuestions,
     getUnansweredQuestions,
     setCurrentResponse,
     handleSaveResponse,
