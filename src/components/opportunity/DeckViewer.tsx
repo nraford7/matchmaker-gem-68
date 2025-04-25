@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
-import { OriginalDeckView } from "./deck-viewer/OriginalDeckView";
 import { DetailedSummary } from "./deck-viewer/DetailedSummary";
 import { AnonymousSummary } from "./deck-viewer/AnonymousSummary";
 import { AIReview } from "./deck-viewer/AIReview";
@@ -22,7 +21,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
   uploadProgress,
   analysisProgress,
 }) => {
-  const [activeTab, setActiveTab] = useState("original");
+  const [activeTab, setActiveTab] = useState("review");
   const [reviewCompleted, setReviewCompleted] = useState(false);
   const [clarificationResponses, setClarificationResponses] = useState<Record<string, string>>({});
 
@@ -44,23 +43,14 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-      <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="original">Original Deck</TabsTrigger>
+      <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="review">AI Review</TabsTrigger>
         <TabsTrigger value="detailed">AI Summary</TabsTrigger>
         <TabsTrigger value="anonymous">Anonymous AI Summary</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="original">
-        <OriginalDeckView 
-          originalDeckUrl={originalDeckUrl}
-          onNext={() => setActiveTab("review")}
-        />
-      </TabsContent>
-
       <TabsContent value="review">
         <AIReview
-          onBack={() => setActiveTab("original")}
           onNext={() => setActiveTab("detailed")}
           onComplete={handleReviewComplete}
           isCompleted={reviewCompleted}

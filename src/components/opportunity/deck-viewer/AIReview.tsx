@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, MessageSquare, Save, SkipForward, CheckCircle } from "lucide-react";
+import { ArrowRight, MessageSquare, Save, SkipForward, CheckCircle } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
@@ -19,14 +19,12 @@ const mockQuestions = [
 ];
 
 interface AIReviewProps {
-  onBack: () => void;
   onNext: () => void;
   onComplete: (responses: Record<string, string>) => void;
   isCompleted: boolean;
 }
 
 export const AIReview: React.FC<AIReviewProps> = ({
-  onBack,
   onNext,
   onComplete,
   isCompleted
@@ -194,11 +192,7 @@ export const AIReview: React.FC<AIReviewProps> = ({
           </Card>
         )}
 
-        <div className="flex justify-between pt-4 border-t">
-          <Button variant="outline" onClick={onBack} className="flex items-center gap-1">
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
+        <div className="flex justify-end pt-4 border-t">
           <Button onClick={() => setReviewMode("summary")}>Review Summary</Button>
         </div>
       </div>
@@ -239,11 +233,7 @@ export const AIReview: React.FC<AIReviewProps> = ({
         })}
       </Card>
 
-      <div className="flex justify-between pt-4 border-t">
-        <Button variant="outline" onClick={() => setReviewMode("questions")} className="flex items-center gap-1">
-          <ArrowLeft className="h-4 w-4" />
-          Back to Questions
-        </Button>
+      <div className="flex justify-end pt-4 border-t">
         <Button onClick={handleComplete} className="flex items-center gap-1">
           <MessageSquare className="h-4 w-4 mr-1" />
           Complete Review & Generate Summary
