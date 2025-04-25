@@ -71,7 +71,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
           </div>
           
           <div className="flex justify-between border-t pt-4 mt-4">
-            <Button variant="secondary" className="flex items-center gap-2">
+            <Button variant="outline" className="flex items-center gap-2">
               <BookmarkPlus className="h-4 w-4" />
               Save for Later
             </Button>
@@ -100,7 +100,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
           </div>
           
           <div className="flex justify-between border-t pt-4 mt-4">
-            <Button variant="secondary" className="flex items-center gap-2">
+            <Button variant="outline" className="flex items-center gap-2">
               <BookmarkPlus className="h-4 w-4" />
               Save for Later
             </Button>
@@ -129,7 +129,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
           </div>
           
           <div className="flex justify-between border-t pt-4 mt-4">
-            <Button variant="secondary" className="flex items-center gap-2">
+            <Button variant="outline" className="flex items-center gap-2">
               <BookmarkPlus className="h-4 w-4" />
               Save for Later
             </Button>
@@ -157,7 +157,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
           </div>
           
           <div className="flex justify-between border-t pt-4 mt-4">
-            <Button variant="secondary" className="flex items-center gap-2">
+            <Button variant="outline" className="flex items-center gap-2">
               <BookmarkPlus className="h-4 w-4" />
               Save for Later
             </Button>
