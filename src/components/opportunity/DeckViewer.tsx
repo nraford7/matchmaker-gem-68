@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -5,15 +6,7 @@ import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
 import { DetailedSummary } from "./deck-viewer/DetailedSummary";
 import { AnonymousSummary } from "./deck-viewer/AnonymousSummary";
 import { AIReview } from "./deck-viewer/AIReview";
-import { FileText, FileSearch, X } from "lucide-react";
-
-interface DeckViewerProps {
-  originalDeckUrl: string | null;
-  isAnalyzing: boolean;
-  isUploading: boolean;
-  uploadProgress: number;
-  onCancel: () => void;
-}
+import { FileText, FileSearch, X, BookmarkPlus } from "lucide-react";
 
 export const DeckViewer: React.FC<DeckViewerProps> = ({
   originalDeckUrl,
@@ -69,16 +62,26 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
           
           <hr className="border-border" />
           
-          <div className="p-6 flex justify-end gap-2">
-            <Button variant="outline" onClick={onCancel}>
-              <X className="h-4 w-4 mr-2" />
-              Cancel
-            </Button>
-            <Button onClick={() => setActiveTab("review")}>
-              <FileSearch className="h-4 w-4 mr-2" />
-              Analyse with AI
-            </Button>
+          <div className="p-6 flex justify-end gap-2 hidden">
+            {/* Hidden div to maintain layout */}
           </div>
+        </div>
+
+        <hr className="border-border my-4" />
+        
+        <div className="flex justify-end gap-2">
+          <Button variant="secondary" className="flex items-center gap-2">
+            <BookmarkPlus className="h-4 w-4" />
+            Save for Later
+          </Button>
+          <Button variant="outline" onClick={onCancel}>
+            <X className="h-4 w-4 mr-2" />
+            Cancel
+          </Button>
+          <Button onClick={() => setActiveTab("review")}>
+            <FileSearch className="h-4 w-4 mr-2" />
+            Analyse with AI
+          </Button>
         </div>
       </TabsContent>
 
