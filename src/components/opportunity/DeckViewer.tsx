@@ -56,16 +56,20 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
 
       <TabsContent value="original">
         <h3 className="text-lg font-medium mb-4">Original Document</h3>
-        <div className="border rounded-lg p-6 space-y-6">
-          {originalDeckUrl && (
-            <iframe
-              src={originalDeckUrl}
-              className="w-full h-[600px] border rounded"
-              title="Original Document"
-            />
-          )}
+        <div className="bg-card rounded-lg border shadow-sm">
+          <div className="p-6">
+            {originalDeckUrl && (
+              <iframe
+                src={originalDeckUrl}
+                className="w-full h-[600px] border rounded"
+                title="Original Document"
+              />
+            )}
+          </div>
           
-          <div className="flex justify-end gap-2 pt-4">
+          <hr className="border-border" />
+          
+          <div className="p-6 flex justify-end gap-2">
             <Button variant="outline" onClick={onCancel}>
               <X className="h-4 w-4 mr-2" />
               Cancel
