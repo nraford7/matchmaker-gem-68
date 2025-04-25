@@ -40,6 +40,12 @@ export const AIReview: React.FC<AIReviewProps> = ({
     handleComplete();
   };
 
+  const handleBack = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
   if (showAnalysis) {
     return <AnalysisChecklist onComplete={handleAnalysisComplete} />;
   }
@@ -53,7 +59,7 @@ export const AIReview: React.FC<AIReviewProps> = ({
         currentResponse={currentResponse}
         onResponseChange={(value) => setCurrentResponse(value)}
         onSave={handleSaveResponse}
-        onSkip={handleSkip}
+        onSkip={handleBack}
         onCancel={handleCancel}
         currentIndex={currentQuestionIndex}
         totalQuestions={unansweredQuestions.length}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { simulateProgress } from "@/utils/progressSimulation";
@@ -60,8 +59,6 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
       ...prev,
       [currentQuestion.id]: currentResponse
     }));
-    
-    toast.success("Response saved");
     
     if (currentQuestionIndex < getUnansweredQuestions().length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);

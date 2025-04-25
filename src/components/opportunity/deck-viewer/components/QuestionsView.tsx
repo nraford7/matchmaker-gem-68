@@ -2,10 +2,10 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, ArrowRight, Save } from "lucide-react";
-import type { mockQuestions } from "../hooks/useAIReview";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
 interface QuestionsViewProps {
-  currentQuestion: typeof mockQuestions[0] | null;
+  currentQuestion: any | null;
   currentResponse: string;
   onResponseChange: (value: string) => void;
   onSave: () => void;
@@ -14,6 +14,7 @@ interface QuestionsViewProps {
   currentIndex: number;
   totalQuestions: number;
 }
+
 export const QuestionsView: React.FC<QuestionsViewProps> = ({
   currentQuestion,
   currentResponse,
@@ -24,6 +25,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
   totalQuestions
 }) => {
   if (!currentQuestion) return null;
+  
   return <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h4 className="text-lg font-medium">AI Review</h4>
@@ -54,6 +56,23 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
         <Textarea placeholder="Your answer..." value={currentResponse} onChange={e => onResponseChange(e.target.value)} className="min-h-[100px]" />
       </Card>
 
-      
+      <div className="flex justify-between items-center">
+        <Button
+          variant="outline"
+          onClick={onSkip}
+          disabled={currentIndex === 0}
+          className="flex items-center gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+        <Button 
+          onClick={onSave}
+          className="flex items-center gap-2"
+        >
+          {currentIndex === totalQuestions - 1 ? 'Complete' : 'Next'}
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      </div>
     </div>;
 };
