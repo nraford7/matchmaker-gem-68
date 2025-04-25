@@ -6,7 +6,14 @@ import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
 import { DetailedSummary } from "./deck-viewer/DetailedSummary";
 import { AnonymousSummary } from "./deck-viewer/AnonymousSummary";
 import { AIReview } from "./deck-viewer/AIReview";
-import { FileText, FileSearch, X, BookmarkPlus } from "lucide-react";
+import { FileText, FileSearch, X, BookmarkPlus, ArrowLeft, ArrowRight } from "lucide-react";
+
+interface DeckViewerProps {
+  originalDeckUrl: string | null;
+  isUploading: boolean;
+  uploadProgress: number;
+  onCancel: () => void;
+}
 
 export const DeckViewer: React.FC<DeckViewerProps> = ({
   originalDeckUrl,
@@ -48,64 +55,123 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
       </TabsList>
 
       <TabsContent value="original">
-        <h3 className="text-lg font-medium mb-4">Original Document</h3>
-        <div className="bg-card rounded-lg border shadow-sm">
-          <div className="p-6">
-            {originalDeckUrl && (
-              <iframe
-                src={originalDeckUrl}
-                className="w-full h-[600px] border rounded"
-                title="Original Document"
-              />
-            )}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Original Document</h3>
+          <div className="bg-card rounded-lg border shadow-sm">
+            <div className="p-6">
+              {originalDeckUrl && (
+                <iframe
+                  src={originalDeckUrl}
+                  className="w-full h-[600px] border rounded"
+                  title="Original Document"
+                />
+              )}
+            </div>
           </div>
           
-          <hr className="border-border" />
-          
-          <div className="p-6 flex justify-end gap-2 hidden">
-            {/* Hidden div to maintain layout */}
+          <div className="flex justify-between border-t pt-4 mt-4">
+            <Button variant="secondary" className="flex items-center gap-2">
+              <BookmarkPlus className="h-4 w-4" />
+              Save for Later
+            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={onCancel}>
+                <X className="h-4 w-4 mr-2" />
+                Cancel
+              </Button>
+              <Button onClick={() => setActiveTab("review")}>
+                <FileSearch className="h-4 w-4 mr-2" />
+                Analyse with AI
+              </Button>
+            </div>
           </div>
-        </div>
-
-        <hr className="border-border my-4" />
-        
-        <div className="flex justify-end gap-2">
-          <Button variant="secondary" className="flex items-center gap-2">
-            <BookmarkPlus className="h-4 w-4" />
-            Save for Later
-          </Button>
-          <Button variant="outline" onClick={onCancel}>
-            <X className="h-4 w-4 mr-2" />
-            Cancel
-          </Button>
-          <Button onClick={() => setActiveTab("review")}>
-            <FileSearch className="h-4 w-4 mr-2" />
-            Analyse with AI
-          </Button>
         </div>
       </TabsContent>
 
       <TabsContent value="review">
-        <AIReview
-          onNext={() => setActiveTab("detailed")}
-          onComplete={handleReviewComplete}
-          isCompleted={reviewCompleted}
-        />
+        <div className="space-y-4">
+          <div className="bg-card rounded-lg border shadow-sm p-6">
+            <AIReview
+              onNext={() => setActiveTab("detailed")}
+              onComplete={handleReviewComplete}
+              isCompleted={reviewCompleted}
+            />
+          </div>
+          
+          <div className="flex justify-between border-t pt-4 mt-4">
+            <Button variant="secondary" className="flex items-center gap-2">
+              <BookmarkPlus className="h-4 w-4" />
+              Save for Later
+            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setActiveTab("original")}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back
+              </Button>
+              <Button onClick={() => setActiveTab("detailed")}>
+                Next
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </div>
+          </div>
+        </div>
       </TabsContent>
 
       <TabsContent value="detailed">
-        <DetailedSummary 
-          onBack={() => setActiveTab("review")}
-          onNext={() => setActiveTab("anonymous")}
-          clarificationResponses={clarificationResponses}
-        />
+        <div className="space-y-4">
+          <div className="bg-card rounded-lg border shadow-sm p-6">
+            <DetailedSummary 
+              onBack={() => setActiveTab("review")}
+              onNext={() => setActiveTab("anonymous")}
+              clarificationResponses={clarificationResponses}
+            />
+          </div>
+          
+          <div className="flex justify-between border-t pt-4 mt-4">
+            <Button variant="secondary" className="flex items-center gap-2">
+              <BookmarkPlus className="h-4 w-4" />
+              Save for Later
+            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setActiveTab("review")}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back
+              </Button>
+              <Button onClick={() => setActiveTab("anonymous")}>
+                Next
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </div>
+          </div>
+        </div>
       </TabsContent>
 
       <TabsContent value="anonymous">
-        <AnonymousSummary 
-          onBack={() => setActiveTab("detailed")}
-          clarificationResponses={clarificationResponses}
-        />
+        <div className="space-y-4">
+          <div className="bg-card rounded-lg border shadow-sm p-6">
+            <AnonymousSummary 
+              onBack={() => setActiveTab("detailed")}
+              clarificationResponses={clarificationResponses}
+            />
+          </div>
+          
+          <div className="flex justify-between border-t pt-4 mt-4">
+            <Button variant="secondary" className="flex items-center gap-2">
+              <BookmarkPlus className="h-4 w-4" />
+              Save for Later
+            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setActiveTab("detailed")}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back
+              </Button>
+              <Button onClick={onCancel}>
+                Done
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </div>
+          </div>
+        </div>
       </TabsContent>
     </Tabs>
   );
