@@ -85,11 +85,42 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
       </div>
 
       <div className="space-y-4">
-        <h4 className="text-lg font-medium">AI Generated Presentation</h4>
+        <h4 className="text-lg font-medium">Deal Memo</h4>
+        <div className="border rounded-md p-6 bg-muted/20">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <h5 className="text-md font-semibold">Investment Rationale</h5>
+              <p className="text-sm text-muted-foreground">
+                A concise summary of why this investment opportunity is compelling, 
+                highlighting key strengths, unique value proposition, and potential 
+                for significant returns.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h5 className="text-md font-semibold">Key Risks</h5>
+              <ul className="list-disc pl-5 text-sm space-y-1">
+                <li>Market volatility</li>
+                <li>Competitive landscape</li>
+                <li>Technology adoption challenges</li>
+              </ul>
+            </div>
+            <div className="space-y-2">
+              <h5 className="text-md font-semibold">Investment Thesis</h5>
+              <p className="text-sm text-muted-foreground">
+                Detailed breakdown of the strategic fit, growth potential, 
+                and alignment with investment criteria.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h4 className="text-lg font-medium">Investment Summary Deck</h4>
         <div className="border rounded-md p-6 bg-muted/20 h-[450px] flex flex-col items-center justify-center">
           <div className="text-center space-y-4">
             <div className="text-muted-foreground">
-              AI-Generated presentation preview will be displayed here
+              Investment summary presentation preview will be displayed here
             </div>
           </div>
         </div>
