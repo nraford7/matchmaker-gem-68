@@ -14,62 +14,74 @@ export const uploadOpportunityWithDocument = async (
   makeWebhookUrl?: string
 ): Promise<string | null> => {
   try {
-    // Get and validate the current user
+    // Validate authentication
     const userId = await getCurrentUserId();
-    if (!validateUserAuth(userId)) {
+    if (!userId) {
       toast.error("Authentication required to upload opportunities");
       return null;
     }
 
     console.log("Uploading opportunity for user:", userId);
-
-    // If document is provided, upload it to the pitch-documents bucket
     let documentUrl = null;
+
+    // Handle document upload if provided
     if (document) {
-      // Make sure the user is authenticated before uploading
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
+      // First verify authentication
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) {
         toast.error("Authentication required to upload documents");
         return null;
       }
       
-      documentUrl = await uploadFile(document, "pitch-documents");
+      // Upload to pitch-documents bucket with progress tracking
+      toast.info("Uploading document...");
+      documentUrl = await uploadFile(
+        document, 
+        "pitch-documents", 
+        (progress) => console.log(`Upload progress: ${progress}%`)
+      );
+      
       if (!documentUrl) {
         toast.error("Document upload failed");
         return null;
       }
+      
+      toast.success("Document uploaded successfully");
     }
 
-    // Add the document URL to the opportunity
-    const opportunityWithDoc = {
-      ...opportunity,
-      pitchDeck: documentUrl,
-      user_id: userId
+    // Prepare opportunity data with document URL
+    const opportunityData = {
+      name: opportunity.name,
+      description: opportunity.description,
+      deal_type: opportunity.dealType,
+      stage: opportunity.stage,
+      check_size_required: opportunity.checkSizeRequired,
+      geographies: opportunity.geographies,
+      sector_tags: opportunity.sectorTags,
+      pitch_deck: documentUrl,
+      user_id: userId,
+      location: opportunity.location,
+      esg_tags: opportunity.esgTags,
+      time_horizon: opportunity.timeHorizon
     };
 
-    // Insert the opportunity into the database
+    // Insert opportunity into database
     const { data, error } = await supabase
       .from("deals")
-      .insert({
-        name: opportunityWithDoc.name,
-        description: opportunityWithDoc.description,
-        deal_type: opportunityWithDoc.dealType,
-        stage: opportunityWithDoc.stage,
-        check_size_required: opportunityWithDoc.checkSizeRequired,
-        geographies: opportunityWithDoc.geographies,
-        sector_tags: opportunityWithDoc.sectorTags,
-        pitch_deck: opportunityWithDoc.pitchDeck,
-        user_id: userId
-      })
+      .insert(opportunityData)
       .select("id")
       .single();
 
     if (error) {
       console.error("Error inserting opportunity:", error);
-      throw error;
+      toast.error("Failed to create opportunity");
+      return null;
     }
 
-    toast.success("Opportunity created successfully");
+    toast.success("Opportunity created successfully", {
+      description: "Your opportunity is now visible to relevant investors"
+    });
+    
     return data.id;
   } catch (error) {
     console.error("Error creating opportunity:", error);

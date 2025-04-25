@@ -6,7 +6,7 @@ interface AnalysisChecklistProps {
   onComplete: () => void;
 }
 
-// Fixed order to ensure "Market Size" is included and not skipped
+// Define the analysis steps with Market Size included
 const analysisSteps = [
   "Customer Problem",
   "Market Size", 
@@ -25,23 +25,26 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   
   useEffect(() => {
-    // Track each step individually to ensure none are skipped
-    const allSteps = analysisSteps.map((_, index) => index);
-    let currentStep = 0;
+    // Process all steps in sequence
+    let stepCounter = 0;
     
     const interval = setInterval(() => {
-      if (currentStep < analysisSteps.length) {
-        setCompletedSteps(prev => [...prev, currentStep]);
-        currentStep++;
+      if (stepCounter < analysisSteps.length) {
+        // Add the current step to completed steps
+        setCompletedSteps(prev => [...prev, stepCounter]);
+        stepCounter++;
       } else {
+        // All steps have been processed
         clearInterval(interval);
+        
+        // Allow time to see the completed state before proceeding
         setTimeout(() => {
-          // Give a moment to see all completed steps before proceeding
           onComplete();
-        }, 500);
+        }, 800);
       }
-    }, 200); // Slightly longer to make sure each step is visible
+    }, 300); // Slow enough to be visible but not too slow
     
+    // Clean up on unmount
     return () => clearInterval(interval);
   }, [onComplete]);
 
@@ -56,12 +59,12 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
           {analysisSteps.map((step, index) => (
             <div 
               key={step}
-              className={`flex items-center gap-4 transition-all duration-100 ${
+              className={`flex items-center gap-4 transition-all duration-300 ${
                 completedSteps.includes(index) ? 'opacity-100' : 'opacity-60'
               }`}
             >
               <div className={`
-                w-8 h-8 rounded-full flex items-center justify-center transition-all duration-100
+                w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300
                 ${completedSteps.includes(index) 
                   ? 'bg-crimson text-white scale-110' 
                   : 'border border-gray-300 bg-gray-50'}
@@ -75,7 +78,7 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
                 )}
               </div>
               <span className={`
-                text-base font-medium transition-colors duration-100
+                text-base font-medium transition-colors duration-300
                 ${completedSteps.includes(index) ? 'text-foreground' : 'text-muted-foreground'}
               `}>
                 {step}

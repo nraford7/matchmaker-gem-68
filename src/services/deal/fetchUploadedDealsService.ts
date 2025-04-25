@@ -45,11 +45,11 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    // Map the data to Deal objects
+    // Map the data to Deal objects safely
     const mappedDeals: Deal[] = [];
     
-    if (data) {
-      for (const item of data as DealDatabaseRecord[]) {
+    if (Array.isArray(data)) {
+      data.forEach((item: DealDatabaseRecord) => {
         mappedDeals.push({
           id: item.id,
           name: item.name,
@@ -66,7 +66,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
           IRR: item.IRR,
           introducedById: item.introduced_by_id
         });
-      }
+      });
     }
 
     console.log("Processed uploaded deals:", mappedDeals);
