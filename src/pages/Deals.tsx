@@ -4,7 +4,7 @@ import { Loader2, Briefcase, FilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Deal } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
-import { fetchDeals, fetchActiveDeals, fetchSavedDeals, fetchPastDeals, fetchUploadedDeals } from "@/services/deal";
+import { fetchAllDeals, fetchActiveDeals, fetchSavedDeals, fetchPastDeals, fetchUploadedDeals } from "@/services/deal";
 import { 
   DealsTabs, 
   AllOpportunities, 
@@ -72,7 +72,7 @@ const Deals = () => {
           fetchSavedDeals(),
           fetchPastDeals(),
           fetchUploadedDeals(),
-          fetchDeals()
+          fetchAllDeals()
         ]);
         
         console.log("Fetched active deals:", active);
