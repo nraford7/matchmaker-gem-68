@@ -32,32 +32,12 @@ export const useFileUpload = () => {
       setError(undefined);
       setDocumentUrl(null);
       
-      let progressInterval: NodeJS.Timeout | null = null;
-      
-      // Start with a small progress animation before actual upload
-      progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          // Only automatically go up to 20% to show activity
-          if (prev < 20) return prev + 1;
-          return prev;
-        });
-      }, 100);
-      
+      // Don't use a small progress simulation before actual upload
+      // Instead, set initial upload progress to 0 and wait for real progress
       try {
         const fileUrl = await uploadFile(file, "pitch-documents", (progress) => {
-          // Once we start getting real progress, use that instead
-          if (progressInterval) {
-            clearInterval(progressInterval);
-            progressInterval = null;
-          }
           setUploadProgress(progress);
         });
-        
-        // Clear the interval if it's still running
-        if (progressInterval) {
-          clearInterval(progressInterval);
-          progressInterval = null;
-        }
         
         if (!fileUrl) {
           throw new Error("Failed to upload file to storage");
@@ -72,11 +52,6 @@ export const useFileUpload = () => {
         }, 500); // Brief delay to show the 100% state before proceeding
         
       } catch (error) {
-        // Clear the interval if there's an error
-        if (progressInterval) {
-          clearInterval(progressInterval);
-          progressInterval = null;
-        }
         console.error("Error uploading document:", error);
         setError("Failed to upload document. Please check your connection and try again.");
         setIsUploading(false);

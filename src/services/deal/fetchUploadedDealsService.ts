@@ -46,22 +46,28 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     console.log("Raw uploaded deals data from Supabase:", data);
 
     // Map the data to Deal objects
-    const mappedDeals: Deal[] = (data as DealDatabaseRecord[]).map(item => ({
-      id: item.id,
-      name: item.name,
-      description: item.description || "",
-      dealType: item.deal_type || "",
-      checkSizeRequired: item.check_size_required,
-      sectorTags: item.sector_tags || [],
-      geographies: item.geographies || [],
-      location: item.location || "",
-      stage: item.stage || "",
-      timeHorizon: item.time_horizon || "",
-      esgTags: item.esg_tags || [],
-      createdAt: item.created_at || new Date().toISOString(),
-      IRR: item.IRR,
-      introducedById: item.introduced_by_id
-    }));
+    const mappedDeals: Deal[] = [];
+    
+    if (data) {
+      for (const item of data as DealDatabaseRecord[]) {
+        mappedDeals.push({
+          id: item.id,
+          name: item.name,
+          description: item.description || "",
+          dealType: item.deal_type || "",
+          checkSizeRequired: item.check_size_required,
+          sectorTags: item.sector_tags || [],
+          geographies: item.geographies || [],
+          location: item.location || "",
+          stage: item.stage || "",
+          timeHorizon: item.time_horizon || "",
+          esgTags: item.esg_tags || [],
+          createdAt: item.created_at || new Date().toISOString(),
+          IRR: item.IRR,
+          introducedById: item.introduced_by_id
+        });
+      }
+    }
 
     console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;

@@ -6,6 +6,7 @@ interface AnalysisChecklistProps {
   onComplete: () => void;
 }
 
+// Fixed order to ensure "Market Size" is included and not skipped
 const analysisSteps = [
   "Customer Problem",
   "Market Size", 
@@ -24,17 +25,22 @@ export const AnalysisChecklist: React.FC<AnalysisChecklistProps> = ({ onComplete
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   
   useEffect(() => {
-    let currentIndex = 0;
+    // Track each step individually to ensure none are skipped
+    const allSteps = analysisSteps.map((_, index) => index);
+    let currentStep = 0;
     
     const interval = setInterval(() => {
-      if (currentIndex < analysisSteps.length) {
-        setCompletedSteps(prev => [...prev, currentIndex]);
-        currentIndex++;
+      if (currentStep < analysisSteps.length) {
+        setCompletedSteps(prev => [...prev, currentStep]);
+        currentStep++;
       } else {
         clearInterval(interval);
-        onComplete();
+        setTimeout(() => {
+          // Give a moment to see all completed steps before proceeding
+          onComplete();
+        }, 500);
       }
-    }, 150); // Reduced interval to make animations faster
+    }, 200); // Slightly longer to make sure each step is visible
     
     return () => clearInterval(interval);
   }, [onComplete]);
