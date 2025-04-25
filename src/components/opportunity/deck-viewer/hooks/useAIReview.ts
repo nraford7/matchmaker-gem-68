@@ -70,6 +70,9 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
   // Save the current response and move to the next question
   const handleSaveResponse = () => {
     const unanswered = getUnansweredQuestions();
+    
+    if (!unanswered.length) return;
+    
     const currentQuestion = unanswered[currentQuestionIndex];
     
     if (!currentQuestion) return;

@@ -40,8 +40,8 @@ export const AIReview: React.FC<AIReviewProps> = ({
 
   // Handle the next button click in questions view
   const handleNextQuestion = () => {
+    // Save the current response before moving to the next question
     handleSaveResponse();
-    // The navigation to summary or next question is handled in handleSaveResponse
   };
 
   // If we're still in the analysis phase
@@ -78,7 +78,8 @@ export const AIReview: React.FC<AIReviewProps> = ({
       responses={responses}
       onComplete={() => {
         handleComplete();
-        onNext(); // This will move to the next tab
+        // Only move to the next tab when explicitly requested from the summary view
+        onNext();
       }}
     />
   );

@@ -37,7 +37,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         ? JSON.parse(item.psychological_fit)
         : (item.psychological_fit || {});
 
-      // Return Deal object with parsed fields
+      // Return a properly structured Deal object without causing type instantiation issues
       return {
         id: item.id,
         name: item.name,
@@ -55,8 +55,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         introducedById: item.introduced_by_id,
         strategyProfile,
         psychologicalFit
-      };
-    }) as Deal[];
+      } as Deal; // Use 'as Deal' for type assertion instead of complex type instantiation
+    });
 
     console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;
