@@ -29,25 +29,12 @@ export const AIReview: React.FC<AIReviewProps> = ({
     setCurrentResponse,
     setCurrentQuestionIndex,
     handleSaveResponse,
-    handleSkip,
     handleComplete,
   } = useAIReview(onComplete);
-
-  // Navigate to the next tab
-  const handleCancel = () => {
-    onNext();
-  };
 
   // Handle completion of the analysis phase
   const handleAnalysisComplete = () => {
     setShowAnalysis(false);
-  };
-
-  // Navigate to the previous question
-  const handleBack = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    }
   };
 
   // If we're still in the analysis phase
@@ -71,8 +58,6 @@ export const AIReview: React.FC<AIReviewProps> = ({
         currentResponse={currentResponse}
         onResponseChange={(value) => setCurrentResponse(value)}
         onSave={handleSaveResponse}
-        onSkip={handleBack}
-        onCancel={handleCancel}
         currentIndex={currentQuestionIndex}
         totalQuestions={unansweredQuestions.length}
       />

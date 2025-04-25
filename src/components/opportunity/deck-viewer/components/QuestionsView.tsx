@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Question } from "../hooks/useAIReview";
 
 interface QuestionsViewProps {
@@ -11,8 +11,6 @@ interface QuestionsViewProps {
   currentResponse: string;
   onResponseChange: (value: string) => void;
   onSave: () => void;
-  onSkip: () => void;
-  onCancel: () => void;
   currentIndex: number;
   totalQuestions: number;
 }
@@ -22,7 +20,6 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
   currentResponse,
   onResponseChange,
   onSave,
-  onSkip,
   currentIndex,
   totalQuestions
 }) => {
@@ -68,16 +65,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
         />
       </Card>
 
-      <div className="flex justify-between items-center">
-        <Button
-          variant="outline"
-          onClick={onSkip}
-          className="flex items-center gap-2"
-          disabled={currentIndex === 0}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </Button>
+      <div className="flex justify-end">
         <Button 
           onClick={onSave}
           className="flex items-center gap-2"

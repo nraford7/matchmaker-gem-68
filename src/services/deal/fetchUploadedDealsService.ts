@@ -4,8 +4,8 @@ import { Deal } from "@/types";
 import { toast } from "sonner";
 import { getCurrentUserId } from "./baseService";
 
-// Define a type for the database response format
-type DealDatabaseResponse = {
+// Separate interface for database response to avoid circular type references
+interface DealDatabaseRecord {
   id: string;
   name: string;
   description: string | null;
@@ -32,7 +32,6 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Fetching uploaded deals for user:", userId);
 
-    // Use the explicit type for the query result
     const { data, error } = await supabase
       .from("deals")
       .select("*")
@@ -47,28 +46,22 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     console.log("Raw uploaded deals data from Supabase:", data);
 
     // Map the data to Deal objects
-    const mappedDeals: Deal[] = [];
-    
-    if (data) {
-      for (const item of data as DealDatabaseResponse[]) {
-        mappedDeals.push({
-          id: item.id,
-          name: item.name,
-          description: item.description || "",
-          dealType: item.deal_type || "",
-          checkSizeRequired: item.check_size_required,
-          sectorTags: item.sector_tags || [],
-          geographies: item.geographies || [],
-          location: item.location || "",
-          stage: item.stage || "",
-          timeHorizon: item.time_horizon || "",
-          esgTags: item.esg_tags || [],
-          createdAt: item.created_at || new Date().toISOString(),
-          IRR: item.IRR,
-          introducedById: item.introduced_by_id
-        });
-      }
-    }
+    const mappedDeals: Deal[] = (data as DealDatabaseRecord[]).map(item => ({
+      id: item.id,
+      name: item.name,
+      description: item.description || "",
+      dealType: item.deal_type || "",
+      checkSizeRequired: item.check_size_required,
+      sectorTags: item.sector_tags || [],
+      geographies: item.geographies || [],
+      location: item.location || "",
+      stage: item.stage || "",
+      timeHorizon: item.time_horizon || "",
+      esgTags: item.esg_tags || [],
+      createdAt: item.created_at || new Date().toISOString(),
+      IRR: item.IRR,
+      introducedById: item.introduced_by_id
+    }));
 
     console.log("Processed uploaded deals:", mappedDeals);
     return mappedDeals;
