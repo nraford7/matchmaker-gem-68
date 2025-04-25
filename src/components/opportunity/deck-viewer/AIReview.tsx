@@ -65,6 +65,7 @@ export const AIReview: React.FC<AIReviewProps> = ({
         currentResponse={currentResponse}
         onResponseChange={(value) => setCurrentResponse(value)}
         onSave={handleNextQuestion}
+        onSkip={handleSkip}
         currentIndex={currentQuestionIndex}
         totalQuestions={unansweredQuestions.length}
       />

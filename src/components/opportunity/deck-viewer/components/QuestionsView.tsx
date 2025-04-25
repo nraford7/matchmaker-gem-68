@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, SkipForward } from "lucide-react";
 import { Question } from "../hooks/useAIReview";
 
 interface QuestionsViewProps {
@@ -11,6 +11,7 @@ interface QuestionsViewProps {
   currentResponse: string;
   onResponseChange: (value: string) => void;
   onSave: () => void;
+  onSkip: () => void;
   currentIndex: number;
   totalQuestions: number;
 }
@@ -20,6 +21,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
   currentResponse,
   onResponseChange,
   onSave,
+  onSkip,
   currentIndex,
   totalQuestions
 }) => {
@@ -28,6 +30,11 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
   const handleNextClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent default form submission
     onSave();
+  };
+
+  const handleSkipClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onSkip();
   };
   
   return (
@@ -70,7 +77,16 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
         />
       </Card>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
+        <Button 
+          onClick={handleSkipClick}
+          className="flex items-center gap-2"
+          type="button"
+          variant="outline"
+        >
+          Skip
+          <SkipForward className="h-4 w-4" />
+        </Button>
         <Button 
           onClick={handleNextClick}
           className="flex items-center gap-2"
