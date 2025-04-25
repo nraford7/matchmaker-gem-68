@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { simulateProgress } from "@/utils/progressSimulation";
@@ -70,7 +69,7 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
     return questions.filter(q => !q.answered || q.confidence < 0.7);
   };
 
-  // Save the current response and move to the next question
+  // Modify the handleSaveResponse to skip questions with empty responses
   const handleSaveResponse = () => {
     // Prevent multiple rapid calls while navigation is happening
     if (isNavigatingRef.current) return;
@@ -90,9 +89,9 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
       return;
     }
     
+    // If response is empty, automatically skip to next question
     if (currentResponse.trim() === "") {
-      toast.error("Please provide an answer or skip this question");
-      isNavigatingRef.current = false;
+      handleSkip();
       return;
     }
     
@@ -102,7 +101,7 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
       [currentQuestion.id]: currentResponse
     }));
     
-    // Move to the next question or summary
+    // Move to the next question or complete
     if (currentQuestionIndex < unanswered.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setCurrentResponse("");
@@ -113,7 +112,9 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
         isNavigatingRef.current = false;
       }, 100);
     } else {
-      setReviewMode("summary");
+      // Directly move to complete when all questions are answered
+      handleComplete();
+      onComplete(responses);
       toast.success("All questions answered");
       isNavigatingRef.current = false;
     }
@@ -135,13 +136,13 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
         isNavigatingRef.current = false;
       }, 100);
     } else {
-      setReviewMode("summary");
+      handleComplete();
       toast.info("No more questions to answer");
       isNavigatingRef.current = false;
     }
   };
 
-  // Complete the review process
+  // Modify handleComplete to remove the separate summary phase
   const handleComplete = () => {
     const allResponses: Record<string, string> = {};
     

@@ -1,8 +1,6 @@
 
 import React, { useState } from "react";
 import { QuestionsView } from "./components/QuestionsView";
-import { SummaryView } from "./components/SummaryView";
-import { AnalysisChecklist } from "./components/AnalysisChecklist";
 import { useAIReview } from "./hooks/useAIReview";
 
 interface AIReviewProps {
@@ -31,16 +29,14 @@ export const AIReview: React.FC<AIReviewProps> = ({
     handleSaveResponse,
     handleComplete,
     handleSkip
-  } = useAIReview(onComplete);
+  } = useAIReview((finalResponses) => {
+    onComplete(finalResponses);
+    onNext(); // Move to AI Summary tab directly
+  });
 
   // Handle completion of the analysis phase
   const handleAnalysisComplete = () => {
     setShowAnalysis(false);
-  };
-
-  // Handle the next button click in questions view
-  const handleNextQuestion = () => {
-    handleSaveResponse();
   };
 
   // If we're still in the analysis phase
@@ -49,46 +45,23 @@ export const AIReview: React.FC<AIReviewProps> = ({
   }
 
   // If we're in the questions phase
-  if (reviewMode === "questions") {
-    const unansweredQuestions = getUnansweredQuestions();
-    
-    if (unansweredQuestions.length === 0) {
-      // Move to summary view immediately when no questions remain
-      handleComplete();
-      return (
-        <SummaryView
-          questions={questions}
-          responses={responses}
-          onComplete={() => {
-            handleComplete();
-            onNext();
-          }}
-        />
-      );
-    }
-
-    return (
-      <QuestionsView
-        currentQuestion={unansweredQuestions[currentQuestionIndex]}
-        currentResponse={currentResponse}
-        onResponseChange={(value) => setCurrentResponse(value)}
-        onSave={handleNextQuestion}
-        onSkip={handleSkip}
-        currentIndex={currentQuestionIndex}
-        totalQuestions={unansweredQuestions.length}
-      />
-    );
+  const unansweredQuestions = getUnansweredQuestions();
+  
+  if (unansweredQuestions.length === 0) {
+    // Move to AI Summary tab immediately when no questions remain
+    handleComplete();
+    return null;
   }
 
-  // If we're in the summary phase
   return (
-    <SummaryView
-      questions={questions}
-      responses={responses}
-      onComplete={() => {
-        handleComplete();
-        onNext();
-      }}
+    <QuestionsView
+      currentQuestion={unansweredQuestions[currentQuestionIndex]}
+      currentResponse={currentResponse}
+      onResponseChange={(value) => setCurrentResponse(value)}
+      onSave={handleSaveResponse}
+      onSkip={handleSkip}
+      currentIndex={currentQuestionIndex}
+      totalQuestions={unansweredQuestions.length}
     />
   );
 };
