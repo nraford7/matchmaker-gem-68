@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { Deal } from "@/types/deal";
 import { uploadFile, deleteFile } from "./file";
@@ -15,8 +16,8 @@ export const getDeals = async (): Promise<Deal[]> => {
     // Convert snake_case to camelCase and handle JSON fields properly
     return data.map(item => {
       // Handle JSON fields safely
-      let strategyProfile = {};
-      let psychologicalFit = {};
+      let strategyProfile: Record<string, any> = {};
+      let psychologicalFit: Record<string, any> = {};
       
       try {
         if (item.strategy_profile) {
@@ -172,6 +173,26 @@ export const createDeal = async (deal: Omit<Deal, "id" | "createdAt">): Promise<
 
     if (!data) return null;
 
+    // Handle JSON fields safely
+    let strategyProfile: Record<string, any> = {};
+    let psychologicalFit: Record<string, any> = {};
+    
+    try {
+      if (data.strategy_profile) {
+        strategyProfile = typeof data.strategy_profile === 'string' 
+          ? JSON.parse(data.strategy_profile) 
+          : data.strategy_profile;
+      }
+      
+      if (data.psychological_fit) {
+        psychologicalFit = typeof data.psychological_fit === 'string'
+          ? JSON.parse(data.psychological_fit)
+          : data.psychological_fit;
+      }
+    } catch (e) {
+      console.error("Error parsing JSON fields:", e);
+    }
+
     // Convert snake_case back to camelCase
     return {
       id: data.id,
@@ -190,8 +211,8 @@ export const createDeal = async (deal: Omit<Deal, "id" | "createdAt">): Promise<
       dueDiligenceLevel: data.due_diligence_level,
       decisionConvictionRequired: data.decision_conviction_required,
       investorSpeedRequired: data.investor_speed_required,
-      strategyProfile: data.strategy_profile,
-      psychologicalFit: data.psychological_fit,
+      strategyProfile,
+      psychologicalFit,
       createdAt: data.created_at,
       updatedAt: data.updated_at,
       IRR: data.IRR,
@@ -245,8 +266,8 @@ export const updateDeal = async (id: string, updates: Partial<Deal>): Promise<De
     if (!data) return null;
 
     // Handle JSON fields safely
-    let strategyProfile = {};
-    let psychologicalFit = {};
+    let strategyProfile: Record<string, any> = {};
+    let psychologicalFit: Record<string, any> = {};
     
     try {
       if (data.strategy_profile) {

@@ -17,8 +17,8 @@ export const fetchAllDeals = async (): Promise<Deal[]> => {
 
     return data.map((item) => {
       // Handle JSON fields safely
-      let strategyProfile = {};
-      let psychologicalFit = {};
+      let strategyProfile: Record<string, any> = {};
+      let psychologicalFit: Record<string, any> = {};
       
       try {
         if (item.strategy_profile) {

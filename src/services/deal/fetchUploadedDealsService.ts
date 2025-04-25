@@ -31,19 +31,26 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     const mappedDeals: Deal[] = [];
     
     if (Array.isArray(data)) {
-      data.forEach((item: any) => {
-        // Safely handle JSON fields without causing circular type issues
-        const strategyProfileData = item.strategy_profile || {};
-        const psychFitData = item.psychological_fit || {};
+      for (const item of data) {
+        // Handle JSON fields safely
+        let strategyProfile: Record<string, any> = {};
+        let psychologicalFit: Record<string, any> = {};
         
-        // Make sure we handle the JSON fields correctly regardless of if they're strings or objects
-        const strategyProfile = typeof strategyProfileData === 'string' 
-          ? JSON.parse(strategyProfileData) 
-          : strategyProfileData;
-        
-        const psychologicalFit = typeof psychFitData === 'string' 
-          ? JSON.parse(psychFitData) 
-          : psychFitData;
+        try {
+          if (item.strategy_profile) {
+            strategyProfile = typeof item.strategy_profile === 'string' 
+              ? JSON.parse(item.strategy_profile) 
+              : item.strategy_profile;
+          }
+          
+          if (item.psychological_fit) {
+            psychologicalFit = typeof item.psychological_fit === 'string' 
+              ? JSON.parse(item.psychological_fit) 
+              : item.psychological_fit;
+          }
+        } catch (e) {
+          console.error("Error parsing JSON fields:", e);
+        }
         
         mappedDeals.push({
           id: item.id,
@@ -64,7 +71,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
           strategyProfile,
           psychologicalFit,
         });
-      });
+      }
     }
 
     console.log("Processed uploaded deals:", mappedDeals);
