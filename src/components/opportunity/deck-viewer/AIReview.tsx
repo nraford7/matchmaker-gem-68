@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, MessageSquare, Save, SkipForward, CheckCircle } from "lucide-react";
@@ -8,7 +7,6 @@ import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { simulateProgress } from "@/utils/progressSimulation";
 
-// Mock questions that the AI would check for in a pitch deck
 const mockQuestions = [
   { id: "q1", question: "What is the company's business model?", answered: true, confidence: 0.9, extractedAnswer: "SaaS subscription model with tiered pricing" },
   { id: "q2", question: "What is the target market size?", answered: true, confidence: 0.85, extractedAnswer: "$4.5B with 15% annual growth" },
@@ -41,14 +39,12 @@ export const AIReview: React.FC<AIReviewProps> = ({
   const [currentResponse, setCurrentResponse] = useState("");
   const [reviewMode, setReviewMode] = useState<"analyzing" | "questions" | "summary">("analyzing");
 
-  // Simulate AI analysis of the document
   useEffect(() => {
     if (isAnalyzing) {
       const stopProgress = simulateProgress(setAnalysisProgress, () => {
         setIsAnalyzing(false);
         setReviewMode("questions");
         
-        // Initialize responses with extracted answers that have high confidence
         const initialResponses: Record<string, string> = {};
         questions.forEach(q => {
           if (q.answered && q.confidence > 0.7) {
@@ -63,7 +59,6 @@ export const AIReview: React.FC<AIReviewProps> = ({
     }
   }, [isAnalyzing]);
 
-  // Helper to get unanswered questions that need clarification
   const getUnansweredQuestions = () => {
     return questions.filter(q => !q.answered || q.confidence < 0.7);
   };
@@ -91,7 +86,6 @@ export const AIReview: React.FC<AIReviewProps> = ({
       setCurrentQuestionIndex(prev => prev + 1);
       setCurrentResponse("");
     } else {
-      // All questions answered
       setReviewMode("summary");
     }
   };
@@ -99,12 +93,10 @@ export const AIReview: React.FC<AIReviewProps> = ({
   const handleSkip = () => {
     if (!currentQuestion) return;
     
-    // Mark as skipped but move to next question
     if (currentQuestionIndex < getUnansweredQuestions().length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setCurrentResponse("");
     } else {
-      // All questions answered or skipped
       setReviewMode("summary");
     }
     
@@ -112,17 +104,14 @@ export const AIReview: React.FC<AIReviewProps> = ({
   };
 
   const handleComplete = () => {
-    // Combine extracted answers with user responses
     const allResponses: Record<string, string> = {};
     
-    // Add all high confidence extracted answers
     questions.forEach(q => {
       if (q.answered && q.confidence > 0.7) {
         allResponses[q.id] = q.extractedAnswer;
       }
     });
     
-    // Add user responses (which override extracted answers if provided)
     Object.keys(responses).forEach(id => {
       allResponses[id] = responses[id];
     });
@@ -162,6 +151,10 @@ export const AIReview: React.FC<AIReviewProps> = ({
         </div>
 
         <Progress value={progress} className="w-full h-2" />
+        
+        <p className="text-sm text-muted-foreground text-center">
+          This deck is great but there's a few questions we have which will help us pitch this. Could you clarify a few questions below, please?
+        </p>
 
         {currentQuestion && (
           <Card className="p-4 space-y-4">
@@ -212,7 +205,6 @@ export const AIReview: React.FC<AIReviewProps> = ({
     );
   }
 
-  // Summary view
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
