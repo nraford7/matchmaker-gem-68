@@ -14,6 +14,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Fetching uploaded deals for user:", userId);
 
+    // Add explicit typing for the query response
     const { data, error } = await supabase
       .from("deals")
       .select("*")
