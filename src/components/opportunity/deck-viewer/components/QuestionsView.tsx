@@ -25,6 +25,11 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
 }) => {
   if (!currentQuestion) return null;
   
+  const handleNextClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default form submission
+    onSave();
+  };
+  
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -67,8 +72,9 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
 
       <div className="flex justify-end">
         <Button 
-          onClick={onSave}
+          onClick={handleNextClick}
           className="flex items-center gap-2"
+          type="button"
         >
           {currentIndex === totalQuestions - 1 ? 'Complete' : 'Next'}
           <ArrowRight className="h-4 w-4" />

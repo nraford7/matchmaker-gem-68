@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { simulateProgress } from "@/utils/progressSimulation";
 
@@ -33,7 +33,9 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
   const [currentResponse, setCurrentResponse] = useState("");
   const [reviewMode, setReviewMode] = useState<ReviewMode>("analyzing");
   const [unansweredQuestions, setUnansweredQuestions] = useState<Question[]>([]);
-  const [isNavigating, setIsNavigating] = useState(false);
+  
+  // Use a ref to track navigation state to prevent multiple rapid navigation attempts
+  const isNavigatingRef = useRef(false);
 
   // Initialize the analysis process
   useEffect(() => {
@@ -71,26 +73,26 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
   // Save the current response and move to the next question
   const handleSaveResponse = () => {
     // Prevent multiple rapid calls while navigation is happening
-    if (isNavigating) return;
-    setIsNavigating(true);
+    if (isNavigatingRef.current) return;
+    isNavigatingRef.current = true;
     
     const unanswered = getUnansweredQuestions();
     
     if (!unanswered.length) {
-      setIsNavigating(false);
+      isNavigatingRef.current = false;
       return;
     }
     
     const currentQuestion = unanswered[currentQuestionIndex];
     
     if (!currentQuestion) {
-      setIsNavigating(false);
+      isNavigatingRef.current = false;
       return;
     }
     
     if (currentResponse.trim() === "") {
       toast.error("Please provide an answer or skip this question");
-      setIsNavigating(false);
+      isNavigatingRef.current = false;
       return;
     }
     
@@ -108,19 +110,19 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
       
       // Reset navigation flag after state updates
       setTimeout(() => {
-        setIsNavigating(false);
-      }, 50);
+        isNavigatingRef.current = false;
+      }, 100);
     } else {
       setReviewMode("summary");
       toast.success("All questions answered");
-      setIsNavigating(false);
+      isNavigatingRef.current = false;
     }
   };
 
   // Skip the current question and move to the next
   const handleSkip = () => {
-    if (isNavigating) return;
-    setIsNavigating(true);
+    if (isNavigatingRef.current) return;
+    isNavigatingRef.current = true;
     
     const unanswered = getUnansweredQuestions();
     
@@ -130,12 +132,12 @@ export const useAIReview = (onComplete: (responses: Record<string, string>) => v
       toast.info("Question skipped");
       
       setTimeout(() => {
-        setIsNavigating(false);
-      }, 50);
+        isNavigatingRef.current = false;
+      }, 100);
     } else {
       setReviewMode("summary");
       toast.info("No more questions to answer");
-      setIsNavigating(false);
+      isNavigatingRef.current = false;
     }
   };
 

@@ -28,7 +28,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     // Map the data to Deal objects with explicit type casting
     const mappedDeals = data.map(item => {
-      // Parse JSON fields directly if they're strings
+      // Parse JSON fields safely
       const strategyProfile = typeof item.strategy_profile === 'string' 
         ? JSON.parse(item.strategy_profile) 
         : (item.strategy_profile || {});
@@ -38,7 +38,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         : (item.psychological_fit || {});
 
       // Return a properly structured Deal object
-      const deal: Deal = {
+      return {
         id: item.id,
         name: item.name,
         description: item.description || "",
@@ -56,8 +56,6 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         strategyProfile,
         psychologicalFit
       };
-      
-      return deal;
     });
 
     console.log("Processed uploaded deals:", mappedDeals);
