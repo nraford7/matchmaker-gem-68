@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { toast } from "sonner";
 import { uploadFile, deleteFile } from "@/services/fileUploadService";
@@ -20,7 +19,6 @@ export const useFileUpload = () => {
       const file = files[0];
       
       // If we're replacing a file, don't reset the UI completely
-      // We'll just update the file and re-upload
       const isReplacing = documentUrl !== null;
       
       // Delete the previous file if one exists
@@ -68,10 +66,6 @@ export const useFileUpload = () => {
         } else {
           console.log("File uploaded by anonymous user");
         }
-        
-        toast.success(isReplacing ? "File replaced successfully" : "Document uploaded successfully", {
-          description: "You can now analyze it with AI"
-        });
         
       } catch (error) {
         console.error("Error uploading document:", error);
