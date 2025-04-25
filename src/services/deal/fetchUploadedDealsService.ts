@@ -27,7 +27,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
 
     console.log("Raw uploaded deals data from Supabase:", data);
 
-    const mappedDeals: Deal[] = data.map((item: any) => ({
+    // Add explicit typing to avoid excessive type instantiation depth
+    const mappedDeals: Deal[] = (data || []).map((item: any) => ({
       id: item.id,
       name: item.name,
       description: item.description,
