@@ -6,7 +6,7 @@ import { OriginalDocumentView } from "./deck-viewer/components/OriginalDocumentV
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
 import { ReviewSection } from "./deck-viewer/components/ReviewSection";
 import { SummarySection } from "./deck-viewer/components/SummarySection";
-import { SharingSettings } from "./deck-viewer/components/sharing/SharingSettings";
+import { SharingSettings } from "./deck-viewer/components/SharingSettings";
 
 interface DeckViewerProps {
   originalDeckUrl: string | null;
