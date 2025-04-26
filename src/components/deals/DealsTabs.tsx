@@ -57,7 +57,7 @@ export const DealsTabs = ({
           </TabsTrigger>
           <TabsTrigger value="uploaded" className="flex items-center gap-1">
             <Upload className="h-4 w-4" />
-            Your Deals
+            Uploaded Deals
           </TabsTrigger>
           <TabsTrigger value="past" className="flex items-center gap-1">
             <Archive className="h-4 w-4" />
