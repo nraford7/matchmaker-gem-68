@@ -1,6 +1,6 @@
 
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, FileSearch, Share } from "lucide-react";
+import { FileText, FileSearch, MessageSquare, Share } from "lucide-react";
 
 interface TabNavigationProps {
   activeTab: string;
@@ -9,7 +9,7 @@ interface TabNavigationProps {
 
 export const TabNavigation = ({ activeTab, onChange }: TabNavigationProps) => {
   return (
-    <TabsList className="grid w-full grid-cols-4">
+    <TabsList className="grid w-full grid-cols-5">
       <TabsTrigger 
         value="original" 
         className="flex items-center gap-2"
@@ -31,6 +31,14 @@ export const TabNavigation = ({ activeTab, onChange }: TabNavigationProps) => {
         onClick={() => onChange("detailed")}
       >
         AI Summary
+      </TabsTrigger>
+      <TabsTrigger 
+        value="recommendation"
+        className="flex items-center gap-2"
+        onClick={() => onChange("recommendation")}
+      >
+        <MessageSquare className="h-4 w-4" />
+        Recommendation
       </TabsTrigger>
       <TabsTrigger 
         value="sharing" 

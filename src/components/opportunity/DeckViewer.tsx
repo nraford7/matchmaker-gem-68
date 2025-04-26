@@ -6,6 +6,7 @@ import { OriginalDocumentView } from "./deck-viewer/components/OriginalDocumentV
 import { AnalysisProgress } from "./deck-viewer/AnalysisProgress";
 import { ReviewSection } from "./deck-viewer/components/ReviewSection";
 import { SummarySection } from "./deck-viewer/components/SummarySection";
+import { RecommendationSection } from "./deck-viewer/components/RecommendationSection";
 import { SharingSettings } from "./deck-viewer/components/SharingSettings";
 
 interface DeckViewerProps {
@@ -13,7 +14,7 @@ interface DeckViewerProps {
   isUploading: boolean;
   uploadProgress: number;
   onCancel: () => void;
-  dealId?: string; // Make optional to maintain backward compatibility
+  dealId?: string;
 }
 
 export const DeckViewer: React.FC<DeckViewerProps> = ({
@@ -27,6 +28,7 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
   const [reviewCompleted, setReviewCompleted] = useState(false);
   const [clarificationResponses, setClarificationResponses] = useState<Record<string, string>>({});
   const [savedForLater, setSavedForLater] = useState(false);
+  const [recommendation, setRecommendation] = useState("");
 
   if (isUploading) {
     return (
@@ -73,14 +75,24 @@ export const DeckViewer: React.FC<DeckViewerProps> = ({
           activeTab="detailed"
           clarificationResponses={clarificationResponses}
           onBack={() => setActiveTab("review")}
+          onNext={() => setActiveTab("recommendation")}
+        />
+      </TabsContent>
+
+      <TabsContent value="recommendation">
+        <RecommendationSection 
+          recommendation={recommendation}
+          onRecommendationChange={setRecommendation}
+          onBack={() => setActiveTab("detailed")}
           onNext={() => setActiveTab("sharing")}
         />
       </TabsContent>
 
       <TabsContent value="sharing">
         <SharingSettings 
-          onBack={() => setActiveTab("detailed")}
-          dealId={dealId || "temp-deal-id"} // Provide fallback for backward compatibility
+          onBack={() => setActiveTab("recommendation")}
+          dealId={dealId || "temp-deal-id"}
+          recommendation={recommendation}
         />
       </TabsContent>
     </Tabs>

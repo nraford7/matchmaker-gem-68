@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -14,14 +13,14 @@ import { VisibilitySettings } from "./sharing/VisibilitySettings";
 interface SharingSettingsProps {
   onBack: () => void;
   dealId: string;
+  recommendation: string;
 }
 
-export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack, dealId }) => {
+export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack, dealId, recommendation }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [sharingOption, setSharingOption] = useState("selected");
   const [selectedInvestors, setSelectedInvestors] = useState<string[]>([]);
-  const [recommendation, setRecommendation] = useState("");
 
   const toggleInvestorSelection = (investorId: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -100,18 +99,6 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack, dealId
           onToggleSelection={toggleInvestorSelection}
         />
 
-        <Card className="p-4">
-          <div className="space-y-4">
-            <h5 className="font-medium">Your Recommendation</h5>
-            <Textarea
-              value={recommendation}
-              onChange={(e) => setRecommendation(e.target.value)}
-              placeholder="Share your reflections on this deal here. It will be shared with each investor you share this deal with."
-              className="min-h-[100px]"
-            />
-          </div>
-        </Card>
-
         <VisibilitySettings
           sharingOption={sharingOption}
           onSharingOptionChange={setSharingOption}
@@ -119,7 +106,7 @@ export const SharingSettings: React.FC<SharingSettingsProps> = ({ onBack, dealId
       </div>
 
       <div className="flex justify-between gap-2 pt-4 border-t">
-        <Button variant="outline" onClick={onBack}>Save for later</Button>
+        <Button variant="outline" onClick={onBack}>Back</Button>
         <Button onClick={handleShareDeal}>
           <Share className="h-4 w-4 mr-2" />
           Share Deal
