@@ -8,12 +8,16 @@ interface AIReviewProps {
   onNext: () => void;
   onComplete: (responses: Record<string, string>) => void;
   isCompleted: boolean;
+  recommendation?: string;
+  onRecommendationChange?: (value: string) => void;
 }
 
 export const AIReview: React.FC<AIReviewProps> = ({
   onNext,
   onComplete,
-  isCompleted
+  isCompleted,
+  recommendation = "",
+  onRecommendationChange
 }) => {
   const [showAnalysis, setShowAnalysis] = useState(true);
   
@@ -58,7 +62,13 @@ export const AIReview: React.FC<AIReviewProps> = ({
     <QuestionsView
       currentQuestion={unansweredQuestions[currentQuestionIndex]}
       currentResponse={currentResponse}
-      onResponseChange={(value) => setCurrentResponse(value)}
+      onResponseChange={(value) => {
+        setCurrentResponse(value);
+        // If this is the recommendation question and we have the handler, call it
+        if (unansweredQuestions[currentQuestionIndex]?.id === "recommendation" && onRecommendationChange) {
+          onRecommendationChange(value);
+        }
+      }}
       onSave={handleSaveResponse}
       onSkip={handleSkip}
       currentIndex={currentQuestionIndex}
