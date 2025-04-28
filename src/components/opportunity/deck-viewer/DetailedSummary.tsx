@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Edit, Download, ArrowRight, Upload } from "lucide-react";
@@ -29,8 +30,70 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
         
         <div className="border rounded-md p-6 bg-muted/20">
           <div className="space-y-6">
+            <div className="space-y-2">
+              <h5 className="text-md font-semibold">Deal Memo</h5>
+              <div className="space-y-2">
+                <h6 className="text-sm font-semibold">Investment Rationale</h6>
+                <p className="text-sm text-muted-foreground">
+                  A concise summary of why this investment opportunity is compelling, 
+                  highlighting key strengths, unique value proposition, and potential 
+                  for significant returns.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h6 className="text-sm font-semibold">Key Risks</h6>
+                <ul className="list-disc pl-5 text-sm space-y-1">
+                  <li>Market volatility</li>
+                  <li>Competitive landscape</li>
+                  <li>Technology adoption challenges</li>
+                </ul>
+              </div>
+              <div className="space-y-2">
+                <h6 className="text-sm font-semibold">Investment Thesis</h6>
+                <p className="text-sm text-muted-foreground">
+                  Detailed breakdown of the strategic fit, growth potential, 
+                  and alignment with investment criteria.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h5 className="text-md font-semibold">Summary Deck</h5>
+              <div className="border rounded-md p-6 bg-muted/20 h-[250px] flex flex-col items-center justify-center">
+                <div className="text-center space-y-4">
+                  <div className="text-muted-foreground">
+                    Investment summary presentation preview will be displayed here
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <div className="relative">
+                  <Input
+                    type="file"
+                    accept=".ppt,.pptx"
+                    onChange={handleReplacePPT}
+                    className="hidden"
+                    id="ppt-upload"
+                  />
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex items-center gap-1"
+                    onClick={() => document.getElementById('ppt-upload')?.click()}
+                  >
+                    <Upload className="h-4 w-4" />
+                    Replace PPT
+                  </Button>
+                </div>
+                <Button size="sm" variant="outline" className="flex items-center gap-1">
+                  <Download className="h-4 w-4" />
+                  Download PPT
+                </Button>
+              </div>
+            </div>
+            
             <div>
-              <h5 className="text-lg font-semibold mb-2">Executive Summary</h5>
+              <h5 className="text-lg font-semibold mb-2">Deal Details</h5>
               <p className="text-sm text-muted-foreground">
                 {Object.keys(clarificationResponses).length > 0 
                   ? "Enhanced AI-generated summary incorporating your clarifications." 
@@ -75,78 +138,12 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
             </div>
             
             {clarificationResponses.q6 && <div className="space-y-2">
-                <h5 className="text-md font-semibold">Use of Funds</h5>
-                <p className="text-sm text-muted-foreground">
-                  {clarificationResponses.q6}
-                </p>
-              </div>}
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <h4 className="text-lg font-medium">Deal Memo</h4>
-        <div className="border rounded-md p-6 bg-muted/20">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <h5 className="text-md font-semibold">Investment Rationale</h5>
+              <h5 className="text-md font-semibold">Use of Funds</h5>
               <p className="text-sm text-muted-foreground">
-                A concise summary of why this investment opportunity is compelling, 
-                highlighting key strengths, unique value proposition, and potential 
-                for significant returns.
+                {clarificationResponses.q6}
               </p>
-            </div>
-            <div className="space-y-2">
-              <h5 className="text-md font-semibold">Key Risks</h5>
-              <ul className="list-disc pl-5 text-sm space-y-1">
-                <li>Market volatility</li>
-                <li>Competitive landscape</li>
-                <li>Technology adoption challenges</li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h5 className="text-md font-semibold">Investment Thesis</h5>
-              <p className="text-sm text-muted-foreground">
-                Detailed breakdown of the strategic fit, growth potential, 
-                and alignment with investment criteria.
-              </p>
-            </div>
+            </div>}
           </div>
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <h4 className="text-lg font-medium">Investment Summary Deck</h4>
-        <div className="border rounded-md p-6 bg-muted/20 h-[450px] flex flex-col items-center justify-center">
-          <div className="text-center space-y-4">
-            <div className="text-muted-foreground">
-              Investment summary presentation preview will be displayed here
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-end gap-2">
-          <div className="relative">
-            <Input
-              type="file"
-              accept=".ppt,.pptx"
-              onChange={handleReplacePPT}
-              className="hidden"
-              id="ppt-upload"
-            />
-            <Button 
-              size="sm" 
-              variant="outline" 
-              className="flex items-center gap-1"
-              onClick={() => document.getElementById('ppt-upload')?.click()}
-            >
-              <Upload className="h-4 w-4" />
-              Replace PPT
-            </Button>
-          </div>
-          <Button size="sm" variant="outline" className="flex items-center gap-1">
-            <Download className="h-4 w-4" />
-            Download PPT
-          </Button>
         </div>
       </div>
 
