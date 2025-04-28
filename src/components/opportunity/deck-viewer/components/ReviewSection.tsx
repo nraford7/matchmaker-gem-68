@@ -1,22 +1,22 @@
 
 import React from "react";
-import { QuestionsView } from "./QuestionsView";
-import { SummaryView } from "./SummaryView";
-import { AnalysisChecklist } from "./AnalysisChecklist";
 import { AIReview } from "../AIReview";
 
 interface ReviewSectionProps {
   onNext: () => void;
   onComplete: (responses: Record<string, string>) => void;
   isCompleted: boolean;
+  recommendation: string;
+  onRecommendationChange: (value: string) => void;
 }
 
 export const ReviewSection: React.FC<ReviewSectionProps> = ({
   onNext,
   onComplete,
-  isCompleted
+  isCompleted,
+  recommendation,
+  onRecommendationChange
 }) => {
-  // This function should be called when the review process is completed
   const handleReviewComplete = (responses: Record<string, string>) => {
     onComplete(responses);
   };
@@ -28,6 +28,8 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           onNext={onNext}
           onComplete={handleReviewComplete}
           isCompleted={isCompleted}
+          recommendation={recommendation}
+          onRecommendationChange={onRecommendationChange}
         />
       </div>
     </div>
