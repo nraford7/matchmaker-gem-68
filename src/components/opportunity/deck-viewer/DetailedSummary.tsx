@@ -59,42 +59,6 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
             </div>
           </div>
 
-          {/* Summary Deck Section */}
-          <div className="border rounded-md p-6 bg-muted/20">
-            <h5 className="text-md font-semibold mb-4">Summary Deck</h5>
-            <div className="border rounded-md p-6 bg-muted/20 h-[250px] flex flex-col items-center justify-center">
-              <div className="text-center space-y-4">
-                <div className="text-muted-foreground">
-                  Investment summary presentation preview will be displayed here
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-end gap-2 mt-4">
-              <div className="relative">
-                <Input
-                  type="file"
-                  accept=".ppt,.pptx"
-                  onChange={handleReplacePPT}
-                  className="hidden"
-                  id="ppt-upload"
-                />
-                <Button 
-                  size="sm" 
-                  variant="outline" 
-                  className="flex items-center gap-1"
-                  onClick={() => document.getElementById('ppt-upload')?.click()}
-                >
-                  <Upload className="h-4 w-4" />
-                  Replace PPT
-                </Button>
-              </div>
-              <Button size="sm" variant="outline" className="flex items-center gap-1">
-                <Download className="h-4 w-4" />
-                Download PPT
-              </Button>
-            </div>
-          </div>
-
           {/* Deal Details Section */}
           <div className="border rounded-md p-6 bg-muted/20">
             <h5 className="text-md font-semibold mb-4">Deal Details</h5>
@@ -151,6 +115,42 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
               </div>}
             </div>
           </div>
+
+          {/* Summary Deck Section */}
+          <div className="border rounded-md p-6 bg-muted/20">
+            <h5 className="text-md font-semibold mb-4">Summary Deck</h5>
+            <div className="border rounded-md p-6 bg-muted/20 h-[250px] flex flex-col items-center justify-center">
+              <div className="text-center space-y-4">
+                <div className="text-muted-foreground">
+                  Investment summary presentation preview will be displayed here
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-4">
+              <div className="relative">
+                <Input
+                  type="file"
+                  accept=".ppt,.pptx"
+                  onChange={handleReplacePPT}
+                  className="hidden"
+                  id="ppt-upload"
+                />
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="flex items-center gap-1"
+                  onClick={() => document.getElementById('ppt-upload')?.click()}
+                >
+                  <Upload className="h-4 w-4" />
+                  Replace PPT
+                </Button>
+              </div>
+              <Button size="sm" variant="outline" className="flex items-center gap-1">
+                <Download className="h-4 w-4" />
+                Download PPT
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -164,3 +164,4 @@ export const DetailedSummary: React.FC<DetailedSummaryProps> = ({
     </div>
   );
 };
+
