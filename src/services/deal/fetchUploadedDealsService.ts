@@ -22,15 +22,13 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     }
     
     // Map database columns to our Deal type properties with explicit typing
-    return (data || []).map((item: any): Deal => ({
+    return (data || []).map((item: any) => ({
       id: item.id,
       name: item.name,
       description: item.description || "",
       dealType: item.deal_type,
       checkSizeRequired: item.check_size_required,
-      check_size_required: item.check_size_required,
       sectorTags: item.sector_tags || [],
-      sector_tags: item.sector_tags || [],
       geographies: item.geographies || [],
       location: item.location,
       stage: item.stage,
