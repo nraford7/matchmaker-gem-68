@@ -15,14 +15,14 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     const { data, error } = await supabase
       .from("deals")
       .select("*")
-      .eq("uploader_id", userData.user.id);
+      .eq("uploaderId", userData.user.id);
       
     if (error) {
       throw new Error(error.message);
     }
     
     // Map database columns to our Deal type properties with explicit typing
-    return (data || []).map((item) => ({
+    return (data || []).map((item: any) => ({
       id: item.id,
       name: item.name,
       description: item.description || "",
@@ -45,9 +45,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       updatedAt: item.updated_at,
       IRR: item.IRR,
       recommendation: item.recommendation,
-      introducedById: item.introduced_by_id,
-      uploaderId: item.uploader_id,
-      privacyLevel: item.privacy_level || "OPEN" // Default to OPEN if not set
+      introducedById: item.introduced_by_id
     }));
   } catch (error) {
     console.error("Error fetching uploaded deals:", error);

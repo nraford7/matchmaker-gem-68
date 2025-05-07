@@ -1,33 +1,37 @@
 
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { EnhancedDeal } from "@/types/deal";
-import { parseJsonField } from "./utils/jsonUtils";
 
-export const fetchDealData = async (id: string): Promise<EnhancedDeal | null> => {
+// Fetch enhanced deal data by ID
+export const fetchDealData = async (dealId: string): Promise<EnhancedDeal | null> => {
   try {
     const { data, error } = await supabase
       .from("deals")
       .select("*")
-      .eq("id", id)
+      .eq("id", dealId)
       .single();
-      
+
     if (error) {
-      throw new Error(error.message);
+      toast.error("Failed to fetch deal data");
+      console.error("Error fetching deal:", error);
+      return null;
     }
-    
+
     if (!data) {
       return null;
     }
 
-    // Map database columns to our EnhancedDeal type properties
-    const enhancedDeal: EnhancedDeal = {
+    // Convert the raw data to our EnhancedDeal type
+    // Cast JSON fields properly to Record<string, any>
+    const deal: EnhancedDeal = {
       id: data.id,
       name: data.name,
-      description: data.description || "",
+      description: data.description,
       dealType: data.deal_type,
       checkSizeRequired: data.check_size_required,
-      sectorTags: data.sector_tags || [],
-      geographies: data.geographies || [],
+      sectorTags: data.sector_tags,
+      geographies: data.geographies,
       location: data.location,
       stage: data.stage,
       timeHorizon: data.time_horizon,
@@ -37,53 +41,69 @@ export const fetchDealData = async (id: string): Promise<EnhancedDeal | null> =>
       dueDiligenceLevel: data.due_diligence_level,
       decisionConvictionRequired: data.decision_conviction_required,
       investorSpeedRequired: data.investor_speed_required,
-      strategyProfile: parseJsonField(data.strategy_profile),
-      psychologicalFit: parseJsonField(data.psychological_fit),
+      // Include the introduced_by_id field
+      introducedById: data.introduced_by_id,
+      // Make sure IRR is included from the database result
+      IRR: data.IRR !== null ? data.IRR : 25, // Default to 25% if null, for demo purposes
+      // Include the recommendation field from the database
+      recommendation: data.recommendation,
+      // Type conversion for JSON fields
+      strategyProfile: data.strategy_profile ? (typeof data.strategy_profile === 'string' 
+        ? JSON.parse(data.strategy_profile) 
+        : data.strategy_profile as Record<string, any>) : {},
+      psychologicalFit: data.psychological_fit ? (typeof data.psychological_fit === 'string'
+        ? JSON.parse(data.psychological_fit)
+        : data.psychological_fit as Record<string, any>) : {},
       createdAt: data.created_at,
       updatedAt: data.updated_at,
-      IRR: data.IRR,
-      recommendation: data.recommendation,
-      introducedById: data.introduced_by_id,
-      privacyLevel: data.privacy_level || "OPEN",
-      uploaderId: data.uploader_id,
       
-      // Enhanced fields - use mock data if the fields don't exist in the database
-      teamSize: data.team_size || 5,
-      foundedYear: data.founded_year || 2020,
-      industry: data.industry || data.sector_tags?.[0] || "Technology",
-      businessModel: data.business_model || "SaaS",
-      competitors: data.competitors || [],
-      timeline: data.timeline || "12-18 months",
-      revenue: data.revenue_info || "$500K - $1M",
-      growth: data.growth_info || "40% YoY",
-      pitchDeckUrl: data.pitch_deck_url || null,
-      contactEmail: data.contact_email || null,
-      projectedIRR: data.projected_irr || null,
-      personalisedRecommendation: data.personalised_recommendation || 
-        "This opportunity aligns with your investment focus.",
+      // Add mock data for now - this can be updated later
+      teamSize: 5,
+      foundedYear: 2020,
+      industry: data.sector_tags?.[0] || "Technology",
+      businessModel: "SaaS",
+      timeline: "12-18 months",
+      revenue: "$500K - $1M",
+      growth: "40% YoY",
+      personalisedRecommendation: "This opportunity aligns with your investment focus in technology startups with strong growth potential.",
       
-      // Mock team, use_of_funds, milestones if they don't exist in the database
-      team: data.team_members || [
+      // Mock team
+      team: [
         { name: "John Smith", role: "CEO" },
         { name: "Emily Wong", role: "CTO" },
         { name: "David Garcia", role: "CFO" }
       ],
-      use_of_funds: data.use_of_funds || [
+      
+      // Mock use of funds
+      use_of_funds: [
         { category: "Product Development", percentage: 40 },
         { category: "Marketing", percentage: 30 },
         { category: "Operations", percentage: 20 },
         { category: "Legal & Admin", percentage: 10 }
       ],
-      milestones: data.milestones || [
+      
+      // Mock milestones
+      milestones: [
         { description: "Product Launch", timeline: "Q2 2023" },
         { description: "Series A Funding", timeline: "Q4 2023" },
         { description: "Market Expansion", timeline: "Q2 2024" }
-      ]
+      ],
+      
+      // Additional fields
+      contactEmail: "contact@example.com",
+      pitchDeckUrl: "https://example.com/pitch"
     };
 
-    return enhancedDeal;
+    // Log to help debug
+    console.log("Fetched deal data:", data);
+    console.log("Processed deal with IRR:", deal.IRR);
+    console.log("Deal recommendation:", deal.recommendation);
+    console.log("Deal introduced by:", deal.introducedById);
+
+    return deal;
   } catch (error) {
-    console.error("Error fetching deal:", error);
+    console.error("Error in fetchDealData:", error);
+    toast.error("Failed to load deal details");
     return null;
   }
 };

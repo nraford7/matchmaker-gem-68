@@ -7,7 +7,6 @@ import { fetchDealData } from "@/services/deal";
 import { EnhancedDeal } from "@/types/deal";
 import DealDetailsHeader from "@/components/deals/DealDetailsHeader";
 import DealDetailsContent from "@/components/deals/DealDetailsContent";
-import { DealAccessGate } from "@/components/deals/DealAccessGate";
 
 const DealDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,7 +24,7 @@ const DealDetails = () => {
     const loadDeal = async () => {
       setIsLoading(true);
       const data = await fetchDealData(id);
-      console.log("Deal data in component:", data);
+      console.log("Deal data in component:", data); // Add this for debugging
       setDealData(data);
       setIsLoading(false);
     };
@@ -36,8 +35,10 @@ const DealDetails = () => {
   // Function to handle going back to the previous page
   const handleGoBack = () => {
     if (location.state?.from) {
+      // If we have a "from" location stored in the state, navigate to it
       navigate(location.state.from);
     } else {
+      // Otherwise just go back in the history
       navigate(-1);
     }
   };
@@ -53,10 +54,7 @@ const DealDetails = () => {
   return (
     <div className="container mx-auto pt-24 py-6 max-w-6xl">
       <DealDetailsHeader deal={dealData} onGoBack={handleGoBack} />
-      
-      <DealAccessGate deal={dealData}>
-        <DealDetailsContent deal={dealData} />
-      </DealAccessGate>
+      <DealDetailsContent deal={dealData} />
     </div>
   );
 };
