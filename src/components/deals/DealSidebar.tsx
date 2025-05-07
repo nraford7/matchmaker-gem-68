@@ -1,3 +1,4 @@
+
 import { EnhancedDeal } from "@/types/deal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -15,6 +16,7 @@ const DealSidebar = ({ deal }: DealSidebarProps) => {
   useEffect(() => {
     const checkOwnership = async () => {
       const { data: userData } = await supabase.auth.getUser();
+      // Check if the current user is the uploader of the deal
       if (userData?.user && deal.uploaderId === userData.user.id) {
         setIsOwner(true);
       }

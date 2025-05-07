@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { Deal } from "@/types/deal";
 import { parseJsonField } from "./utils/jsonUtils";
@@ -47,6 +48,7 @@ export const fetchAllDeals = async (): Promise<Deal[]> => {
       IRR: item.IRR,
       recommendation: item.recommendation,
       introducedById: item.introduced_by_id,
+      uploaderId: item.uploader_id,
       privacyLevel: item.privacy_level || "OPEN"
     }));
 

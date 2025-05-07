@@ -34,6 +34,8 @@ export type Deal = {
   introducedById?: string;
   // Added privacy level field
   privacyLevel?: PrivacyLevel;
+  // Add uploaderId for deal creator
+  uploaderId?: string;
   // Additional fields for backward compatibility
   sector?: string;
   fundingAmount?: number;
@@ -56,6 +58,8 @@ export type EnhancedDeal = Deal & {
   team?: { name: string; role: string }[];
   use_of_funds?: { category: string; percentage: number }[];
   milestones?: { description: string; timeline: string }[];
+  // Added uploaderId for deal creator
+  uploaderId?: string;
 };
 
 // For backward compatibility

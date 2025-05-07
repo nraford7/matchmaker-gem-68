@@ -26,25 +26,23 @@ export const registerInterest = async (dealId: string): Promise<boolean> => {
 
     const userId = userData.user.id;
     
-    // Check if already registered
+    // Check if already registered - using RPC call to avoid direct table access issues
     const { data: existingReg, error: checkError } = await supabase
-      .from("deal_interest_registrations")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("deal_id", dealId)
-      .single();
+      .rpc('check_interest_registration', {
+        user_id_param: userId,
+        deal_id_param: dealId
+      });
       
-    if (existingReg) {
+    if (existingReg && existingReg.length > 0) {
       toast.info("You have already registered interest in this deal");
       return true;
     }
 
-    // Get the deal to determine privacy level
+    // Get the deal to determine privacy level - using RPC call
     const { data: dealData, error: dealError } = await supabase
-      .from("deals")
-      .select("privacy_level")
-      .eq("id", dealId)
-      .single();
+      .rpc('get_deal_privacy_level', {
+        deal_id_param: dealId
+      });
       
     if (dealError || !dealData) {
       throw new Error("Could not find deal");
@@ -54,13 +52,12 @@ export const registerInterest = async (dealId: string): Promise<boolean> => {
     const initialStatus: RegistrationStatus = 
       dealData.privacy_level === "INVITATION_ONLY" ? "REGISTERED" : "APPROVED";
 
-    // Register interest
+    // Register interest - using RPC call
     const { error } = await supabase
-      .from("deal_interest_registrations")
-      .insert({
-        user_id: userId,
-        deal_id: dealId,
-        status: initialStatus
+      .rpc('register_interest_in_deal', {
+        user_id_param: userId,
+        deal_id_param: dealId,
+        status_param: initialStatus
       });
 
     if (error) {
@@ -93,12 +90,11 @@ export const checkDealAccess = async (dealId: string): Promise<{ hasAccess: bool
 
     const userId = userData.user.id;
     
-    // Get deal privacy level
+    // Get deal privacy level using RPC call
     const { data: dealData, error: dealError } = await supabase
-      .from("deals")
-      .select("privacy_level, uploaderId")
-      .eq("id", dealId)
-      .single();
+      .rpc('get_deal_with_privacy', {
+        deal_id_param: dealId
+      });
       
     if (dealError || !dealData) {
       throw new Error("Could not find deal");
@@ -110,46 +106,51 @@ export const checkDealAccess = async (dealId: string): Promise<{ hasAccess: bool
     }
     
     // If user is the uploader, they have access
-    if (dealData.uploaderId === userId) {
+    if (dealData.uploader_id === userId) {
       return { hasAccess: true };
     }
 
-    // Check if user has registered interest
+    // Check if user has registered interest using RPC call
     const { data: registration, error: regError } = await supabase
-      .from("deal_interest_registrations")
-      .select("status")
-      .eq("user_id", userId)
-      .eq("deal_id", dealId)
-      .single();
+      .rpc('check_interest_status', {
+        user_id_param: userId,
+        deal_id_param: dealId
+      });
 
-    if (regError || !registration) {
+    if (regError || !registration || registration.length === 0) {
       return { hasAccess: false };
     }
 
+    const registrationStatus = registration[0].status as RegistrationStatus;
+
     // If CONFIDENTIAL, any registration gives access
     if (dealData.privacy_level === "CONFIDENTIAL" && registration) {
-      return { hasAccess: true, status: registration.status };
+      return { hasAccess: true, status: registrationStatus };
     }
 
     // If INVITATION_ONLY, only APPROVED registrations give access
-    if (dealData.privacy_level === "INVITATION_ONLY" && registration.status === "APPROVED") {
-      return { hasAccess: true, status: registration.status };
+    if (dealData.privacy_level === "INVITATION_ONLY" && registrationStatus === "APPROVED") {
+      return { hasAccess: true, status: registrationStatus };
     }
 
-    return { hasAccess: false, status: registration.status };
+    return { hasAccess: false, status: registrationStatus };
   } catch (error) {
     console.error("Error checking deal access:", error);
     return { hasAccess: false };
   }
 };
 
-// Approve interest registration (for deal originators)
+// The remaining functions (approveInterest, rejectInterest, getPendingRegistrations)
+// need similar changes to use RPC calls instead of direct table access.
+// For this patch, we'll focus on the core functionality first.
+
+// Approve interest registration (for deal originators) - via RPC
 export const approveInterest = async (registrationId: string): Promise<boolean> => {
   try {
     const { error } = await supabase
-      .from("deal_interest_registrations")
-      .update({ status: "APPROVED", updated_at: new Date().toISOString() })
-      .eq("id", registrationId);
+      .rpc('approve_interest_registration', {
+        registration_id_param: registrationId
+      });
 
     if (error) {
       throw error;
@@ -164,13 +165,13 @@ export const approveInterest = async (registrationId: string): Promise<boolean> 
   }
 };
 
-// Reject interest registration (for deal originators)
+// Reject interest registration (for deal originators) - via RPC
 export const rejectInterest = async (registrationId: string): Promise<boolean> => {
   try {
     const { error } = await supabase
-      .from("deal_interest_registrations")
-      .update({ status: "REJECTED", updated_at: new Date().toISOString() })
-      .eq("id", registrationId);
+      .rpc('reject_interest_registration', {
+        registration_id_param: registrationId
+      });
 
     if (error) {
       throw error;
@@ -185,7 +186,7 @@ export const rejectInterest = async (registrationId: string): Promise<boolean> =
   }
 };
 
-// Get pending interest registrations for a deal (for deal originators)
+// Get pending interest registrations for a deal (for deal originators) - via RPC
 export const getPendingRegistrations = async (dealId: string): Promise<any[]> => {
   try {
     const { data: userData, error: userError } = await supabase.auth.getUser();
@@ -194,29 +195,23 @@ export const getPendingRegistrations = async (dealId: string): Promise<any[]> =>
       return [];
     }
 
-    const { data: deal, error: dealError } = await supabase
-      .from("deals")
-      .select("uploaderId")
-      .eq("id", dealId)
-      .single();
+    // Check if current user is the deal uploader
+    const { data: dealData, error: dealError } = await supabase
+      .rpc('check_deal_ownership', {
+        deal_id_param: dealId,
+        user_id_param: userData.user.id
+      });
       
-    if (dealError || !deal || deal.uploaderId !== userData.user.id) {
+    if (dealError || !dealData || !dealData.is_owner) {
       // Only the deal uploader can see pending registrations
       return [];
     }
 
+    // Get pending registrations
     const { data, error } = await supabase
-      .from("deal_interest_registrations")
-      .select(`
-        *,
-        profiles:user_id (
-          id,
-          name,
-          email
-        )
-      `)
-      .eq("deal_id", dealId)
-      .eq("status", "REGISTERED");
+      .rpc('get_pending_registrations', {
+        deal_id_param: dealId
+      });
 
     if (error) {
       throw error;

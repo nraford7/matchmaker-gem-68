@@ -15,7 +15,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     const { data, error } = await supabase
       .from("deals")
       .select("*")
-      .eq("uploaderId", userData.user.id);
+      .eq("uploader_id", userData.user.id);
       
     if (error) {
       throw new Error(error.message);
@@ -46,6 +46,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       IRR: item.IRR,
       recommendation: item.recommendation,
       introducedById: item.introduced_by_id,
+      uploaderId: item.uploader_id,
       privacyLevel: item.privacy_level || "OPEN" // Default to OPEN if not set
     }));
   } catch (error) {
