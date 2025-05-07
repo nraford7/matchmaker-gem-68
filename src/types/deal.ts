@@ -1,4 +1,6 @@
 
+export type PrivacyLevel = "OPEN" | "CONFIDENTIAL" | "INVITATION_ONLY";
+
 export type Deal = {
   id: string;
   name: string;
@@ -30,6 +32,8 @@ export type Deal = {
   recommendation?: string;
   // Added introduced by field
   introducedById?: string;
+  // Added privacy level field
+  privacyLevel?: PrivacyLevel;
   // Additional fields for backward compatibility
   sector?: string;
   fundingAmount?: number;

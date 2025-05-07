@@ -22,7 +22,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     }
     
     // Map database columns to our Deal type properties with explicit typing
-    return (data || []).map((item: any) => ({
+    return (data || []).map((item) => ({
       id: item.id,
       name: item.name,
       description: item.description || "",
@@ -45,7 +45,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       updatedAt: item.updated_at,
       IRR: item.IRR,
       recommendation: item.recommendation,
-      introducedById: item.introduced_by_id
+      introducedById: item.introduced_by_id,
+      privacyLevel: item.privacy_level || "OPEN" // Default to OPEN if not set
     }));
   } catch (error) {
     console.error("Error fetching uploaded deals:", error);

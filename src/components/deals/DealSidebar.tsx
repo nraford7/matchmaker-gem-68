@@ -1,135 +1,110 @@
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { EnhancedDeal } from "@/types/deal";
-import { FileText, TrendingUp } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { InterestRequestsPanel } from "./InterestRequestsPanel";
 
 interface DealSidebarProps {
   deal: EnhancedDeal;
 }
 
 const DealSidebar = ({ deal }: DealSidebarProps) => {
-  // Function to capitalize the first letter of each word
-  const capitalize = (text: string) => {
-    if (!text) return "";
-    return text.split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  };
+  const [isOwner, setIsOwner] = useState(false);
+
+  useEffect(() => {
+    const checkOwnership = async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (userData?.user && deal.uploaderId === userData.user.id) {
+        setIsOwner(true);
+      }
+    };
+
+    checkOwnership();
+  }, [deal.uploaderId]);
 
   return (
     <>
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-lg">Deal Details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {deal.sectorTags && deal.sectorTags.length > 0 && (
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">Sector</span>
-                <span className="text-sm font-medium">{capitalize(deal.sectorTags[0])}</span>
+      <Card className="bg-white">
+        <CardContent className="pt-6">
+          <h3 className="text-lg font-semibold mb-4">Deal Metrics</h3>
+          <div className="space-y-4">
+            {deal.checkSizeRequired && (
+              <div>
+                <h4 className="text-sm font-semibold">Check Size Required</h4>
+                <p className="text-sm text-muted-foreground">
+                  ${deal.checkSizeRequired.toLocaleString()}
+                </p>
               </div>
             )}
-            <Separator />
-            <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Stage</span>
-              <span className="text-sm font-medium">{capitalize(deal.stage || "Not specified")}</span>
-            </div>
-            <Separator />
-            <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Check Size</span>
-              <span className="text-sm font-medium">${deal.checkSizeRequired?.toLocaleString() || "Not specified"}</span>
-            </div>
-            <Separator />
-            {deal.IRR !== undefined && deal.IRR !== null && (
-              <>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Projected IRR</span>
-                  <span className="text-sm font-medium">{deal.IRR}%</span>
-                </div>
-                <Separator />
-              </>
+            
+            {deal.IRR && (
+              <div>
+                <h4 className="text-sm font-semibold">IRR</h4>
+                <p className="text-sm text-muted-foreground">{deal.IRR}%</p>
+              </div>
             )}
-            {deal.involvementModel && (
-              <>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Involvement</span>
-                  <span className="text-sm font-medium">{capitalize(deal.involvementModel)}</span>
-                </div>
-                <Separator />
-              </>
-            )}
+            
             {deal.timeHorizon && (
-              <>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Time Horizon</span>
-                  <span className="text-sm font-medium">{capitalize(deal.timeHorizon)}</span>
-                </div>
-                <Separator />
-              </>
-            )}
-            {deal.projectedIRR && !deal.IRR && (
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">Projected IRR</span>
-                <span className="text-sm font-medium">{capitalize(deal.projectedIRR)}</span>
+              <div>
+                <h4 className="text-sm font-semibold">Time Horizon</h4>
+                <p className="text-sm text-muted-foreground">{deal.timeHorizon}</p>
               </div>
             )}
           </div>
+          <Separator className="my-4" />
+          <h4 className="text-sm font-semibold">Involvement Model</h4>
+          <p className="text-sm text-muted-foreground">{deal.involvementModel || "Not specified"}</p>
+          <Separator className="my-4" />
+          <h4 className="text-sm font-semibold">Exit Style</h4>
+          <p className="text-sm text-muted-foreground">{deal.exitStyle || "Not specified"}</p>
         </CardContent>
       </Card>
       
-      {deal.matchScore !== undefined && (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Match Score</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Compatibility</span>
-                <span className="font-medium">{Math.round(deal.matchScore * 100)}%</span>
-              </div>
-              <Progress value={deal.matchScore * 100} className="h-2" />
-              {deal.matchExplanation && (
-                <p className="text-sm text-muted-foreground mt-2">{deal.matchExplanation}</p>
-              )}
+      {/* Show interest requests panel for deal originators */}
+      {isOwner && deal.privacyLevel === "INVITATION_ONLY" && (
+        <div className="mt-6">
+          <InterestRequestsPanel dealId={deal.id} />
+        </div>
+      )}
+
+      {/* If there's a pitchDeckUrl, show pitch deck download */}
+      {deal.pitchDeckUrl && (
+        <Card className="mt-6">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-semibold mb-4">Resources</h3>
+            <div className="space-y-4">
+              <a
+                href={deal.pitchDeckUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Download Pitch Deck
+              </a>
             </div>
           </CardContent>
         </Card>
       )}
       
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-lg">Contact Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {deal.contactEmail && (
-              <div className="flex items-center">
-                <span className="w-20 text-sm text-muted-foreground">Email:</span>
-                <a href={`mailto:${deal.contactEmail}`} className="text-sm hover:underline">
+      {/* If there's a contactEmail, show contact info */}
+      {deal.contactEmail && (
+        <Card className="mt-6">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-semibold mb-4">Contact</h3>
+            <div className="space-y-4">
+              <p className="text-sm">
+                <a
+                  href={`mailto:${deal.contactEmail}`}
+                  className="text-primary hover:underline"
+                >
                   {deal.contactEmail}
                 </a>
-              </div>
-            )}
-            <div className="flex items-center">
-              <span className="w-20 text-sm text-muted-foreground">Location:</span>
-              <span className="text-sm">{deal.location || deal.geographies?.join(', ') || "Not specified"}</span>
+              </p>
             </div>
-            {deal.pitchDeckUrl && (
-              <div className="mt-4">
-                <Button variant="outline" size="sm" className="w-full gap-1">
-                  <FileText className="h-4 w-4" />
-                  View Pitch Deck
-                </Button>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </>
   );
 };
