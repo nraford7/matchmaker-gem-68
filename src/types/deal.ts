@@ -30,6 +30,8 @@ export type Deal = {
   recommendation?: string;
   // Added introduced by field
   introducedById?: string;
+  // Added uploader ID field
+  uploaderId?: string;
   // Additional fields for backward compatibility
   sector?: string;
   fundingAmount?: number;
