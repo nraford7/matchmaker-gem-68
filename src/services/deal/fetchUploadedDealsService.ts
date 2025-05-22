@@ -45,7 +45,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       updatedAt: item.updated_at,
       IRR: item.IRR,
       recommendation: item.recommendation,
-      introducedById: item.introduced_by_id
+      introducedById: item.introduced_by_id,
+      uploaderId: item.uploaderId
     }));
   } catch (error) {
     console.error("Error fetching uploaded deals:", error);
