@@ -153,7 +153,7 @@ const InvestorOnboarding = () => {
       {currentStep === OnboardingStep.STRUCTURED_INTAKE && (
         <Card>
           <CardHeader>
-            <CardTitle>Part 1: Structured Context Intake</CardTitle>
+            <CardTitle>Part 1: About You and Your Investments</CardTitle>
           </CardHeader>
           <CardContent>
             <Form {...structuredIntakeForm}>
@@ -166,7 +166,7 @@ const InvestorOnboarding = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name / Investor ID</FormLabel>
+                      <FormLabel>What is your name or investment identity?</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter your name" {...field} />
                       </FormControl>
@@ -180,10 +180,10 @@ const InvestorOnboarding = () => {
                   name="role"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Role / Entity Type</FormLabel>
+                      <FormLabel>How do you invest - as an individual, through a family office, or another entity?</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Are you investing as an individual, through a family office, fund, or firm?"
+                          placeholder="Individual investor, family office, investment fund, etc."
                           {...field}
                         />
                       </FormControl>
@@ -197,10 +197,10 @@ const InvestorOnboarding = () => {
                   name="sourceOfWealth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Source(s) of Wealth</FormLabel>
+                      <FormLabel>How did you build your capital?</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="How did you acquire or build your capital? (e.g. business sale, inheritance, career earnings)"
+                          placeholder="Business sale, inheritance, career earnings, etc."
                           {...field}
                         />
                       </FormControl>
@@ -214,9 +214,9 @@ const InvestorOnboarding = () => {
                   name="aum"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Estimated AUM / Net Worth</FormLabel>
+                      <FormLabel>What is your estimated AUM or net worth?</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your AUM or net worth" {...field} />
+                        <Input placeholder="Enter amount or range" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -228,9 +228,9 @@ const InvestorOnboarding = () => {
                   name="checkSizeRange"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Typical Check Size Range</FormLabel>
+                      <FormLabel>What is your typical investment size per deal?</FormLabel>
                       <FormControl>
-                        <Input placeholder="What is your usual investment size per deal?" {...field} />
+                        <Input placeholder="Enter amount or range" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -242,10 +242,10 @@ const InvestorOnboarding = () => {
                   name="preferredAssetClasses"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Preferred Asset Classes</FormLabel>
+                      <FormLabel>Which asset classes do you prefer to invest in?</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="E.g. Startups, funds, real estate, public equities, private credit"
+                          placeholder="Startups, funds, real estate, public equities, private credit, etc."
                           {...field}
                         />
                       </FormControl>
@@ -259,10 +259,10 @@ const InvestorOnboarding = () => {
                   name="sectorFocus"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sector or Theme Focus</FormLabel>
+                      <FormLabel>Which industries or themes are you most drawn to?</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Are there specific industries or themes you are drawn to?"
+                          placeholder="Tech, healthcare, sustainability, etc."
                           {...field}
                         />
                       </FormControl>
@@ -276,7 +276,7 @@ const InvestorOnboarding = () => {
                   name="fundStructure"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Fund or Entity Structure</FormLabel>
+                      <FormLabel>What is your fund or entity structure?</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Evergreen family office, 10-year VC fund, etc."
@@ -293,10 +293,10 @@ const InvestorOnboarding = () => {
                   name="timeHorizon"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Investment Time Horizon</FormLabel>
+                      <FormLabel>What is your typical investment time horizon?</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Typical hold period or exit horizon"
+                          placeholder="1-3 years, 5-10 years, etc."
                           {...field}
                         />
                       </FormControl>
@@ -310,9 +310,9 @@ const InvestorOnboarding = () => {
                   name="preferredStage"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Preferred Deal Stage or Geography</FormLabel>
+                      <FormLabel>Which deal stages or geographies do you prefer?</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter preferred stages or regions" {...field} />
+                        <Input placeholder="Seed, Series A, North America, Europe, etc." {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -324,10 +324,10 @@ const InvestorOnboarding = () => {
                   name="esgValues"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>ESG / Values Alignment (Optional)</FormLabel>
+                      <FormLabel>Do any ethical, religious, or environmental values guide your investments? (Optional)</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Do ethical, religious, or environmental values guide your investment decisions?"
+                          placeholder="Impact investing, faith-based criteria, ESG considerations, etc."
                           {...field}
                         />
                       </FormControl>
@@ -346,7 +346,7 @@ const InvestorOnboarding = () => {
       {currentStep === OnboardingStep.STORY_BASED && (
         <Card>
           <CardHeader>
-            <CardTitle>Part 2: Story-Based Questionnaire</CardTitle>
+            <CardTitle>Part 2: Your Investment Story</CardTitle>
           </CardHeader>
           <CardContent>
             <Form {...storyBasedForm}>
@@ -359,7 +359,7 @@ const InvestorOnboarding = () => {
                   name="interestingInvestment"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tell me about one of the most interesting investments you've made</FormLabel>
+                      <FormLabel>Could you share one of your most interesting investments?</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="What drew you to it? How much did you invest? How did you decide to go ahead?"
@@ -377,10 +377,10 @@ const InvestorOnboarding = () => {
                   name="evaluationProcess"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>What's your usual process when you evaluate a new opportunity?</FormLabel>
+                      <FormLabel>How do you typically evaluate new investment opportunities?</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Do you follow a set of criteria, rely on instinct, or trust others?"
+                          placeholder="Do you follow set criteria, rely on instinct, or trust others?"
                           className="min-h-24"
                           {...field}
                         />
@@ -395,7 +395,7 @@ const InvestorOnboarding = () => {
                   name="missedOpportunity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Can you remember a time you passed on an opportunity and later regretted it (or didn't)?</FormLabel>
+                      <FormLabel>Have you ever passed on an opportunity and later regretted it?</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="What happened? How did you feel or respond afterward?"
@@ -413,10 +413,10 @@ const InvestorOnboarding = () => {
                   name="marketCrisisResponse"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>How did you respond during the last market drop or financial crisis?</FormLabel>
+                      <FormLabel>How did you handle the last market drop or financial crisis?</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Did you make any changes or stick to your plan?"
+                          placeholder="Did you make changes or stick to your plan?"
                           className="min-h-24"
                           {...field}
                         />
@@ -431,10 +431,10 @@ const InvestorOnboarding = () => {
                   name="allocationRule"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Do you have a general rule about how much you're willing to allocate to any one investment?</FormLabel>
+                      <FormLabel>Do you have rules about how much to allocate to a single investment?</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="What determines that amount?"
+                          placeholder="What factors determine that amount?"
                           className="min-h-24"
                           {...field}
                         />
@@ -449,7 +449,7 @@ const InvestorOnboarding = () => {
                   name="investmentFailure"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tell me about a time when an investment went wrong</FormLabel>
+                      <FormLabel>Can you tell us about a time when an investment didn't work out?</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="What did you do in response? What did you learn?"
@@ -467,10 +467,10 @@ const InvestorOnboarding = () => {
                   name="founderRelationship"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>How important is it for you to personally know the founders, fund managers, or operators you invest with?</FormLabel>
+                      <FormLabel>How important is your relationship with founders or fund managers?</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Do you meet them, vet them, or delegate that?"
+                          placeholder="Do you meet them personally, vet them, or delegate that?"
                           className="min-h-24"
                           {...field}
                         />
@@ -485,7 +485,7 @@ const InvestorOnboarding = () => {
                   name="portfolioManagement"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Do you prefer to manage your portfolio directly or work through advisors or partners?</FormLabel>
+                      <FormLabel>Do you manage your portfolio directly or work through advisors?</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="How involved are you in day-to-day decisions?"
@@ -503,7 +503,7 @@ const InvestorOnboarding = () => {
                   name="sectorPreference"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>What kind of sectors or asset types do you naturally gravitate toward—and why?</FormLabel>
+                      <FormLabel>What sectors or assets do you naturally gravitate toward and why?</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Is it due to familiarity, values, perceived opportunity, or past experience?"
@@ -521,7 +521,7 @@ const InvestorOnboarding = () => {
                   name="exitDecision"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>How do you decide when to exit an investment?</FormLabel>
+                      <FormLabel>How do you decide when it's time to exit an investment?</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Do you follow a target return, market signal, or instinct?"
@@ -539,7 +539,7 @@ const InvestorOnboarding = () => {
                   name="reportingExpectations"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>What kind of reporting or updates do you expect from your investments?</FormLabel>
+                      <FormLabel>What kind of updates do you expect from your investments?</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Do you track performance closely or prefer a hands-off approach?"
@@ -557,7 +557,7 @@ const InvestorOnboarding = () => {
                   name="investmentMotivation"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>What motivates you to invest?</FormLabel>
+                      <FormLabel>What motivates you most about investing?</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Is it financial return, legacy, excitement, impact, or intellectual interest?"

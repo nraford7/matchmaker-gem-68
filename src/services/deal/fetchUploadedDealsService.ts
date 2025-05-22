@@ -21,10 +21,9 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       throw new Error(error.message);
     }
     
-    // Map database columns to our Deal type properties with explicit typing
-    // Avoid deep instantiation by defining a concrete type
+    // Process the data with explicit typing to avoid deep instantiation
     return (data || []).map((item: any) => {
-      // Create deal object with explicit typing
+      // Create a new Deal object for each item to avoid type instantiation issues
       const deal: Deal = {
         id: item.id,
         name: item.name,
