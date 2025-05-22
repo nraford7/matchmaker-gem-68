@@ -12,6 +12,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       throw new Error("User not authenticated");
     }
     
+    // Fetch deals with explicit type casting to avoid type instantiation issues
     const { data, error } = await supabase
       .from("deals")
       .select("*")
@@ -21,13 +22,14 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
       throw new Error(error.message);
     }
     
-    // Process the data with explicit typing to avoid deep instantiation
-    return (data || []).map((item: any) => {
-      // Create a new Deal object for each item to avoid type instantiation issues
+    // Use a mapped type approach to avoid deep instantiation
+    return (data || []).map((item: Record<string, any>) => {
+      // Parse JSON fields separately
       const strategyProfile = parseJsonField(item.strategy_profile);
       const psychologicalFit = parseJsonField(item.psychological_fit);
       
-      const deal: Deal = {
+      // Construct a Deal object with explicit property assignments
+      return {
         id: item.id,
         name: item.name,
         description: item.description || "",
@@ -52,8 +54,7 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         recommendation: item.recommendation,
         introducedById: item.introduced_by_id,
         uploaderId: item.uploaderId
-      };
-      return deal;
+      } as Deal;
     });
   } catch (error) {
     console.error("Error fetching uploaded deals:", error);
