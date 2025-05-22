@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,6 +18,7 @@ import Deals from "./pages/Deals";
 import DealDetails from "./pages/DealDetails";
 import Network from "./pages/Network";
 import InvestorProfile from "./pages/InvestorProfile";
+import InvestorOnboarding from "./pages/InvestorOnboarding";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import PublicDeals from "./pages/PublicDeals";
@@ -75,6 +77,11 @@ const App = () => (
             <Route path="/investor/:id" element={
               <ProtectedRoute>
                 <InvestorProfile />
+              </ProtectedRoute>
+            } />
+            <Route path="/investor-onboarding" element={
+              <ProtectedRoute>
+                <InvestorOnboarding />
               </ProtectedRoute>
             } />
             <Route path="/public-deals" element={<PublicDeals />} />

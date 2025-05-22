@@ -1,5 +1,7 @@
 
 import { Users } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export const NetworkHeader = () => {
   return (
@@ -9,6 +11,11 @@ export const NetworkHeader = () => {
           <Users className="h-8 w-8 text-primary" />
           Network
         </h1>
+        <Link to="/investor-onboarding">
+          <Button className="bg-crimson text-white hover:bg-crimson/90">
+            Become an Investor
+          </Button>
+        </Link>
       </div>
       <p className="text-muted-foreground">
         Connect with other investors and discover opportunities
