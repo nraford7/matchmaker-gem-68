@@ -1,6 +1,12 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { StorageError } from "@supabase/supabase-js";
+
+// Define the StorageError type as it's not directly exported from supabase-js
+type StorageError = {
+  message: string;
+  statusCode?: number;
+  name?: string;
+};
 
 export const handleBucketError = async (
   error: StorageError,
