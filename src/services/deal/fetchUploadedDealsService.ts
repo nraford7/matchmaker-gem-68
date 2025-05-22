@@ -24,6 +24,9 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
     // Process the data with explicit typing to avoid deep instantiation
     return (data || []).map((item: any) => {
       // Create a new Deal object for each item to avoid type instantiation issues
+      const strategyProfile = parseJsonField(item.strategy_profile);
+      const psychologicalFit = parseJsonField(item.psychological_fit);
+      
       const deal: Deal = {
         id: item.id,
         name: item.name,
@@ -41,8 +44,8 @@ export const fetchUploadedDeals = async (): Promise<Deal[]> => {
         dueDiligenceLevel: item.due_diligence_level,
         decisionConvictionRequired: item.decision_conviction_required,
         investorSpeedRequired: item.investor_speed_required,
-        strategyProfile: parseJsonField(item.strategy_profile),
-        psychologicalFit: parseJsonField(item.psychological_fit),
+        strategyProfile,
+        psychologicalFit,
         createdAt: item.created_at,
         updatedAt: item.updated_at,
         IRR: item.IRR,

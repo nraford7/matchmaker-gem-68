@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -27,22 +26,22 @@ enum OnboardingStep {
   COMPLETE = 2,
 }
 
-// Schema for Part 1: Structured Context Intake
+// Schema for Part 1: Structured Context Intake - All fields are now optional
 const structuredIntakeSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  role: z.string().min(1, "Role/Entity Type is required"),
-  sourceOfWealth: z.string().min(1, "Source of wealth is required"),
-  aum: z.string().min(1, "Estimated AUM/Net Worth is required"),
-  checkSizeRange: z.string().min(1, "Check size range is required"),
-  preferredAssetClasses: z.string().min(1, "Preferred asset classes is required"),
-  sectorFocus: z.string().min(1, "Sector focus is required"),
-  fundStructure: z.string().min(1, "Fund structure is required"),
-  timeHorizon: z.string().min(1, "Investment time horizon is required"),
-  preferredStage: z.string().min(1, "Preferred deal stage is required"),
+  name: z.string().optional(),
+  role: z.string().optional(),
+  sourceOfWealth: z.string().optional(),
+  aum: z.string().optional(),
+  checkSizeRange: z.string().optional(),
+  preferredAssetClasses: z.string().optional(),
+  sectorFocus: z.string().optional(),
+  fundStructure: z.string().optional(),
+  timeHorizon: z.string().optional(),
+  preferredStage: z.string().optional(),
   esgValues: z.string().optional(),
 });
 
-// Schema for Part 2: Story-Based Questionnaire
+// Schema for Part 2: Story-Based Questionnaire - Already optional
 const storyBasedSchema = z.object({
   interestingInvestment: z.string().optional(),
   evaluationProcess: z.string().optional(),
@@ -114,16 +113,16 @@ const InvestorOnboarding = () => {
     try {
       // Process data to match investor profile structure
       const profileData = {
-        name: combinedData.name,
+        name: combinedData.name || user?.email?.split('@')[0] || "Investor",
         email: user?.email || "",
-        company: combinedData.fundStructure,
-        preferred_stages: combinedData.preferredStage.split(',').map((s: string) => s.trim()),
+        company: combinedData.fundStructure || "",
+        preferred_stages: combinedData.preferredStage ? combinedData.preferredStage.split(',').map((s: string) => s.trim()) : [],
         preferred_geographies: [], // Not collected in this form
-        check_size_min: parseInt(combinedData.checkSizeRange.split('-')[0]) || 0,
-        check_size_max: parseInt(combinedData.checkSizeRange.split('-')[1]) || 0,
-        investment_thesis: combinedData.investmentMotivation,
+        check_size_min: combinedData.checkSizeRange ? parseInt(combinedData.checkSizeRange.split('-')[0]) || 0 : 0,
+        check_size_max: combinedData.checkSizeRange ? parseInt(combinedData.checkSizeRange.split('-')[1]) || 0 : 0,
+        investment_thesis: combinedData.investmentMotivation || "",
         deal_count: 0,
-        sector_tags: combinedData.sectorFocus.split(',').map((s: string) => s.trim()),
+        sector_tags: combinedData.sectorFocus ? combinedData.sectorFocus.split(',').map((s: string) => s.trim()) : [],
       };
       
       await updateInvestorProfile(profileData);
